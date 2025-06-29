@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제24강: 지식 관리 시스템 구축 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+            --purple-color: #b48ead;
+            --orange-color: #d08770;
+            --knowledge-color: #b48ead;
+            --system-color: #88c0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--knowledge-color) 0%, transparent 70%);
+            opacity: 0.2;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-50px, -50px) rotate(120deg); }
+            66% { transform: translate(50px, -30px) rotate(240deg); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--knowledge-color), var(--system-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(odd) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(even) {
+            animation-delay: 0.4s;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--accent-color), var(--knowledge-color));
+            border-radius: 3px;
+        }
+
+        .section h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--knowledge-color);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(180, 142, 173, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--knowledge-color);
+        }
+
+        .knowledge-framework {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .framework-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .framework-layer {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .framework-layer::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--knowledge-color), var(--system-color));
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .framework-layer:hover::before {
+            opacity: 1;
+        }
+
+        .framework-layer:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .layer-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .layer-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--knowledge-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-description {
+            font-size: 1rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        .workflow-system {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .workflow-steps::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--knowledge-color), var(--system-color));
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--knowledge-color);
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-content:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--knowledge-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            font-size: 1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .folder-structure {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .folder-tree {
+            line-height: 1.8;
+        }
+
+        .folder-tree .folder {
+            color: var(--warning-color);
+        }
+
+        .folder-tree .file {
+            color: var(--info-color);
+        }
+
+        .folder-tree .comment {
+            color: var(--success-color);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .template-gallery {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .template-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .template-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--knowledge-color), var(--system-color));
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .template-card:hover::after {
+            transform: translateY(0);
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .template-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .template-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--knowledge-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .template-description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .template-preview {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-block .tag {
+            color: #ce9178;
+        }
+
+        .code-block .property {
+            color: #9cdcfe;
+        }
+
+        .code-block .value {
+            color: #ce9178;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(136, 192, 208, 0.3);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        .methodology-comparison {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin-top: 2rem;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--secondary-color);
+            font-weight: 600;
+            color: var(--knowledge-color);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--hover-bg);
+        }
+
+        .comparison-table .check {
+            color: var(--success-color);
+        }
+
+        .comparison-table .cross {
+            color: var(--error-color);
+        }
+
+        .interactive-demo {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            padding: 0.8rem 1.5rem;
+            background: var(--knowledge-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(180, 142, 173, 0.3);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        .demo-output {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .knowledge-graph {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .graph-container {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: var(--knowledge-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .graph-node:hover {
+            transform: scale(1.2);
+            box-shadow: 0 5px 20px rgba(180, 142, 173, 0.5);
+        }
+
+        .graph-connection {
+            position: absolute;
+            height: 2px;
+            background: var(--border-color);
+            transform-origin: left center;
+            z-index: 1;
+        }
+
+        .best-practices {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--knowledge-color) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .practice-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .practice-card:hover {
+            border-color: var(--knowledge-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .practice-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .practice-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--knowledge-color);
+        }
+
+        .practice-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .faq-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--knowledge-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        .resources-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .resource-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .resource-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--knowledge-color);
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-link {
+            color: var(--system-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-link:hover {
+            color: var(--accent-color);
+        }
+
+        .practice-exercises {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .exercise-list {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .exercise-item {
+            background: rgba(46, 52, 64, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--knowledge-color);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--knowledge-color);
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: var(--success-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-medium {
+            background: var(--warning-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-hard {
+            background: var(--error-color);
+            color: var(--text-color);
+        }
+
+        .next-lesson {
+            background: linear-gradient(135deg, var(--knowledge-color) 0%, var(--system-color) 100%);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .next-lesson::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .next-lesson h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .next-lesson p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .framework-diagram {
+                grid-template-columns: 1fr;
+            }
+
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
+
+            .workflow-steps::before {
+                left: 20px;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p>체계적으로 배우는 노션 활용법</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_01.html">기초과정</a></li>
+            <li><a href="notion_course_12.html">중급과정</a></li>
+            <li><a href="notion_course_21.html">고급과정</a></li>
+            <li><a href="#framework">프레임워크</a></li>
+            <li><a href="#methodology">방법론</a></li>
+            <li><a href="#implementation">구현</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제24강: 지식 관리 시스템 구축</h1>
+            <p>Obsidian을 활용한 체계적인 개인 지식 관리 시스템(PKM)을 구축하고 운영하는 방법을 배웁니다</p>
+            <div class="badge-container">
+                <span class="badge badge-advanced">고급</span>
+                <span class="badge badge-duration">90분</span>
+                <span class="badge badge-pkm">PKM</span>
+            </div>
+        </div>
+
+        <section class="section" id="introduction">
+            <h2>1. 지식 관리 시스템의 이해</h2>
+            
+            <div class="card">
+                <h3>개인 지식 관리(PKM)란?</h3>
+                <p>개인 지식 관리(Personal Knowledge Management)는 개인이 정보를 수집, 분류, 저장, 검색, 활용하는 과정을 체계화하는 것입니다. Obsidian은 이러한 PKM을 구현하기에 최적의 도구입니다.</p>
+                
+                <div class="knowledge-framework">
+                    <h4>PKM의 핵심 구성 요소</h4>
+                    <div class="framework-diagram">
+                        <div class="framework-layer">
+                            <div class="layer-icon">📥</div>
+                            <div class="layer-title">수집 (Capture)</div>
+                            <div class="layer-description">
+                                아이디어, 정보, 인사이트를 빠르고 효과적으로 수집
+                            </div>
+                        </div>
+                        <div class="framework-layer">
+                            <div class="layer-icon">🗂️</div>
+                            <div class="layer-title">정리 (Organize)</div>
+                            <div class="layer-description">
+                                수집한 정보를 체계적으로 분류하고 구조화
+                            </div>
+                        </div>
+                        <div class="framework-layer">
+                            <div class="layer-icon">🔍</div>
+                            <div class="layer-title">연결 (Connect)</div>
+                            <div class="layer-description">
+                                정보 간의 관계를 발견하고 네트워크 구축
+                            </div>
+                        </div>
+                        <div class="framework-layer">
+                            <div class="layer-icon">💡</div>
+                            <div class="layer-title">창조 (Create)</div>
+                            <div class="layer-description">
+                                축적된 지식을 바탕으로 새로운 인사이트 도출
+                            </div>
+                        </div>
+                        <div class="framework-layer">
+                            <div class="layer-icon">📤</div>
+                            <div class="layer-title">공유 (Share)</div>
+                            <div class="layer-description">
+                                지식을 다른 사람과 공유하고 피드백 수렴
+                            </div>
+                        </div>
+                        <div class="framework-layer">
+                            <div class="layer-icon">🔄</div>
+                            <div class="layer-title">개선 (Refine)</div>
+                            <div class="layer-description">
+                                지속적인 검토와 업데이트로 시스템 개선
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>왜 지식 관리 시스템이 필요한가?</h3>
+                <ul>
+                    <li><strong>정보 과부하 해결</strong>: 일일이 수많은 정보를 효과적으로 관리</li>
+                    <li><strong>장기 기억 보완</strong>: 외부 뇌(Second Brain)로 활용</li>
+                    <li><strong>창의적 사고 촉진</strong>: 정보 간 연결을 통한 새로운 아이디어 발견</li>
+                    <li><strong>학습 효율 향상</strong>: 체계적인 복습과 활용</li>
+                    <li><strong>지식 자산 구축</strong>: 평생 활용 가능한 개인 지식 베이스</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="framework">
+            <h2>2. 지식 관리 프레임워크</h2>
+            
+            <div class="card">
+                <h3>PARA 메소드</h3>
+                <div class="folder-structure">
+                    <div class="folder-tree">
+<span class="folder">📁 PARA System</span>
+├── <span class="folder">📁 1_Projects</span> <span class="comment">// 진행 중인 프로젝트 (명확한 결과물과 마감일)</span>
+│   ├── <span class="folder">📁 웹사이트 리뉴얼</span>
+│   ├── <span class="folder">📁 논문 작성</span>
+│   └── <span class="folder">📁 제품 출시</span>
+├── <span class="folder">📁 2_Areas</span> <span class="comment">// 지속적으로 관리하는 영역</span>
+│   ├── <span class="folder">📁 건강관리</span>
+│   ├── <span class="folder">📁 재정관리</span>
+│   └── <span class="folder">📁 가족</span>
+├── <span class="folder">📁 3_Resources</span> <span class="comment">// 미래에 유용할 수 있는 자료</span>
+│   ├── <span class="folder">📁 독서노트</span>
+│   ├── <span class="folder">📁 강의노트</span>
+│   └── <span class="folder">📁 참고자료</span>
+└── <span class="folder">📁 4_Archives</span> <span class="comment">// 비활성화된 항목</span>
+    ├── <span class="folder">📁 완료된 프로젝트</span>
+    └── <span class="folder">📁 오래된 자료</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Zettelkasten 방식</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment"># Zettelkasten 구조</span>
+
+<span class="folder">📁 Zettelkasten</span>
+├── <span class="folder">📁 Permanent Notes</span> <span class="comment">// 영구 노트 (하나의 아이디어)</span>
+│   ├── <span class="file">202401151423 - 지식의 복리 효과.md</span>
+│   ├── <span class="file">202401151456 - 연결이 창의성을 만든다.md</span>
+│   └── <span class="file">202401151523 - 작은 노트의 힘.md</span>
+├── <span class="folder">📁 Literature Notes</span> <span class="comment">// 문헌 노트 (출처 있는 정보)</span>
+│   ├── <span class="file">How to Take Smart Notes - Sönke Ahrens.md</span>
+│   └── <span class="file">Building a Second Brain - Tiago Forte.md</span>
+├── <span class="folder">📁 Reference Notes</span> <span class="comment">// 참조 노트 (사실 정보)</span>
+└── <span class="folder">📁 Index</span> <span class="comment">// 인덱스와 구조 노트</span>
+    ├── <span class="file">Index.md</span>
+    └── <span class="file">Structure Notes.md</span>
+
+<span class="comment"># 영구 노트 예시</span>
+<span class="tag">---</span>
+<span class="property">id</span>: <span class="value">202401151423</span>
+<span class="property">tags</span>: <span class="value">[knowledge-management, compound-effect]</span>
+<span class="property">created</span>: <span class="value">2024-01-15 14:23</span>
+<span class="tag">---</span>
+
+# 지식의 복리 효과
+
+지식은 금융 자산처럼 복리로 성장한다. 새로운 지식은 기존 지식과 결합하여 
+기하급수적인 가치를 창출한다.
+
+## 핵심 원리
+- 연결이 많을수록 가치가 증가
+- 시간이 지날수록 연결 밀도 증가
+- 품질 > 수량
+
+## 관련 노트
+- [[202401151456 - 연결이 창의성을 만든다]]
+- [[202401141234 - 네트워크 효과]]</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>CODE 방법론</h3>
+                <div class="workflow-system">
+                    <h4>Capture → Organize → Distill → Express</h4>
+                    <div class="workflow-steps">
+                        <div class="workflow-step">
+                            <div class="step-number">C</div>
+                            <div class="step-content">
+                                <div class="step-title">Capture (수집)</div>
+                                <div class="step-description">
+                                    흥미롭고 유용한 정보를 빠르게 포착합니다. 완벽함보다는 수집 자체에 집중하세요.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">O</div>
+                            <div class="step-content">
+                                <div class="step-title">Organize (정리)</div>
+                                <div class="step-description">
+                                    수집한 정보를 실행 가능한 형태로 정리합니다. PARA 방법론을 활용하여 체계화하세요.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">D</div>
+                            <div class="step-content">
+                                <div class="step-title">Distill (추출)</div>
+                                <div class="step-description">
+                                    핵심 인사이트를 추출하고 요약합니다. Progressive Summarization을 활용하세요.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">E</div>
+                            <div class="step-content">
+                                <div class="step-title">Express (표현)</div>
+                                <div class="step-description">
+                                    축적된 지식을 창작물로 표현합니다. 블로그, 프레젠테이션, 프로젝트 등으로 공유하세요.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="methodology">
+            <h2>3. 방법론 비교와 선택</h2>
+            
+            <div class="card">
+                <h3>주요 PKM 방법론 비교</h3>
+                <div class="methodology-comparison">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>방법론</th>
+                                <th>특징</th>
+                                <th>장점</th>
+                                <th>적합한 사용자</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>PARA</strong></td>
+                                <td>프로젝트 중심 구조</td>
+                                <td>실용적, 행동 지향적</td>
+                                <td>프로젝트 관리자, 실무자</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zettelkasten</strong></td>
+                                <td>원자적 노트, 고유 ID</td>
+                                <td>창의적 사고, 깊은 연결</td>
+                                <td>연구자, 작가, 학자</td>
+                            </tr>
+                            <tr>
+                                <td><strong>GTD</strong></td>
+                                <td>할 일 중심 관리</td>
+                                <td>스트레스 감소, 명확한 실행</td>
+                                <td>바쁜 직장인, 관리자</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Johnny Decimal</strong></td>
+                                <td>계층적 번호 체계</td>
+                                <td>체계적, 확장 가능</td>
+                                <td>대규모 프로젝트 관리자</td>
+                            </tr>
+                            <tr>
+                                <td><strong>IMF</strong></td>
+                                <td>인덱스, 맵, 필터</td>
+                                <td>유연성, 다중 관점</td>
+                                <td>복잡한 주제 연구자</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>하이브리드 접근법</h3>
+                <p>하나의 방법론에 얽매이지 말고, 자신의 필요에 맞게 여러 방법론을 조합하여 사용하세요.</p>
+                
+                <div class="folder-structure">
+                    <div class="folder-tree">
+<span class="folder">📁 Hybrid PKM System</span>
+├── <span class="folder">📁 0_Inbox</span> <span class="comment">// GTD: 수집함</span>
+├── <span class="folder">📁 1_Projects</span> <span class="comment">// PARA: 프로젝트</span>
+├── <span class="folder">📁 2_Areas</span> <span class="comment">// PARA: 영역</span>
+├── <span class="folder">📁 3_Resources</span> <span class="comment">// PARA: 자원</span>
+│   ├── <span class="folder">📁 Zettelkasten</span> <span class="comment">// 영구 노트</span>
+│   └── <span class="folder">📁 References</span> <span class="comment">// 참고 자료</span>
+├── <span class="folder">📁 4_Archives</span> <span class="comment">// PARA: 보관</span>
+└── <span class="folder">📁 _System</span> <span class="comment">// 시스템 파일</span>
+    ├── <span class="folder">📁 Templates</span>
+    ├── <span class="folder">📁 Attachments</span>
+    └── <span class="file">Index.md</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="implementation">
+            <h2>4. Obsidian에서 구현하기</h2>
+            
+            <div class="card">
+                <h3>필수 플러그인 설정</h3>
+                <ul>
+                    <li><strong>Templater</strong>: 노트 템플릿 자동화</li>
+                    <li><strong>Dataview</strong>: 동적 인덱스와 쿼리</li>
+                    <li><strong>QuickAdd</strong>: 빠른 노트 생성</li>
+                    <li><strong>Folder Note</strong>: 폴더 인덱스 관리</li>
+                    <li><strong>Auto Link Title</strong>: 링크 제목 자동 추출</li>
+                    <li><strong>Note Refactor</strong>: 노트 분할과 추출</li>
+                    <li><strong>Breadcrumbs</strong>: 계층 구조 시각화</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>템플릿 갤러리</h3>
+                <div class="template-gallery">
+                    <div class="template-grid">
+                        <div class="template-card">
+                            <div class="template-icon">📝</div>
+                            <div class="template-title">영구 노트 템플릿</div>
+                            <div class="template-description">
+                                Zettelkasten 방식의 원자적 노트 템플릿
+                            </div>
+                            <div class="template-preview">
+---
+id: {{date:YYYYMMDDHHmm}}
+tags: []
+created: {{date}}
+---
+
+# {{title}}
+
+## 핵심 아이디어
+
+
+## 근거와 예시
+
+
+## 관련 노트
+- [[]]
+
+## 참고 문헌
+                            </div>
+                        </div>
+
+                        <div class="template-card">
+                            <div class="template-icon">📚</div>
+                            <div class="template-title">독서 노트 템플릿</div>
+                            <div class="template-description">
+                                책을 읽으며 인사이트를 정리하는 템플릿
+                            </div>
+                            <div class="template-preview">
+---
+title: "{{title}}"
+author: 
+isbn: 
+category: 
+status: reading
+rating: 
+started: {{date}}
+finished: 
+tags: [book]
+---
+
+# 📚 {{title}}
+
+## 핵심 내용
+
+
+## 인상깊은 구절
+
+
+## 나의 생각
+
+
+## 행동 계획
+                            </div>
+                        </div>
+
+                        <div class="template-card">
+                            <div class="template-icon">🎯</div>
+                            <div class="template-title">프로젝트 템플릿</div>
+                            <div class="template-description">
+                                PARA 방식의 프로젝트 관리 템플릿
+                            </div>
+                            <div class="template-preview">
+---
+project: "{{title}}"
+status: active
+priority: high
+deadline: 
+tags: [project]
+created: {{date}}
+---
+
+# 🎯 {{title}}
+
+## 프로젝트 목표
+
+
+## 주요 작업
+- [ ] 
+
+## 리소스
+
+
+## 진행 로그
+### {{date:YYYY-MM-DD}}
+- 
+                            </div>
+                        </div>
+
+                        <div class="template-card">
+                            <div class="template-icon">💭</div>
+                            <div class="template-title">아이디어 템플릿</div>
+                            <div class="template-description">
+                                떠오른 아이디어를 빠르게 기록하는 템플릿
+                            </div>
+                            <div class="template-preview">
+---
+type: idea
+tags: [idea]
+created: {{date:YYYY-MM-DD HH:mm}}
+---
+
+# 💡 {{title}}
+
+## 아이디어 설명
+
+
+## 영감의 출처
+
+
+## 다음 단계
+- [ ] 
+                            </div>
+                        </div>
+
+                        <div class="template-card">
+                            <div class="template-icon">🗓️</div>
+                            <div class="template-title">주간 리뷰 템플릿</div>
+                            <div class="template-description">
+                                주간 성과를 돌아보고 계획하는 템플릿
+                            </div>
+                            <div class="template-preview">
+---
+week: {{date:YYYY-[W]ww}}
+tags: [weekly-review]
+---
+
+# 주간 리뷰: {{date:YYYY-[W]ww}}
+
+## 이번 주 성과
+- 
+
+## 배운 점
+
+
+## 개선할 점
+
+
+## 다음 주 계획
+- [ ] 
+                            </div>
+                        </div>
+
+                        <div class="template-card">
+                            <div class="template-icon">🔗</div>
+                            <div class="template-title">MOC 템플릿</div>
+                            <div class="template-description">
+                                Map of Content로 주제별 인덱스 생성
+                            </div>
+                            <div class="template-preview">
+---
+type: moc
+tags: [moc]
+created: {{date}}
+---
+
+# 🗺️ {{title}} MOC
+
+## 개요
+
+
+## 핵심 개념
+- [[]]
+
+## 관련 노트
+### 기초
+- [[]]
+
+### 심화
+- [[]]
+
+## 참고 자료
+- 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="workflow">
+            <h2>5. 일상 워크플로우</h2>
+            
+            <div class="card">
+                <h3>일일 루틴</h3>
+                <div class="workflow-system">
+                    <div class="workflow-steps">
+                        <div class="workflow-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Morning Capture (아침 수집)</div>
+                                <div class="step-description">
+                                    • Daily Note 생성<br>
+                                    • 오늘의 목표 설정<br>
+                                    • Inbox 정리<br>
+                                    • 중요 작업 우선순위 지정
+                                </div>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Work Sessions (작업 세션)</div>
+                                <div class="step-description">
+                                    • 프로젝트 노트 업데이트<br>
+                                    • 새로운 아이디어 캡처<br>
+                                    • 참고 자료 연결<br>
+                                    • 진행 상황 기록
+                                </div>
+                            </div>
+                        </div>
+                        <div class="workflow-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Evening Review (저녁 검토)</div>
+                                <div class="step-description">
+                                    • 오늘의 노트 정리<br>
+                                    • 태그와 링크 추가<br>
+                                    • 내일 할 일 준비<br>
+                                    • 감사 일기 작성
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>주간/월간 검토</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment"># 주간 검토 체크리스트</span>
+
+## 📊 지난 주 돌아보기
+- [ ] Daily Notes 검토
+- [ ] 완료된 작업 확인
+- [ ] 미완료 작업 이월
+- [ ] 주요 성과 기록
+
+## 🧹 정리 작업
+- [ ] Inbox 비우기
+- [ ] 노트 재구조화
+- [ ] 태그 정리
+- [ ] 깨진 링크 수정
+
+## 📈 분석과 개선
+- [ ] 생산성 패턴 분석
+- [ ] 병목 지점 파악
+- [ ] 시스템 개선점 도출
+
+## 🎯 다음 주 계획
+- [ ] 주요 목표 설정
+- [ ] 프로젝트 우선순위
+- [ ] 일정 블로킹
+- [ ] 리소스 준비</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="advanced">
+            <h2>6. 고급 기능과 자동화</h2>
+            
+            <div class="card">
+                <h3>스마트 쿼리와 대시보드</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment"># PKM 대시보드</span>
+
+## 📊 시스템 통계
+```dataview
+TABLE 
+    length(file.inlinks) as "백링크",
+    length(file.outlinks) as "아웃링크",
+    file.size as "크기"
+FROM ""
+SORT length(file.inlinks) DESC
+LIMIT 10
+```
+
+## 🔥 최근 수정된 노트
+```dataview
+LIST 
+FROM "" 
+WHERE file.mtime >= date(today) - dur(7 days)
+SORT file.mtime DESC
+LIMIT 20
+```
+
+## 🏷️ 태그 클라우드
+```dataviewjs
+const tags = {};
+for (const page of dv.pages()) {
+    if (page.tags) {
+        for (const tag of page.tags) {
+            tags[tag] = (tags[tag] || 0) + 1;
+        }
+    }
+}
+
+const sortedTags = Object.entries(tags)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 30);
+
+dv.el("div", sortedTags.map(([tag, count]) => 
+    `<span style="font-size: ${Math.min(200, 100 + count * 5)}%">#${tag} </span>`
+).join(" "));
+```</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>지식 그래프 활용</h3>
+                <div class="knowledge-graph">
+                    <h4>노트 간 연결 시각화</h4>
+                    <div class="graph-container">
+                        <div class="graph-node" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                            Index
+                        </div>
+                        <div class="graph-node" style="top: 20%; left: 30%;">
+                            Projects
+                        </div>
+                        <div class="graph-node" style="top: 20%; left: 70%;">
+                            Areas
+                        </div>
+                        <div class="graph-node" style="top: 80%; left: 30%;">
+                            Resources
+                        </div>
+                        <div class="graph-node" style="top: 80%; left: 70%;">
+                            Archive
+                        </div>
+                        <div class="graph-connection" style="width: 150px; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);"></div>
+                        <div class="graph-connection" style="width: 150px; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);"></div>
+                        <div class="graph-connection" style="width: 150px; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-135deg);"></div>
+                        <div class="graph-connection" style="width: 150px; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(135deg);"></div>
+                    </div>
+                    <p style="text-align: center; margin-top: 1rem; opacity: 0.8;">
+                        Local Graph View를 활용하여 노트 간의 연결을 시각적으로 탐색하세요
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>인터랙티브 데모</h3>
+                <div class="interactive-demo">
+                    <div class="demo-controls">
+                        <button class="demo-button" onclick="generateStructure()">폴더 구조 생성</button>
+                        <button class="demo-button" onclick="createTemplate()">템플릿 생성</button>
+                        <button class="demo-button" onclick="analyzeNotes()">노트 분석</button>
+                        <button class="demo-button" onclick="showWorkflow()">워크플로우 시뮬레이션</button>
+                    </div>
+                    <div class="demo-output" id="demo-output">
+                        데모 결과가 여기에 표시됩니다...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="best-practices">
+            <h2>7. 모범 사례와 팁</h2>
+            
+            <div class="card">
+                <h3>PKM 성공 원칙</h3>
+                <div class="best-practices">
+                    <div class="practice-grid">
+                        <div class="practice-card">
+                            <div class="practice-icon">🎯</div>
+                            <div class="practice-title">목적 명확화</div>
+                            <div class="practice-description">
+                                PKM의 목적을 명확히 정의하고, 그에 맞는 시스템을 구축하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🔄</div>
+                            <div class="practice-title">점진적 개선</div>
+                            <div class="practice-description">
+                                완벽한 시스템을 한 번에 만들려 하지 말고, 지속적으로 개선하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">⚡</div>
+                            <div class="practice-title">마찰 최소화</div>
+                            <div class="practice-description">
+                                노트 작성의 장벽을 낮추고, 빠르게 캡처할 수 있는 방법을 마련하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🔗</div>
+                            <div class="practice-title">연결 우선</div>
+                            <div class="practice-description">
+                                완벽한 분류보다 노트 간의 연결을 만드는 것에 집중하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">📅</div>
+                            <div class="practice-title">정기 검토</div>
+                            <div class="practice-description">
+                                주기적인 검토를 통해 시스템을 최신 상태로 유지하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🌱</div>
+                            <div class="practice-title">유기적 성장</div>
+                            <div class="practice-description">
+                                시스템이 자연스럽게 성장하도록 허용하되, 방향은 제시하세요.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>흔한 실수와 해결책</h3>
+                <ul>
+                    <li><strong>과도한 구조화</strong>: 너무 복잡한 폴더 구조는 오히려 생산성을 해칩니다</li>
+                    <li><strong>도구 집착</strong>: 도구보다 콘텐츠와 프로세스가 중요합니다</li>
+                    <li><strong>수집만 하기</strong>: 수집한 정보를 활용하지 않으면 의미가 없습니다</li>
+                    <li><strong>완벽주의</strong>: 80%의 완성도로도 충분합니다</li>
+                    <li><strong>일관성 부족</strong>: 기본 규칙은 지키되 유연하게 대처하세요</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>실습 과제</h2>
+            
+            <div class="practice-exercises">
+                <h3>이번 강의의 실습 과제</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🏗️ 과제 1: PKM 시스템 설계</span>
+                            <span class="difficulty-badge difficulty-easy">초급</span>
+                        </div>
+                        <p>자신만의 PKM 시스템을 설계하세요:</p>
+                        <ul>
+                            <li>목적과 목표 정의</li>
+                            <li>적합한 방법론 선택</li>
+                            <li>폴더 구조 설계</li>
+                            <li>기본 템플릿 작성</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🔄 과제 2: 워크플로우 구축</span>
+                            <span class="difficulty-badge difficulty-medium">중급</span>
+                        </div>
+                        <p>일상적인 지식 관리 워크플로우를 구축하세요:</p>
+                        <ul>
+                            <li>일일 루틴 설정</li>
+                            <li>주간 검토 프로세스</li>
+                            <li>자동화 스크립트 작성</li>
+                            <li>대시보드 구성</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🚀 과제 3: 고급 시스템 구현</span>
+                            <span class="difficulty-badge difficulty-hard">고급</span>
+                        </div>
+                        <p>완전한 PKM 시스템을 구현하세요:</p>
+                        <ul>
+                            <li>다중 방법론 통합</li>
+                            <li>고급 쿼리와 시각화</li>
+                            <li>외부 도구 연동</li>
+                            <li>시스템 문서화</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>FAQ</h2>
+            
+            <div class="faq-section">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        어떤 PKM 방법론을 선택해야 하나요?
+                    </div>
+                    <div class="faq-answer">
+                        정답은 없습니다. 당신의 목적, 작업 스타일, 선호도에 따라 다릅니다. PARA는 실용적이고, Zettelkasten은 창의적입니다. 여러 방법을 시도해보고 자신에게 맞는 것을 찾으세요.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        노트를 얼마나 자세히 작성해야 하나요?
+                    </div>
+                    <div class="faq-answer">
+                        미래의 자신이 이해할 수 있을 정도면 충분합니다. 너무 자세하면 시간이 오래 걸리고, 너무 간단하면 나중에 이해하기 어렵습니다. 핵심 아이디어와 맥락을 포함하세요.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        태그와 폴더 중 무엇을 사용해야 하나요?
+                    </div>
+                    <div class="faq-answer">
+                        둘 다 사용하세요. 폴더는 큰 구조를, 태그는 횡단적 분류를 담당합니다. 폴더는 배타적이지만 태그는 다중 적용이 가능합니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        언제 노트를 분할해야 하나요?
+                    </div>
+                    <div class="faq-answer">
+                        하나의 노트가 여러 주제를 다루거나 너무 길어지면 분할을 고려하세요. 각 노트는 하나의 핵심 아이디어를 담는 것이 이상적입니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        PKM 시스템 유지가 부담스러워요
+                    </div>
+                    <div class="faq-answer">
+                        시스템을 단순화하세요. 모든 것을 완벽하게 정리할 필요는 없습니다. 80/20 원칙을 적용하여 가장 중요한 20%에 집중하세요.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>추가 학습 자료</h2>
+            
+            <div class="resources-section">
+                <h3>지식 관리 시스템 관련 자료</h3>
+                <ul class="resource-list">
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📚 Building a Second Brain - Tiago Forte
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📚 How to Take Smart Notes - Sönke Ahrens
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🎥 PKM 시스템 구축 가이드 (동영상)
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📝 Obsidian PKM 템플릿 모음
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            💡 커뮤니티 PKM 사례 연구
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="next-lesson">
+            <h3>다음 강의 안내</h3>
+            <p>제25강: 연구와 논문 작성 - 학술적 글쓰기를 위한 Obsidian 활용법</p>
+            <p>Obsidian을 활용한 체계적인 연구 방법과 논문 작성 프로세스를 배웁니다.</p>
+        </div>
+    </div>
+
+    <script>
+        // FAQ 토글 기능
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 코드 복사 기능
+        function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('pre');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '복사됨!';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    button.textContent = '복사';
+                    button.style.background = 'var(--accent-color)';
+                }, 2000);
+            });
+        }
+
+        // 데모 함수들
+        function generateStructure() {
+            const output = document.getElementById('demo-output');
+            output.textContent = `폴더 구조 생성 중...
+
+📁 My PKM System
+├── 📁 0_Inbox
+│   └── 📄 Quick Capture.md
+├── 📁 1_Projects
+│   ├── 📁 Active
+│   └── 📁 Planning
+├── 📁 2_Areas
+│   ├── 📁 Personal
+│   ├── 📁 Professional
+│   └── 📁 Learning
+├── 📁 3_Resources
+│   ├── 📁 Books
+│   ├── 📁 Articles
+│   ├── 📁 Courses
+│   └── 📁 References
+├── 📁 4_Archives
+│   └── 📁 2024
+└── 📁 _System
+    ├── 📁 Templates
+    ├── 📁 Attachments
+    └── 📄 Index.md
+
+✅ 폴더 구조가 생성되었습니다!`;
+        }
+
+        function createTemplate() {
+            const output = document.getElementById('demo-output');
+            output.textContent = `템플릿 생성 중...
+
+📄 Daily Note Template
+---
+date: {{date}}
+tags: [daily]
+---
+
+# 📅 {{date:YYYY년 MM월 DD일 dddd}}
+
+## 🎯 오늘의 목표
+- [ ] 
+
+## 📝 노트
+
+
+## 💭 반성과 감사
+
+
+---
+✅ 템플릿이 생성되었습니다!
+경로: _System/Templates/Daily Note.md`;
+        }
+
+        function analyzeNotes() {
+            const output = document.getElementById('demo-output');
+            output.textContent = `노트 분석 중...
+
+📊 분석 결과:
+• 총 노트 수: 347개
+• 총 단어 수: 125,432개
+• 평균 노트 길이: 361 단어
+• 가장 연결된 노트: "PKM Index" (47개 링크)
+• 고립된 노트: 23개
+
+🏷️ 상위 태그:
+1. #learning (89회)
+2. #project (67회)
+3. #idea (54회)
+4. #daily (45회)
+5. #book (38회)
+
+🔗 연결 분석:
+• 총 링크 수: 892개
+• 평균 링크/노트: 2.57개
+• 양방향 링크: 234개
+
+💡 추천사항:
+• 고립된 노트들을 다른 노트와 연결하세요
+• "Areas/Learning" 폴더가 너무 커졌습니다. 세분화를 고려하세요`;
+        }
+
+        function showWorkflow() {
+            const output = document.getElementById('demo-output');
+            output.textContent = `워크플로우 시뮬레이션...
+
+⏰ 09:00 - Morning Routine
+  ✓ Daily Note 생성
+  ✓ 어제 노트 검토
+  ✓ 오늘의 우선순위 설정
+
+📥 10:00 - Capture Session
+  → 이메일에서 중요 정보 추출
+  → 웹 클리핑 3건
+  → 아이디어 노트 2개 생성
+
+🔨 14:00 - Processing
+  → Inbox 정리 (7개 항목)
+  → 노트 연결 생성
+  → 태그 추가
+
+📊 17:00 - Review & Plan
+  ✓ 오늘의 성과 정리
+  ✓ 내일 할 일 준비
+  ✓ 주간 목표 확인
+
+✅ 워크플로우 완료!`;
+        }
+
+        // 프레임워크 레이어 클릭 이벤트
+        document.querySelectorAll('.framework-layer').forEach(layer => {
+            layer.addEventListener('click', function() {
+                const title = this.querySelector('.layer-title').textContent;
+                const description = this.querySelector('.layer-description').textContent;
+                alert(`${title}\n\n${description}`);
+            });
+        });
+
+        // 페이지 로드 애니메이션
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.section').forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // 그래프 노드 애니메이션
+        document.querySelectorAll('.graph-node').forEach(node => {
+            node.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.2)';
+            });
+            node.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

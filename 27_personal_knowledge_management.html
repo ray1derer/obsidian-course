@@ -1,0 +1,2928 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제27강: 개인 지식 관리(PKM) 전략 - 옵시디언 마스터 과정</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #7c3aed;
+            --secondary-color: #a78bfa;
+            --background-color: #1a1a1a;
+            --surface-color: #262626;
+            --text-color: #e0e0e0;
+            --accent-color: #fbbf24;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --info-color: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 10s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #e0e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            color: #f0f0f0;
+        }
+
+        /* 네비게이션 스타일 */
+        nav {
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--accent-color);
+        }
+
+        /* 메인 컨텐츠 스타일 */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* 사이드바 스타일 */
+        .sidebar {
+            background-color: var(--surface-color);
+            border-radius: 16px;
+            padding: 2rem;
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .toc-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 0.8rem;
+        }
+
+        .toc-list a {
+            color: var(--text-color);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .toc-list a:hover,
+        .toc-list a.active {
+            background-color: rgba(124, 58, 237, 0.1);
+            border-left-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* 컨텐츠 영역 스타일 */
+        .content {
+            background-color: var(--surface-color);
+            border-radius: 16px;
+            padding: 3rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .content h2 {
+            font-size: 2.5rem;
+            margin: 3rem 0 1.5rem;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .content h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--secondary-color);
+        }
+
+        .content h4 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 0.8rem;
+            color: var(--primary-color);
+        }
+
+        .content p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+            color: #d0d0d0;
+        }
+
+        /* PKM 특별 스타일 */
+        .pkm-framework {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.1));
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        .knowledge-cycle {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .cycle-stage {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .cycle-stage:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+
+        .cycle-stage i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* 마인드맵 스타일 */
+        .mindmap-container {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mindmap-node {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            position: relative;
+            font-weight: bold;
+        }
+
+        .mindmap-branch {
+            position: absolute;
+            width: 2px;
+            background: var(--secondary-color);
+            transform-origin: left center;
+        }
+
+        /* 노트 시스템 카드 */
+        .note-system {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .system-card {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(251, 191, 36, 0.2);
+        }
+
+        /* 워크플로우 다이어그램 */
+        .workflow-diagram {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+
+        .workflow-step {
+            display: inline-block;
+            background: var(--surface-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 0 1rem;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+        }
+
+        .workflow-step::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        /* 코드 블록 스타일 */
+        .code-block {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0.5rem;
+            right: 1rem;
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            background-color: rgba(124, 58, 237, 0.2);
+            padding: 0.2rem 0.8rem;
+            border-radius: 4px;
+        }
+
+        code {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #f8f8f2;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* 인포그래픽 스타일 */
+        .infographic {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1));
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        /* 팁 박스 스타일 */
+        .tip-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1));
+            border-left: 4px solid var(--success-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.1));
+            border-left: 4px solid var(--warning-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.1));
+            border-left: 4px solid var(--info-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        /* 인터랙티브 요소 */
+        .interactive-quiz {
+            background-color: rgba(124, 58, 237, 0.1);
+            border: 2px dashed var(--primary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .quiz-option {
+            background: var(--surface-color);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: rgba(124, 58, 237, 0.2);
+            transform: translateX(10px);
+        }
+
+        /* 프로그레스 트래커 */
+        .progress-tracker {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .progress-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .progress-checkbox.checked {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* 리소스 갤러리 */
+        .resource-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .resource-card {
+            background: var(--surface-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .resource-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* 타임라인 */
+        .knowledge-timeline {
+            position: relative;
+            padding: 2rem 0;
+            margin: 2rem 0;
+        }
+
+        .timeline-event {
+            display: flex;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .timeline-date {
+            width: 120px;
+            text-align: right;
+            padding-right: 2rem;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(124, 58, 237, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: 138px;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .timeline-event::after {
+            content: '';
+            position: absolute;
+            left: 143px;
+            top: 2rem;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background: var(--primary-color);
+            opacity: 0.3;
+        }
+
+        .timeline-event:last-child::after {
+            display: none;
+        }
+
+        /* 체크리스트 스타일 */
+        .checklist {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .checklist li {
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: #d0d0d0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .checklist li:hover {
+            background-color: rgba(124, 58, 237, 0.05);
+            padding-left: 2.5rem;
+        }
+
+        .checklist li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container,
+            .nav-container,
+            .content {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .content h2 {
+                font-size: 1.8rem;
+            }
+
+            .content h3 {
+                font-size: 1.4rem;
+            }
+
+            .knowledge-cycle,
+            .note-system,
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-diagram {
+                overflow-x: scroll;
+            }
+        }
+
+        /* 프린트 스타일 */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            header,
+            nav,
+            .sidebar {
+                display: none;
+            }
+
+            .main-container {
+                display: block;
+                max-width: 100%;
+            }
+
+            .content {
+                background: none;
+                border: none;
+                padding: 0;
+            }
+        }
+
+        /* 스크롤바 스타일 */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface-color);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        /* 로딩 애니메이션 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 플로팅 액션 버튼 */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .fab:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.6);
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(124, 58, 237, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(124, 58, 237, 0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* 뱃지 스타일 */
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(124, 58, 237, 0.2);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0 0.3rem;
+        }
+
+        .lecture-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--accent-color), #f59e0b);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(251, 191, 36, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>제27강: 개인 지식 관리(PKM) 전략</h1>
+            <p class="subtitle">옵시디언으로 구축하는 두 번째 뇌, 지식의 정원 가꾸기</p>
+            <div class="lecture-meta">
+                <span class="badge"><i class="fas fa-brain"></i> 고급</span>
+                <span class="badge"><i class="fas fa-clock"></i> 50분</span>
+                <span class="badge"><i class="fas fa-seedling"></i> 실전 전략</span>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> 홈</a>
+                <a href="26_project_management.html"><i class="fas fa-chevron-left"></i> 이전 강의</a>
+                <a href="28_ai_integration.html"><i class="fas fa-chevron-right"></i> 다음 강의</a>
+            </div>
+            <div class="nav-links">
+                <a href="#overview"><i class="fas fa-brain"></i> 개요</a>
+                <a href="#practice"><i class="fas fa-code"></i> 실습</a>
+                <a href="#download" class="download-btn"><i class="fas fa-download"></i> 자료 다운로드</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <aside class="sidebar fade-in">
+            <h3 class="toc-title"><i class="fas fa-list"></i> 목차</h3>
+            <ul class="toc-list">
+                <li><a href="#intro" class="active">들어가며</a></li>
+                <li><a href="#pkm-theory">PKM 이론과 원칙</a></li>
+                <li><a href="#capture-system">정보 수집 시스템</a></li>
+                <li><a href="#organize-system">정보 조직화</a></li>
+                <li><a href="#connect-system">지식 연결하기</a></li>
+                <li><a href="#retrieve-system">검색과 활용</a></li>
+                <li><a href="#review-system">리뷰와 발전</a></li>
+                <li><a href="#workflows">PKM 워크플로우</a></li>
+                <li><a href="#tools-integration">도구 통합</a></li>
+                <li><a href="#case-studies">실제 사례</a></li>
+                <li><a href="#advanced-strategies">고급 전략</a></li>
+                <li><a href="#conclusion">마무리</a></li>
+            </ul>
+        </aside>
+
+        <main class="content">
+            <section id="intro" class="fade-in">
+                <h2><i class="fas fa-seedling"></i> 들어가며</h2>
+                
+                <p>개인 지식 관리(Personal Knowledge Management, PKM)는 디지털 시대의 필수 역량이 되었습니다. 이번 강의에서는 옵시디언을 활용하여 효과적인 PKM 시스템을 구축하고, 지식을 체계적으로 관리하며 창의적으로 활용하는 방법을 학습합니다.</p>
+
+                <div class="pkm-framework">
+                    <h3>PKM의 핵심 가치</h3>
+                    <ul>
+                        <li><strong>외부 기억장치</strong>: 두 번째 뇌로서의 디지털 지식 저장소</li>
+                        <li><strong>연결된 사고</strong>: 아이디어 간의 예상치 못한 연결 발견</li>
+                        <li><strong>복합 학습</strong>: 수집, 처리, 연결, 창조의 순환</li>
+                        <li><strong>장기적 성장</strong>: 시간이 지날수록 가치가 증가하는 지식 자산</li>
+                        <li><strong>창의적 산출</strong>: 축적된 지식을 바탕으로 한 새로운 통찰</li>
+                    </ul>
+                </div>
+
+                <div class="infographic">
+                    <h3>PKM 시스템의 효과</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">73%</div>
+                            <div class="stat-label">정보 검색 시간 단축</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">5x</div>
+                            <div class="stat-label">아이디어 연결 증가</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">89%</div>
+                            <div class="stat-label">학습 효율 향상</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">∞</div>
+                            <div class="stat-label">지식의 복리 효과</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pkm-theory" class="fade-in">
+                <h2><i class="fas fa-book"></i> PKM 이론과 원칙</h2>
+
+                <h3>1. 지식 관리의 순환 구조</h3>
+                
+                <div class="knowledge-cycle">
+                    <div class="cycle-stage">
+                        <i class="fas fa-search"></i>
+                        <h4>발견 (Discover)</h4>
+                        <p>정보를 찾고 수집하는 단계. 다양한 소스에서 가치 있는 정보를 포착합니다.</p>
+                    </div>
+                    <div class="cycle-stage">
+                        <i class="fas fa-filter"></i>
+                        <h4>정제 (Distill)</h4>
+                        <p>수집한 정보를 분석하고 핵심을 추출하는 단계. 노이즈를 제거하고 본질을 파악합니다.</p>
+                    </div>
+                    <div class="cycle-stage">
+                        <i class="fas fa-link"></i>
+                        <h4>연결 (Connect)</h4>
+                        <p>정보들 간의 관계를 발견하고 연결하는 단계. 새로운 통찰이 생성됩니다.</p>
+                    </div>
+                    <div class="cycle-stage">
+                        <i class="fas fa-lightbulb"></i>
+                        <h4>창조 (Create)</h4>
+                        <p>축적된 지식을 바탕으로 새로운 아이디어나 콘텐츠를 만드는 단계입니다.</p>
+                    </div>
+                </div>
+
+                <h3>2. 제텔카스텐 원칙</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 제텔카스텐 핵심 원칙
+
+## 1. 원자적 노트 (Atomic Notes)
+- 하나의 노트는 하나의 아이디어만 담는다
+- 독립적으로 이해 가능해야 한다
+- 다른 노트와 자유롭게 연결될 수 있다
+
+## 2. 고유 식별자 (Unique Identifier)
+- 모든 노트는 고유한 ID를 가진다
+- 예: 202401151430 (타임스탬프)
+- 또는: 1a1, 1a2, 1b1 (계층적 번호)
+
+## 3. 연결의 원칙 (Linking Principle)
+- 관련 노트들을 적극적으로 연결한다
+- 연결의 이유를 명시한다
+- 예상치 못한 연결을 환영한다
+
+## 4. 지속적 발전 (Continuous Development)
+- 노트는 완성되지 않는다
+- 새로운 통찰이 생기면 업데이트한다
+- 시간이 지날수록 풍부해진다
+
+## 5. 자기 언어로 작성 (Own Words)
+- 단순 복사가 아닌 자신의 언어로 재구성
+- 이해한 내용을 바탕으로 작성
+- 미래의 자신이 이해할 수 있도록</code>
+                </div>
+
+                <h3>3. PARA 방법론</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># PARA 방법론 구조
+
+## 📁 Projects (프로젝트)
+현재 진행 중인 작업들
+- 명확한 결과물이 있음
+- 마감일이 정해져 있음
+- 활발히 작업 중
+
+예시:
+- 📁 블로그 포스트 작성
+- 📁 프레젠테이션 준비
+- 📁 연구 논문
+
+## 📁 Areas (영역)
+지속적으로 관리해야 하는 책임 영역
+- 끝이 없는 지속적 관리
+- 표준을 유지해야 함
+- 정기적 검토 필요
+
+예시:
+- 📁 건강 관리
+- 📁 재정 관리
+- 📁 가족 관계
+
+## 📁 Resources (자료)
+미래에 유용할 수 있는 참고 자료
+- 당장 사용하지 않음
+- 나중에 참고할 가능성
+- 주제별로 정리
+
+예시:
+- 📁 프로그래밍 팁
+- 📁 요리 레시피
+- 📁 여행 정보
+
+## 📁 Archive (보관함)
+더 이상 활성화되지 않은 항목들
+- 완료된 프로젝트
+- 비활성 영역
+- 오래된 자료
+
+예시:
+- 📁 2023년 프로젝트
+- 📁 이전 직장 자료
+- 📁 졸업 논문</code>
+                </div>
+
+                <h3>4. CODE 방법</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># CODE 방법: 정보를 지식으로
+
+## C - Capture (포착)
+흥미롭고 유용한 정보를 빠르게 수집
+```
+- 웹 클리퍼 사용
+- 음성 메모 활용
+- 스크린샷 저장
+- 빠른 노트 작성
+```
+
+## O - Organize (조직)
+수집한 정보를 체계적으로 정리
+```
+- 폴더 구조 활용
+- 태그 시스템 구축
+- 메타데이터 추가
+- 정기적 정리
+```
+
+## D - Distill (정제)
+핵심 내용을 추출하고 요약
+```
+- 프로그레시브 요약
+- 핵심 문장 하이라이트
+- 자신의 언어로 재작성
+- 불필요한 내용 제거
+```
+
+## E - Express (표현)
+학습한 내용을 창의적으로 활용
+```
+- 블로그 포스트 작성
+- 프레젠테이션 제작
+- 새로운 프로젝트 시작
+- 지식 공유
+```</code>
+                </div>
+            </section>
+
+            <section id="capture-system" class="fade-in">
+                <h2><i class="fas fa-inbox"></i> 정보 수집 시스템</h2>
+
+                <h3>1. 수집 도구 설정</h3>
+                
+                <div class="note-system">
+                    <div class="system-card">
+                        <h4>🌐 웹 클리퍼</h4>
+                        <p>브라우저에서 직접 옵시디언으로 정보 저장</p>
+                        <ul>
+                            <li>Obsidian Web Clipper</li>
+                            <li>MarkDownload 확장</li>
+                            <li>SingleFile로 전체 페이지 저장</li>
+                            <li>Hypothesis로 웹 주석</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="system-card">
+                        <h4>📱 모바일 수집</h4>
+                        <p>이동 중에도 끊김 없는 정보 수집</p>
+                        <ul>
+                            <li>Obsidian Mobile</li>
+                            <li>음성 메모 → 텍스트 변환</li>
+                            <li>사진 → OCR</li>
+                            <li>공유 기능 활용</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="system-card">
+                        <h4>📚 독서 노트</h4>
+                        <p>책과 논문에서 통찰 추출</p>
+                        <ul>
+                            <li>Readwise 연동</li>
+                            <li>Kindle 하이라이트 가져오기</li>
+                            <li>PDF 주석 추출</li>
+                            <li>수동 입력 템플릿</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>2. Daily Notes 시스템</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 📅 2024-01-15 월요일
+
+## 🌅 오늘의 시작
+- [ ] 명상 10분
+- [ ] 저널링
+- [ ] 오늘의 목표 설정
+
+## 📥 Inbox
+<!-- 오늘 수집한 모든 정보를 일단 여기에 -->
+- [[웹 아티클]] - "The Future of PKM Systems"
+- 아이디어: 지식 관리 자동화 도구 개발
+- 인용구: "We shape our tools and thereafter they shape us" - McLuhan
+- 미팅 노트: [[2024-01-15 팀 회의]]
+
+## 💭 오늘의 생각
+### 10:30 - PKM 시스템 개선에 대해
+최근 내 PKM 시스템이 너무 복잡해진 것 같다. 단순화가 필요하다.
+핵심은 수집이 아니라 연결과 창조에 있다는 것을 잊지 말자.
+
+### 14:15 - 학습 방법론
+[[파인만 기법]]을 실제로 적용해보니 효과가 놀랍다. 
+특히 복잡한 개념을 단순한 언어로 설명하는 과정에서 
+내가 정말로 이해하지 못했던 부분들이 드러났다.
+
+## 📝 작업 기록
+- [x] [[프로젝트 A]] - 기획서 초안 작성
+- [x] [[독서노트]] - "Atomic Habits" 3장 정리
+- [ ] [[블로그 포스트]] - PKM 시리즈 2편 작성
+
+## 🔗 오늘의 연결
+- [[2024-01-10 Daily Note]]에서 언급한 아이디어가 오늘의 프로젝트와 연결됨
+- [[제텔카스텐]]과 [[GTD]]의 통합 방법 발견
+
+## 🌙 하루 마무리
+### 감사한 것
+1. 새로운 통찰을 얻은 것
+2. 생산적인 하루를 보낸 것
+3. 가족과 함께한 저녁 시간
+
+### 내일을 위한 메모
+- [ ] [[프로젝트 B]] 킥오프 미팅 준비
+- [ ] 주간 리뷰 시간 확보</code>
+                </div>
+
+                <h3>3. 빠른 캡처 템플릿</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🎯 빠른 캡처 - {{date}} {{time}}
+
+**소스**: {{source}}
+**태그**: #capture #to-process
+**관련**: [[]]
+
+## 📌 핵심 내용
+{{content}}
+
+## 💭 첫 인상
+<!-- 왜 이것을 캡처했는가? -->
+
+## 🔗 잠재적 연결
+<!-- 어떤 기존 노트와 연결될 수 있는가? -->
+
+## ⏭️ 다음 액션
+- [ ] 상세 노트로 발전시키기
+- [ ] 관련 자료 더 찾아보기
+- [ ] 실험/적용해보기
+
+---
+*캡처 시간: {{time}}*</code>
+                </div>
+
+                <h3>4. 멀티미디어 관리</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 📸 미디어 자산 관리
+
+## 이미지 관리
+```
+Assets/
+├── Images/
+│   ├── 2024/
+│   │   ├── 01-January/
+│   │   │   ├── screenshots/
+│   │   │   ├── diagrams/
+│   │   │   └── photos/
+│   │   └── 02-February/
+│   └── permanent/
+│       ├── logos/
+│       └── templates/
+```
+
+## 이미지 메타데이터 템플릿
+```yaml
+---
+type: image
+date: 2024-01-15
+source: "website/book/original"
+tags: [tag1, tag2]
+description: "이미지 설명"
+alt-text: "접근성을 위한 대체 텍스트"
+related: [[관련노트]]
+---
+```
+
+## 오디오/비디오 노트
+```markdown
+# 🎥 {{title}}
+
+**원본**: [YouTube Link]({{url}})
+**길이**: {{duration}}
+**화자**: {{speaker}}
+**날짜**: {{date}}
+
+## ⏱️ 타임스탬프
+- 00:00 - 인트로
+- 02:15 - 핵심 개념 설명
+- 15:30 - 실제 사례
+- 25:00 - Q&A
+
+## 📝 핵심 내용
+### 02:15 - 핵심 개념
+> "직접 인용문"
+
+내 해석: ...
+
+### 15:30 - 사례 연구
+- 포인트 1
+- 포인트 2
+
+## 💡 통찰
+- 
+
+## 🔗 관련 자료
+- [[관련 노트]]
+- [참고 문서](link)
+```</code>
+                </div>
+            </section>
+
+            <section id="organize-system" class="fade-in">
+                <h2><i class="fas fa-folder-tree"></i> 정보 조직화</h2>
+
+                <h3>1. 폴더 구조 설계</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🗂️ PKM 폴더 구조
+
+```
+Vault/
+├── 000 Index/              # 시작점과 맵
+│   ├── 000 Start Here.md
+│   ├── 001 Index.md
+│   └── 002 MOCs/          # Maps of Content
+├── 100 Daily/             # 일상 기록
+│   ├── 2024/
+│   │   └── 01-January/
+│   └── Templates/
+├── 200 Areas/             # 지속 관리 영역
+│   ├── 210 Career/
+│   ├── 220 Health/
+│   ├── 230 Finance/
+│   └── 240 Relationships/
+├── 300 Resources/         # 참고 자료
+│   ├── 310 Articles/
+│   ├── 320 Books/
+│   ├── 330 Courses/
+│   └── 340 Tools/
+├── 400 Projects/          # 활성 프로젝트
+│   ├── Active/
+│   └── Archive/
+├── 500 Knowledge/         # 영구 노트
+│   ├── 510 Concepts/
+│   ├── 520 Mental Models/
+│   └── 530 Frameworks/
+├── 600 Creative/          # 창작물
+│   ├── 610 Writing/
+│   ├── 620 Ideas/
+│   └── 630 Experiments/
+├── 700 People/            # 인물 노트
+├── 800 Reviews/           # 리뷰와 회고
+│   ├── Weekly/
+│   ├── Monthly/
+│   └── Annual/
+├── 900 Archive/           # 보관함
+└── 999 Meta/              # 시스템 관리
+    ├── Templates/
+    ├── Scripts/
+    └── Documentation/
+```</code>
+                </div>
+
+                <h3>2. 태그 시스템</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🏷️ 태그 체계
+
+## 상태 태그
+- #📥to-process - 처리 필요
+- #🚧in-progress - 작업 중
+- #✅completed - 완료
+- #🔄recurring - 반복
+- #⏸️on-hold - 보류
+
+## 유형 태그
+- #📚book - 도서
+- #📰article - 아티클
+- #🎥video - 비디오
+- #🎙️podcast - 팟캐스트
+- #💡idea - 아이디어
+- #✍️writing - 글쓰기
+- #🔬research - 연구
+
+## 주제 태그 (계층적)
+- #tech/programming/python
+- #tech/programming/javascript
+- #business/marketing/content
+- #business/finance/investing
+- #personal/health/exercise
+- #personal/productivity/pkm
+
+## 중요도 태그
+- #⭐️important
+- #🔥urgent
+- #💎evergreen
+- #🌱seedling
+
+## 출처 태그
+- #source/book/
+- #source/web/
+- #source/podcast/
+- #source/original/
+
+## 프로젝트 태그
+- #project/active/
+- #project/completed/
+- #project/idea/
+
+## 태그 사용 규칙
+1. 최대 5개까지만 사용
+2. 가장 구체적인 태그 사용
+3. 계층 구조 활용
+4. 정기적으로 정리
+5. 사용하지 않는 태그 제거</code>
+                </div>
+
+                <h3>3. Maps of Content (MOC)</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🗺️ PKM 마스터 맵
+
+이 맵은 내 PKM 시스템의 전체 구조를 보여줍니다.
+
+## 🎯 핵심 영역
+### 📚 학습과 성장
+- [[학습 방법론 MOC]]
+- [[독서 시스템]]
+- [[온라인 코스 관리]]
+- [[스킬 개발 로드맵]]
+
+### 💼 경력과 프로젝트
+- [[경력 개발 MOC]]
+- [[프로젝트 포트폴리오]]
+- [[네트워킹 전략]]
+- [[개인 브랜딩]]
+
+### 🧘 개인 발전
+- [[습관 시스템]]
+- [[건강 관리 MOC]]
+- [[마음챙김과 명상]]
+- [[인간관계 관리]]
+
+### 💡 창의성과 아이디어
+- [[아이디어 뱅크]]
+- [[글쓰기 프로젝트]]
+- [[창의적 프로세스]]
+- [[영감 수집함]]
+
+## 🔧 시스템과 도구
+### 핵심 워크플로우
+- [[일일 루틴]]
+- [[주간 리뷰 프로세스]]
+- [[월간 계획]]
+- [[연간 목표 설정]]
+
+### 도구 모음
+- [[옵시디언 설정]]
+- [[플러그인 목록]]
+- [[단축키 모음]]
+- [[자동화 스크립트]]
+
+## 📈 메트릭스와 추적
+- [[습관 트래커]]
+- [[학습 로그]]
+- [[프로젝트 진행상황]]
+- [[목표 달성률]]
+
+## 🌟 주요 프로젝트
+### 현재 진행 중
+1. [[PKM 시스템 최적화]]
+2. [[블로그 콘텐츠 시리즈]]
+3. [[온라인 코스 제작]]
+
+### 아이디어 단계
+- [[미래 프로젝트 아이디어]]
+- [[실험하고 싶은 것들]]
+
+## 📚 지식 베이스
+- [[핵심 개념 사전]]
+- [[멘탈 모델 컬렉션]]
+- [[인용구 모음]]
+- [[사례 연구]]
+
+---
+*마지막 업데이트: {{date}}*</code>
+                </div>
+
+                <h3>4. 메타데이터 시스템</h3>
+                
+                <div class="code-block" data-language="yaml">
+<code>---
+# 노트 메타데이터 템플릿
+title: "{{title}}"
+date: {{date}}
+lastmod: {{date}}
+tags: [tag1, tag2]
+categories: [category]
+type: "permanent-note" # fleeting, literature, permanent
+status: "🌱 seedling" # 🌱 seedling, 🌿 budding, 🌳 evergreen
+confidence: 7 # 1-10
+importance: 8 # 1-10
+effort: 3 # 예상 소요 시간
+related:
+  - "[[관련 노트 1]]"
+  - "[[관련 노트 2]]"
+sources:
+  - "책 제목, 저자, 페이지"
+  - "URL"
+aliases:
+  - "다른 이름 1"
+  - "다른 이름 2"
+---</code>
+                </div>
+            </section>
+
+            <section id="connect-system" class="fade-in">
+                <h2><i class="fas fa-link"></i> 지식 연결하기</h2>
+
+                <h3>1. 링크 전략</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🔗 효과적인 링킹 전략
+
+## 1. 컨텍스트 링크
+나쁜 예:
+```
+관련 항목: [[노트1]] [[노트2]] [[노트3]]
+```
+
+좋은 예:
+```
+이 개념은 [[노트1|심리학적 관점]]에서 보면 흥미로운데,
+특히 [[노트2|행동 경제학]]의 원리와 연결하면 
+[[노트3|실용적 응용]]이 가능하다.
+```
+
+## 2. 링크 타입 명시
+```markdown
+## 🔗 연결
+### 📖 이론적 배경
+- [[인지 심리학]] - 기본 이론 제공
+- [[시스템 사고]] - 전체적 관점
+
+### 🔄 유사 개념
+- [[마인드맵]] - 시각적 구조화
+- [[개념도]] - 관계 중심 표현
+
+### ⚡ 실제 적용
+- [[프로젝트 A]] - 이 방법론 적용
+- [[일일 루틴]] - 실천 방법
+
+### 🤔 대조/비교
+- [[전통적 노트]] - 선형적 vs 네트워크적
+- [[폴더 시스템]] - 계층적 vs 연결적
+```
+
+## 3. 브릿지 노트
+```markdown
+# 🌉 [[개념A]]와 [[개념B]]의 연결
+
+## 공통점
+- 둘 다 정보 구조화에 관련
+- 시각적 표현 중시
+- 연결성 강조
+
+## 차이점
+| 측면 | 개념A | 개념B |
+|------|-------|-------|
+| 접근 | 하향식 | 상향식 |
+| 구조 | 계층적 | 네트워크 |
+| 용도 | 분석 | 종합 |
+
+## 시너지
+두 개념을 결합하면...
+1. 더 완전한 이해 가능
+2. 각각의 약점 보완
+3. 새로운 통찰 창출
+
+## 실제 사례
+[[프로젝트 X]]에서 두 방법을 통합하여...
+```</code>
+                </div>
+
+                <h3>2. 구조 노트 (Structure Notes)</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🏗️ PKM 시스템 구조 노트
+
+## 개요
+이 노트는 PKM 시스템의 전체 구조와 각 구성 요소 간의 관계를 보여줍니다.
+
+## 🎯 핵심 구성 요소
+
+### 1. 입력 시스템 (Input)
+```mermaid
+graph LR
+    A[정보 소스] --> B[캡처 도구]
+    B --> C[Inbox]
+    C --> D[처리 대기]
+```
+
+관련 노트:
+- [[웹 클리핑 워크플로우]]
+- [[독서 노트 시스템]]
+- [[일일 캡처 루틴]]
+
+### 2. 처리 시스템 (Processing)
+```mermaid
+graph TD
+    A[Inbox] --> B{분류}
+    B -->|참고자료| C[Resources]
+    B -->|실행필요| D[Projects]
+    B -->|지식| E[Permanent Notes]
+    B -->|삭제| F[Trash]
+```
+
+관련 노트:
+- [[프로그레시브 요약법]]
+- [[PARA 방법론 실전]]
+- [[노트 성숙도 모델]]
+
+### 3. 연결 시스템 (Connecting)
+- [[링크 vs 태그 전략]]
+- [[MOC 작성 가이드]]
+- [[시각적 지식 맵핑]]
+
+### 4. 출력 시스템 (Output)
+- [[블로그 글쓰기 워크플로우]]
+- [[프레젠테이션 제작]]
+- [[지식 공유 전략]]
+
+## 🔄 워크플로우 통합
+
+### 일일 워크플로우
+1. Morning Review → [[일일 계획]]
+2. Capture → [[빠른 캡처]]
+3. Process → [[저녁 정리]]
+4. Reflect → [[일일 회고]]
+
+### 주간 워크플로우
+1. Weekly Review → [[주간 리뷰 템플릿]]
+2. Link Building → [[연결 세션]]
+3. Content Creation → [[콘텐츠 스프린트]]
+
+## 📊 시스템 메트릭스
+- 일일 캡처 노트 수: 평균 15개
+- 주간 영구 노트 생성: 평균 5개
+- 월간 콘텐츠 산출: 평균 4개
+
+## 🔧 최적화 포인트
+1. [ ] Inbox 처리 시간 단축
+2. [ ] 링킹 자동화 개선
+3. [ ] 검색 효율성 향상</code>
+                </div>
+
+                <h3>3. 트레일 가이드</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🥾 PKM 학습 트레일
+
+## 🌄 초보자 트레일 (1-2주)
+### Day 1-3: 기본 설정
+1. [[옵시디언 설치 및 설정]]
+2. [[첫 번째 노트 만들기]]
+3. [[기본 마크다운 문법]]
+
+### Day 4-7: 일일 노트
+1. [[Daily Notes 시작하기]]
+2. [[템플릿 활용법]]
+3. [[습관 만들기]]
+
+### Week 2: 연결과 구조
+1. [[링크 만들기]]
+2. [[태그 사용법]]
+3. [[첫 MOC 만들기]]
+
+## 🏔️ 중급자 트레일 (3-8주)
+### Week 3-4: 시스템 구축
+1. [[PARA 방법론 도입]]
+2. [[폴더 구조 최적화]]
+3. [[메타데이터 활용]]
+
+### Week 5-6: 워크플로우
+1. [[캡처 시스템 구축]]
+2. [[처리 루틴 확립]]
+3. [[리뷰 주기 설정]]
+
+### Week 7-8: 자동화
+1. [[템플릿 고급 활용]]
+2. [[플러그인 설정]]
+3. [[단축키 마스터]]
+
+## 🚀 고급자 트레일 (2개월+)
+### Month 3: 고급 기법
+1. [[Dataview 쿼리]]
+2. [[자동화 스크립트]]
+3. [[API 연동]]
+
+### Month 4: 창의적 활용
+1. [[지식 시각화]]
+2. [[콘텐츠 생성 시스템]]
+3. [[협업 워크플로우]]
+
+## 📚 추천 읽기 순서
+1. [[PKM이란 무엇인가]]
+2. [[왜 옵시디언인가]]
+3. [[제텔카스텐 원리]]
+4. [[디지털 정원 가꾸기]]
+5. [[지식 복리 효과]]
+
+## 🎯 실습 프로젝트
+### 프로젝트 1: 독서 노트 시스템
+- [[독서 노트 템플릿]]
+- [[책 요약 방법]]
+- [[인용구 관리]]
+
+### 프로젝트 2: 학습 관리 시스템
+- [[강의 노트 작성]]
+- [[복습 시스템]]
+- [[시험 준비]]
+
+### 프로젝트 3: 창작 프로젝트
+- [[아이디어 뱅크]]
+- [[글쓰기 시스템]]
+- [[출판 워크플로우]]</code>
+                </div>
+            </section>
+
+            <section id="retrieve-system" class="fade-in">
+                <h2><i class="fas fa-search"></i> 검색과 활용</h2>
+
+                <h3>1. 검색 전략</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🔍 고급 검색 전략
+
+## 1. 검색 연산자 활용
+```
+"정확한 구문"           # 정확히 일치하는 구문
+단어1 OR 단어2          # 둘 중 하나 포함
+단어1 AND 단어2         # 둘 다 포함
+-제외단어              # 특정 단어 제외
+file:파일명            # 파일명 검색
+path:폴더명            # 특정 폴더 내 검색
+tag:#태그명            # 태그 검색
+line:검색어            # 라인 단위 검색
+section:검색어         # 섹션 단위 검색
+```
+
+## 2. 정규식 검색
+```
+/regex/                # 정규식 패턴
+/\d{4}-\d{2}-\d{2}/   # 날짜 패턴 (YYYY-MM-DD)
+/^#{1,3}\s.*/         # 헤딩 검색
+/\[\[.*?\]\]/         # 모든 위키링크
+```
+
+## 3. Dataview 쿼리
+```dataview
+TABLE 
+    file.ctime as "생성일",
+    file.mtime as "수정일",
+    length(file.outlinks) as "링크 수"
+FROM ""
+WHERE contains(file.name, "PKM")
+SORT file.mtime DESC
+LIMIT 10
+```
+
+## 4. 스마트 검색 조합
+### 최근 수정된 미완성 노트
+```
+tag:#🌱seedling -tag:#✅completed 
+```
+
+### 특정 기간 내 작성된 노트
+```dataview
+LIST
+FROM ""
+WHERE file.ctime >= date(2024-01-01) 
+  AND file.ctime <= date(2024-01-31)
+SORT file.ctime DESC
+```
+
+### 고아 노트 찾기 (연결되지 않은 노트)
+```dataview
+LIST
+FROM ""
+WHERE length(file.inlinks) = 0 
+  AND length(file.outlinks) = 0
+```
+
+## 5. 검색 결과 활용
+1. 검색 결과를 새로운 MOC로 저장
+2. 자주 사용하는 검색을 북마크
+3. 검색 결과를 Dataview 쿼리로 변환
+4. Embedded Search Results 활용</code>
+                </div>
+
+                <h3>2. 지식 활용 템플릿</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 📤 지식 활용 템플릿
+
+## 1. 브레인스토밍 템플릿
+```markdown
+# 💡 브레인스토밍: {{주제}}
+
+## 🎯 목표
+무엇을 달성하려고 하는가?
+
+## 🧠 관련 지식 맵핑
+```dataview
+LIST
+FROM [[]]
+WHERE contains(tags, "relevant-topic")
+```
+
+## 💭 아이디어 리스트
+1. 
+2. 
+3. 
+
+## 🔗 연결 가능한 개념
+- [[개념1]] + [[개념2]] = ?
+- [[이론A]]를 [[상황B]]에 적용하면?
+
+## 📊 평가 매트릭스
+| 아이디어 | 실현가능성 | 영향력 | 우선순위 |
+|---------|-----------|--------|---------|
+|         |           |        |         |
+```
+
+## 2. 문제 해결 템플릿
+```markdown
+# 🔧 문제 해결: {{문제}}
+
+## 📋 문제 정의
+- **현재 상황**: 
+- **원하는 상황**: 
+- **차이**: 
+
+## 🔍 원인 분석
+### 5 Whys
+1. 왜? 
+2. 왜? 
+3. 왜? 
+4. 왜? 
+5. 왜? 
+
+## 💡 해결책 탐색
+### 기존 지식 활용
+```dataview
+TABLE solution
+FROM #problem-solving OR #case-study
+WHERE contains(file.content, "similar")
+```
+
+### 새로운 접근
+1. 
+2. 
+
+## 📝 실행 계획
+- [ ] Step 1: 
+- [ ] Step 2: 
+- [ ] Step 3: 
+
+## 📊 결과 측정
+- 성공 지표: 
+- 측정 방법: 
+```
+
+## 3. 창작 템플릿
+```markdown
+# ✍️ 창작: {{제목}}
+
+## 🎯 창작 목적
+- 대상 독자: 
+- 전달 메시지: 
+- 원하는 반응: 
+
+## 📚 참고 자료 수집
+```dataview
+TABLE file.link as "자료", summary as "핵심 내용"
+FROM #reference
+WHERE contains(tags, "{{topic}}")
+```
+
+## 🏗️ 구조 설계
+### 개요
+1. 도입
+   - Hook: 
+   - 문제 제기: 
+2. 본론
+   - 포인트 1: 
+   - 포인트 2: 
+   - 포인트 3: 
+3. 결론
+   - 요약: 
+   - Call to Action: 
+
+## ✍️ 초안
+[작성 공간]
+
+## 🔄 수정 체크리스트
+- [ ] 명확성
+- [ ] 논리적 흐름
+- [ ] 근거 제시
+- [ ] 감정적 호소
+- [ ] 행동 유도
+```</code>
+                </div>
+
+                <h3>3. 산출물 생성 시스템</h3>
+                
+                <div class="workflow-diagram">
+                    <div class="workflow-step">
+                        <h4>수집</h4>
+                        <p>관련 노트 모으기</p>
+                    </div>
+                    <div class="workflow-step">
+                        <h4>연결</h4>
+                        <p>아이디어 연결</p>
+                    </div>
+                    <div class="workflow-step">
+                        <h4>구조화</h4>
+                        <p>논리적 배열</p>
+                    </div>
+                    <div class="workflow-step">
+                        <h4>작성</h4>
+                        <p>콘텐츠 생성</p>
+                    </div>
+                    <div class="workflow-step">
+                        <h4>개선</h4>
+                        <p>피드백 반영</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="review-system" class="fade-in">
+                <h2><i class="fas fa-sync"></i> 리뷰와 발전</h2>
+
+                <h3>1. 주간 리뷰</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 📅 주간 리뷰 - Week {{week-number}}, {{year}}
+
+## 📊 주간 통계
+```dataview
+TABLE 
+    length(rows) as "노트 수"
+FROM ""
+WHERE file.ctime >= date({{start-date}}) 
+  AND file.ctime <= date({{end-date}})
+GROUP BY type
+```
+
+## ✅ 완료한 것들
+### 프로젝트
+- [x] 
+
+### 학습
+- [x] 
+
+### 개인
+- [x] 
+
+## 📝 주요 노트 리뷰
+### 이번 주 생성한 영구 노트
+1. [[노트1]] - 핵심 통찰: 
+2. [[노트2]] - 핵심 통찰: 
+
+### 가장 많이 연결된 노트
+```dataview
+TABLE length(file.inlinks) as "Inlinks"
+FROM ""
+WHERE file.mtime >= date({{start-date}})
+SORT length(file.inlinks) DESC
+LIMIT 5
+```
+
+## 💡 주간 인사이트
+### 새로 발견한 연결
+- [[개념A]]와 [[개념B]]의 관계: 
+
+### 떠오른 아이디어
+1. 
+
+### 학습한 교훈
+- 
+
+## 🎯 다음 주 계획
+### 우선순위 Top 3
+1. 
+2. 
+3. 
+
+### 탐구하고 싶은 주제
+- 
+
+### 연결하고 싶은 아이디어
+- 
+
+## 🔧 시스템 개선
+### 잘 작동한 것
+- 
+
+### 개선이 필요한 것
+- 
+
+### 실험해볼 것
+- 
+
+## 📈 성장 지표
+- 노트 생성: 목표 대비 {{percentage}}%
+- 연결 생성: 주간 {{number}}개
+- 콘텐츠 산출: {{number}}개</code>
+                </div>
+
+                <h3>2. 월간 리뷰</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 📆 월간 리뷰 - {{month}} {{year}}
+
+## 🎯 월간 목표 리뷰
+| 목표 | 결과 | 달성률 | 회고 |
+|------|------|--------|------|
+|      |      |        |      |
+
+## 📊 월간 메트릭스
+### 노트 통계
+```dataviewjs
+const notes = dv.pages('""').where(p => {
+    const created = moment(p.file.ctime);
+    return created.month() === moment().month() - 1;
+});
+
+dv.header(3, "노트 생성 통계");
+dv.paragraph(`- 총 노트 수: ${notes.length}`);
+dv.paragraph(`- 일평균: ${(notes.length / 30).toFixed(1)}개`);
+
+const types = {};
+notes.forEach(note => {
+    const type = note.type || 'untyped';
+    types[type] = (types[type] || 0) + 1;
+});
+
+dv.table(["유형", "개수", "비율"],
+    Object.entries(types).map(([type, count]) => [
+        type,
+        count,
+        `${((count/notes.length)*100).toFixed(1)}%`
+    ])
+);
+```
+
+## 🌟 월간 하이라이트
+### Best Notes (가장 가치 있었던 노트)
+1. [[노트명]] - 이유: 
+2. [[노트명]] - 이유: 
+
+### Key Insights (핵심 통찰)
+1. 
+2. 
+
+### Major Connections (중요한 연결)
+- [[A]] ↔ [[B]]: 
+
+## 📈 성장 분석
+### 지식 영역별 성장
+```dataview
+TABLE 
+    length(rows) as "노트 수",
+    length(filter(rows, (r) => r.type = "permanent")) as "영구노트"
+FROM ""
+WHERE file.ctime.month = {{month}}
+GROUP BY folder
+```
+
+### 학습 효과성
+- 가장 효과적이었던 학습 방법: 
+- 새로 시도한 방법: 
+- 개선이 필요한 영역: 
+
+## 🔄 프로세스 리뷰
+### 워크플로우 효율성
+- 일일 캡처 평균: 
+- 주간 처리율: 
+- 월간 산출물: 
+
+### 도구 활용도
+- 새로 도입한 도구/플러그인: 
+- 가장 유용했던 기능: 
+- 불필요한 것: 
+
+## 🎯 다음 달 계획
+### 목표 설정
+1. 
+2. 
+3. 
+
+### 집중 영역
+- 
+
+### 실험 계획
+- 
+
+## 💭 월간 성찰
+### 감사한 점
+1. 
+2. 
+3. 
+
+### 배운 점
+- 
+
+### 개선할 점
+- </code>
+                </div>
+
+                <h3>3. 지식 정원 가꾸기</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🌱 지식 정원 가꾸기
+
+## 노트 성숙도 관리
+### 🌱 Seedling (씨앗)
+- 새로운 아이디어나 개념
+- 아직 발전 가능성이 많음
+- 정기적인 물주기(리뷰) 필요
+
+### 🌿 Budding (새싹)
+- 어느 정도 발전한 노트
+- 다른 노트와 연결 시작
+- 추가 연구나 사례 필요
+
+### 🌳 Evergreen (상록수)
+- 완전히 발전한 노트
+- 독립적으로 가치 있음
+- 지속적으로 참조됨
+
+## 정원 관리 활동
+### 주간 가드닝 세션
+```markdown
+## 🌱 → 🌿 발전시킬 노트
+```dataview
+LIST
+FROM #🌱seedling
+WHERE file.mtime < date(today) - dur(7 days)
+SORT file.mtime ASC
+LIMIT 5
+```
+
+## 🌿 → 🌳 성숙시킬 노트
+```dataview
+LIST
+FROM #🌿budding
+WHERE length(file.outlinks) >= 3
+AND file.mtime < date(today) - dur(14 days)
+```
+
+### 가지치기 (Pruning)
+- [ ] 중복 노트 병합
+- [ ] 오래된 임시 노트 정리
+- [ ] 깨진 링크 수정
+- [ ] 사용하지 않는 태그 제거
+
+### 교배 (Cross-pollination)
+- [ ] 서로 다른 영역의 노트 연결
+- [ ] 새로운 MOC 생성
+- [ ] 브릿지 노트 작성
+
+### 수확 (Harvesting)
+- [ ] 블로그 포스트로 발전
+- [ ] 프레젠테이션 자료 생성
+- [ ] 가이드나 튜토리얼 작성</code>
+                </div>
+            </section>
+
+            <section id="workflows" class="fade-in">
+                <h2><i class="fas fa-stream"></i> PKM 워크플로우</h2>
+
+                <h3>1. 일일 워크플로우</h3>
+                
+                <div class="knowledge-timeline">
+                    <div class="timeline-event">
+                        <div class="timeline-date">06:00</div>
+                        <div class="timeline-content">
+                            <h4>모닝 루틴</h4>
+                            <ul>
+                                <li>Daily Note 생성</li>
+                                <li>오늘의 의도 설정</li>
+                                <li>inbox 확인</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-date">09:00</div>
+                        <div class="timeline-content">
+                            <h4>집중 작업</h4>
+                            <ul>
+                                <li>핵심 프로젝트 진행</li>
+                                <li>깊은 사고 노트 작성</li>
+                                <li>아이디어 연결</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-date">14:00</div>
+                        <div class="timeline-content">
+                            <h4>정보 수집</h4>
+                            <ul>
+                                <li>아티클 읽기</li>
+                                <li>팟캐스트 듣기</li>
+                                <li>빠른 캡처</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-event">
+                        <div class="timeline-date">20:00</div>
+                        <div class="timeline-content">
+                            <h4>저녁 정리</h4>
+                            <ul>
+                                <li>Inbox 처리</li>
+                                <li>노트 연결</li>
+                                <li>내일 준비</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>2. 주제별 워크플로우</h3>
+                
+                <div class="note-system">
+                    <div class="system-card">
+                        <h4>📚 독서 워크플로우</h4>
+                        <ol>
+                            <li>책 선택 및 목표 설정</li>
+                            <li>능동적 읽기 (하이라이트)</li>
+                            <li>챕터별 요약 작성</li>
+                            <li>핵심 개념 추출</li>
+                            <li>기존 지식과 연결</li>
+                            <li>실행 계획 수립</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="system-card">
+                        <h4>🎓 학습 워크플로우</h4>
+                        <ol>
+                            <li>학습 목표 정의</li>
+                            <li>리소스 수집</li>
+                            <li>적극적 노트 작성</li>
+                            <li>개념 맵 생성</li>
+                            <li>실습/적용</li>
+                            <li>티칭 노트 작성</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="system-card">
+                        <h4>💡 아이디어 워크플로우</h4>
+                        <ol>
+                            <li>빠른 캡처 (음성/텍스트)</li>
+                            <li>아이디어 뱅크 저장</li>
+                            <li>관련 아이디어 탐색</li>
+                            <li>개념 발전시키기</li>
+                            <li>실행 가능성 평가</li>
+                            <li>프로젝트로 전환</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <h3>3. 통합 워크플로우 스크립트</h3>
+                
+                <div class="code-block" data-language="javascript">
+<code>// PKM 워크플로우 자동화 스크립트
+class PKMWorkflow {
+    constructor(app) {
+        this.app = app;
+        this.config = {
+            inboxFolder: "000 Inbox",
+            dailyFolder: "100 Daily",
+            permanentFolder: "500 Knowledge",
+            templatesFolder: "999 Meta/Templates"
+        };
+    }
+    
+    // 일일 시작 루틴
+    async morningRoutine() {
+        const today = moment().format('YYYY-MM-DD');
+        const dailyPath = `${this.config.dailyFolder}/${today}.md`;
+        
+        // Daily Note 생성
+        if (!await this.app.vault.adapter.exists(dailyPath)) {
+            const template = await this.getTemplate('daily-note');
+            const content = this.processTemplate(template, {
+                date: today,
+                weather: await this.getWeather(),
+                quote: await this.getDailyQuote()
+            });
+            await this.app.vault.create(dailyPath, content);
+        }
+        
+        // Inbox 상태 확인
+        const inboxItems = await this.getInboxItems();
+        if (inboxItems.length > 0) {
+            new Notice(`📥 Inbox에 ${inboxItems.length}개의 항목이 있습니다.`);
+        }
+        
+        // 오늘의 리마인더
+        await this.showDailyReminders();
+    }
+    
+    // 정보 처리 워크플로우
+    async processInbox() {
+        const items = await this.getInboxItems();
+        
+        for (const item of items) {
+            const content = await this.app.vault.read(item);
+            const metadata = this.extractMetadata(content);
+            
+            // 자동 분류
+            const category = await this.categorizeContent(content);
+            const targetFolder = this.getTargetFolder(category);
+            
+            // 메타데이터 추가
+            const enrichedContent = this.enrichContent(content, {
+                processedDate: moment().format('YYYY-MM-DD'),
+                category: category,
+                tags: await this.suggestTags(content),
+                relatedNotes: await this.findRelatedNotes(content)
+            });
+            
+            // 파일 이동 및 업데이트
+            const newPath = `${targetFolder}/${item.basename}`;
+            await this.app.vault.rename(item, newPath);
+            await this.app.vault.modify(
+                this.app.vault.getAbstractFileByPath(newPath),
+                enrichedContent
+            );
+        }
+        
+        new Notice(`✅ ${items.length}개의 항목을 처리했습니다.`);
+    }
+    
+    // 지식 연결 세션
+    async linkingSession() {
+        // 최근 노트 가져오기
+        const recentNotes = await this.getRecentNotes(7);
+        
+        // 연결 가능한 노트 쌍 찾기
+        const linkSuggestions = [];
+        
+        for (let i = 0; i < recentNotes.length; i++) {
+            for (let j = i + 1; j < recentNotes.length; j++) {
+                const similarity = await this.calculateSimilarity(
+                    recentNotes[i],
+                    recentNotes[j]
+                );
+                
+                if (similarity > 0.3 && !this.areLinked(recentNotes[i], recentNotes[j])) {
+                    linkSuggestions.push({
+                        note1: recentNotes[i],
+                        note2: recentNotes[j],
+                        similarity: similarity,
+                        reason: await this.getLinkReason(recentNotes[i], recentNotes[j])
+                    });
+                }
+            }
+        }
+        
+        // 연결 제안 표시
+        if (linkSuggestions.length > 0) {
+            await this.showLinkSuggestions(linkSuggestions);
+        }
+    }
+    
+    // 주간 리뷰 자동화
+    async weeklyReview() {
+        const weekData = await this.collectWeeklyData();
+        const insights = await this.generateInsights(weekData);
+        const reviewContent = await this.generateWeeklyReview(weekData, insights);
+        
+        const reviewPath = `800 Reviews/Weekly/${moment().format('YYYY-[W]WW')}.md`;
+        await this.app.vault.create(reviewPath, reviewContent);
+        
+        // 다음 주 계획 템플릿 생성
+        await this.createNextWeekPlan();
+        
+        new Notice('📊 주간 리뷰가 생성되었습니다!');
+    }
+    
+    // 지식 정원 관리
+    async tendGarden() {
+        // 오래된 seedling 노트 확인
+        const oldSeedlings = await this.getOldSeedlings(14);
+        
+        for (const note of oldSeedlings) {
+            // 발전 가능성 평가
+            const potential = await this.evaluatePotential(note);
+            
+            if (potential.score > 0.7) {
+                // 발전시킬 노트로 표시
+                await this.markForDevelopment(note);
+            } else if (potential.score < 0.3) {
+                // 보관 또는 삭제 고려
+                await this.markForArchive(note);
+            }
+        }
+        
+        // 깨진 링크 확인
+        const brokenLinks = await this.findBrokenLinks();
+        if (brokenLinks.length > 0) {
+            await this.fixBrokenLinks(brokenLinks);
+        }
+        
+        // 고아 노트 처리
+        const orphanNotes = await this.findOrphanNotes();
+        await this.processOrphanNotes(orphanNotes);
+    }
+}</code>
+                </div>
+            </section>
+
+            <section id="tools-integration" class="fade-in">
+                <h2><i class="fas fa-plug"></i> 도구 통합</h2>
+
+                <h3>1. 필수 플러그인 설정</h3>
+                
+                <div class="resource-gallery">
+                    <div class="resource-card">
+                        <i class="fas fa-calendar-day resource-icon"></i>
+                        <h4>Daily Notes</h4>
+                        <p>일일 노트 자동 생성</p>
+                    </div>
+                    <div class="resource-card">
+                        <i class="fas fa-file-alt resource-icon"></i>
+                        <h4>Templater</h4>
+                        <p>고급 템플릿 시스템</p>
+                    </div>
+                    <div class="resource-card">
+                        <i class="fas fa-database resource-icon"></i>
+                        <h4>Dataview</h4>
+                        <p>동적 쿼리와 뷰</p>
+                    </div>
+                    <div class="resource-card">
+                        <i class="fas fa-link resource-icon"></i>
+                        <h4>Auto Link Title</h4>
+                        <p>자동 링크 제목</p>
+                    </div>
+                    <div class="resource-card">
+                        <i class="fas fa-tags resource-icon"></i>
+                        <h4>Tag Wrangler</h4>
+                        <p>태그 관리 도구</p>
+                    </div>
+                    <div class="resource-card">
+                        <i class="fas fa-search resource-icon"></i>
+                        <h4>Quick Switcher++</h4>
+                        <p>향상된 검색</p>
+                    </div>
+                </div>
+
+                <h3>2. 외부 도구 연동</h3>
+                
+                <div class="code-block" data-language="yaml">
+<code># 외부 도구 연동 설정
+
+# Readwise 연동
+readwise:
+  api_key: "your-api-key"
+  sync_frequency: "daily"
+  import_folder: "300 Resources/Books"
+  template: "readwise-highlight-template"
+
+# Notion 연동
+notion:
+  integration_token: "your-token"
+  database_id: "your-database-id"
+  sync_properties:
+    - title
+    - tags
+    - created_date
+    - last_edited
+
+# GitHub 연동
+github:
+  repo: "username/obsidian-backup"
+  branch: "main"
+  auto_commit: true
+  commit_message: "Auto backup: {{date}}"
+  
+# AI 도구 연동
+openai:
+  api_key: "your-api-key"
+  model: "gpt-4"
+  use_cases:
+    - summarization
+    - idea_generation
+    - connection_finding</code>
+                </div>
+
+                <h3>3. 자동화 워크플로우</h3>
+                
+                <div class="code-block" data-language="javascript">
+<code>// Zapier/Make.com 통합 예시
+const obsidianIntegration = {
+    triggers: {
+        // 새 노트 생성 시
+        newNote: {
+            folder: "Inbox",
+            action: "send_to_notion"
+        },
+        
+        // 특정 태그 추가 시
+        tagAdded: {
+            tag: "#publish",
+            action: "create_blog_draft"
+        },
+        
+        // 주간 리뷰 완료 시
+        weeklyReviewComplete: {
+            action: "send_summary_email"
+        }
+    },
+    
+    actions: {
+        // 이메일에서 노트 생성
+        emailToNote: async (email) => {
+            const note = {
+                title: email.subject,
+                content: `# ${email.subject}\n\n${email.body}`,
+                tags: ["#email", "#to-process"],
+                folder: "Inbox"
+            };
+            
+            await createObsidianNote(note);
+        },
+        
+        // 캘린더 이벤트에서 노트 생성
+        calendarToNote: async (event) => {
+            const note = {
+                title: `Meeting: ${event.title}`,
+                content: generateMeetingTemplate(event),
+                tags: ["#meeting", `#${event.calendar}`],
+                folder: "Meetings"
+            };
+            
+            await createObsidianNote(note);
+        },
+        
+        // 노트를 블로그 포스트로
+        noteToBlog: async (notePath) => {
+            const content = await getObsidianNote(notePath);
+            const processed = processForBlog(content);
+            
+            await publishToBlog(processed);
+        }
+    }
+};</code>
+                </div>
+            </section>
+
+            <section id="case-studies" class="fade-in">
+                <h2><i class="fas fa-microscope"></i> 실제 사례</h2>
+
+                <h3>사례 1: 연구자의 PKM</h3>
+                
+                <div class="pkm-framework">
+                    <h4>배경</h4>
+                    <p>박사과정 연구자 A씨는 방대한 논문과 연구 데이터를 효과적으로 관리하기 위해 옵시디언 PKM 시스템을 구축했습니다.</p>
+                    
+                    <h4>구현 내용</h4>
+                    <ul>
+                        <li><strong>논문 관리</strong>: Zotero와 연동하여 자동으로 논문 노트 생성</li>
+                        <li><strong>연구 일지</strong>: 일일 실험 기록과 아이디어 추적</li>
+                        <li><strong>문헌 리뷰</strong>: 주제별 MOC로 연구 동향 정리</li>
+                        <li><strong>논문 작성</strong>: 아웃라인에서 초고까지 옵시디언에서 진행</li>
+                    </ul>
+                    
+                    <h4>성과</h4>
+                    <ul>
+                        <li>논문 작성 시간 40% 단축</li>
+                        <li>인용 관리 오류 제로</li>
+                        <li>연구 아이디어의 체계적 발전</li>
+                        <li>공동 연구자와의 지식 공유 개선</li>
+                    </ul>
+                </div>
+
+                <h3>사례 2: 콘텐츠 크리에이터의 PKM</h3>
+                
+                <div class="pkm-framework">
+                    <h4>배경</h4>
+                    <p>유튜버 겸 블로거 B씨는 콘텐츠 아이디어 관리와 제작 프로세스를 최적화하기 위해 PKM을 도입했습니다.</p>
+                    
+                    <h4>시스템 구성</h4>
+                    <ul>
+                        <li><strong>콘텐츠 캘린더</strong>: 월별/주별 콘텐츠 계획</li>
+                        <li><strong>아이디어 뱅크</strong>: 즉흥적 아이디어 캡처 시스템</li>
+                        <li><strong>리서치 허브</strong>: 주제별 자료 수집 및 정리</li>
+                        <li><strong>템플릿 라이브러리</strong>: 영상 스크립트, 블로그 포스트 템플릿</li>
+                    </ul>
+                    
+                    <h4>워크플로우</h4>
+                    <ol>
+                        <li>아이디어 캡처 → 아이디어 뱅크</li>
+                        <li>주제 선정 → 리서치 노트 생성</li>
+                        <li>콘텐츠 기획 → 템플릿 활용</li>
+                        <li>제작 → 프로덕션 노트</li>
+                        <li>발행 → 성과 분석 노트</li>
+                    </ol>
+                    
+                    <h4>결과</h4>
+                    <ul>
+                        <li>콘텐츠 제작 속도 2배 향상</li>
+                        <li>일관된 품질 유지</li>
+                        <li>시리즈 콘텐츠 기획 용이</li>
+                        <li>과거 콘텐츠 재활용 증가</li>
+                    </ul>
+                </div>
+
+                <h3>사례 3: 프리랜서 개발자의 PKM</h3>
+                
+                <div class="pkm-framework">
+                    <h4>도전 과제</h4>
+                    <p>여러 프로젝트를 동시에 진행하는 프리랜서 개발자 C씨는 기술 문서, 코드 스니펫, 클라이언트 정보를 통합 관리할 필요가 있었습니다.</p>
+                    
+                    <h4>솔루션</h4>
+                    <ul>
+                        <li><strong>프로젝트 대시보드</strong>: 각 프로젝트별 진행 상황 추적</li>
+                        <li><strong>코드 스니펫 라이브러리</strong>: 재사용 가능한 코드 관리</li>
+                        <li><strong>기술 위키</strong>: 학습한 기술 스택 문서화</li>
+                        <li><strong>클라이언트 CRM</strong>: 고객 정보와 커뮤니케이션 기록</li>
+                    </ul>
+                    
+                    <h4>특별 기능</h4>
+                    <ul>
+                        <li>Git 연동으로 코드 변경사항 자동 문서화</li>
+                        <li>시간 추적 통합으로 프로젝트별 투입 시간 관리</li>
+                        <li>인보이스 템플릿과 재무 추적</li>
+                        <li>Stack Overflow 답변 아카이빙</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="advanced-strategies" class="fade-in">
+                <h2><i class="fas fa-chess"></i> 고급 전략</h2>
+
+                <h3>1. AI 활용 PKM</h3>
+                
+                <div class="code-block" data-language="javascript">
+<code>// AI 강화 PKM 시스템
+class AIEnhancedPKM {
+    constructor(obsidianApp, aiService) {
+        this.app = obsidianApp;
+        this.ai = aiService;
+    }
+    
+    // 자동 요약 생성
+    async generateSummary(notePath) {
+        const content = await this.app.vault.read(notePath);
+        const summary = await this.ai.summarize(content, {
+            maxLength: 200,
+            style: 'academic'
+        });
+        
+        // 프론트매터에 요약 추가
+        await this.updateFrontmatter(notePath, {
+            summary: summary,
+            summarizedAt: new Date().toISOString()
+        });
+    }
+    
+    // 연결 제안
+    async suggestConnections(notePath) {
+        const content = await this.app.vault.read(notePath);
+        const embedding = await this.ai.getEmbedding(content);
+        
+        // 모든 노트의 임베딩과 비교
+        const allNotes = this.app.vault.getMarkdownFiles();
+        const similarities = [];
+        
+        for (const note of allNotes) {
+            if (note.path === notePath) continue;
+            
+            const noteContent = await this.app.vault.read(note);
+            const noteEmbedding = await this.ai.getEmbedding(noteContent);
+            const similarity = this.cosineSimilarity(embedding, noteEmbedding);
+            
+            if (similarity > 0.7) {
+                similarities.push({
+                    note: note,
+                    similarity: similarity,
+                    reason: await this.ai.explainConnection(content, noteContent)
+                });
+            }
+        }
+        
+        return similarities.sort((a, b) => b.similarity - a.similarity);
+    }
+    
+    // 질문 생성
+    async generateQuestions(notePath) {
+        const content = await this.app.vault.read(notePath);
+        const questions = await this.ai.generateQuestions(content, {
+            types: ['clarification', 'extension', 'application'],
+            count: 5
+        });
+        
+        // 질문을 노트에 추가
+        const questionsSection = `
+## 🤔 탐구 질문
+${questions.map(q => `- ${q}`).join('\n')}
+`;
+        
+        await this.appendToNote(notePath, questionsSection);
+    }
+    
+    // 개념 추출
+    async extractConcepts(notePath) {
+        const content = await this.app.vault.read(notePath);
+        const concepts = await this.ai.extractConcepts(content);
+        
+        // 각 개념에 대한 노트 생성 제안
+        for (const concept of concepts) {
+            if (!await this.conceptNoteExists(concept)) {
+                await this.createConceptNote(concept);
+            }
+        }
+    }
+}</code>
+                </div>
+
+                <h3>2. 메타 인지 전략</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 🧠 메타 인지 PKM 전략
+
+## 1. 학습 추적 시스템
+### 이해도 레벨
+- 🔴 Level 1: 표면적 인식 (들어본 정도)
+- 🟡 Level 2: 기본 이해 (설명 가능)
+- 🟢 Level 3: 적용 가능 (실무 활용)
+- 🔵 Level 4: 창의적 활용 (새로운 연결)
+- 🟣 Level 5: 가르칠 수 있음 (완전 내재화)
+
+### 학습 로그 템플릿
+```markdown
+## 📚 학습 로그: {{concept}}
+- **날짜**: {{date}}
+- **현재 레벨**: 🔴 → 🟡
+- **학습 방법**: 
+- **소요 시간**: 
+- **핵심 통찰**: 
+- **다음 단계**: 
+```
+
+## 2. 사고 패턴 분석
+### 자주 사용하는 멘탈 모델
+```dataview
+TABLE 
+    usage_count as "사용 횟수",
+    last_used as "마지막 사용"
+FROM #mental-model
+SORT usage_count DESC
+```
+
+### 사고의 맹점 발견
+- 확증 편향 체크
+- 관점의 다양성 확보
+- 반대 의견 적극 수집
+
+## 3. 창의성 촉진 기법
+### 랜덤 연결 세션
+```javascript
+// 매주 금요일 랜덤 노트 3개 선택
+// 강제로 연결점 찾기
+const notes = getRandomNotes(3);
+createConnectionChallenge(notes);
+```
+
+### 제약 기반 사고
+- 5분 브레인스토밍
+- 10단어로 요약하기
+- 그림으로 표현하기
+
+## 4. 성찰적 실천
+### 일일 성찰 질문
+1. 오늘 가장 중요한 깨달음은?
+2. 어떤 가정을 의심해봤는가?
+3. 놓친 관점은 없었는가?
+
+### 주간 메타 리뷰
+- 사고 패턴 분석
+- 학습 효율성 평가
+- 시스템 개선점 도출</code>
+                </div>
+
+                <h3>3. 협업 PKM</h3>
+                
+                <div class="code-block" data-language="markdown">
+<code># 👥 협업 PKM 시스템
+
+## 공유 규칙
+### 1. 노트 권한 관리
+```yaml
+permissions:
+  public:
+    - read: ["MOC/*", "Resources/Public/*"]
+    - write: []
+  team:
+    - read: ["Projects/*", "Resources/*"]
+    - write: ["Projects/Active/*"]
+  private:
+    - read: ["Personal/*"]
+    - write: ["Personal/*"]
+```
+
+## 2. 협업 워크플로우
+### 지식 기여 프로세스
+1. **제안 단계**
+   - Draft 폴더에 초안 작성
+   - #review-needed 태그 추가
+
+2. **리뷰 단계**
+   - 팀원들의 피드백 수집
+   - 토론 노트에 의견 기록
+
+3. **통합 단계**
+   - 합의된 내용으로 수정
+   - 공식 지식 베이스로 이동
+
+## 3. 팀 지식 맵
+```mermaid
+graph TD
+    A[팀 지식 베이스] --> B[프로젝트 문서]
+    A --> C[기술 스택]
+    A --> D[프로세스]
+    A --> E[레슨 런드]
+    
+    B --> B1[진행 중]
+    B --> B2[완료]
+    B --> B3[아카이브]
+    
+    C --> C1[프론트엔드]
+    C --> C2[백엔드]
+    C --> C3[데브옵스]
+    
+    D --> D1[개발 프로세스]
+    D --> D2[코드 리뷰]
+    D --> D3[배포]
+```
+
+## 4. 지식 공유 세션
+### 월간 지식 공유회
+- 각자의 TIL 공유
+- 새로운 발견 소개
+- 크로스 폴리네이션
+
+### 페어 노팅
+- 2명이 함께 노트 작성
+- 다양한 관점 통합
+- 실시간 아이디어 발전</code>
+                </div>
+            </section>
+
+            <section id="conclusion" class="fade-in">
+                <h2><i class="fas fa-flag-checkered"></i> 마무리</h2>
+                
+                <p>이번 강의에서는 옵시디언을 활용한 개인 지식 관리(PKM) 시스템의 구축과 운영에 대해 심도 있게 다루었습니다. PKM은 단순한 정보 저장을 넘어 지식의 연결, 발전, 창조를 가능하게 하는 강력한 도구입니다.</p>
+
+                <div class="tip-box">
+                    <h3>핵심 요점</h3>
+                    <ul>
+                        <li><strong>체계적 수집</strong>: 정보를 효율적으로 캡처하는 시스템 구축</li>
+                        <li><strong>의미 있는 연결</strong>: 지식 간의 예상치 못한 연결 발견</li>
+                        <li><strong>지속적 발전</strong>: 노트의 성숙도를 높이는 정원 가꾸기</li>
+                        <li><strong>능동적 활용</strong>: 축적된 지식을 창의적으로 활용</li>
+                        <li><strong>메타 인지</strong>: 자신의 사고와 학습 과정을 관찰하고 개선</li>
+                    </ul>
+                </div>
+
+                <h3>PKM 여정 시작하기</h3>
+                
+                <div class="progress-tracker">
+                    <div class="progress-item">
+                        <div class="progress-checkbox">✓</div>
+                        <span>기본 폴더 구조 설정</span>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-checkbox">✓</div>
+                        <span>일일 노트 습관 만들기</span>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-checkbox">✓</div>
+                        <span>캡처 시스템 구축</span>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-checkbox"></div>
+                        <span>첫 MOC 작성</span>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-checkbox"></div>
+                        <span>주간 리뷰 루틴 확립</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 기억하세요</h4>
+                    <p>PKM은 마라톤이지 단거리 경주가 아닙니다. 시스템을 구축하는 데 시간을 투자하면, 그 시스템이 평생 동안 여러분의 지적 성장을 도울 것입니다. 작게 시작하되 꾸준히 발전시켜 나가세요.</p>
+                </div>
+
+                <p>다음 강의에서는 AI 통합과 자동화를 통해 PKM 시스템을 한 단계 더 발전시키는 방법을 알아보겠습니다. 인공지능의 도움을 받아 더욱 강력하고 효율적인 지식 관리 시스템을 만들어봅시다.</p>
+            </section>
+        </main>
+    </div>
+
+    <!-- 플로팅 액션 버튼 -->
+    <div class="fab" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 목차 활성화
+        const sections = document.querySelectorAll('section');
+        const tocLinks = document.querySelectorAll('.toc-list a');
+
+        function updateTOC() {
+            let current = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom > 100) {
+                    current = section.id;
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateTOC);
+
+        // 맨 위로 스크롤
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 프로그레스 체크박스
+        document.querySelectorAll('.progress-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                if (this.textContent === '✓') {
+                    this.textContent = '';
+                    this.classList.remove('checked');
+                } else {
+                    this.textContent = '✓';
+                    this.classList.add('checked');
+                }
+            });
+        });
+
+        // 인터랙티브 퀴즈
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.style.backgroundColor = 'rgba(124, 58, 237, 0.3)';
+                setTimeout(() => {
+                    this.style.backgroundColor = '';
+                }, 1000);
+            });
+        });
+
+        // 코드 복사 기능
+        document.querySelectorAll('.code-block').forEach(block => {
+            const button = document.createElement('button');
+            button.innerHTML = '<i class="fas fa-copy"></i>';
+            button.className = 'copy-button';
+            button.style.cssText = 'position: absolute; top: 10px; right: 10px; background: var(--primary-color); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;';
+            
+            block.style.position = 'relative';
+            block.appendChild(button);
+            
+            button.addEventListener('click', () => {
+                const code = block.querySelector('code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="fas fa-copy"></i>';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

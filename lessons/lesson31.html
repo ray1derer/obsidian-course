@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제31강: 실전 프로젝트 | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-rocket"></i> 제31강: 실전 프로젝트</h1>
+                <p class="lesson-subtitle">지금까지 배운 모든 기술을 통합한 완성형 지식 관리 시스템 구축</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 최고급</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 90분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: 종합 프로젝트</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson30.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제31강: 실전 프로젝트</span>
+            <a href="lesson32.html" class="nav-link next">
+                다음 강의 <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>지금까지 배운 모든 기술의 통합 적용</li>
+                    <li>실제 업무 환경에서의 Obsidian 활용</li>
+                    <li>개인 지식 관리 시스템 완성</li>
+                    <li>팀 협업 프로젝트 구현</li>
+                    <li>미래를 위한 확장 전략 수립</li>
+                </ul>
+            </section>
+
+            <section class="project-overview">
+                <h2><i class="fas fa-project-diagram"></i> 프로젝트 개요</h2>
+                
+                <div class="project-intro">
+                    <h3>Knowledge Operating System (KOS) 프로젝트</h3>
+                    <p>개인과 팀이 함께 사용할 수 있는 완벽한 지식 관리 시스템을 구축합니다. 이 프로젝트는 실제 업무 환경에서 즉시 활용 가능한 통합 솔루션입니다.</p>
+                    
+                    <div class="project-features">
+                        <div class="feature-card">
+                            <i class="fas fa-user"></i>
+                            <h4>개인 지식 관리</h4>
+                            <ul>
+                                <li>일일 노트와 저널링</li>
+                                <li>프로젝트 관리</li>
+                                <li>학습 추적</li>
+                                <li>아이디어 캡처</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-users"></i>
+                            <h4>팀 협업</h4>
+                            <ul>
+                                <li>실시간 공동 편집</li>
+                                <li>프로젝트 위키</li>
+                                <li>지식 공유</li>
+                                <li>리뷰 시스템</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-robot"></i>
+                            <h4>자동화</h4>
+                            <ul>
+                                <li>AI 기반 콘텐츠 생성</li>
+                                <li>자동 분류 및 태깅</li>
+                                <li>워크플로우 자동화</li>
+                                <li>정기 보고서</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-plug"></i>
+                            <h4>통합</h4>
+                            <ul>
+                                <li>외부 도구 연동</li>
+                                <li>API 통합</li>
+                                <li>멀티플랫폼 동기화</li>
+                                <li>백업 및 버전 관리</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-stack">
+                    <h3>기술 스택</h3>
+                    <div class="stack-items">
+                        <span class="stack-item">Obsidian (Core)</span>
+                        <span class="stack-item">JavaScript/TypeScript</span>
+                        <span class="stack-item">Python</span>
+                        <span class="stack-item">Git</span>
+                        <span class="stack-item">Cloud Services</span>
+                        <span class="stack-item">AI APIs</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="project-structure">
+                <h2><i class="fas fa-sitemap"></i> 프로젝트 구조 설계</h2>
+
+                <div class="structure-design">
+                    <h3>볼트 아키텍처</h3>
+                    <pre><code class="language-javascript">// 프로젝트 구조 설계
+class KnowledgeOperatingSystem {
+  constructor() {
+    this.structure = {
+      // 개인 영역
+      personal: {
+        daily: 'Personal/Daily',
+        journal: 'Personal/Journal',
+        projects: 'Personal/Projects',
+        learning: 'Personal/Learning',
+        ideas: 'Personal/Ideas'
+      },
+      
+      // 팀 영역
+      team: {
+        wiki: 'Team/Wiki',
+        projects: 'Team/Projects',
+        meetings: 'Team/Meetings',
+        resources: 'Team/Resources',
+        templates: 'Team/Templates'
+      },
+      
+      // 시스템 영역
+      system: {
+        config: 'System/Config',
+        plugins: 'System/Plugins',
+        scripts: 'System/Scripts',
+        backup: 'System/Backup',
+        logs: 'System/Logs'
+      },
+      
+      // 아카이브
+      archive: {
+        yearly: 'Archive/Yearly',
+        projects: 'Archive/Projects',
+        reference: 'Archive/Reference'
+      }
+    };
+    
+    this.initialize();
+  }
+
+  async initialize() {
+    // 1. 폴더 구조 생성
+    await this.createStructure();
+    
+    // 2. 핵심 템플릿 설치
+    await this.installTemplates();
+    
+    // 3. 플러그인 구성
+    await this.configurePlugins();
+    
+    // 4. 자동화 설정
+    await this.setupAutomation();
+    
+    // 5. 통합 연결
+    await this.setupIntegrations();
+  }
+
+  // 폴더 구조 생성
+  async createStructure() {
+    const folders = this.flattenStructure(this.structure);
+    
+    for (const folder of folders) {
+      await this.createFolder(folder);
+      await this.createReadme(folder);
+    }
+  }
+
+  // 템플릿 시스템
+  async installTemplates() {
+    const templates = {
+      daily: {
+        path: 'Templates/daily-note.md',
+        content: `---
+date: {{date}}
+tags: [daily, journal]
+weather: 
+mood: 
+energy: /10
+---
+
+# {{date:YYYY-MM-DD}} - {{date:dddd}}
+
+## 🎯 Today's Focus
+- [ ] 
+
+## 📝 Notes
+
+## 💡 Ideas
+
+## 🙏 Gratitude
+
+## 📊 Metrics
+- Productivity: /10
+- Learning: /10
+- Health: /10
+
+## 🔄 Tomorrow's Priorities
+`
+      },
+      
+      meeting: {
+        path: 'Templates/meeting-note.md',
+        content: `---
+date: {{date}}
+type: meeting
+attendees: 
+project: 
+tags: [meeting]
+---
+
+# Meeting: {{title}}
+
+## 📋 Agenda
+1. 
+
+## 🎯 Objectives
+- 
+
+## 💬 Discussion
+
+## ✅ Decisions
+- 
+
+## 🚀 Action Items
+- [ ] 
+
+## 📎 Resources
+`
+      },
+      
+      project: {
+        path: 'Templates/project.md',
+        content: `---
+created: {{date}}
+status: planning
+priority: 
+deadline: 
+team: 
+tags: [project]
+---
+
+# Project: {{title}}
+
+## 🎯 Overview
+### Goal
+
+### Success Criteria
+
+### Constraints
+
+## 👥 Stakeholders
+| Role | Name | Responsibility |
+|------|------|----------------|
+|      |      |                |
+
+## 📅 Timeline
+### Milestones
+- [ ] 
+
+### Gantt Chart
+\`\`\`mermaid
+gantt
+    title Project Timeline
+    dateFormat YYYY-MM-DD
+    section Phase 1
+    Task 1: 2024-01-01, 7d
+\`\`\`
+
+## 📊 Progress Tracking
+
+## 📝 Documentation
+
+## 🔗 Related
+`
+      }
+    };
+
+    for (const [name, template] of Object.entries(templates)) {
+      await this.createTemplate(template);
+    }
+  }
+}</code></pre>
+
+                    <h3>핵심 컴포넌트 구현</h3>
+                    <div class="component-implementation">
+                        <h4>1. 일일 노트 시스템</h4>
+                        <pre><code class="language-javascript">// 일일 노트 자동화
+class DailyNoteSystem {
+  constructor() {
+    this.config = {
+      autoCreate: true,
+      template: 'Templates/daily-note.md',
+      folder: 'Personal/Daily/{{year}}/{{month}}',
+      format: 'YYYY-MM-DD',
+      openOnStartup: true
+    };
+  }
+
+  async createDailyNote() {
+    const today = moment().format(this.config.format);
+    const notePath = this.getNotePath(today);
+    
+    // 노트가 이미 존재하는지 확인
+    if (await this.noteExists(notePath)) {
+      return this.openNote(notePath);
+    }
+    
+    // 템플릿에서 노트 생성
+    const template = await this.loadTemplate();
+    const content = this.processTemplate(template, {
+      date: moment(),
+      weather: await this.getWeather(),
+      lastDayNotes: await this.getLastDayHighlights()
+    });
+    
+    await this.createNote(notePath, content);
+    await this.openNote(notePath);
+    
+    // 자동 링크 생성
+    await this.createLinks(notePath);
+  }
+
+  // 주간 리뷰 생성
+  async createWeeklyReview() {
+    const weekNotes = await this.getWeekNotes();
+    const metrics = this.calculateWeeklyMetrics(weekNotes);
+    const highlights = this.extractHighlights(weekNotes);
+    
+    const review = {
+      accomplishments: highlights.completed,
+      learnings: highlights.learnings,
+      challenges: highlights.challenges,
+      metrics: metrics,
+      nextWeekGoals: []
+    };
+    
+    return this.generateWeeklyReview(review);
+  }
+
+  // 습관 추적
+  async trackHabits() {
+    const habits = [
+      { name: 'Exercise', type: 'boolean' },
+      { name: 'Reading', type: 'minutes' },
+      { name: 'Meditation', type: 'boolean' },
+      { name: 'Writing', type: 'words' }
+    ];
+    
+    return {
+      record: async (habit, value) => {
+        await this.updateDailyNote({
+          habits: { [habit]: value }
+        });
+      },
+      
+      visualize: async (period = 30) => {
+        const data = await this.getHabitData(period);
+        return this.createHabitChart(data);
+      }
+    };
+  }
+}</code></pre>
+
+                        <h4>2. 프로젝트 관리 시스템</h4>
+                        <pre><code class="language-javascript">// 통합 프로젝트 관리
+class ProjectManagementSystem {
+  constructor() {
+    this.projects = new Map();
+    this.tasks = new TaskManager();
+    this.kanban = new KanbanBoard();
+    this.gantt = new GanttChart();
+  }
+
+  async createProject(projectData) {
+    const project = {
+      id: this.generateId(),
+      ...projectData,
+      created: new Date(),
+      status: 'planning',
+      tasks: [],
+      milestones: [],
+      resources: [],
+      risks: []
+    };
+    
+    // 프로젝트 구조 생성
+    await this.createProjectStructure(project);
+    
+    // 초기 문서 생성
+    await this.createProjectDocuments(project);
+    
+    // 대시보드 설정
+    await this.setupProjectDashboard(project);
+    
+    // 자동화 규칙 설정
+    await this.setupProjectAutomation(project);
+    
+    this.projects.set(project.id, project);
+    return project;
+  }
+
+  // 칸반 보드 생성
+  async createKanbanBoard(project) {
+    return {
+      columns: [
+        { id: 'backlog', name: 'Backlog', limit: null },
+        { id: 'todo', name: 'To Do', limit: 5 },
+        { id: 'progress', name: 'In Progress', limit: 3 },
+        { id: 'review', name: 'Review', limit: 2 },
+        { id: 'done', name: 'Done', limit: null }
+      ],
+      
+      cards: project.tasks.map(task => ({
+        id: task.id,
+        title: task.title,
+        description: task.description,
+        assignee: task.assignee,
+        priority: task.priority,
+        tags: task.tags,
+        dueDate: task.dueDate,
+        column: task.status
+      })),
+      
+      rules: {
+        autoMove: {
+          'pr-merged': 'review',
+          'tests-passed': 'done'
+        },
+        
+        notifications: {
+          'overdue': ['assignee', 'pm'],
+          'blocked': ['team'],
+          'completed': ['stakeholders']
+        }
+      }
+    };
+  }
+
+  // 프로젝트 분석
+  async analyzeProject(projectId) {
+    const project = this.projects.get(projectId);
+    
+    return {
+      // 진행 상황
+      progress: {
+        overall: this.calculateProgress(project),
+        byMilestone: this.progressByMilestone(project),
+        byAssignee: this.progressByAssignee(project)
+      },
+      
+      // 건강도 지표
+      health: {
+        schedule: this.assessScheduleHealth(project),
+        budget: this.assessBudgetHealth(project),
+        quality: this.assessQualityHealth(project),
+        team: this.assessTeamHealth(project)
+      },
+      
+      // 위험 분석
+      risks: {
+        identified: await this.identifyRisks(project),
+        mitigation: await this.suggestMitigation(project),
+        impact: await this.assessImpact(project)
+      },
+      
+      // 예측
+      predictions: {
+        completionDate: await this.predictCompletion(project),
+        bottlenecks: await this.predictBottlenecks(project),
+        resourceNeeds: await this.predictResources(project)
+      }
+    };
+  }
+}</code></pre>
+
+                        <h4>3. 지식 관리 시스템</h4>
+                        <pre><code class="language-javascript">// 고급 지식 관리 시스템
+class KnowledgeManagementSystem {
+  constructor() {
+    this.graph = new KnowledgeGraph();
+    this.search = new SemanticSearch();
+    this.ai = new AIAssistant();
+    this.analytics = new KnowledgeAnalytics();
+  }
+
+  // 지식 그래프 구축
+  async buildKnowledgeGraph() {
+    // 1. 모든 노트 스캔
+    const notes = await this.scanAllNotes();
+    
+    // 2. 엔티티 추출
+    for (const note of notes) {
+      const entities = await this.ai.extractEntities(note);
+      const concepts = await this.ai.extractConcepts(note);
+      const relationships = await this.ai.extractRelationships(note);
+      
+      // 그래프에 추가
+      this.graph.addNode(note.id, {
+        title: note.title,
+        type: 'note',
+        entities,
+        concepts
+      });
+      
+      for (const rel of relationships) {
+        this.graph.addEdge(rel.from, rel.to, rel.type);
+      }
+    }
+    
+    // 3. 클러스터링
+    const clusters = await this.graph.detectCommunities();
+    
+    // 4. 중요도 계산
+    const importance = this.graph.calculatePageRank();
+    
+    return { graph: this.graph, clusters, importance };
+  }
+
+  // 시맨틱 검색
+  async semanticSearch(query, options = {}) {
+    // 1. 쿼리 임베딩
+    const queryEmbedding = await this.ai.embed(query);
+    
+    // 2. 유사도 검색
+    const candidates = await this.search.findSimilar(
+      queryEmbedding,
+      options.limit || 20
+    );
+    
+    // 3. 리랭킹
+    const reranked = await this.ai.rerank(query, candidates);
+    
+    // 4. 컨텍스트 확장
+    const withContext = await this.expandContext(reranked);
+    
+    return withContext;
+  }
+
+  // 지식 추천 시스템
+  async getRecommendations(context) {
+    const recommendations = {
+      // 관련 노트
+      relatedNotes: await this.findRelatedNotes(context),
+      
+      // 다음 읽을 거리
+      nextReads: await this.suggestNextReads(context),
+      
+      // 빠진 링크
+      missingLinks: await this.findMissingLinks(context),
+      
+      // 학습 경로
+      learningPath: await this.generateLearningPath(context),
+      
+      // 콘텐츠 갭
+      contentGaps: await this.identifyContentGaps(context)
+    };
+    
+    return this.rankRecommendations(recommendations, context);
+  }
+
+  // 지식 시각화
+  async visualizeKnowledge() {
+    return {
+      // 3D 그래프
+      graph3D: await this.create3DGraph(),
+      
+      // 히트맵
+      heatmap: await this.createKnowledgeHeatmap(),
+      
+      // 타임라인
+      timeline: await this.createKnowledgeTimeline(),
+      
+      // 마인드맵
+      mindmap: await this.generateMindMap(),
+      
+      // 대시보드
+      dashboard: await this.createKnowledgeDashboard()
+    };
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="integration-setup">
+                <h2><i class="fas fa-plug"></i> 통합 시스템 구축</h2>
+
+                <div class="integrations">
+                    <h3>1. 외부 도구 통합</h3>
+                    <pre><code class="language-javascript">// 통합 매니저
+class IntegrationManager {
+  constructor() {
+    this.integrations = new Map();
+    this.webhooks = new WebhookManager();
+    this.api = new APIGateway();
+  }
+
+  // GitHub 통합
+  async setupGitHub() {
+    const github = new GitHubIntegration({
+      token: process.env.GITHUB_TOKEN,
+      repo: 'knowledge-base'
+    });
+    
+    // 이슈 동기화
+    github.on('issue.created', async (issue) => {
+      await this.createTaskFromIssue(issue);
+    });
+    
+    // PR 리뷰 노트
+    github.on('pull_request.opened', async (pr) => {
+      await this.createReviewNote(pr);
+    });
+    
+    // 코드 스니펫 저장
+    github.on('gist.created', async (gist) => {
+      await this.saveCodeSnippet(gist);
+    });
+    
+    this.integrations.set('github', github);
+  }
+
+  // Slack 통합
+  async setupSlack() {
+    const slack = new SlackIntegration({
+      token: process.env.SLACK_TOKEN,
+      workspace: 'team'
+    });
+    
+    // 중요 메시지 저장
+    slack.on('message.starred', async (message) => {
+      await this.saveImportantMessage(message);
+    });
+    
+    // 스레드 요약
+    slack.on('thread.completed', async (thread) => {
+      await this.summarizeThread(thread);
+    });
+    
+    // 알림 전송
+    this.notifications = {
+      send: async (channel, message) => {
+        await slack.postMessage(channel, message);
+      }
+    };
+    
+    this.integrations.set('slack', slack);
+  }
+
+  // Calendar 통합
+  async setupCalendar() {
+    const calendar = new CalendarIntegration({
+      provider: 'google',
+      credentials: this.loadCredentials()
+    });
+    
+    // 미팅 노트 자동 생성
+    calendar.on('event.starting', async (event) => {
+      if (event.type === 'meeting') {
+        await this.createMeetingNote(event);
+      }
+    });
+    
+    // 데드라인 추적
+    calendar.on('deadline.approaching', async (deadline) => {
+      await this.createDeadlineReminder(deadline);
+    });
+    
+    this.integrations.set('calendar', calendar);
+  }
+
+  // Email 통합
+  async setupEmail() {
+    const email = new EmailIntegration({
+      provider: 'gmail',
+      filters: [
+        { label: 'important', action: 'save' },
+        { from: 'boss@company.com', action: 'prioritize' }
+      ]
+    });
+    
+    // 중요 이메일 저장
+    email.on('important.received', async (mail) => {
+      await this.saveImportantEmail(mail);
+    });
+    
+    // 뉴스레터 요약
+    email.on('newsletter.received', async (newsletter) => {
+      const summary = await this.ai.summarize(newsletter);
+      await this.saveNewsletterSummary(summary);
+    });
+    
+    this.integrations.set('email', email);
+  }
+}</code></pre>
+
+                    <h3>2. AI 통합</h3>
+                    <pre><code class="language-javascript">// AI 어시스턴트 시스템
+class AIAssistantSystem {
+  constructor() {
+    this.llm = new LLMProvider({
+      models: {
+        gpt4: { provider: 'openai', model: 'gpt-4' },
+        claude: { provider: 'anthropic', model: 'claude-3' },
+        local: { provider: 'ollama', model: 'llama2' }
+      }
+    });
+    
+    this.agents = new AgentOrchestrator();
+  }
+
+  // 연구 어시스턴트
+  async createResearchAssistant() {
+    return this.agents.create({
+      name: 'ResearchAssistant',
+      
+      capabilities: [
+        'literature-review',
+        'summarization',
+        'fact-checking',
+        'citation-management'
+      ],
+      
+      tools: [
+        new WebSearchTool(),
+        new ArxivTool(),
+        new WikipediaTool(),
+        new CitationTool()
+      ],
+      
+      workflow: async (query) => {
+        // 1. 문헌 검색
+        const papers = await this.searchLiterature(query);
+        
+        // 2. 요약 생성
+        const summaries = await this.summarizePapers(papers);
+        
+        // 3. 종합 분석
+        const synthesis = await this.synthesizeFindings(summaries);
+        
+        // 4. 노트 생성
+        return await this.createResearchNote(synthesis);
+      }
+    });
+  }
+
+  // 글쓰기 도우미
+  async createWritingAssistant() {
+    return {
+      // 개요 생성
+      outline: async (topic, style) => {
+        return await this.llm.generate({
+          prompt: `Create a detailed outline for: ${topic}`,
+          style: style,
+          format: 'hierarchical'
+        });
+      },
+      
+      // 단락 확장
+      expand: async (point, context) => {
+        return await this.llm.generate({
+          prompt: `Expand this point into a paragraph: ${point}`,
+          context: context,
+          length: 'paragraph'
+        });
+      },
+      
+      // 스타일 개선
+      improve: async (text, goals) => {
+        return await this.llm.edit({
+          text: text,
+          instructions: goals,
+          preserve: 'meaning'
+        });
+      },
+      
+      // 인용 추가
+      citations: async (claims) => {
+        const sources = await this.findSources(claims);
+        return this.formatCitations(sources);
+      }
+    };
+  }
+
+  // 학습 도우미
+  async createLearningAssistant() {
+    return {
+      // 개념 설명
+      explain: async (concept, level) => {
+        return await this.llm.generate({
+          prompt: `Explain ${concept} for ${level} level`,
+          style: 'educational',
+          examples: true
+        });
+      },
+      
+      // 퀴즈 생성
+      quiz: async (content, difficulty) => {
+        return await this.generateQuiz(content, {
+          difficulty: difficulty,
+          types: ['multiple-choice', 'short-answer', 'true-false'],
+          count: 10
+        });
+      },
+      
+      // 학습 경로
+      path: async (goal, current) => {
+        return await this.generateLearningPath({
+          from: current,
+          to: goal,
+          style: 'personalized'
+        });
+      },
+      
+      // 플래시카드
+      flashcards: async (notes) => {
+        return await this.generateFlashcards(notes, {
+          algorithm: 'spaced-repetition',
+          difficulty: 'adaptive'
+        });
+      }
+    };
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="automation-system">
+                <h2><i class="fas fa-cog"></i> 자동화 시스템</h2>
+
+                <div class="automation-examples">
+                    <h3>워크플로우 자동화</h3>
+                    <pre><code class="language-javascript">// 마스터 자동화 시스템
+class MasterAutomationSystem {
+  constructor() {
+    this.workflows = new WorkflowEngine();
+    this.triggers = new TriggerManager();
+    this.actions = new ActionLibrary();
+    this.scheduler = new Scheduler();
+  }
+
+  // 일일 루틴 자동화
+  async setupDailyRoutines() {
+    // 아침 루틴
+    this.scheduler.schedule('0 6 * * *', async () => {
+      await this.morningRoutine();
+    });
+    
+    // 저녁 리뷰
+    this.scheduler.schedule('0 21 * * *', async () => {
+      await this.eveningReview();
+    });
+    
+    // 주간 리뷰
+    this.scheduler.schedule('0 9 * * SUN', async () => {
+      await this.weeklyReview();
+    });
+  }
+
+  async morningRoutine() {
+    const tasks = [
+      // 1. 일일 노트 생성
+      this.createDailyNote(),
+      
+      // 2. 오늘의 일정 가져오기
+      this.fetchTodaySchedule(),
+      
+      // 3. 우선순위 작업 정리
+      this.organizePriorities(),
+      
+      // 4. 뉴스 요약
+      this.fetchNewsSummary(),
+      
+      // 5. 날씨 정보
+      this.getWeatherInfo()
+    ];
+    
+    const results = await Promise.all(tasks);
+    await this.compileMorningBriefing(results);
+  }
+
+  // 콘텐츠 처리 자동화
+  async setupContentProcessing() {
+    // 웹 클리핑 처리
+    this.triggers.on('webclip.saved', async (clip) => {
+      const processed = await this.processWebClip(clip);
+      await this.createProcessedNote(processed);
+    });
+    
+    // PDF 처리
+    this.triggers.on('pdf.uploaded', async (pdf) => {
+      const extracted = await this.extractPDFContent(pdf);
+      const summary = await this.ai.summarize(extracted);
+      await this.createLiteratureNote(pdf, summary);
+    });
+    
+    // 이미지 처리
+    this.triggers.on('image.added', async (image) => {
+      const ocr = await this.performOCR(image);
+      const tags = await this.ai.generateTags(image);
+      await this.updateImageMetadata(image, { ocr, tags });
+    });
+  }
+
+  // 유지보수 자동화
+  async setupMaintenance() {
+    return {
+      // 링크 검사
+      brokenLinks: this.scheduler.weekly(async () => {
+        const broken = await this.findBrokenLinks();
+        await this.createMaintenanceReport('broken-links', broken);
+      }),
+      
+      // 중복 검사
+      duplicates: this.scheduler.monthly(async () => {
+        const dupes = await this.findDuplicates();
+        await this.createMaintenanceReport('duplicates', dupes);
+      }),
+      
+      // 고아 노트
+      orphans: this.scheduler.weekly(async () => {
+        const orphans = await this.findOrphanedNotes();
+        await this.suggestConnections(orphans);
+      }),
+      
+      // 백업
+      backup: this.scheduler.daily(async () => {
+        await this.performBackup();
+        await this.verifyBackupIntegrity();
+      })
+    };
+  }
+}</code></pre>
+
+                    <h3>스마트 알림 시스템</h3>
+                    <pre><code class="language-javascript">// 지능형 알림 시스템
+class SmartNotificationSystem {
+  constructor() {
+    this.rules = new NotificationRules();
+    this.channels = new NotificationChannels();
+    this.ai = new NotificationAI();
+  }
+
+  async setupNotifications() {
+    // 중요도 기반 알림
+    this.rules.add({
+      name: 'HighPriorityTask',
+      condition: 'task.priority === "high" && task.dueDate <= today + 2days',
+      action: {
+        channels: ['desktop', 'mobile', 'email'],
+        message: 'High priority task due soon: {{task.title}}',
+        frequency: 'twice-daily'
+      }
+    });
+    
+    // AI 기반 인사이트
+    this.rules.add({
+      name: 'KnowledgeGapDetected',
+      condition: async (context) => {
+        const gaps = await this.ai.detectKnowledgeGaps(context);
+        return gaps.severity > 0.7;
+      },
+      action: {
+        channels: ['desktop'],
+        message: 'Knowledge gap detected: {{gap.description}}',
+        suggestions: true
+      }
+    });
+    
+    // 패턴 기반 제안
+    this.rules.add({
+      name: 'WorkPatternSuggestion',
+      condition: async (context) => {
+        const patterns = await this.ai.analyzeWorkPatterns(context);
+        return patterns.hasImprovements;
+      },
+      action: {
+        channels: ['morning-briefing'],
+        message: 'Productivity tip: {{suggestion}}',
+        actionable: true
+      }
+    });
+  }
+
+  // 적응형 알림
+  async adaptiveNotifications(user) {
+    const preferences = await this.learnUserPreferences(user);
+    
+    return {
+      // 최적 시간대
+      optimalTiming: preferences.activeTimes,
+      
+      // 선호 채널
+      preferredChannels: preferences.channels,
+      
+      // 알림 빈도
+      frequency: preferences.tolerance,
+      
+      // 컨텍스트 인식
+      contextAware: async (notification) => {
+        const context = await this.getUserContext(user);
+        return this.shouldNotify(notification, context, preferences);
+      }
+    };
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="deployment">
+                <h2><i class="fas fa-rocket"></i> 배포 및 운영</h2>
+
+                <div class="deployment-guide">
+                    <h3>시스템 배포 체크리스트</h3>
+                    <div class="checklist">
+                        <div class="checklist-section">
+                            <h4>준비 단계</h4>
+                            <ul class="checklist-items">
+                                <li><input type="checkbox"> 볼트 구조 설계 완료</li>
+                                <li><input type="checkbox"> 필수 플러그인 설치</li>
+                                <li><input type="checkbox"> 템플릿 시스템 구성</li>
+                                <li><input type="checkbox"> 백업 시스템 설정</li>
+                                <li><input type="checkbox"> 권한 체계 수립</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="checklist-section">
+                            <h4>구현 단계</h4>
+                            <ul class="checklist-items">
+                                <li><input type="checkbox"> 자동화 워크플로우 구축</li>
+                                <li><input type="checkbox"> 외부 도구 통합</li>
+                                <li><input type="checkbox"> AI 시스템 연결</li>
+                                <li><input type="checkbox"> 모니터링 대시보드 설정</li>
+                                <li><input type="checkbox"> 사용자 교육 자료 작성</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="checklist-section">
+                            <h4>운영 단계</h4>
+                            <ul class="checklist-items">
+                                <li><input type="checkbox"> 일일 백업 확인</li>
+                                <li><input type="checkbox"> 성능 모니터링</li>
+                                <li><input type="checkbox"> 사용자 피드백 수집</li>
+                                <li><input type="checkbox"> 정기 유지보수</li>
+                                <li><input type="checkbox"> 시스템 최적화</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h3>운영 대시보드</h3>
+                    <div class="operations-dashboard">
+                        <pre><code class="language-javascript">// 운영 대시보드 구성
+const operationsDashboard = {
+  metrics: {
+    system: {
+      uptime: '99.9%',
+      responseTime: '< 200ms',
+      errorRate: '< 0.1%'
+    },
+    
+    usage: {
+      activeUsers: 'realtime',
+      notesCreated: 'daily',
+      searchQueries: 'hourly'
+    },
+    
+    quality: {
+      brokenLinks: 'weekly',
+      orphanedNotes: 'weekly',
+      duplicateContent: 'monthly'
+    }
+  },
+  
+  alerts: {
+    critical: ['system-down', 'data-loss', 'security-breach'],
+    warning: ['high-latency', 'disk-space', 'error-spike'],
+    info: ['maintenance-due', 'update-available', 'backup-complete']
+  },
+  
+  automation: {
+    reporting: 'daily-summary',
+    maintenance: 'auto-fix-enabled',
+    scaling: 'adaptive'
+  }
+};</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="future-expansion">
+                <h2><i class="fas fa-forward"></i> 미래 확장 계획</h2>
+
+                <div class="expansion-roadmap">
+                    <h3>발전 로드맵</h3>
+                    <div class="roadmap-timeline">
+                        <div class="roadmap-phase">
+                            <h4>Phase 1: 기반 구축 (현재)</h4>
+                            <ul>
+                                <li>핵심 시스템 구현</li>
+                                <li>기본 자동화 설정</li>
+                                <li>팀 온보딩</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="roadmap-phase">
+                            <h4>Phase 2: AI 강화 (3개월)</h4>
+                            <ul>
+                                <li>고급 AI 기능 추가</li>
+                                <li>자동 콘텐츠 생성</li>
+                                <li>예측 분석 도입</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="roadmap-phase">
+                            <h4>Phase 3: 확장 (6개월)</h4>
+                            <ul>
+                                <li>멀티 플랫폼 지원</li>
+                                <li>엔터프라이즈 기능</li>
+                                <li>API 생태계 구축</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="roadmap-phase">
+                            <h4>Phase 4: 혁신 (1년)</h4>
+                            <ul>
+                                <li>AR/VR 통합</li>
+                                <li>음성 인터페이스</li>
+                                <li>완전 자율 시스템</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-check-circle"></i> 프로젝트 완성</h2>
+                
+                <div class="completion-message">
+                    <h3>🎉 축하합니다!</h3>
+                    <p>Knowledge Operating System 프로젝트를 성공적으로 완성했습니다. 이제 당신은 최첨단 지식 관리 시스템을 보유하게 되었습니다.</p>
+                    
+                    <div class="achievements">
+                        <h4>달성한 목표</h4>
+                        <ul>
+                            <li>✅ 완전 자동화된 일일 워크플로우</li>
+                            <li>✅ AI 기반 지식 관리 시스템</li>
+                            <li>✅ 팀 협업 플랫폼</li>
+                            <li>✅ 다중 도구 통합</li>
+                            <li>✅ 확장 가능한 아키텍처</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="next-steps">
+                        <h4>다음 단계</h4>
+                        <ul>
+                            <li>시스템을 일상 업무에 적용하기</li>
+                            <li>팀원들과 지식 공유하기</li>
+                            <li>지속적인 개선과 최적화</li>
+                            <li>커뮤니티에 경험 공유하기</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="course-completion">
+                    <h3>🏆 Obsidian 마스터 인증</h3>
+                    <p>31개 강의를 모두 완주하신 것을 축하드립니다! 이제 당신은 Obsidian의 진정한 마스터입니다.</p>
+                    
+                    <div class="certificate-mock">
+                        <div class="certificate">
+                            <h2>수료증</h2>
+                            <p>이 분은 Obsidian 마스터 클래스의<br>모든 과정을 성공적으로 이수하였음을 증명합니다.</p>
+                            <div class="certificate-date">{{date}}</div>
+                            <div class="certificate-signature">Obsidian Master Class</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3><i class="fas fa-trophy"></i> 최종 프로젝트</h3>
+                <p>지금까지 배운 모든 내용을 통합한 완성형 시스템을 구축했습니다.</p>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fas fa-star"></i> 핵심 성과</h3>
+                <ul>
+                    <li>통합 지식 관리 시스템</li>
+                    <li>완전 자동화 워크플로우</li>
+                    <li>AI 기반 어시스턴트</li>
+                    <li>팀 협업 플랫폼</li>
+                    <li>확장 가능한 아키텍처</li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fas fa-rocket"></i> 시작하기</h3>
+                <div class="action-buttons">
+                    <button class="action-btn primary">
+                        <i class="fas fa-download"></i> 프로젝트 템플릿 다운로드
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-code"></i> 소스 코드 보기
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-book"></i> 설치 가이드
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-section resources">
+                <h3><i class="fas fa-link"></i> 유용한 리소스</h3>
+                <ul>
+                    <li><a href="#" class="resource-link">Obsidian 공식 포럼</a></li>
+                    <li><a href="#" class="resource-link">플러그인 개발 가이드</a></li>
+                    <li><a href="#" class="resource-link">API 문서</a></li>
+                    <li><a href="#" class="resource-link">커뮤니티 템플릿</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="progress-tracker">
+            <div class="progress-bar" style="width: 88.57%;"></div>
+            <span class="progress-text">31/35 강의 완료</span>
+        </div>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>

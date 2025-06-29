@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제20강: 성능 최적화 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+            --purple-color: #b48ead;
+            --orange-color: #d08770;
+            --performance-color: #a3be8c;
+            --speed-color: #88c0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--performance-color) 0%, transparent 70%);
+            opacity: 0.2;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-50px, -50px) rotate(120deg); }
+            66% { transform: translate(50px, -30px) rotate(240deg); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--performance-color), var(--speed-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(odd) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(even) {
+            animation-delay: 0.4s;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--accent-color), var(--performance-color));
+            border-radius: 3px;
+        }
+
+        .section h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--performance-color);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(163, 190, 140, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--performance-color);
+        }
+
+        .performance-metrics {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .metric-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--performance-color) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .metric-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--performance-color);
+            margin-bottom: 0.5rem;
+            animation: countUp 2s ease-out;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .metric-label {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .benchmark-chart {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bar-label {
+            min-width: 150px;
+            font-weight: 500;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 30px;
+            background: var(--secondary-color);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--performance-color), var(--speed-color));
+            border-radius: 15px;
+            transition: width 1.5s ease-out;
+            position: relative;
+            animation: fillBar 1.5s ease-out;
+        }
+
+        @keyframes fillBar {
+            from { width: 0; }
+        }
+
+        .bar-value {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .optimization-tips {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .tip-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .tip-item {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            border-left: 4px solid var(--performance-color);
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .tip-item::before {
+            content: '💡';
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        .tip-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .config-editor {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            font-family: 'Courier New', monospace;
+            border: 1px solid var(--border-color);
+        }
+
+        .config-line {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .config-key {
+            color: var(--info-color);
+            min-width: 200px;
+        }
+
+        .config-value {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--performance-color);
+            transition: all 0.3s ease;
+        }
+
+        .config-value:focus {
+            outline: none;
+            border-color: var(--performance-color);
+            box-shadow: 0 0 0 3px rgba(163, 190, 140, 0.2);
+        }
+
+        .performance-monitor {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .monitor-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--performance-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .cache-visualization {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .cache-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .cache-block {
+            aspect-ratio: 1;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cache-block.cached {
+            background: var(--performance-color);
+            color: var(--primary-color);
+        }
+
+        .cache-block:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cache-block::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .cache-block:active::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .loading-demo {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .loading-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--performance-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .lazy-loading {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(136, 192, 208, 0.3);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        .best-practices {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--performance-color), var(--speed-color));
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .practice-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .practice-card:hover {
+            border-color: var(--performance-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .practice-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .practice-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--performance-color);
+        }
+
+        .practice-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .performance-comparison {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin-top: 2rem;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--secondary-color);
+            font-weight: 600;
+            color: var(--performance-color);
+        }
+
+        .comparison-table tr:hover {
+            background: var(--hover-bg);
+        }
+
+        .comparison-table .positive {
+            color: var(--success-color);
+        }
+
+        .comparison-table .negative {
+            color: var(--error-color);
+        }
+
+        .faq-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--performance-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        .resources-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .resource-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .resource-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--performance-color);
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-link {
+            color: var(--speed-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-link:hover {
+            color: var(--accent-color);
+        }
+
+        .practice-exercises {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .exercise-list {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .exercise-item {
+            background: rgba(46, 52, 64, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--performance-color);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--performance-color);
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: var(--success-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-medium {
+            background: var(--warning-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-hard {
+            background: var(--error-color);
+            color: var(--text-color);
+        }
+
+        .next-lesson {
+            background: linear-gradient(135deg, var(--performance-color) 0%, var(--speed-color) 100%);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .next-lesson::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .next-lesson h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .next-lesson p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .config-line {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .config-key {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p>체계적으로 배우는 노션 활용법</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_01.html">기초과정</a></li>
+            <li><a href="notion_course_12.html">중급과정</a></li>
+            <li><a href="notion_course_21.html">고급과정</a></li>
+            <li><a href="#performance">성능최적화</a></li>
+            <li><a href="#monitoring">모니터링</a></li>
+            <li><a href="#tips">최적화팁</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제20강: 성능 최적화</h1>
+            <p>Obsidian의 성능을 극대화하고 대규모 볼트를 효율적으로 관리하는 방법을 배웁니다</p>
+            <div class="badge-container">
+                <span class="badge badge-intermediate">중급</span>
+                <span class="badge badge-duration">60분</span>
+                <span class="badge badge-optimization">최적화</span>
+            </div>
+        </div>
+
+        <section class="section" id="introduction">
+            <h2>1. 성능 최적화 개요</h2>
+            
+            <div class="card">
+                <h3>왜 성능 최적화가 중요한가?</h3>
+                <p>Obsidian은 로컬 파일 시스템을 기반으로 작동하므로, 볼트가 커질수록 성능 문제가 발생할 수 있습니다. 적절한 최적화를 통해 수천, 수만 개의 노트를 가진 볼트에서도 빠르고 안정적인 성능을 유지할 수 있습니다.</p>
+                
+                <div class="performance-metrics">
+                    <h4>주요 성능 지표</h4>
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <div class="metric-value">< 0.5s</div>
+                            <div class="metric-label">노트 열기 시간</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">< 2s</div>
+                            <div class="metric-label">검색 응답 시간</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">< 1GB</div>
+                            <div class="metric-label">메모리 사용량</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">> 60fps</div>
+                            <div class="metric-label">UI 프레임레이트</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>성능에 영향을 미치는 요소</h3>
+                <ul>
+                    <li><strong>볼트 크기</strong>: 노트 수, 첨부파일 크기</li>
+                    <li><strong>플러그인</strong>: 활성화된 플러그인 수와 복잡도</li>
+                    <li><strong>테마와 CSS</strong>: 커스텀 스타일의 복잡도</li>
+                    <li><strong>백링크와 태그</strong>: 연결의 복잡도</li>
+                    <li><strong>검색 인덱스</strong>: 인덱싱된 콘텐츠 양</li>
+                    <li><strong>실시간 미리보기</strong>: 렌더링 부하</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="vault-optimization">
+            <h2>2. 볼트 구조 최적화</h2>
+            
+            <div class="card">
+                <h3>효율적인 폴더 구조</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code>📁 Optimized Vault Structure
+├── 📁 01_Inbox <span class="comment">// 임시 노트 (정기적으로 정리)</span>
+│   └── 📄 quick-notes.md
+├── 📁 02_Active <span class="comment">// 현재 작업 중인 프로젝트</span>
+│   ├── 📁 Project_A
+│   └── 📁 Project_B
+├── 📁 03_Reference <span class="comment">// 참조 자료 (읽기 전용)</span>
+│   ├── 📁 Books
+│   └── 📁 Articles
+├── 📁 04_Archive <span class="comment">// 완료된 프로젝트 (별도 볼트 고려)</span>
+│   └── 📁 2023
+├── 📁 05_Templates <span class="comment">// 템플릿 파일</span>
+└── 📁 06_Attachments <span class="comment">// 미디어 파일 중앙화</span>
+    ├── 📁 Images
+    └── 📁 PDFs</code></pre>
+                </div>
+
+                <h4>폴더 구조 원칙</h4>
+                <ul>
+                    <li>깊이는 3단계 이하로 제한</li>
+                    <li>폴더당 파일 수는 100개 미만 유지</li>
+                    <li>정기적으로 아카이브 폴더로 이동</li>
+                    <li>첨부파일은 별도 폴더에 중앙화</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>파일 명명 규칙</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 날짜 기반 명명</span>
+2024-01-15_meeting-notes.md
+2024-01-15_project-update.md
+
+<span class="comment">// 카테고리 기반 명명</span>
+[BOOK] Atomic Habits.md
+[ARTICLE] Performance Optimization.md
+[PROJECT] Website Redesign.md
+
+<span class="comment">// 제텔카스텐 스타일</span>
+20240115a - Main Idea.md
+20240115b - Supporting Evidence.md
+20240115c - Counter Arguments.md</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>대용량 파일 처리</h3>
+                <div class="optimization-tips">
+                    <ul class="tip-list">
+                        <li class="tip-item">
+                            <strong>이미지 최적화</strong>: WebP 포맷 사용, 최대 너비 1920px
+                        </li>
+                        <li class="tip-item">
+                            <strong>PDF 분할</strong>: 50MB 이상 PDF는 페이지별로 분할
+                        </li>
+                        <li class="tip-item">
+                            <strong>외부 저장소 활용</strong>: 대용량 파일은 클라우드 링크로 대체
+                        </li>
+                        <li class="tip-item">
+                            <strong>첨부파일 정리</strong>: 사용하지 않는 첨부파일 정기적 삭제
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="plugin-optimization">
+            <h2>3. 플러그인 최적화</h2>
+            
+            <div class="card">
+                <h3>플러그인 성능 관리</h3>
+                <div class="benchmark-chart">
+                    <h4>플러그인별 로딩 시간</h4>
+                    <div class="chart-bars">
+                        <div class="chart-bar">
+                            <span class="bar-label">Dataview</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 85%">
+                                    <span class="bar-value">850ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Templater</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 45%">
+                                    <span class="bar-value">450ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Calendar</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 30%">
+                                    <span class="bar-value">300ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Tasks</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 60%">
+                                    <span class="bar-value">600ms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>플러그인 최적화 전략</h3>
+                <div class="best-practices">
+                    <div class="practice-grid">
+                        <div class="practice-card">
+                            <div class="practice-icon">🔌</div>
+                            <div class="practice-title">필수 플러그인만 활성화</div>
+                            <div class="practice-description">
+                                사용하지 않는 플러그인은 비활성화하거나 삭제하여 메모리 사용량과 로딩 시간을 줄입니다.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">⚡</div>
+                            <div class="practice-title">지연 로딩 활용</div>
+                            <div class="practice-description">
+                                즉시 필요하지 않은 플러그인은 지연 로딩을 설정하여 초기 시작 시간을 단축합니다.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🔄</div>
+                            <div class="practice-title">정기적인 업데이트</div>
+                            <div class="practice-description">
+                                플러그인을 최신 버전으로 유지하여 성능 개선과 버그 수정을 적용합니다.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">📊</div>
+                            <div class="practice-title">성능 모니터링</div>
+                            <div class="practice-description">
+                                개발자 도구를 사용하여 플러그인별 성능을 측정하고 문제가 있는 플러그인을 식별합니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Dataview 쿼리 최적화</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 비효율적인 쿼리</span>
+<span class="string">```dataview
+TABLE file.name, file.mtime, file.size
+FROM ""
+WHERE contains(file.name, "project")
+SORT file.mtime DESC
+```</span>
+
+<span class="comment">// 최적화된 쿼리</span>
+<span class="string">```dataview
+TABLE WITHOUT ID
+  file.link as "노트",
+  file.mtime as "수정일"
+FROM "02_Active"
+WHERE contains(file.name, "project")
+LIMIT 10
+SORT file.mtime DESC
+```</span>
+
+<span class="comment">// 캐싱 활용</span>
+<span class="string">```dataviewjs
+// 결과를 변수에 저장하여 재사용
+const projects = dv.pages('"02_Active"')
+  .where(p => p.file.name.includes("project"))
+  .limit(10);
+
+dv.table(["노트", "수정일"], 
+  projects.map(p => [p.file.link, p.file.mtime])
+);
+```</span></code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="rendering-optimization">
+            <h2>4. 렌더링 최적화</h2>
+            
+            <div class="card">
+                <h3>에디터 설정 최적화</h3>
+                <div class="config-editor">
+                    <div class="config-line">
+                        <span class="config-key">editor.lineWrapping:</span>
+                        <input type="text" class="config-value" value="false" />
+                    </div>
+                    <div class="config-line">
+                        <span class="config-key">editor.spellcheck:</span>
+                        <input type="text" class="config-value" value="false" />
+                    </div>
+                    <div class="config-line">
+                        <span class="config-key">editor.foldGutter:</span>
+                        <input type="text" class="config-value" value="false" />
+                    </div>
+                    <div class="config-line">
+                        <span class="config-key">editor.lineNumbers:</span>
+                        <input type="text" class="config-value" value="false" />
+                    </div>
+                    <div class="config-line">
+                        <span class="config-key">editor.readableLineLength:</span>
+                        <input type="text" class="config-value" value="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>CSS 최적화</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* GPU 가속 활용 */</span>
+<span class="keyword">.markdown-preview-view</span> {
+    <span class="property">will-change</span>: transform;
+    <span class="property">transform</span>: translateZ(0);
+}
+
+<span class="comment">/* 애니메이션 최적화 */</span>
+<span class="keyword">.nav-folder.is-collapsed</span> {
+    <span class="property">transition</span>: transform 0.15s ease-out;
+    <span class="comment">/* opacity 대신 transform 사용 */</span>
+    <span class="property">transform</span>: scaleY(0);
+}
+
+<span class="comment">/* 불필요한 리플로우 방지 */</span>
+<span class="keyword">.workspace-leaf-content</span> {
+    <span class="property">contain</span>: layout style paint;
+}
+
+<span class="comment">/* 폰트 최적화 */</span>
+<span class="keyword">@font-face</span> {
+    <span class="property">font-family</span>: 'CustomFont';
+    <span class="property">font-display</span>: swap; <span class="comment">/* 폰트 로딩 중 대체 폰트 표시 */</span>
+    <span class="property">src</span>: url('font.woff2') format('woff2');
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>미리보기 최적화</h3>
+                <div class="optimization-tips">
+                    <ul class="tip-list">
+                        <li class="tip-item">
+                            <strong>이미지 지연 로딩</strong>: 스크롤 시 이미지를 동적으로 로드
+                        </li>
+                        <li class="tip-item">
+                            <strong>코드 블록 최적화</strong>: 구문 강조를 선택적으로 적용
+                        </li>
+                        <li class="tip-item">
+                            <strong>수식 렌더링</strong>: MathJax 대신 KaTeX 사용
+                        </li>
+                        <li class="tip-item">
+                            <strong>링크 미리보기</strong>: 호버 시에만 미리보기 로드
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="search-optimization">
+            <h2>5. 검색 최적화</h2>
+            
+            <div class="card">
+                <h3>검색 인덱스 관리</h3>
+                <div class="performance-monitor">
+                    <h4>인덱스 상태</h4>
+                    <div class="monitor-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">📄</div>
+                            <div class="stat-value">5,432</div>
+                            <div class="stat-label">인덱싱된 파일</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">🔍</div>
+                            <div class="stat-value">127MB</div>
+                            <div class="stat-label">인덱스 크기</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-value">0.3s</div>
+                            <div class="stat-label">평균 검색 시간</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">🔄</div>
+                            <div class="stat-value">2분전</div>
+                            <div class="stat-label">마지막 업데이트</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>검색 성능 향상 팁</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 효율적인 검색 쿼리</span>
+<span class="comment">// 1. 경로 지정으로 검색 범위 제한</span>
+path:"02_Active" project status:active
+
+<span class="comment">// 2. 파일 유형 필터링</span>
+ext:md tag:#important -path:Archive
+
+<span class="comment">// 3. 정규식 대신 간단한 텍스트 검색</span>
+"performance optimization" <span class="comment">// Good</span>
+/perform.*optim.*/ <span class="comment">// Slow</span>
+
+<span class="comment">// 4. 제외 패턴 활용</span>
+project -tag:#completed -path:Templates
+
+<span class="comment">// 5. 검색 연산자 조합</span>
+(tag:#urgent OR tag:#important) path:Active</code></pre>
+                </div>
+
+                <h4>검색 제외 설정</h4>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// .obsidian/app.json</span>
+{
+  <span class="string">"userIgnoreFilters"</span>: [
+    <span class="string">"node_modules/"</span>,
+    <span class="string">"*.tmp"</span>,
+    <span class="string">".git/"</span>,
+    <span class="string">"Archive/"</span>
+  ],
+  <span class="string">"attachmentFolderPath"</span>: <span class="string">"06_Attachments"</span>
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="memory-optimization">
+            <h2>6. 메모리 최적화</h2>
+            
+            <div class="card">
+                <h3>메모리 사용량 모니터링</h3>
+                <div class="performance-monitor">
+                    <h4>현재 메모리 상태</h4>
+                    <div class="monitor-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">💾</div>
+                            <div class="stat-value">487MB</div>
+                            <div class="stat-label">총 사용량</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-value">23%</div>
+                            <div class="stat-label">CPU 사용률</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">🗂️</div>
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">열린 파일 수</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">🔌</div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">활성 플러그인</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>메모리 최적화 방법</h3>
+                <div class="optimization-tips">
+                    <ul class="tip-list">
+                        <li class="tip-item">
+                            <strong>탭 관리</strong>: 사용하지 않는 탭은 즉시 닫기
+                        </li>
+                        <li class="tip-item">
+                            <strong>히스토리 제한</strong>: 실행 취소 히스토리를 100단계로 제한
+                        </li>
+                        <li class="tip-item">
+                            <strong>캐시 정리</strong>: 정기적으로 캐시 폴더 정리
+                        </li>
+                        <li class="tip-item">
+                            <strong>대용량 파일 분할</strong>: 10,000줄 이상 파일은 분할
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>캐시 관리</h3>
+                <div class="cache-visualization">
+                    <h4>캐시 사용 현황</h4>
+                    <div class="cache-grid">
+                        <div class="cache-block cached">IMG</div>
+                        <div class="cache-block cached">CSS</div>
+                        <div class="cache-block cached">JS</div>
+                        <div class="cache-block">PDF</div>
+                        <div class="cache-block cached">MD</div>
+                        <div class="cache-block">MP4</div>
+                        <div class="cache-block cached">JSON</div>
+                        <div class="cache-block cached">YAML</div>
+                        <div class="cache-block">ZIP</div>
+                        <div class="cache-block cached">TXT</div>
+                        <div class="cache-block">DOC</div>
+                        <div class="cache-block cached">HTML</div>
+                    </div>
+                    <p style="margin-top: 1rem; text-align: center; opacity: 0.7;">
+                        녹색: 캐시됨 | 회색: 캐시되지 않음
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="loading-optimization">
+            <h2>7. 로딩 시간 최적화</h2>
+            
+            <div class="card">
+                <h3>시작 시간 단축</h3>
+                <div class="benchmark-chart">
+                    <h4>구성 요소별 로딩 시간</h4>
+                    <div class="chart-bars">
+                        <div class="chart-bar">
+                            <span class="bar-label">Core</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 30%">
+                                    <span class="bar-value">0.3s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Theme</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 15%">
+                                    <span class="bar-value">0.15s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Plugins</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 70%">
+                                    <span class="bar-value">0.7s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-bar">
+                            <span class="bar-label">Index</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 45%">
+                                    <span class="bar-value">0.45s</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>지연 로딩 구현</h3>
+                <div class="loading-demo">
+                    <h4>로딩 순서 최적화</h4>
+                    <div class="loading-container">
+                        <div class="loading-item lazy-loading">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">핵심 기능 로드 중...</div>
+                        </div>
+                        <div class="loading-item lazy-loading" style="animation-delay: 0.5s">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">필수 플러그인 초기화...</div>
+                        </div>
+                        <div class="loading-item lazy-loading" style="animation-delay: 1s">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-text">선택적 기능 로드...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>프리로딩 전략</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 자주 사용하는 파일 프리로드</span>
+<span class="keyword">const</span> <span class="function">preloadFrequentFiles</span> = () => {
+    <span class="keyword">const</span> frequentFiles = [
+        <span class="string">'Daily Notes/2024-01-15.md'</span>,
+        <span class="string">'Templates/Daily Template.md'</span>,
+        <span class="string">'Index.md'</span>
+    ];
+    
+    frequentFiles.<span class="function">forEach</span>(file => {
+        <span class="comment">// 백그라운드에서 파일 캐싱</span>
+        app.vault.<span class="function">cachedRead</span>(file);
+    });
+};
+
+<span class="comment">// 이미지 지연 로딩</span>
+<span class="keyword">const</span> <span class="function">lazyLoadImages</span> = () => {
+    <span class="keyword">const</span> imageObserver = <span class="keyword">new</span> <span class="function">IntersectionObserver</span>((entries) => {
+        entries.<span class="function">forEach</span>(entry => {
+            <span class="keyword">if</span> (entry.isIntersecting) {
+                <span class="keyword">const</span> img = entry.target;
+                img.src = img.dataset.src;
+                imageObserver.<span class="function">unobserve</span>(img);
+            }
+        });
+    });
+    
+    document.<span class="function">querySelectorAll</span>(<span class="string">'img[data-src]'</span>)
+        .<span class="function">forEach</span>(img => imageObserver.<span class="function">observe</span>(img));
+};</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="performance-testing">
+            <h2>8. 성능 테스트와 모니터링</h2>
+            
+            <div class="card">
+                <h3>성능 측정 도구</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 개발자 콘솔에서 성능 측정</span>
+<span class="comment">// Ctrl+Shift+I (Windows/Linux) 또는 Cmd+Opt+I (Mac)</span>
+
+<span class="comment">// 1. 플러그인 로딩 시간 측정</span>
+console.<span class="function">time</span>(<span class="string">'Plugin Load'</span>);
+await app.plugins.<span class="function">loadPlugin</span>(<span class="string">'dataview'</span>);
+console.<span class="function">timeEnd</span>(<span class="string">'Plugin Load'</span>);
+
+<span class="comment">// 2. 검색 성능 측정</span>
+<span class="keyword">const</span> startTime = performance.<span class="function">now</span>();
+<span class="keyword">const</span> results = await app.vault.<span class="function">search</span>(<span class="string">'performance'</span>);
+<span class="keyword">const</span> endTime = performance.<span class="function">now</span>();
+console.<span class="function">log</span>(<span class="string">`Search took ${endTime - startTime}ms`</span>);
+
+<span class="comment">// 3. 메모리 사용량 확인</span>
+<span class="keyword">if</span> (performance.memory) {
+    console.<span class="function">log</span>({
+        <span class="string">'Used JS Heap'</span>: (performance.memory.usedJSHeapSize / 1048576).<span class="function">toFixed</span>(2) + <span class="string">' MB'</span>,
+        <span class="string">'Total JS Heap'</span>: (performance.memory.totalJSHeapSize / 1048576).<span class="function">toFixed</span>(2) + <span class="string">' MB'</span>
+    });
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>성능 비교 분석</h3>
+                <div class="performance-comparison">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>최적화 항목</th>
+                                <th>이전</th>
+                                <th>이후</th>
+                                <th>개선율</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>시작 시간</td>
+                                <td>3.5s</td>
+                                <td>1.2s</td>
+                                <td class="positive">↓ 65%</td>
+                            </tr>
+                            <tr>
+                                <td>검색 응답</td>
+                                <td>2.1s</td>
+                                <td>0.4s</td>
+                                <td class="positive">↓ 81%</td>
+                            </tr>
+                            <tr>
+                                <td>메모리 사용</td>
+                                <td>1.2GB</td>
+                                <td>487MB</td>
+                                <td class="positive">↓ 59%</td>
+                            </tr>
+                            <tr>
+                                <td>CPU 사용률</td>
+                                <td>45%</td>
+                                <td>23%</td>
+                                <td class="positive">↓ 49%</td>
+                            </tr>
+                            <tr>
+                                <td>파일 열기</td>
+                                <td>0.8s</td>
+                                <td>0.2s</td>
+                                <td class="positive">↓ 75%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>자동 성능 모니터링</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 성능 모니터링 플러그인 스니펫</span>
+<span class="keyword">class</span> <span class="function">PerformanceMonitor</span> {
+    <span class="keyword">constructor</span>() {
+        <span class="keyword">this</span>.metrics = {
+            fileOpenTimes: [],
+            searchTimes: [],
+            memoryUsage: []
+        };
+    }
+    
+    <span class="function">trackFileOpen</span>(fileName, duration) {
+        <span class="keyword">this</span>.metrics.fileOpenTimes.<span class="function">push</span>({
+            file: fileName,
+            duration: duration,
+            timestamp: <span class="keyword">new</span> <span class="function">Date</span>()
+        });
+        
+        <span class="comment">// 평균 계산</span>
+        <span class="keyword">const</span> avg = <span class="keyword">this</span>.metrics.fileOpenTimes
+            .<span class="function">reduce</span>((sum, item) => sum + item.duration, <span class="number">0</span>) 
+            / <span class="keyword">this</span>.metrics.fileOpenTimes.length;
+            
+        <span class="keyword">if</span> (avg > <span class="number">500</span>) {
+            <span class="keyword">this</span>.<span class="function">showWarning</span>(<span class="string">'파일 열기 속도가 느립니다'</span>);
+        }
+    }
+    
+    <span class="function">checkMemoryUsage</span>() {
+        <span class="keyword">if</span> (performance.memory) {
+            <span class="keyword">const</span> usage = performance.memory.usedJSHeapSize / <span class="number">1048576</span>;
+            <span class="keyword">this</span>.metrics.memoryUsage.<span class="function">push</span>(usage);
+            
+            <span class="keyword">if</span> (usage > <span class="number">1000</span>) {
+                <span class="keyword">this</span>.<span class="function">showWarning</span>(<span class="string">'메모리 사용량이 높습니다'</span>);
+            }
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="best-practices">
+            <h2>9. 성능 최적화 모범 사례</h2>
+            
+            <div class="card">
+                <h3>일일 유지보수 체크리스트</h3>
+                <div class="optimization-tips">
+                    <ul class="tip-list">
+                        <li class="tip-item">
+                            <strong>✓ 사용하지 않는 탭 닫기</strong>
+                        </li>
+                        <li class="tip-item">
+                            <strong>✓ 임시 파일 정리</strong>
+                        </li>
+                        <li class="tip-item">
+                            <strong>✓ 검색 인덱스 재구축</strong>
+                        </li>
+                        <li class="tip-item">
+                            <strong>✓ 플러그인 업데이트 확인</strong>
+                        </li>
+                        <li class="tip-item">
+                            <strong>✓ 대용량 첨부파일 확인</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>주간 최적화 작업</h3>
+                <div class="best-practices">
+                    <div class="practice-grid">
+                        <div class="practice-card">
+                            <div class="practice-icon">🗂️</div>
+                            <div class="practice-title">아카이브 정리</div>
+                            <div class="practice-description">
+                                완료된 프로젝트와 오래된 노트를 아카이브 폴더로 이동
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🧹</div>
+                            <div class="practice-title">캐시 정리</div>
+                            <div class="practice-description">
+                                .obsidian 폴더의 캐시 파일 삭제 및 재생성
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">📊</div>
+                            <div class="practice-title">성능 리포트</div>
+                            <div class="practice-description">
+                                주간 성능 지표 확인 및 문제점 분석
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">⚙️</div>
+                            <div class="practice-title">설정 검토</div>
+                            <div class="practice-description">
+                                플러그인 설정 및 에디터 설정 최적화 여부 확인
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>월간 대규모 정비</h3>
+                <ul>
+                    <li><strong>볼트 구조 재정비</strong>: 폴더 구조 최적화 및 파일 재배치</li>
+                    <li><strong>플러그인 감사</strong>: 사용하지 않는 플러그인 제거</li>
+                    <li><strong>미디어 파일 압축</strong>: 이미지 및 동영상 최적화</li>
+                    <li><strong>백업 및 복원 테스트</strong>: 백업 무결성 확인</li>
+                    <li><strong>성능 벤치마크</strong>: 이전 달과 성능 비교</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>실습 과제</h2>
+            
+            <div class="practice-exercises">
+                <h3>이번 강의의 실습 과제</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">📊 과제 1: 성능 진단</span>
+                            <span class="difficulty-badge difficulty-easy">초급</span>
+                        </div>
+                        <p>현재 볼트의 성능을 측정하고 문제점을 파악하세요:</p>
+                        <ul>
+                            <li>개발자 도구로 로딩 시간 측정</li>
+                            <li>메모리 사용량 확인</li>
+                            <li>플러그인별 성능 영향 분석</li>
+                            <li>성능 리포트 작성</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">⚡ 과제 2: 플러그인 최적화</span>
+                            <span class="difficulty-badge difficulty-medium">중급</span>
+                        </div>
+                        <p>플러그인을 최적화하여 시작 시간을 단축하세요:</p>
+                        <ul>
+                            <li>필수/선택 플러그인 분류</li>
+                            <li>지연 로딩 설정 적용</li>
+                            <li>Dataview 쿼리 최적화</li>
+                            <li>최적화 전후 비교</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🚀 과제 3: 종합 최적화</span>
+                            <span class="difficulty-badge difficulty-hard">고급</span>
+                        </div>
+                        <p>볼트 전체를 종합적으로 최적화하세요:</p>
+                        <ul>
+                            <li>폴더 구조 재설계</li>
+                            <li>CSS 및 렌더링 최적화</li>
+                            <li>자동 성능 모니터링 구현</li>
+                            <li>최적화 가이드 문서 작성</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>FAQ</h2>
+            
+            <div class="faq-section">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Obsidian이 점점 느려지는 이유는 무엇인가요?
+                    </div>
+                    <div class="faq-answer">
+                        주요 원인으로는 볼트 크기 증가, 플러그인 누적, 캐시 파일 증가, 검색 인덱스 비대화 등이 있습니다. 정기적인 최적화 작업으로 해결할 수 있습니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        어느 정도 크기의 볼트까지 효율적으로 관리할 수 있나요?
+                    </div>
+                    <div class="faq-answer">
+                        적절한 최적화를 통해 10,000개 이상의 노트와 수 GB의 첨부파일을 포함한 볼트도 원활히 관리할 수 있습니다. 핵심은 구조화와 정기적인 유지보수입니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        플러그인을 많이 설치하면 얼마나 느려지나요?
+                    </div>
+                    <div class="faq-answer">
+                        플러그인마다 다르지만, 일반적으로 10-15개의 플러그인은 큰 영향이 없습니다. 중요한 것은 플러그인의 품질과 최적화 정도입니다. 필요한 플러그인만 활성화하고 정기적으로 업데이트하세요.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        검색이 느려졌을 때 어떻게 해결하나요?
+                    </div>
+                    <div class="faq-answer">
+                        검색 인덱스를 재구축하고, 검색 제외 폴더를 설정하며, 검색 쿼리를 최적화하세요. 특히 아카이브나 첨부파일 폴더를 검색에서 제외하면 크게 개선됩니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        모바일에서 성능을 개선하는 방법은?
+                    </div>
+                    <div class="faq-answer">
+                        모바일에서는 필수 플러그인만 활성화하고, 동기화할 폴더를 제한하며, 이미지 크기를 최적화하세요. 또한 오프라인 사용을 위해 필요한 파일만 다운로드하도록 설정하세요.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>추가 학습 자료</h2>
+            
+            <div class="resources-section">
+                <h3>성능 최적화 관련 자료</h3>
+                <ul class="resource-list">
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📚 Obsidian 성능 최적화 공식 가이드
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🎥 대규모 볼트 관리 베스트 프랙티스 (동영상)
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📝 플러그인 성능 벤치마크 리포트
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🛠️ 성능 모니터링 플러그인 모음
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            💡 커뮤니티 최적화 팁 모음
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="next-lesson">
+            <h3>다음 강의 안내</h3>
+            <p>제21강: 플러그인 개발 기초 - 나만의 Obsidian 플러그인 만들기</p>
+            <p>JavaScript와 TypeScript를 사용한 플러그인 개발의 기초를 배웁니다.</p>
+        </div>
+    </div>
+
+    <script>
+        // FAQ 토글 기능
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 코드 복사 기능
+        function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('pre code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '복사됨!';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    button.textContent = '복사';
+                    button.style.background = 'var(--accent-color)';
+                }, 2000);
+            });
+        }
+
+        // 캐시 블록 클릭 이벤트
+        document.querySelectorAll('.cache-block').forEach(block => {
+            block.addEventListener('click', () => {
+                block.classList.toggle('cached');
+            });
+        });
+
+        // 성능 모니터링 시뮬레이션
+        function updatePerformanceMetrics() {
+            document.querySelectorAll('.stat-value').forEach(stat => {
+                const current = parseFloat(stat.textContent);
+                if (!isNaN(current)) {
+                    const variation = (Math.random() - 0.5) * 0.1;
+                    const newValue = current * (1 + variation);
+                    
+                    if (stat.textContent.includes('MB')) {
+                        stat.textContent = newValue.toFixed(0) + 'MB';
+                    } else if (stat.textContent.includes('s')) {
+                        stat.textContent = newValue.toFixed(1) + 's';
+                    } else if (stat.textContent.includes('%')) {
+                        stat.textContent = newValue.toFixed(0) + '%';
+                    }
+                }
+            });
+        }
+
+        // 5초마다 성능 지표 업데이트
+        setInterval(updatePerformanceMetrics, 5000);
+
+        // 설정 값 변경 시 효과
+        document.querySelectorAll('.config-value').forEach(input => {
+            input.addEventListener('change', () => {
+                input.style.borderColor = 'var(--success-color)';
+                setTimeout(() => {
+                    input.style.borderColor = 'var(--border-color)';
+                }, 2000);
+            });
+        });
+
+        // 페이지 로드 애니메이션
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.section').forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제29강: 고급 워크플로우 | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-project-diagram"></i> 제29강: 고급 워크플로우</h1>
+                <p class="lesson-subtitle">복잡한 작업을 자동화하고 최적화하는 전문가의 방법</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 고급</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 70분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: 자동화</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson28.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제29강: 고급 워크플로우</span>
+            <a href="lesson30.html" class="nav-link next">
+                다음 강의 <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>복잡한 워크플로우 설계 및 구현하기</li>
+                    <li>다중 도구 통합 시스템 구축하기</li>
+                    <li>고급 자동화 패턴 마스터하기</li>
+                    <li>팀 협업 워크플로우 구성하기</li>
+                    <li>전문가급 생산성 시스템 완성하기</li>
+                </ul>
+            </section>
+
+            <section class="workflow-architecture">
+                <h2><i class="fas fa-building"></i> 워크플로우 아키텍처</h2>
+                
+                <div class="architecture-overview">
+                    <h3>고급 워크플로우의 구성 요소</h3>
+                    <div class="component-grid">
+                        <div class="architecture-component">
+                            <i class="fas fa-cubes"></i>
+                            <h4>모듈러 디자인</h4>
+                            <p>재사용 가능한 컴포넌트로 구성된 유연한 시스템</p>
+                        </div>
+                        <div class="architecture-component">
+                            <i class="fas fa-sync-alt"></i>
+                            <h4>이벤트 기반 아키텍처</h4>
+                            <p>트리거와 액션으로 구성된 반응형 시스템</p>
+                        </div>
+                        <div class="architecture-component">
+                            <i class="fas fa-code-branch"></i>
+                            <h4>조건부 분기</h4>
+                            <p>상황에 따른 동적 경로 선택</p>
+                        </div>
+                        <div class="architecture-component">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>에러 핸들링</h4>
+                            <p>장애 복구와 대체 경로 제공</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-example">
+                    <h3>워크플로우 프레임워크 구현</h3>
+                    <pre><code class="language-javascript">// 고급 워크플로우 프레임워크
+class AdvancedWorkflowFramework {
+  constructor() {
+    this.workflows = new Map();
+    this.plugins = new Map();
+    this.integrations = new Map();
+    this.eventBus = new EventEmitter();
+    this.state = new WorkflowState();
+  }
+
+  // 워크플로우 정의
+  defineWorkflow(name, config) {
+    const workflow = new Workflow({
+      name,
+      ...config,
+      steps: this.parseSteps(config.steps),
+      conditions: this.parseConditions(config.conditions),
+      errorHandling: config.errorHandling || 'continue'
+    });
+
+    this.workflows.set(name, workflow);
+    this.registerTriggers(workflow);
+    
+    return workflow;
+  }
+
+  // 단계 파싱
+  parseSteps(steps) {
+    return steps.map(step => {
+      if (typeof step === 'string') {
+        return { action: step, params: {} };
+      }
+      
+      return {
+        action: step.action,
+        params: step.params || {},
+        condition: step.condition,
+        parallel: step.parallel || false,
+        retry: step.retry || { times: 0 },
+        timeout: step.timeout || 30000,
+        onError: step.onError || 'fail'
+      };
+    });
+  }
+
+  // 워크플로우 실행
+  async execute(workflowName, context = {}) {
+    const workflow = this.workflows.get(workflowName);
+    if (!workflow) {
+      throw new Error(`Workflow '${workflowName}' not found`);
+    }
+
+    const execution = new WorkflowExecution(workflow, context);
+    this.state.addExecution(execution);
+
+    try {
+      await execution.run();
+      this.eventBus.emit('workflow:complete', { workflow, execution });
+    } catch (error) {
+      this.eventBus.emit('workflow:error', { workflow, execution, error });
+      throw error;
+    }
+
+    return execution.getResult();
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="complex-workflows">
+                <h2><i class="fas fa-cogs"></i> 복잡한 워크플로우 패턴</h2>
+
+                <div class="workflow-patterns">
+                    <h3>1. 병렬 처리 워크플로우</h3>
+                    <div class="pattern-example">
+                        <div class="workflow-diagram">
+                            <div class="workflow-node start">시작</div>
+                            <div class="workflow-split">
+                                <div class="parallel-branch">
+                                    <div class="workflow-node">데이터 수집</div>
+                                    <div class="workflow-node">API 호출</div>
+                                </div>
+                                <div class="parallel-branch">
+                                    <div class="workflow-node">파일 처리</div>
+                                    <div class="workflow-node">변환</div>
+                                </div>
+                                <div class="parallel-branch">
+                                    <div class="workflow-node">검증</div>
+                                    <div class="workflow-node">로깅</div>
+                                </div>
+                            </div>
+                            <div class="workflow-node merge">병합</div>
+                            <div class="workflow-node end">완료</div>
+                        </div>
+
+                        <pre><code class="language-javascript">// 병렬 처리 워크플로우 구현
+class ParallelWorkflow extends Workflow {
+  async executeParallelSteps(steps, context) {
+    const promises = steps.map(step => 
+      this.executeStep(step, context)
+        .catch(error => ({
+          step: step.name,
+          error: error.message,
+          status: 'failed'
+        }))
+    );
+
+    const results = await Promise.allSettled(promises);
+    
+    return {
+      successful: results.filter(r => r.status === 'fulfilled'),
+      failed: results.filter(r => r.status === 'rejected'),
+      partial: results.filter(r => r.value?.status === 'failed')
+    };
+  }
+
+  async run(context) {
+    const parallelGroups = this.groupParallelSteps();
+    
+    for (const group of parallelGroups) {
+      if (group.parallel) {
+        const results = await this.executeParallelSteps(group.steps, context);
+        
+        if (this.config.failFast && results.failed.length > 0) {
+          throw new WorkflowError('Parallel execution failed', results);
+        }
+        
+        context.parallelResults = results;
+      } else {
+        for (const step of group.steps) {
+          await this.executeStep(step, context);
+        }
+      }
+    }
+  }
+}</code></pre>
+                    </div>
+
+                    <h3>2. 조건부 분기 워크플로우</h3>
+                    <div class="pattern-example">
+                        <pre><code class="language-javascript">// 조건부 분기 워크플로우
+class ConditionalWorkflow extends Workflow {
+  constructor(config) {
+    super(config);
+    this.conditions = new ConditionEngine();
+  }
+
+  async evaluateCondition(condition, context) {
+    switch (condition.type) {
+      case 'expression':
+        return this.conditions.evaluate(condition.expression, context);
+      
+      case 'function':
+        return await condition.function(context);
+      
+      case 'comparison':
+        const value = this.getValueFromContext(condition.path, context);
+        return this.compare(value, condition.operator, condition.value);
+      
+      default:
+        throw new Error(`Unknown condition type: ${condition.type}`);
+    }
+  }
+
+  async executeConditionalStep(step, context) {
+    if (step.condition) {
+      const shouldExecute = await this.evaluateCondition(step.condition, context);
+      
+      if (!shouldExecute) {
+        return { skipped: true, reason: 'Condition not met' };
+      }
+    }
+
+    return await this.executeStep(step, context);
+  }
+
+  // 복잡한 조건부 로직 예제
+  defineComplexWorkflow() {
+    return {
+      name: 'DataProcessingPipeline',
+      steps: [
+        {
+          name: 'LoadData',
+          action: 'data.load',
+          params: { source: '{{input.source}}' }
+        },
+        {
+          name: 'ValidateData',
+          action: 'data.validate',
+          condition: {
+            type: 'expression',
+            expression: 'data.size > 0 && data.format === "valid"'
+          }
+        },
+        {
+          name: 'ProcessRoute',
+          action: 'router',
+          branches: [
+            {
+              condition: { type: 'comparison', path: 'data.type', operator: '===', value: 'structured' },
+              steps: [
+                { action: 'process.structured' },
+                { action: 'store.database' }
+              ]
+            },
+            {
+              condition: { type: 'comparison', path: 'data.type', operator: '===', value: 'unstructured' },
+              steps: [
+                { action: 'process.ai' },
+                { action: 'transform.normalize' },
+                { action: 'store.objectStorage' }
+              ]
+            },
+            {
+              default: true,
+              steps: [
+                { action: 'process.generic' },
+                { action: 'store.archive' }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+  }
+}</code></pre>
+                    </div>
+
+                    <h3>3. 재시도 및 복구 워크플로우</h3>
+                    <div class="pattern-example">
+                        <pre><code class="language-javascript">// 재시도 및 복구 메커니즘
+class ResilientWorkflow extends Workflow {
+  constructor(config) {
+    super(config);
+    this.retryStrategies = {
+      exponential: this.exponentialBackoff,
+      linear: this.linearBackoff,
+      fibonacci: this.fibonacciBackoff
+    };
+  }
+
+  async executeWithRetry(step, context, retryConfig = {}) {
+    const {
+      maxAttempts = 3,
+      strategy = 'exponential',
+      initialDelay = 1000,
+      maxDelay = 30000,
+      onRetry = () => {}
+    } = retryConfig;
+
+    let lastError;
+    
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        return await this.executeStep(step, context);
+      } catch (error) {
+        lastError = error;
+        
+        if (attempt === maxAttempts) {
+          break;
+        }
+
+        const delay = this.calculateDelay(attempt, strategy, initialDelay, maxDelay);
+        
+        await onRetry({
+          step: step.name,
+          attempt,
+          error: error.message,
+          nextRetryIn: delay
+        });
+
+        await this.sleep(delay);
+      }
+    }
+
+    // 복구 전략 실행
+    if (step.fallback) {
+      try {
+        return await this.executeFallback(step.fallback, context, lastError);
+      } catch (fallbackError) {
+        throw new WorkflowError('Step failed with fallback', {
+          original: lastError,
+          fallback: fallbackError
+        });
+      }
+    }
+
+    throw lastError;
+  }
+
+  async executeFallback(fallback, context, originalError) {
+    context.fallbackReason = originalError.message;
+    
+    switch (fallback.type) {
+      case 'alternate':
+        return await this.executeStep(fallback.step, context);
+      
+      case 'default':
+        return fallback.value;
+      
+      case 'skip':
+        return { skipped: true, reason: originalError.message };
+      
+      case 'compensate':
+        await this.executeCompensation(fallback.compensation, context);
+        throw originalError;
+      
+      default:
+        throw new Error(`Unknown fallback type: ${fallback.type}`);
+    }
+  }
+
+  calculateDelay(attempt, strategy, initialDelay, maxDelay) {
+    let delay;
+    
+    switch (strategy) {
+      case 'exponential':
+        delay = Math.min(initialDelay * Math.pow(2, attempt - 1), maxDelay);
+        break;
+      
+      case 'linear':
+        delay = Math.min(initialDelay * attempt, maxDelay);
+        break;
+      
+      case 'fibonacci':
+        delay = Math.min(this.fibonacci(attempt) * initialDelay, maxDelay);
+        break;
+      
+      default:
+        delay = initialDelay;
+    }
+
+    // 지터 추가 (±20%)
+    const jitter = delay * 0.2 * (Math.random() - 0.5);
+    return Math.round(delay + jitter);
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="integration-workflows">
+                <h2><i class="fas fa-plug"></i> 다중 도구 통합 워크플로우</h2>
+
+                <div class="integration-examples">
+                    <h3>1. 연구 자동화 워크플로우</h3>
+                    <div class="workflow-example">
+                        <div class="workflow-description">
+                            <p>학술 연구를 위한 완전 자동화된 워크플로우로, 문헌 검색부터 노트 생성, 인용 관리까지 통합합니다.</p>
+                        </div>
+
+                        <pre><code class="language-javascript">// 연구 자동화 워크플로우
+const researchWorkflow = {
+  name: 'AutomatedResearchPipeline',
+  description: '학술 연구 자동화 시스템',
+  
+  triggers: [
+    {
+      type: 'schedule',
+      cron: '0 9 * * MON', // 매주 월요일 9시
+      name: 'weeklyLiteratureReview'
+    },
+    {
+      type: 'webhook',
+      endpoint: '/research/new-topic',
+      name: 'newResearchTopic'
+    }
+  ],
+
+  integrations: {
+    scholar: {
+      type: 'google-scholar',
+      apiKey: '{{secrets.scholarKey}}'
+    },
+    arxiv: {
+      type: 'arxiv-api',
+      categories: ['cs.AI', 'cs.CL']
+    },
+    zotero: {
+      type: 'zotero',
+      library: '{{config.zoteroLibrary}}'
+    },
+    openai: {
+      type: 'openai',
+      model: 'gpt-4',
+      apiKey: '{{secrets.openaiKey}}'
+    },
+    notion: {
+      type: 'notion',
+      database: '{{config.researchDatabase}}'
+    }
+  },
+
+  steps: [
+    {
+      name: 'SearchLiterature',
+      action: 'multi-search',
+      parallel: true,
+      sources: [
+        {
+          integration: 'scholar',
+          query: '{{input.keywords}}',
+          filters: {
+            year: 'last5years',
+            citations: '>10'
+          }
+        },
+        {
+          integration: 'arxiv',
+          query: '{{input.keywords}}',
+          maxResults: 50
+        }
+      ]
+    },
+    
+    {
+      name: 'FilterDuplicates',
+      action: 'deduplicate',
+      params: {
+        fields: ['title', 'doi'],
+        similarity: 0.85
+      }
+    },
+
+    {
+      name: 'AnalyzePapers',
+      action: 'batch-process',
+      parallel: true,
+      batchSize: 5,
+      forEach: '{{SearchLiterature.results}}',
+      steps: [
+        {
+          action: 'extract-metadata',
+          params: {
+            fields: ['abstract', 'authors', 'keywords', 'citations']
+          }
+        },
+        {
+          action: 'ai-summarize',
+          integration: 'openai',
+          prompt: `
+            Summarize this research paper:
+            Title: {{item.title}}
+            Abstract: {{item.abstract}}
+            
+            Focus on:
+            1. Main contributions
+            2. Methodology
+            3. Key findings
+            4. Limitations
+            5. Future work
+          `
+        },
+        {
+          action: 'generate-tags',
+          integration: 'openai',
+          prompt: 'Generate 5-10 relevant tags for categorization'
+        }
+      ]
+    },
+
+    {
+      name: 'CreateNotes',
+      action: 'generate-notes',
+      template: `
+---
+title: "{{paper.title}}"
+authors: {{paper.authors}}
+year: {{paper.year}}
+doi: {{paper.doi}}
+tags: {{analysis.tags}}
+created: {{date}}
+---
+
+# {{paper.title}}
+
+## Summary
+{{analysis.summary}}
+
+## Key Points
+{{#each analysis.keyPoints}}
+- {{this}}
+{{/each}}
+
+## Methodology
+{{analysis.methodology}}
+
+## Results
+{{analysis.results}}
+
+## Citations
+\`\`\`bibtex
+{{paper.bibtex}}
+\`\`\`
+
+## Related Papers
+{{#each relatedPapers}}
+- [[{{this.title}}]]
+{{/each}}
+      `,
+      outputPath: 'Research/Papers/{{paper.year}}/{{paper.slug}}.md'
+    },
+
+    {
+      name: 'UpdateDatabase',
+      action: 'update-external',
+      parallel: true,
+      updates: [
+        {
+          integration: 'zotero',
+          action: 'add-items',
+          items: '{{papers.metadata}}'
+        },
+        {
+          integration: 'notion',
+          action: 'add-to-database',
+          data: '{{papers.processed}}'
+        }
+      ]
+    },
+
+    {
+      name: 'GenerateReport',
+      action: 'create-report',
+      template: 'weekly-research-summary',
+      data: {
+        papersFound: '{{SearchLiterature.count}}',
+        papersProcessed: '{{AnalyzePapers.completed}}',
+        newInsights: '{{analysis.insights}}',
+        recommendations: '{{ai.recommendations}}'
+      },
+      outputPath: 'Research/Reports/{{date}}-weekly-summary.md'
+    }
+  ],
+
+  errorHandling: {
+    strategy: 'continue-with-errors',
+    notifications: {
+      email: 'researcher@example.com',
+      slack: '#research-automation'
+    },
+    fallbacks: {
+      'ai-summarize': {
+        action: 'basic-extract',
+        params: { maxLength: 500 }
+      }
+    }
+  }
+};</code></pre>
+                    </div>
+
+                    <h3>2. 콘텐츠 생성 워크플로우</h3>
+                    <div class="workflow-example">
+                        <pre><code class="language-javascript">// 콘텐츠 생성 자동화 워크플로우
+const contentCreationWorkflow = {
+  name: 'ContentCreationPipeline',
+  
+  steps: [
+    {
+      name: 'IdeaGeneration',
+      action: 'ai-brainstorm',
+      params: {
+        topic: '{{input.topic}}',
+        count: 10,
+        criteria: ['relevance', 'uniqueness', 'feasibility']
+      }
+    },
+    
+    {
+      name: 'ContentResearch',
+      parallel: true,
+      forEach: '{{IdeaGeneration.selected}}',
+      steps: [
+        {
+          action: 'web-search',
+          params: {
+            query: '{{idea.keywords}}',
+            sources: ['academic', 'news', 'blogs'],
+            limit: 20
+          }
+        },
+        {
+          action: 'competitor-analysis',
+          params: {
+            keywords: '{{idea.keywords}}',
+            platforms: ['medium', 'dev.to', 'hashnode']
+          }
+        }
+      ]
+    },
+
+    {
+      name: 'OutlineCreation',
+      action: 'generate-outline',
+      integration: 'openai',
+      params: {
+        research: '{{ContentResearch.results}}',
+        style: '{{config.writingStyle}}',
+        targetLength: '{{config.articleLength}}'
+      }
+    },
+
+    {
+      name: 'DraftGeneration',
+      action: 'generate-sections',
+      parallel: true,
+      forEach: '{{OutlineCreation.sections}}',
+      steps: [
+        {
+          action: 'write-section',
+          params: {
+            outline: '{{section}}',
+            research: '{{section.research}}',
+            tone: '{{config.tone}}',
+            examples: '{{section.needsExamples}}'
+          }
+        }
+      ]
+    },
+
+    {
+      name: 'ContentEnhancement',
+      steps: [
+        {
+          action: 'add-visuals',
+          params: {
+            type: ['diagrams', 'charts', 'infographics'],
+            style: '{{config.visualStyle}}'
+          }
+        },
+        {
+          action: 'optimize-seo',
+          params: {
+            targetKeywords: '{{input.keywords}}',
+            metaDescription: true,
+            headingOptimization: true
+          }
+        },
+        {
+          action: 'add-interactivity',
+          params: {
+            elements: ['quizzes', 'calculators', 'demos']
+          }
+        }
+      ]
+    },
+
+    {
+      name: 'QualityAssurance',
+      steps: [
+        {
+          action: 'grammar-check',
+          integration: 'grammarly'
+        },
+        {
+          action: 'fact-check',
+          params: {
+            sources: '{{ContentResearch.sources}}',
+            citationStyle: 'APA'
+          }
+        },
+        {
+          action: 'readability-analysis',
+          params: {
+            targetAudience: '{{config.audience}}',
+            metrics: ['flesch-kincaid', 'gunning-fog']
+          }
+        }
+      ]
+    },
+
+    {
+      name: 'Publishing',
+      condition: {
+        type: 'approval',
+        approvers: ['editor', 'content-manager']
+      },
+      steps: [
+        {
+          action: 'format-content',
+          formats: ['markdown', 'html', 'pdf']
+        },
+        {
+          action: 'publish-multi-platform',
+          parallel: true,
+          platforms: [
+            {
+              name: 'obsidian',
+              path: 'Content/Published/{{date}}-{{slug}}.md'
+            },
+            {
+              name: 'wordpress',
+              integration: 'wordpress-api',
+              category: '{{content.category}}'
+            },
+            {
+              name: 'medium',
+              integration: 'medium-api',
+              tags: '{{content.tags}}'
+            }
+          ]
+        },
+        {
+          action: 'schedule-social',
+          posts: '{{generateSocialPosts(content)}}'
+        }
+      ]
+    }
+  ]
+};</code></pre>
+                    </div>
+
+                    <h3>3. 프로젝트 관리 워크플로우</h3>
+                    <div class="workflow-example">
+                        <pre><code class="language-javascript">// 프로젝트 관리 자동화 워크플로우
+const projectManagementWorkflow = {
+  name: 'AgileProjectAutomation',
+  
+  triggers: [
+    {
+      type: 'git-webhook',
+      events: ['push', 'pull_request', 'issue']
+    },
+    {
+      type: 'calendar',
+      events: ['sprint-start', 'sprint-end', 'daily-standup']
+    },
+    {
+      type: 'chat-command',
+      commands: ['/project', '/task', '/report']
+    }
+  ],
+
+  steps: [
+    {
+      name: 'EventRouter',
+      action: 'route-event',
+      routes: [
+        {
+          condition: 'event.type === "sprint-start"',
+          workflow: 'SprintPlanningWorkflow'
+        },
+        {
+          condition: 'event.type === "git-push"',
+          workflow: 'CodeReviewWorkflow'
+        },
+        {
+          condition: 'event.type === "daily-standup"',
+          workflow: 'DailyReportWorkflow'
+        }
+      ]
+    }
+  ],
+
+  subWorkflows: {
+    SprintPlanningWorkflow: {
+      steps: [
+        {
+          name: 'GatherBacklog',
+          action: 'fetch-issues',
+          sources: ['github', 'jira', 'obsidian-tasks'],
+          filters: {
+            status: 'ready',
+            priority: ['high', 'medium']
+          }
+        },
+        {
+          name: 'EstimateEffort',
+          action: 'ai-estimate',
+          params: {
+            historicalData: '{{team.velocityHistory}}',
+            complexity: '{{analyzeComplexity(issues)}}'
+          }
+        },
+        {
+          name: 'CreateSprintPlan',
+          action: 'generate-sprint',
+          params: {
+            capacity: '{{team.capacity}}',
+            issues: '{{EstimateEffort.results}}',
+            dependencies: '{{analyzeDependencies(issues)}}'
+          }
+        },
+        {
+          name: 'UpdateSystems',
+          parallel: true,
+          updates: [
+            {
+              system: 'obsidian',
+              action: 'create-sprint-dashboard',
+              template: 'sprint-dashboard-template'
+            },
+            {
+              system: 'github',
+              action: 'create-milestone',
+              milestone: '{{sprint.name}}'
+            },
+            {
+              system: 'slack',
+              action: 'announce-sprint',
+              channel: '#team-updates'
+            }
+          ]
+        }
+      ]
+    },
+
+    CodeReviewWorkflow: {
+      steps: [
+        {
+          name: 'AnalyzeChanges',
+          parallel: true,
+          analyses: [
+            {
+              action: 'lint-code',
+              linters: ['eslint', 'prettier', 'custom']
+            },
+            {
+              action: 'run-tests',
+              suites: ['unit', 'integration', 'e2e']
+            },
+            {
+              action: 'security-scan',
+              tools: ['sonarqube', 'snyk']
+            },
+            {
+              action: 'performance-check',
+              metrics: ['bundle-size', 'load-time', 'memory']
+            }
+          ]
+        },
+        {
+          name: 'GenerateReport',
+          action: 'create-review-report',
+          template: 'code-review-template',
+          sections: [
+            'changes-summary',
+            'test-results',
+            'security-findings',
+            'performance-impact',
+            'recommendations'
+          ]
+        },
+        {
+          name: 'UpdateDocumentation',
+          condition: 'hasApiChanges || hasArchitectureChanges',
+          steps: [
+            {
+              action: 'generate-api-docs',
+              format: 'openapi'
+            },
+            {
+              action: 'update-architecture-diagram',
+              tool: 'mermaid'
+            },
+            {
+              action: 'create-migration-guide',
+              condition: 'hasBreakingChanges'
+            }
+          ]
+        }
+      ]
+    },
+
+    DailyReportWorkflow: {
+      steps: [
+        {
+          name: 'CollectUpdates',
+          parallel: true,
+          sources: [
+            {
+              action: 'git-activity',
+              repos: '{{config.repositories}}',
+              since: 'yesterday'
+            },
+            {
+              action: 'task-progress',
+              systems: ['obsidian', 'github', 'jira']
+            },
+            {
+              action: 'team-calendar',
+              events: ['meetings', 'deadlines', 'milestones']
+            }
+          ]
+        },
+        {
+          name: 'AnalyzeProgress',
+          action: 'calculate-metrics',
+          metrics: [
+            'velocity',
+            'burndown',
+            'blockers',
+            'risks'
+          ]
+        },
+        {
+          name: 'GenerateStandupNotes',
+          action: 'create-note',
+          template: `
+# Daily Standup - {{date}}
+
+## Team Updates
+{{#each teamUpdates}}
+### {{member.name}}
+**Yesterday:** {{member.yesterday}}
+**Today:** {{member.today}}
+**Blockers:** {{member.blockers}}
+{{/each}}
+
+## Sprint Progress
+- Velocity: {{metrics.velocity}}
+- Completed: {{metrics.completed}}/{{metrics.total}}
+- At Risk: {{metrics.atRisk}}
+
+## Key Highlights
+{{#each highlights}}
+- {{this}}
+{{/each}}
+
+## Action Items
+{{#each actionItems}}
+- [ ] {{this.description}} @{{this.assignee}}
+{{/each}}
+          `,
+          outputPath: 'Projects/Standups/{{date}}.md'
+        }
+      ]
+    }
+  }
+};</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="team-collaboration">
+                <h2><i class="fas fa-users"></i> 팀 협업 워크플로우</h2>
+
+                <div class="collaboration-patterns">
+                    <h3>1. 지식 공유 워크플로우</h3>
+                    <div class="pattern-card">
+                        <h4><i class="fas fa-share-alt"></i> 팀 위키 자동화</h4>
+                        <pre><code class="language-javascript">// 팀 지식 공유 시스템
+const knowledgeSharingWorkflow = {
+  name: 'TeamKnowledgeHub',
+  
+  components: {
+    // 지식 수집
+    collector: {
+      sources: [
+        'team-notes',
+        'meeting-minutes',
+        'code-comments',
+        'chat-archives'
+      ],
+      extraction: {
+        patterns: [
+          /TIL:|Today I Learned:/i,
+          /Solution:|Fixed by:/i,
+          /Best Practice:/i,
+          /Lesson Learned:/i
+        ]
+      }
+    },
+
+    // 지식 처리
+    processor: {
+      categorize: async (content) => {
+        // AI 기반 분류
+        const category = await ai.classify(content, {
+          categories: [
+            'technical-solution',
+            'process-improvement',
+            'tool-usage',
+            'domain-knowledge',
+            'troubleshooting'
+          ]
+        });
+        
+        return {
+          category,
+          tags: await ai.extractTags(content),
+          summary: await ai.summarize(content)
+        };
+      },
+      
+      enrich: async (knowledge) => {
+        // 관련 정보 추가
+        return {
+          ...knowledge,
+          relatedDocs: await findRelated(knowledge),
+          experts: await identifyExperts(knowledge.tags),
+          resources: await gatherResources(knowledge.topic)
+        };
+      }
+    },
+
+    // 지식 배포
+    distributor: {
+      channels: [
+        {
+          type: 'obsidian-vault',
+          path: 'Team/Knowledge Base',
+          format: 'markdown'
+        },
+        {
+          type: 'confluence',
+          space: 'TEAM_WIKI',
+          format: 'rich-text'
+        },
+        {
+          type: 'slack',
+          channel: '#til',
+          format: 'summary'
+        }
+      ],
+      
+      notifications: {
+        newKnowledge: ['team-leads', 'interested-parties'],
+        updates: ['subscribers'],
+        reviews: ['domain-experts']
+      }
+    }
+  },
+
+  workflows: {
+    captureKnowledge: {
+      trigger: 'manual | automatic',
+      steps: [
+        'extract-content',
+        'validate-quality',
+        'categorize',
+        'enrich',
+        'review',
+        'publish'
+      ]
+    },
+    
+    weeklyDigest: {
+      trigger: 'schedule:weekly',
+      steps: [
+        'collect-week-knowledge',
+        'generate-summary',
+        'identify-trends',
+        'create-newsletter',
+        'distribute'
+      ]
+    }
+  }
+};</code></pre>
+                    </div>
+
+                    <h3>2. 코드 리뷰 자동화</h3>
+                    <div class="pattern-card">
+                        <h4><i class="fas fa-code-branch"></i> 지능형 코드 리뷰</h4>
+                        <pre><code class="language-javascript">// 고급 코드 리뷰 워크플로우
+const codeReviewWorkflow = {
+  name: 'IntelligentCodeReview',
+  
+  stages: {
+    preReview: {
+      checks: [
+        {
+          name: 'Style Compliance',
+          tool: 'eslint',
+          config: '.eslintrc.team.js',
+          autoFix: true
+        },
+        {
+          name: 'Type Safety',
+          tool: 'typescript',
+          strict: true
+        },
+        {
+          name: 'Test Coverage',
+          tool: 'jest',
+          threshold: {
+            statements: 80,
+            branches: 75,
+            functions: 80,
+            lines: 80
+          }
+        }
+      ],
+      
+      aiAnalysis: {
+        codeQuality: async (diff) => {
+          return await ai.analyze(diff, {
+            checkFor: [
+              'code-smells',
+              'complexity',
+              'duplication',
+              'best-practices'
+            ]
+          });
+        },
+        
+        securityScan: async (code) => {
+          return await security.scan(code, {
+            vulnerabilities: 'OWASP-Top-10',
+            secrets: true,
+            dependencies: true
+          });
+        }
+      }
+    },
+
+    review: {
+      assignReviewers: async (pr) => {
+        const codeOwners = await getCodeOwners(pr.files);
+        const experts = await findExperts(pr.technologies);
+        const available = await checkAvailability(
+          [...codeOwners, ...experts]
+        );
+        
+        return selectReviewers(available, {
+          required: 2,
+          optional: 1
+        });
+      },
+      
+      createReviewGuide: async (pr) => {
+        return {
+          summary: await ai.summarizeChanges(pr),
+          impact: await analyzeImpact(pr),
+          risks: await identifyRisks(pr),
+          focusAreas: await suggestFocusAreas(pr),
+          checklist: await generateChecklist(pr)
+        };
+      }
+    },
+
+    postReview: {
+      documentation: async (pr) => {
+        if (pr.hasApiChanges) {
+          await updateApiDocs(pr);
+        }
+        if (pr.hasArchitectureChanges) {
+          await updateArchitectureDocs(pr);
+        }
+        if (pr.hasNewFeatures) {
+          await createUserDocs(pr);
+        }
+      },
+      
+      knowledgeCapture: async (review) => {
+        const lessons = await extractLessons(review);
+        const patterns = await identifyPatterns(review);
+        
+        await saveToKnowledgeBase({
+          lessons,
+          patterns,
+          decisions: review.decisions,
+          discussions: review.keyDiscussions
+        });
+      }
+    }
+  }
+};</code></pre>
+                    </div>
+
+                    <h3>3. 프로젝트 동기화</h3>
+                    <div class="pattern-card">
+                        <h4><i class="fas fa-sync"></i> 멀티 플랫폼 동기화</h4>
+                        <pre><code class="language-javascript">// 프로젝트 동기화 워크플로우
+const projectSyncWorkflow = {
+  name: 'MultiPlatformSync',
+  
+  platforms: {
+    obsidian: {
+      type: 'primary',
+      vault: 'TeamVault',
+      structure: {
+        projects: 'Projects/',
+        tasks: 'Tasks/',
+        meetings: 'Meetings/',
+        documentation: 'Docs/'
+      }
+    },
+    
+    github: {
+      type: 'vcs',
+      repos: ['main-project', 'documentation'],
+      sync: ['issues', 'milestones', 'wiki']
+    },
+    
+    jira: {
+      type: 'project-management',
+      project: 'TEAM',
+      sync: ['epics', 'stories', 'tasks']
+    },
+    
+    confluence: {
+      type: 'documentation',
+      space: 'TEAMSPACE',
+      sync: ['requirements', 'design', 'guides']
+    }
+  },
+
+  syncRules: {
+    // Obsidian → 다른 플랫폼
+    fromObsidian: [
+      {
+        source: 'Tasks/*.md',
+        destination: 'github:issues',
+        transform: 'obsidianTaskToGithubIssue',
+        conditions: ['has-github-tag']
+      },
+      {
+        source: 'Projects/*/README.md',
+        destination: 'confluence:pages',
+        transform: 'markdownToConfluence',
+        conditions: ['is-published']
+      }
+    ],
+    
+    // 다른 플랫폼 → Obsidian
+    toObsidian: [
+      {
+        source: 'github:issues',
+        destination: 'Tasks/GitHub/',
+        transform: 'githubIssueToObsidianTask',
+        conditions: ['is-assigned-to-me']
+      },
+      {
+        source: 'jira:stories',
+        destination: 'Projects/{{epic}}/Stories/',
+        transform: 'jiraStoryToObsidianNote'
+      }
+    ]
+  },
+
+  conflictResolution: {
+    strategy: 'last-write-wins',
+    backup: true,
+    notifyOn: ['data-loss-risk', 'major-changes'],
+    
+    customRules: [
+      {
+        field: 'status',
+        resolution: 'most-advanced'
+      },
+      {
+        field: 'assignee',
+        resolution: 'keep-both'
+      }
+    ]
+  },
+
+  automation: {
+    realTimeSync: {
+      enabled: true,
+      debounce: 5000,
+      batchSize: 10
+    },
+    
+    scheduledSync: {
+      full: '0 2 * * *', // 매일 새벽 2시
+      incremental: '*/30 * * * *' // 30분마다
+    },
+    
+    hooks: {
+      preSyncTransform: async (data) => {
+        // 동기화 전 데이터 변환
+        return await transformData(data);
+      },
+      
+      postSyncValidation: async (result) => {
+        // 동기화 후 검증
+        return await validateSync(result);
+      },
+      
+      onConflict: async (conflict) => {
+        // 충돌 처리
+        return await resolveConflict(conflict);
+      }
+    }
+  }
+};</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="workflow-optimization">
+                <h2><i class="fas fa-tachometer-alt"></i> 워크플로우 최적화</h2>
+
+                <div class="optimization-strategies">
+                    <h3>성능 최적화 기법</h3>
+                    <div class="optimization-grid">
+                        <div class="optimization-card">
+                            <h4><i class="fas fa-bolt"></i> 병렬 처리</h4>
+                            <p>독립적인 작업을 동시에 실행하여 전체 실행 시간 단축</p>
+                            <pre><code class="language-javascript">// 병렬 처리 최적화
+const optimizedExecution = async (tasks) => {
+  // 의존성 분석
+  const dependencies = analyzeDependencies(tasks);
+  const executionGroups = topologicalSort(tasks, dependencies);
+  
+  // 그룹별 병렬 실행
+  for (const group of executionGroups) {
+    await Promise.all(
+      group.map(task => executeTask(task))
+    );
+  }
+};</code></pre>
+                        </div>
+
+                        <div class="optimization-card">
+                            <h4><i class="fas fa-memory"></i> 캐싱 전략</h4>
+                            <p>반복적인 연산 결과를 캐시하여 성능 향상</p>
+                            <pre><code class="language-javascript">// 지능형 캐싱
+class WorkflowCache {
+  constructor() {
+    this.cache = new Map();
+    this.stats = new CacheStats();
+  }
+
+  async get(key, generator) {
+    if (this.cache.has(key)) {
+      this.stats.hit();
+      return this.cache.get(key);
+    }
+
+    this.stats.miss();
+    const value = await generator();
+    this.cache.set(key, value);
+    return value;
+  }
+}</code></pre>
+                        </div>
+
+                        <div class="optimization-card">
+                            <h4><i class="fas fa-compress"></i> 리소스 풀링</h4>
+                            <p>연결과 리소스를 재사용하여 오버헤드 감소</p>
+                            <pre><code class="language-javascript">// 연결 풀 관리
+class ResourcePool {
+  constructor(factory, options) {
+    this.factory = factory;
+    this.pool = [];
+    this.active = new Set();
+    this.maxSize = options.maxSize || 10;
+  }
+
+  async acquire() {
+    let resource = this.pool.pop();
+    if (!resource) {
+      resource = await this.factory.create();
+    }
+    this.active.add(resource);
+    return resource;
+  }
+
+  release(resource) {
+    this.active.delete(resource);
+    if (this.pool.length < this.maxSize) {
+      this.pool.push(resource);
+    } else {
+      this.factory.destroy(resource);
+    }
+  }
+}</code></pre>
+                        </div>
+
+                        <div class="optimization-card">
+                            <h4><i class="fas fa-chart-line"></i> 동적 스케일링</h4>
+                            <p>부하에 따라 워커 수를 자동 조절</p>
+                            <pre><code class="language-javascript">// 동적 워커 스케일링
+class DynamicWorkerPool {
+  constructor() {
+    this.workers = [];
+    this.queue = [];
+    this.metrics = new PerformanceMetrics();
+  }
+
+  async autoScale() {
+    const load = this.metrics.getCurrentLoad();
+    const optimal = this.calculateOptimalWorkers(load);
+    
+    if (optimal > this.workers.length) {
+      await this.scaleUp(optimal - this.workers.length);
+    } else if (optimal < this.workers.length) {
+      await this.scaleDown(this.workers.length - optimal);
+    }
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="advanced-patterns">
+                <h2><i class="fas fa-puzzle-piece"></i> 고급 패턴과 기법</h2>
+
+                <div class="pattern-showcase">
+                    <h3>1. 이벤트 소싱 패턴</h3>
+                    <pre><code class="language-javascript">// 이벤트 소싱 워크플로우
+class EventSourcedWorkflow {
+  constructor() {
+    this.eventStore = new EventStore();
+    this.snapshots = new SnapshotStore();
+    this.projections = new Map();
+  }
+
+  async execute(command) {
+    // 현재 상태 복원
+    const state = await this.restoreState(command.aggregateId);
+    
+    // 명령 실행 및 이벤트 생성
+    const events = await this.processCommand(command, state);
+    
+    // 이벤트 저장
+    await this.eventStore.append(command.aggregateId, events);
+    
+    // 프로젝션 업데이트
+    await this.updateProjections(events);
+    
+    // 스냅샷 생성 (필요시)
+    if (this.shouldSnapshot(state)) {
+      await this.snapshots.save(command.aggregateId, state);
+    }
+    
+    return events;
+  }
+
+  async restoreState(aggregateId) {
+    // 최신 스냅샷 조회
+    const snapshot = await this.snapshots.get(aggregateId);
+    const fromVersion = snapshot ? snapshot.version : 0;
+    
+    // 스냅샷 이후 이벤트 조회
+    const events = await this.eventStore.getEvents(
+      aggregateId, 
+      fromVersion
+    );
+    
+    // 상태 재구성
+    return this.replayEvents(snapshot?.state, events);
+  }
+}</code></pre>
+
+                    <h3>2. 사가 패턴</h3>
+                    <pre><code class="language-javascript">// 분산 트랜잭션을 위한 사가 패턴
+class SagaOrchestrator {
+  constructor() {
+    this.sagas = new Map();
+    this.compensations = new Map();
+  }
+
+  defineSaga(name, steps) {
+    const saga = {
+      name,
+      steps: steps.map(step => ({
+        ...step,
+        compensation: step.compensation || this.defaultCompensation
+      }))
+    };
+    
+    this.sagas.set(name, saga);
+  }
+
+  async executeSaga(sagaName, context) {
+    const saga = this.sagas.get(sagaName);
+    const executedSteps = [];
+    
+    try {
+      for (const step of saga.steps) {
+        const result = await this.executeStep(step, context);
+        executedSteps.push({ step, result });
+        context[step.name] = result;
+      }
+      
+      return { success: true, results: context };
+    } catch (error) {
+      // 보상 트랜잭션 실행
+      await this.compensate(executedSteps.reverse());
+      throw new SagaError(`Saga ${sagaName} failed`, error);
+    }
+  }
+
+  async compensate(executedSteps) {
+    for (const { step, result } of executedSteps) {
+      try {
+        await step.compensation(result);
+      } catch (compensationError) {
+        console.error(`Compensation failed for ${step.name}`, compensationError);
+      }
+    }
+  }
+}</code></pre>
+
+                    <h3>3. 서킷 브레이커 패턴</h3>
+                    <pre><code class="language-javascript">// 장애 격리를 위한 서킷 브레이커
+class CircuitBreaker {
+  constructor(options = {}) {
+    this.failureThreshold = options.failureThreshold || 5;
+    this.resetTimeout = options.resetTimeout || 60000;
+    this.state = 'CLOSED';
+    this.failureCount = 0;
+    this.lastFailureTime = null;
+  }
+
+  async execute(fn, fallback) {
+    if (this.state === 'OPEN') {
+      if (Date.now() - this.lastFailureTime > this.resetTimeout) {
+        this.state = 'HALF_OPEN';
+      } else {
+        return fallback ? fallback() : Promise.reject(new Error('Circuit breaker is OPEN'));
+      }
+    }
+
+    try {
+      const result = await fn();
+      this.onSuccess();
+      return result;
+    } catch (error) {
+      this.onFailure();
+      throw error;
+    }
+  }
+
+  onSuccess() {
+    this.failureCount = 0;
+    if (this.state === 'HALF_OPEN') {
+      this.state = 'CLOSED';
+    }
+  }
+
+  onFailure() {
+    this.failureCount++;
+    this.lastFailureTime = Date.now();
+    
+    if (this.failureCount >= this.failureThreshold) {
+      this.state = 'OPEN';
+    }
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="practice">
+                <h2><i class="fas fa-laptop-code"></i> 실습: 종합 워크플로우 구축</h2>
+
+                <div class="practice-content">
+                    <h3>프로젝트: 스마트 노트 시스템</h3>
+                    <p>AI와 자동화를 결합한 지능형 노트 관리 시스템을 구축합니다.</p>
+
+                    <div class="practice-steps">
+                        <h4>Step 1: 시스템 설계</h4>
+                        <pre><code class="language-javascript">// 스마트 노트 시스템 아키텍처
+const smartNoteSystem = {
+  name: 'IntelligentNoteManagement',
+  
+  components: {
+    capture: {
+      sources: ['voice', 'image', 'web-clipper', 'email'],
+      processors: ['transcription', 'ocr', 'extraction']
+    },
+    
+    analysis: {
+      nlp: ['entity-extraction', 'sentiment', 'summarization'],
+      classification: ['topic', 'priority', 'project'],
+      linking: ['similar-notes', 'references', 'people']
+    },
+    
+    enhancement: {
+      ai: ['expand-content', 'generate-questions', 'suggest-actions'],
+      media: ['create-diagrams', 'find-images', 'embed-videos'],
+      metadata: ['auto-tag', 'add-context', 'track-sources']
+    },
+    
+    automation: {
+      workflows: ['review-reminders', 'archive-old', 'share-insights'],
+      integrations: ['calendar', 'task-manager', 'communication']
+    }
+  }
+};</code></pre>
+
+                        <h4>Step 2: 워크플로우 구현</h4>
+                        <pre><code class="language-javascript">// 노트 처리 워크플로우
+async function processIntelligentNote(input) {
+  // 1. 캡처 및 정규화
+  const captured = await captureContent(input);
+  const normalized = await normalizeContent(captured);
+  
+  // 2. AI 분석
+  const analysis = await Promise.all([
+    extractEntities(normalized),
+    classifyContent(normalized),
+    generateSummary(normalized),
+    findRelatedNotes(normalized)
+  ]);
+  
+  // 3. 콘텐츠 강화
+  const enhanced = await enhanceContent({
+    original: normalized,
+    entities: analysis[0],
+    category: analysis[1],
+    summary: analysis[2],
+    related: analysis[3]
+  });
+  
+  // 4. 노트 생성
+  const note = await createSmartNote(enhanced);
+  
+  // 5. 후처리 자동화
+  await Promise.all([
+    scheduleReview(note),
+    updateConnections(note),
+    notifyRelevantPeople(note),
+    triggerFollowUpActions(note)
+  ]);
+  
+  return note;
+}</code></pre>
+
+                        <h4>Step 3: 통합 테스트</h4>
+                        <div class="test-scenarios">
+                            <div class="scenario">
+                                <h5>시나리오 1: 회의록 자동화</h5>
+                                <ul>
+                                    <li>음성 녹음 → 텍스트 변환</li>
+                                    <li>핵심 결정사항 추출</li>
+                                    <li>액션 아이템 생성</li>
+                                    <li>참석자에게 자동 배포</li>
+                                </ul>
+                            </div>
+                            <div class="scenario">
+                                <h5>시나리오 2: 연구 노트 강화</h5>
+                                <ul>
+                                    <li>논문 PDF → 핵심 내용 추출</li>
+                                    <li>관련 연구 자동 연결</li>
+                                    <li>인용 정보 자동 생성</li>
+                                    <li>연구 그래프 시각화</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-check-circle"></i> 핵심 정리</h2>
+                
+                <div class="key-points">
+                    <div class="point">
+                        <h3><i class="fas fa-star"></i> 워크플로우 설계 원칙</h3>
+                        <ul>
+                            <li>모듈성과 재사용성을 고려한 설계</li>
+                            <li>에러 처리와 복구 메커니즘 구현</li>
+                            <li>성능 최적화와 확장성 확보</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-star"></i> 자동화 전략</h3>
+                        <ul>
+                            <li>반복 작업의 완전 자동화</li>
+                            <li>AI를 활용한 지능형 처리</li>
+                            <li>다중 도구 통합으로 시너지 창출</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-star"></i> 팀 협업 최적화</h3>
+                        <ul>
+                            <li>실시간 동기화와 충돌 해결</li>
+                            <li>지식 공유 자동화</li>
+                            <li>프로세스 표준화와 품질 관리</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h3><i class="fas fa-forward"></i> 다음 단계</h3>
+                    <p>이제 대규모 볼트 관리 기법을 학습하여 수천, 수만 개의 노트를 효율적으로 관리하는 방법을 알아보겠습니다.</p>
+                </div>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3><i class="fas fa-bookmark"></i> 이 강의의 핵심</h3>
+                <ul>
+                    <li>복잡한 워크플로우 아키텍처</li>
+                    <li>병렬 처리와 조건부 분기</li>
+                    <li>다중 도구 통합 시스템</li>
+                    <li>팀 협업 자동화</li>
+                    <li>고급 패턴과 최적화</li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fas fa-lightbulb"></i> 실습 프로젝트</h3>
+                <div class="tip-box">
+                    <p>스마트 노트 시스템을 구축하여 AI와 자동화를 통합한 지능형 지식 관리를 경험해보세요.</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section resources">
+                <h3><i class="fas fa-book"></i> 추가 학습 자료</h3>
+                <ul>
+                    <li><a href="#" class="resource-link">워크플로우 패턴 가이드</a></li>
+                    <li><a href="#" class="resource-link">자동화 도구 비교</a></li>
+                    <li><a href="#" class="resource-link">팀 협업 베스트 프랙티스</a></li>
+                    <li><a href="#" class="resource-link">성능 최적화 기법</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="progress-tracker">
+            <div class="progress-bar" style="width: 82.86%;"></div>
+            <span class="progress-text">29/35 강의 완료</span>
+        </div>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>

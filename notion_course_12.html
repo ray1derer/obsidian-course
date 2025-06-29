@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제12강: Canvas로 시각적 사고하기 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            left: 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-color) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--info-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Canvas 특성 그리드 */
+        .canvas-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--info-color) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* Canvas 데모 영역 */
+        .canvas-demo {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 600px;
+            position: relative;
+            border: 2px solid var(--border-color);
+            overflow: auto;
+        }
+
+        /* Canvas 노드 스타일 */
+        .canvas-node {
+            position: absolute;
+            background: var(--bg-color);
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-width: 200px;
+            cursor: move;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .canvas-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .canvas-node.text-node {
+            background: var(--card-bg);
+            border-color: var(--info-color);
+        }
+
+        .canvas-node.image-node {
+            background: var(--secondary-color);
+            border-color: var(--success-color);
+        }
+
+        .canvas-node.note-node {
+            background: var(--hover-bg);
+            border-color: var(--warning-color);
+        }
+
+        .canvas-node h4 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .canvas-node p {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        /* Canvas 연결선 */
+        .canvas-connection {
+            position: absolute;
+            background: var(--accent-color);
+            height: 2px;
+            transform-origin: left center;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* 사용 사례 섹션 */
+        .use-cases {
+            margin: 4rem 0;
+        }
+
+        .use-case-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .use-case-tab {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .use-case-tab:hover {
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+        }
+
+        .use-case-tab.active {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border-color: var(--accent-color);
+        }
+
+        .use-case-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .use-case-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 템플릿 갤러리 */
+        .template-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .template-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .template-preview {
+            height: 200px;
+            background: var(--secondary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .template-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .template-card:hover .template-preview img {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        .template-info {
+            padding: 1.5rem;
+        }
+
+        .template-info h3 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .template-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .template-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .template-tag {
+            background: var(--hover-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        /* 팁과 트릭 섹션 */
+        .tips-section {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .tip-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tip-card::before {
+            content: '💡';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .tip-card h4 {
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+        }
+
+        /* 인터랙티브 튜토리얼 */
+        .tutorial-section {
+            margin: 4rem 0;
+        }
+
+        .tutorial-steps {
+            counter-reset: step-counter;
+        }
+
+        .tutorial-step {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 4rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .tutorial-step:hover {
+            border-color: var(--accent-color);
+            transform: translateX(10px);
+        }
+
+        .tutorial-step::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent-color);
+            color: var(--primary-color);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .tutorial-step h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .tutorial-step .step-content {
+            margin-bottom: 1rem;
+        }
+
+        .tutorial-step .step-action {
+            background: var(--hover-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* 실습 과제 섹션 */
+        .practice-section {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .practice-tasks {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-task {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-task::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--warning-color);
+        }
+
+        .practice-task h4 {
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .practice-task .difficulty {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            background: var(--hover-bg);
+        }
+
+        .difficulty.easy { color: var(--success-color); }
+        .difficulty.medium { color: var(--warning-color); }
+        .difficulty.hard { color: var(--error-color); }
+
+        /* 고급 기능 섹션 */
+        .advanced-features {
+            margin: 4rem 0;
+        }
+
+        .feature-showcase {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-showcase::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+            opacity: 0.05;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .feature-showcase h3 {
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-showcase .feature-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 코드 블록 스타일 */
+        .code-block {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--hover-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        .code-block code {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* 비디오 플레이어 스타일 */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            margin: 2rem 0;
+            background: var(--bg-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* FAQ 섹션 */
+        .faq-section {
+            margin: 4rem 0;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent-color);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 진행 표시기 */
+        .progress-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .progress-indicator:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .progress-text {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            nav ul {
+                padding: 0 1rem;
+            }
+
+            nav li {
+                margin: 0.25rem 0.5rem;
+            }
+
+            .template-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .canvas-container {
+                min-height: 400px;
+                padding: 1rem;
+            }
+
+            .canvas-node {
+                min-width: 150px;
+                padding: 1rem;
+            }
+        }
+
+        /* 로딩 애니메이션 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 툴팁 스타일 */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* 뱃지 스타일 */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 0.25rem;
+        }
+
+        .badge.new {
+            background: var(--success-color);
+            color: var(--bg-color);
+        }
+
+        .badge.beta {
+            background: var(--warning-color);
+            color: var(--bg-color);
+        }
+
+        .badge.pro {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        /* 애니메이션 효과 */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.5s ease;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 다크 모드 토글 */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-color);
+        }
+
+        /* 검색 바 */
+        .search-bar {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            padding: 1rem 2rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(136, 192, 208, 0.2);
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex: 1;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-bar button {
+            background: var(--accent-color);
+            border: none;
+            color: var(--bg-color);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .search-bar button:hover {
+            background: var(--info-color);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p class="subtitle">당신의 생각을 구조화하는 가장 강력한 도구</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_index.html">강좌 홈</a></li>
+            <li><a href="notion_course_11.html">이전 강의</a></li>
+            <li><a href="#" class="active">제12강</a></li>
+            <li><a href="notion_course_13.html">다음 강의</a></li>
+            <li><a href="#practice">실습하기</a></li>
+            <li><a href="#quiz">퀴즈</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제12강: Canvas로 시각적 사고하기</h1>
+            <p class="subtitle">무한한 캔버스 위에서 아이디어를 자유롭게 연결하고 구조화하세요</p>
+            <div class="badge new">New Feature</div>
+            <div class="badge pro">Pro Technique</div>
+        </div>
+
+        <!-- Canvas 소개 섹션 -->
+        <section class="intro-section">
+            <h2>🎨 Obsidian Canvas란?</h2>
+            <p>Obsidian Canvas는 무한한 2D 공간에서 노트, 이미지, 텍스트, 링크를 자유롭게 배치하고 연결할 수 있는 시각적 사고 도구입니다. 마인드맵, 플로우차트, 무드보드, 프로젝트 계획 등 다양한 용도로 활용할 수 있습니다.</p>
+            
+            <div class="canvas-demo">
+                <h3>🖼️ Canvas 데모</h3>
+                <div class="canvas-container" id="canvas-demo">
+                    <div class="canvas-node text-node" style="left: 50px; top: 50px;">
+                        <h4>중심 아이디어</h4>
+                        <p>Canvas의 핵심 개념</p>
+                    </div>
+                    <div class="canvas-node note-node" style="left: 300px; top: 80px;">
+                        <h4>관련 노트</h4>
+                        <p>[[기존 노트 연결]]</p>
+                    </div>
+                    <div class="canvas-node image-node" style="left: 200px; top: 250px;">
+                        <h4>시각적 자료</h4>
+                        <p>이미지, 다이어그램 추가</p>
+                    </div>
+                    <div class="canvas-connection" style="left: 250px; top: 100px; width: 50px; transform: rotate(10deg);"></div>
+                    <div class="canvas-connection" style="left: 150px; top: 150px; width: 100px; transform: rotate(45deg);"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Canvas의 주요 특징 -->
+        <section class="features-section">
+            <h2>🚀 Canvas의 주요 특징</h2>
+            <div class="canvas-features-grid">
+                <div class="feature-card">
+                    <span class="icon">♾️</span>
+                    <h3>무한한 캔버스</h3>
+                    <p>제한 없는 2D 공간에서 자유롭게 아이디어를 펼치세요. 줌 인/아웃으로 전체 그림과 세부사항을 오가며 작업할 수 있습니다.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🔗</span>
+                    <h3>유연한 연결</h3>
+                    <p>노드 간 연결선으로 관계를 시각화하고, 화살표 방향으로 흐름을 표현할 수 있습니다.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">📝</span>
+                    <h3>다양한 노드 타입</h3>
+                    <p>텍스트, 노트, 이미지, PDF, 웹 페이지 등 다양한 형식의 콘텐츠를 캔버스에 배치할 수 있습니다.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🎨</span>
+                    <h3>스타일링 옵션</h3>
+                    <p>노드의 색상, 크기, 모양을 자유롭게 조정하여 시각적 계층구조를 만들 수 있습니다.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🔄</span>
+                    <h3>실시간 동기화</h3>
+                    <p>Canvas의 변경사항이 연결된 노트와 실시간으로 동기화됩니다.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">📁</span>
+                    <h3>그룹핑 기능</h3>
+                    <p>관련 노드들을 그룹으로 묶어 체계적으로 관리할 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Canvas 생성 및 기본 사용법 -->
+        <section class="tutorial-section">
+            <h2>📚 Canvas 시작하기</h2>
+            <div class="tutorial-steps">
+                <div class="tutorial-step">
+                    <h3>Canvas 파일 생성하기</h3>
+                    <div class="step-content">
+                        <p>새로운 Canvas를 생성하는 여러 가지 방법을 알아봅시다.</p>
+                    </div>
+                    <div class="step-action">
+                        <p>방법 1: Ctrl/Cmd + N → "Canvas" 선택</p>
+                        <p>방법 2: 파일 탐색기에서 우클릭 → "New canvas"</p>
+                        <p>방법 3: 명령 팔레트 → "Canvas: Create new canvas"</p>
+                    </div>
+                </div>
+
+                <div class="tutorial-step">
+                    <h3>노드 추가하기</h3>
+                    <div class="step-content">
+                        <p>Canvas에 다양한 유형의 노드를 추가하는 방법입니다.</p>
+                    </div>
+                    <div class="step-action">
+                        <p>• 더블 클릭: 텍스트 노드 생성</p>
+                        <p>• 드래그 & 드롭: 파일, 이미지 추가</p>
+                        <p>• 우클릭 메뉴: 다양한 노드 타입 선택</p>
+                        <p>• Ctrl/Cmd + 드래그: 기존 노드 복제</p>
+                    </div>
+                </div>
+
+                <div class="tutorial-step">
+                    <h3>노드 연결하기</h3>
+                    <div class="step-content">
+                        <p>노드 간의 관계를 시각적으로 표현하는 연결선 만들기</p>
+                    </div>
+                    <div class="step-action">
+                        <p>1. 시작 노드의 가장자리에 마우스 호버</p>
+                        <p>2. 연결점이 나타나면 클릭하여 드래그</p>
+                        <p>3. 대상 노드까지 드래그하여 연결</p>
+                        <p>4. 연결선을 선택하여 화살표 방향 설정</p>
+                    </div>
+                </div>
+
+                <div class="tutorial-step">
+                    <h3>Canvas 탐색하기</h3>
+                    <div class="step-content">
+                        <p>대규모 Canvas를 효율적으로 탐색하는 방법</p>
+                    </div>
+                    <div class="step-action">
+                        <p>• 스페이스 + 드래그: 캔버스 이동</p>
+                        <p>• Ctrl/Cmd + 스크롤: 줌 인/아웃</p>
+                        <p>• Ctrl/Cmd + 0: 전체 보기</p>
+                        <p>• Ctrl/Cmd + 1: 100% 크기로 복원</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Canvas 활용 사례 -->
+        <section class="use-cases">
+            <h2>💡 Canvas 활용 사례</h2>
+            <div class="use-case-tabs">
+                <div class="use-case-tab active" onclick="showUseCase('mindmap')">마인드맵</div>
+                <div class="use-case-tab" onclick="showUseCase('project')">프로젝트 계획</div>
+                <div class="use-case-tab" onclick="showUseCase('research')">연구 정리</div>
+                <div class="use-case-tab" onclick="showUseCase('workflow')">워크플로우</div>
+                <div class="use-case-tab" onclick="showUseCase('story')">스토리보드</div>
+            </div>
+
+            <div id="mindmap" class="use-case-content active">
+                <h3>🧠 마인드맵으로 아이디어 정리</h3>
+                <p>중심 주제에서 시작하여 관련 아이디어를 방사형으로 전개하는 고전적인 사고 도구입니다.</p>
+                <div class="code-block" data-language="Structure">
+                    <code>중심 주제
+├── 주요 가지 1
+│   ├── 세부 아이디어 1-1
+│   └── 세부 아이디어 1-2
+├── 주요 가지 2
+│   ├── 세부 아이디어 2-1
+│   └── 세부 아이디어 2-2
+└── 주요 가지 3
+    └── 세부 아이디어 3-1</code>
+                </div>
+                <p><strong>활용 팁:</strong></p>
+                <ul>
+                    <li>색상으로 주제별 구분</li>
+                    <li>이미지와 아이콘으로 시각적 단서 추가</li>
+                    <li>키워드 중심의 간결한 표현</li>
+                    <li>연결선으로 아이디어 간 관계 표시</li>
+                </ul>
+            </div>
+
+            <div id="project" class="use-case-content">
+                <h3>📊 프로젝트 계획 및 관리</h3>
+                <p>프로젝트의 전체 구조를 한눈에 파악하고 진행 상황을 추적할 수 있습니다.</p>
+                <div class="feature-showcase">
+                    <h4>프로젝트 Canvas 구성 요소</h4>
+                    <div class="feature-content">
+                        <ul>
+                            <li><strong>목표 노드:</strong> 프로젝트의 최종 목표와 KPI</li>
+                            <li><strong>타임라인:</strong> 주요 마일스톤과 일정</li>
+                            <li><strong>팀 구성:</strong> 역할과 책임 분배</li>
+                            <li><strong>리소스:</strong> 필요한 자원과 예산</li>
+                            <li><strong>리스크:</strong> 잠재적 위험 요소와 대응 방안</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="research" class="use-case-content">
+                <h3>📚 연구 자료 정리 및 분석</h3>
+                <p>다양한 출처의 자료를 시각적으로 연결하여 통찰을 도출합니다.</p>
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>문헌 정리</h4>
+                        <p>PDF 파일을 직접 Canvas에 추가하고 주요 인용구를 텍스트 노드로 추출</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>개념 매핑</h4>
+                        <p>핵심 개념 간의 관계를 시각화하여 이론적 프레임워크 구축</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>데이터 분석</h4>
+                        <p>차트와 그래프를 배치하고 발견한 패턴을 노트로 기록</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="workflow" class="use-case-content">
+                <h3>⚙️ 업무 프로세스 설계</h3>
+                <p>복잡한 업무 흐름을 시각적으로 표현하고 최적화합니다.</p>
+                <div class="code-block" data-language="Process">
+                    <code>시작 → 입력 확인 → 조건 분기
+                    ↓               ↓
+                처리 A          처리 B
+                    ↓               ↓
+                결과 저장 ← 데이터 병합
+                    ↓
+                  완료</code>
+                </div>
+            </div>
+
+            <div id="story" class="use-case-content">
+                <h3>🎬 스토리보드 및 콘텐츠 기획</h3>
+                <p>시각적 스토리텔링을 위한 씬 구성과 내러티브 흐름 설계</p>
+                <ul>
+                    <li>각 씬을 이미지 노드로 표현</li>
+                    <li>대사와 설명을 텍스트 노드로 추가</li>
+                    <li>씬 간 전환을 연결선으로 표시</li>
+                    <li>캐릭터 아크와 플롯 포인트 매핑</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 고급 Canvas 기능 -->
+        <section class="advanced-features">
+            <h2>🔥 고급 Canvas 기능</h2>
+            
+            <div class="feature-showcase">
+                <h3>1. 노드 그룹핑과 프레임</h3>
+                <div class="feature-content">
+                    <p>관련 노드들을 그룹으로 묶어 체계적으로 관리하세요.</p>
+                    <div class="code-block" data-language="Shortcut">
+                        <code>• 여러 노드 선택: Shift + 클릭 또는 드래그 선택
+• 그룹 만들기: Ctrl/Cmd + G
+• 프레임 추가: 우클릭 → "Add frame"
+• 그룹 해제: Ctrl/Cmd + Shift + G</code>
+                    </div>
+                    <p><strong>프레임 활용법:</strong></p>
+                    <ul>
+                        <li>프로젝트 단계별 구분</li>
+                        <li>주제별 콘텐츠 분류</li>
+                        <li>팀별 작업 영역 지정</li>
+                        <li>시간순 정보 정리</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-showcase">
+                <h3>2. 임베디드 노트와 실시간 편집</h3>
+                <div class="feature-content">
+                    <p>Canvas 내에서 직접 노트를 편집하고 실시간으로 업데이트됩니다.</p>
+                    <div class="tutorial-step">
+                        <h4>임베디드 노트 활용</h4>
+                        <div class="step-action">
+                            <p>1. 기존 노트를 Canvas로 드래그</p>
+                            <p>2. 노드를 더블 클릭하여 편집 모드 진입</p>
+                            <p>3. Canvas 내에서 직접 마크다운 편집</p>
+                            <p>4. 변경사항이 원본 노트에 자동 반영</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-showcase">
+                <h3>3. 스타일링과 시각적 계층구조</h3>
+                <div class="feature-content">
+                    <p>색상, 크기, 모양을 활용하여 정보의 중요도와 관계를 표현하세요.</p>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <h4>색상 코딩</h4>
+                            <p>• 빨강: 긴급/중요<br>
+                               • 노랑: 진행 중<br>
+                               • 초록: 완료<br>
+                               • 파랑: 정보/참고</p>
+                        </div>
+                        <div class="tip-card">
+                            <h4>크기 활용</h4>
+                            <p>• 큰 노드: 주요 개념<br>
+                               • 중간 노드: 하위 주제<br>
+                               • 작은 노드: 세부사항<br>
+                               • 미니 노드: 주석/메모</p>
+                        </div>
+                        <div class="tip-card">
+                            <h4>연결선 스타일</h4>
+                            <p>• 실선: 직접 관계<br>
+                               • 점선: 간접 관계<br>
+                               • 화살표: 방향성<br>
+                               • 굵기: 관계 강도</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-showcase">
+                <h3>4. Canvas 템플릿 시스템</h3>
+                <div class="feature-content">
+                    <p>자주 사용하는 Canvas 구조를 템플릿으로 저장하고 재사용하세요.</p>
+                    <div class="code-block" data-language="Template">
+                        <code>📁 Canvas Templates/
+├── 📋 주간 계획 템플릿.canvas
+├── 🧠 브레인스토밍 템플릿.canvas
+├── 📊 프로젝트 대시보드.canvas
+├── 📚 독서 노트 템플릿.canvas
+└── 🎯 목표 설정 템플릿.canvas</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Canvas 템플릿 갤러리 -->
+        <section class="template-section">
+            <h2>🎨 Canvas 템플릿 갤러리</h2>
+            <div class="template-gallery">
+                <div class="template-card">
+                    <div class="template-preview">
+                        <img src="template-weekly-review.jpg" alt="주간 리뷰 템플릿">
+                    </div>
+                    <div class="template-info">
+                        <h3>주간 리뷰 & 계획</h3>
+                        <p>한 주를 돌아보고 다음 주를 계획하는 구조화된 템플릿</p>
+                        <div class="template-tags">
+                            <span class="template-tag">생산성</span>
+                            <span class="template-tag">계획</span>
+                            <span class="template-tag">리뷰</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-preview">
+                        <img src="template-eisenhower.jpg" alt="아이젠하워 매트릭스">
+                    </div>
+                    <div class="template-info">
+                        <h3>아이젠하워 매트릭스</h3>
+                        <p>긴급도와 중요도로 작업을 분류하는 우선순위 관리 도구</p>
+                        <div class="template-tags">
+                            <span class="template-tag">우선순위</span>
+                            <span class="template-tag">시간관리</span>
+                            <span class="template-tag">의사결정</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-preview">
+                        <img src="template-swot.jpg" alt="SWOT 분석">
+                    </div>
+                    <div class="template-info">
+                        <h3>SWOT 분석</h3>
+                        <p>강점, 약점, 기회, 위협을 체계적으로 분석하는 전략 도구</p>
+                        <div class="template-tags">
+                            <span class="template-tag">전략</span>
+                            <span class="template-tag">분석</span>
+                            <span class="template-tag">비즈니스</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-preview">
+                        <img src="template-kanban.jpg" alt="칸반 보드">
+                    </div>
+                    <div class="template-info">
+                        <h3>칸반 보드</h3>
+                        <p>작업 흐름을 시각화하는 애자일 프로젝트 관리 도구</p>
+                        <div class="template-tags">
+                            <span class="template-tag">프로젝트</span>
+                            <span class="template-tag">애자일</span>
+                            <span class="template-tag">워크플로우</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-preview">
+                        <img src="template-customer-journey.jpg" alt="고객 여정 지도">
+                    </div>
+                    <div class="template-info">
+                        <h3>고객 여정 지도</h3>
+                        <p>사용자 경험을 단계별로 매핑하는 UX 디자인 도구</p>
+                        <div class="template-tags">
+                            <span class="template-tag">UX</span>
+                            <span class="template-tag">디자인</span>
+                            <span class="template-tag">서비스</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-preview">
+                        <img src="template-mind-palace.jpg" alt="기억의 궁전">
+                    </div>
+                    <div class="template-info">
+                        <h3>기억의 궁전</h3>
+                        <p>공간 기억법을 활용한 학습 및 암기 도구</p>
+                        <div class="template-tags">
+                            <span class="template-tag">학습</span>
+                            <span class="template-tag">기억술</span>
+                            <span class="template-tag">교육</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실전 팁과 트릭 -->
+        <section class="tips-section">
+            <h2>💎 Canvas 활용 팁과 트릭</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4>빠른 노드 생성</h4>
+                    <p>• Alt + 드래그: 연결된 새 노드 생성<br>
+                       • Shift + Enter: 현재 노드에서 연결된 노드 생성<br>
+                       • Tab: 하위 레벨 노드 생성<br>
+                       • Shift + Tab: 상위 레벨 노드 생성</p>
+                </div>
+
+                <div class="tip-card">
+                    <h4>효율적인 정렬</h4>
+                    <p>• 여러 노드 선택 후 우클릭 → "Align"<br>
+                       • 자동 정렬: 수평/수직 정렬<br>
+                       • 균등 분배: 노드 간 간격 조정<br>
+                       • 스마트 가이드: 드래그 시 자동 정렬선</p>
+                </div>
+
+                <div class="tip-card">
+                    <h4>Canvas 검색</h4>
+                    <p>• Ctrl/Cmd + F: Canvas 내 텍스트 검색<br>
+                       • 검색 결과 하이라이트<br>
+                       • F3/Enter: 다음 결과로 이동<br>
+                       • 필터링: 특정 색상/타입 노드만 표시</p>
+                </div>
+
+                <div class="tip-card">
+                    <h4>성능 최적화</h4>
+                    <p>• 대규모 Canvas: 영역별 분할 고려<br>
+                       • 이미지 최적화: 적절한 해상도 사용<br>
+                       • 레이어 활용: 배경/전경 분리<br>
+                       • 정기적인 정리: 사용하지 않는 노드 제거</p>
+                </div>
+
+                <div class="tip-card">
+                    <h4>협업 팁</h4>
+                    <p>• 색상 규칙 문서화<br>
+                       • 노드 작성자 표시<br>
+                       • 버전 관리: Git으로 Canvas 추적<br>
+                       • 코멘트 노드: 피드백과 논의 기록</p>
+                </div>
+
+                <div class="tip-card">
+                    <h4>모바일 연동</h4>
+                    <p>• Canvas 읽기 전용 모드 지원<br>
+                       • 동기화: 클라우드 스토리지 활용<br>
+                       • 스크린샷: 주요 부분 캡처 저장<br>
+                       • 간단한 편집: 텍스트 노드 수정 가능</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Canvas와 다른 기능 연동 -->
+        <section class="integration-section">
+            <h2>🔗 Canvas와 Obsidian 기능 연동</h2>
+            
+            <div class="feature-showcase">
+                <h3>1. Canvas + Graph View</h3>
+                <div class="feature-content">
+                    <p>Canvas에서 만든 연결 관계가 Graph View에 반영되어 지식 네트워크를 다각도로 볼 수 있습니다.</p>
+                    <ul>
+                        <li>Canvas 노드 → Graph 노드로 표시</li>
+                        <li>Canvas 연결 → Graph 엣지로 변환</li>
+                        <li>양방향 탐색 가능</li>
+                        <li>필터링으로 특정 Canvas만 표시</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-showcase">
+                <h3>2. Canvas + Dataview</h3>
+                <div class="feature-content">
+                    <p>Dataview 쿼리 결과를 Canvas에 동적으로 표시할 수 있습니다.</p>
+                    <div class="code-block" data-language="Dataview">
+                        <code>```dataview
+TABLE file.name, status, priority
+FROM "Projects"
+WHERE contains(tags, "active")
+SORT priority DESC
+```</code>
+                    </div>
+                    <p>이 쿼리를 Canvas 노드에 포함시키면 실시간으로 업데이트되는 대시보드를 만들 수 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="feature-showcase">
+                <h3>3. Canvas + Templates</h3>
+                <div class="feature-content">
+                    <p>Templater 플러그인과 연동하여 Canvas 내에서 템플릿 기반 노트를 생성할 수 있습니다.</p>
+                    <ul>
+                        <li>Canvas에서 바로 템플릿 노트 생성</li>
+                        <li>변수 자동 채우기</li>
+                        <li>날짜/시간 스탬프 추가</li>
+                        <li>커스텀 함수 실행</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실습 과제 -->
+        <section id="practice" class="practice-section">
+            <h2>🎯 실습 과제</h2>
+            <p>이번 강의에서 배운 Canvas 기능을 직접 실습해보세요.</p>
+            
+            <div class="practice-tasks">
+                <div class="practice-task">
+                    <h4>과제 1: 개인 프로젝트 Canvas 만들기 <span class="difficulty easy">초급</span></h4>
+                    <p>현재 진행 중이거나 계획 중인 프로젝트를 Canvas로 시각화해보세요.</p>
+                    <ul>
+                        <li>프로젝트 목표를 중앙에 배치</li>
+                        <li>주요 단계를 노드로 추가</li>
+                        <li>각 단계별 세부 작업 연결</li>
+                        <li>색상으로 진행 상태 표시</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 2: 지식 맵 구축하기 <span class="difficulty medium">중급</span></h4>
+                    <p>관심 분야의 핵심 개념들을 Canvas로 연결하여 지식 맵을 만들어보세요.</p>
+                    <ul>
+                        <li>중심 주제 선정</li>
+                        <li>관련 개념 5-10개 추가</li>
+                        <li>개념 간 관계 연결선으로 표시</li>
+                        <li>각 개념에 대한 노트 링크 추가</li>
+                        <li>참고 자료와 이미지 포함</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 3: 인터랙티브 대시보드 만들기 <span class="difficulty hard">고급</span></h4>
+                    <p>Canvas를 활용한 개인 대시보드를 구축해보세요.</p>
+                    <ul>
+                        <li>일일/주간/월간 영역 구분</li>
+                        <li>할 일 목록 노드 추가</li>
+                        <li>습관 추적기 시각화</li>
+                        <li>목표 진행률 표시</li>
+                        <li>영감을 주는 인용구와 이미지</li>
+                        <li>빠른 접근 링크 모음</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>보너스 과제: Canvas 템플릿 제작 <span class="difficulty hard">고급</span></h4>
+                    <p>자신만의 Canvas 템플릿을 만들고 공유해보세요.</p>
+                    <ul>
+                        <li>특정 용도의 템플릿 설계</li>
+                        <li>재사용 가능한 구조 만들기</li>
+                        <li>사용 가이드 노드 포함</li>
+                        <li>색상과 스타일 가이드 정의</li>
+                        <li>커뮤니티에 공유하고 피드백 받기</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ 섹션 -->
+        <section class="faq-section">
+            <h2>❓ 자주 묻는 질문</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Canvas 파일이 너무 커지면 성능에 문제가 있나요?
+                </div>
+                <div class="faq-answer">
+                    <p>Canvas는 효율적으로 설계되어 있지만, 매우 큰 Canvas(노드 1000개 이상)는 성능에 영향을 줄 수 있습니다. 이런 경우:</p>
+                    <ul>
+                        <li>Canvas를 주제별로 분할하기</li>
+                        <li>사용하지 않는 노드 정리하기</li>
+                        <li>고해상도 이미지 최적화하기</li>
+                        <li>하드웨어 가속 활성화하기</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Canvas를 다른 사람과 공유할 수 있나요?
+                </div>
+                <div class="faq-answer">
+                    <p>네, 여러 가지 방법으로 공유할 수 있습니다:</p>
+                    <ul>
+                        <li>.canvas 파일 직접 공유</li>
+                        <li>PNG/PDF로 내보내기</li>
+                        <li>Git을 통한 버전 관리 및 협업</li>
+                        <li>Obsidian Publish로 웹 공유</li>
+                        <li>스크린샷이나 비디오 녹화</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Canvas에서 코드 블록을 사용할 수 있나요?
+                </div>
+                <div class="faq-answer">
+                    <p>네, 텍스트 노드 내에서 마크다운 코드 블록을 사용할 수 있습니다. 백틱 세 개(```)로 감싸면 구문 강조도 적용됩니다. 또한 Mermaid 다이어그램도 지원됩니다.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    모바일에서 Canvas를 편집할 수 있나요?
+                </div>
+                <div class="faq-answer">
+                    <p>현재 모바일 앱에서는 Canvas 보기는 가능하지만 편집 기능은 제한적입니다. 텍스트 노드의 간단한 수정은 가능하며, 전체 기능은 데스크톱 버전에서 사용할 수 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Canvas와 Excalidraw의 차이점은 무엇인가요?
+                </div>
+                <div class="faq-answer">
+                    <p>두 도구 모두 시각적 사고를 지원하지만 목적이 다릅니다:</p>
+                    <ul>
+                        <li><strong>Canvas:</strong> 노트와 파일 연결, 지식 관리에 최적화</li>
+                        <li><strong>Excalidraw:</strong> 자유로운 드로잉, 다이어그램 그리기에 특화</li>
+                        <li>용도에 따라 함께 사용하면 시너지 효과</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 추가 리소스 -->
+        <section class="resources-section">
+            <h2>📚 추가 학습 리소스</h2>
+            <div class="canvas-features-grid">
+                <div class="feature-card">
+                    <span class="icon">📖</span>
+                    <h3>공식 문서</h3>
+                    <p>Obsidian Canvas 공식 문서에서 모든 기능과 단축키를 확인하세요.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🎥</span>
+                    <h3>비디오 튜토리얼</h3>
+                    <p>Canvas 활용 예제와 워크플로우를 동영상으로 학습하세요.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">👥</span>
+                    <h3>커뮤니티 포럼</h3>
+                    <p>다른 사용자들의 Canvas 활용 사례와 팁을 공유받으세요.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🎨</span>
+                    <h3>템플릿 라이브러리</h3>
+                    <p>다양한 Canvas 템플릿을 다운로드하고 커스터마이징하세요.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 다음 강의 예고 -->
+        <section class="next-preview">
+            <h2>🔮 다음 강의 예고</h2>
+            <div class="feature-showcase">
+                <h3>제13강: 노트 간 관계 설계와 MOC</h3>
+                <div class="feature-content">
+                    <p>다음 강의에서는 Map of Content(MOC)를 활용한 체계적인 지식 구조 설계를 배웁니다:</p>
+                    <ul>
+                        <li>MOC의 개념과 필요성</li>
+                        <li>효과적인 MOC 구조 설계</li>
+                        <li>인덱스 노트 만들기</li>
+                        <li>주제별 허브 페이지 구축</li>
+                        <li>계층적 지식 구조 만들기</li>
+                        <li>동적 MOC vs 정적 MOC</li>
+                    </ul>
+                    <p>Canvas에서 시각화한 아이디어를 체계적인 지식 구조로 발전시키는 방법을 알아봅니다!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 진행률 표시 -->
+    <div class="progress-indicator" onclick="scrollToTop()">
+        <span class="progress-text">12/30</span>
+    </div>
+
+    <script>
+        // Canvas 데모 인터랙션
+        let selectedNode = null;
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
+
+        const canvasNodes = document.querySelectorAll('.canvas-node');
+        const canvasContainer = document.getElementById('canvas-demo');
+
+        canvasNodes.forEach(node => {
+            node.addEventListener('mousedown', startDrag);
+        });
+
+        function startDrag(e) {
+            selectedNode = e.target.closest('.canvas-node');
+            if (!selectedNode) return;
+
+            isDragging = true;
+            const rect = selectedNode.getBoundingClientRect();
+            const containerRect = canvasContainer.getBoundingClientRect();
+            
+            dragOffset.x = e.clientX - rect.left;
+            dragOffset.y = e.clientY - rect.top;
+
+            selectedNode.style.zIndex = '100';
+            selectedNode.style.cursor = 'grabbing';
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging || !selectedNode) return;
+
+            const containerRect = canvasContainer.getBoundingClientRect();
+            const x = e.clientX - containerRect.left - dragOffset.x;
+            const y = e.clientY - containerRect.top - dragOffset.y;
+
+            selectedNode.style.left = Math.max(0, Math.min(x, containerRect.width - selectedNode.offsetWidth)) + 'px';
+            selectedNode.style.top = Math.max(0, Math.min(y, containerRect.height - selectedNode.offsetHeight)) + 'px';
+
+            updateConnections();
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (selectedNode) {
+                selectedNode.style.zIndex = '';
+                selectedNode.style.cursor = 'move';
+                selectedNode = null;
+            }
+            isDragging = false;
+        });
+
+        function updateConnections() {
+            // Canvas 연결선 업데이트 로직
+            // 실제 구현에서는 노드 위치에 따라 연결선을 다시 그립니다
+        }
+
+        // 사용 사례 탭 전환
+        function showUseCase(caseId) {
+            const tabs = document.querySelectorAll('.use-case-tab');
+            const contents = document.querySelectorAll('.use-case-content');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(caseId).classList.add('active');
+        }
+
+        // FAQ 토글
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 맨 위로 스크롤
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 스크롤 진행률 표시
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrolled / total) * 100;
+
+            // 진행률에 따라 인디케이터 업데이트
+            const progressIndicator = document.querySelector('.progress-indicator');
+            if (progress > 10) {
+                progressIndicator.style.opacity = '1';
+            } else {
+                progressIndicator.style.opacity = '0.5';
+            }
+        });
+
+        // 이미지 레이지 로딩
+        const images = document.querySelectorAll('img');
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        images.forEach(img => imageObserver.observe(img));
+
+        // 애니메이션 트리거
+        const animatedElements = document.querySelectorAll('.feature-card, .tutorial-step, .template-card');
+        const animationObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        animatedElements.forEach(el => animationObserver.observe(el));
+
+        // 키보드 단축키
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        console.log('저장 단축키 실행');
+                        break;
+                    case 'k':
+                        e.preventDefault();
+                        document.querySelector('.search-bar input').focus();
+                        break;
+                }
+            }
+        });
+
+        // 노드 더블클릭으로 편집
+        canvasNodes.forEach(node => {
+            node.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                const textContent = node.querySelector('p');
+                if (textContent) {
+                    textContent.contentEditable = true;
+                    textContent.focus();
+                    
+                    textContent.addEventListener('blur', () => {
+                        textContent.contentEditable = false;
+                    });
+                }
+            });
+        });
+
+        // Canvas 배경 더블클릭으로 새 노드 생성
+        canvasContainer.addEventListener('dblclick', (e) => {
+            if (e.target === canvasContainer) {
+                const newNode = document.createElement('div');
+                newNode.className = 'canvas-node text-node';
+                newNode.style.left = e.offsetX + 'px';
+                newNode.style.top = e.offsetY + 'px';
+                newNode.innerHTML = '<h4>새 노드</h4><p>텍스트를 입력하세요</p>';
+                
+                canvasContainer.appendChild(newNode);
+                
+                // 새 노드에 드래그 이벤트 추가
+                newNode.addEventListener('mousedown', startDrag);
+                newNode.addEventListener('dblclick', (e) => {
+                    e.stopPropagation();
+                    const textContent = newNode.querySelector('p');
+                    if (textContent) {
+                        textContent.contentEditable = true;
+                        textContent.focus();
+                        
+                        textContent.addEventListener('blur', () => {
+                            textContent.contentEditable = false;
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

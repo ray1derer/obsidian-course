@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제21강: 플러그인 개발 기초 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+            --purple-color: #b48ead;
+            --orange-color: #d08770;
+            --code-color: #8fbcbb;
+            --plugin-color: #b48ead;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--plugin-color) 0%, transparent 70%);
+            opacity: 0.2;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-50px, -50px) rotate(120deg); }
+            66% { transform: translate(50px, -30px) rotate(240deg); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--plugin-color), var(--code-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(odd) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(even) {
+            animation-delay: 0.4s;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--accent-color), var(--plugin-color));
+            border-radius: 3px;
+        }
+
+        .section h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--plugin-color);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(180, 142, 173, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--plugin-color);
+        }
+
+        .plugin-architecture {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .architecture-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .architecture-layer {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .architecture-layer:hover {
+            transform: scale(1.05);
+            border-color: var(--plugin-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .layer-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--plugin-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-description {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .setup-steps {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .step-list {
+            list-style: none;
+            margin-top: 1.5rem;
+            counter-reset: step-counter;
+        }
+
+        .step-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            position: relative;
+            padding-left: 4rem;
+            transition: all 0.3s ease;
+            counter-increment: step-counter;
+        }
+
+        .step-item::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--plugin-color);
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-editor {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .editor-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--error-color);
+        }
+
+        .editor-dot:nth-child(2) {
+            background: var(--warning-color);
+        }
+
+        .editor-dot:nth-child(3) {
+            background: var(--success-color);
+        }
+
+        .editor-title {
+            margin-left: auto;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .code-block .type {
+            color: #4ec9b0;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(136, 192, 208, 0.3);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        .api-reference {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .api-method {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .api-method:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--plugin-color);
+        }
+
+        .method-signature {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--code-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .method-description {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .plugin-examples {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .example-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .example-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--plugin-color), var(--code-color));
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .example-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .example-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .example-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .example-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--plugin-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .example-description {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .file-structure {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .file-tree {
+            line-height: 1.8;
+        }
+
+        .file-tree .folder {
+            color: var(--warning-color);
+        }
+
+        .file-tree .file {
+            color: var(--info-color);
+        }
+
+        .file-tree .comment {
+            color: var(--success-color);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .debug-tools {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .console-output {
+            background: #0e0e0e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #d4d4d4;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .console-line {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .console-prefix {
+            color: var(--info-color);
+            margin-right: 1rem;
+        }
+
+        .console-log {
+            color: #d4d4d4;
+        }
+
+        .console-warn {
+            color: var(--warning-color);
+        }
+
+        .console-error {
+            color: var(--error-color);
+        }
+
+        .best-practices {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--plugin-color), var(--code-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+
+        .practice-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .practice-card:hover {
+            border-color: var(--plugin-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .practice-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .practice-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--plugin-color);
+        }
+
+        .practice-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .manifest-editor {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .manifest-field {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .manifest-label {
+            font-weight: 600;
+            color: var(--plugin-color);
+        }
+
+        .manifest-input {
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .manifest-input:focus {
+            outline: none;
+            border-color: var(--plugin-color);
+            box-shadow: 0 0 0 3px rgba(180, 142, 173, 0.2);
+        }
+
+        .interactive-demo {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            padding: 0.8rem 1.5rem;
+            background: var(--plugin-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(180, 142, 173, 0.3);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        .demo-output {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .faq-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--plugin-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        .resources-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .resource-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .resource-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--plugin-color);
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-link {
+            color: var(--code-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-link:hover {
+            color: var(--accent-color);
+        }
+
+        .practice-exercises {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .exercise-list {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .exercise-item {
+            background: rgba(46, 52, 64, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--plugin-color);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--plugin-color);
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: var(--success-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-medium {
+            background: var(--warning-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-hard {
+            background: var(--error-color);
+            color: var(--text-color);
+        }
+
+        .next-lesson {
+            background: linear-gradient(135deg, var(--plugin-color) 0%, var(--code-color) 100%);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .next-lesson::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .next-lesson h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .next-lesson p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p>체계적으로 배우는 노션 활용법</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_01.html">기초과정</a></li>
+            <li><a href="notion_course_12.html">중급과정</a></li>
+            <li><a href="notion_course_21.html">고급과정</a></li>
+            <li><a href="#setup">개발환경</a></li>
+            <li><a href="#basics">기본구조</a></li>
+            <li><a href="#api">API참조</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제21강: 플러그인 개발 기초</h1>
+            <p>JavaScript와 TypeScript로 나만의 Obsidian 플러그인을 만들어보세요</p>
+            <div class="badge-container">
+                <span class="badge badge-advanced">고급</span>
+                <span class="badge badge-duration">90분</span>
+                <span class="badge badge-plugin">플러그인</span>
+            </div>
+        </div>
+
+        <section class="section" id="introduction">
+            <h2>1. 플러그인 개발 소개</h2>
+            
+            <div class="card">
+                <h3>왜 플러그인을 개발하나요?</h3>
+                <p>Obsidian의 강력한 플러그인 시스템을 통해 자신만의 워크플로우에 맞는 기능을 추가할 수 있습니다. 반복적인 작업을 자동화하고, 새로운 UI 요소를 추가하며, 외부 서비스와 통합할 수 있습니다.</p>
+                
+                <div class="plugin-architecture">
+                    <h4>Obsidian 플러그인 아키텍처</h4>
+                    <div class="architecture-diagram">
+                        <div class="architecture-layer">
+                            <div class="layer-title">Plugin Interface</div>
+                            <div class="layer-description">플러그인의 진입점 (main.ts)</div>
+                        </div>
+                        <div class="architecture-layer">
+                            <div class="layer-title">Obsidian API</div>
+                            <div class="layer-description">Vault, Editor, Workspace 등 핵심 API</div>
+                        </div>
+                        <div class="architecture-layer">
+                            <div class="layer-title">Event System</div>
+                            <div class="layer-description">이벤트 리스너와 콜백 관리</div>
+                        </div>
+                        <div class="architecture-layer">
+                            <div class="layer-title">UI Components</div>
+                            <div class="layer-description">모달, 설정, 리본 아이콘 등</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>필요한 기술 스택</h3>
+                <ul>
+                    <li><strong>TypeScript</strong>: 타입 안정성과 자동완성을 위해 권장</li>
+                    <li><strong>JavaScript</strong>: 기본적인 프로그래밍 지식</li>
+                    <li><strong>HTML/CSS</strong>: UI 구성 요소 스타일링</li>
+                    <li><strong>Node.js & npm</strong>: 개발 도구 및 패키지 관리</li>
+                    <li><strong>Git</strong>: 버전 관리 (선택사항)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="setup">
+            <h2>2. 개발 환경 설정</h2>
+            
+            <div class="card">
+                <h3>필수 도구 설치</h3>
+                <div class="setup-steps">
+                    <ol class="step-list">
+                        <li class="step-item">
+                            <strong>Node.js 설치</strong>
+                            <p>nodejs.org에서 LTS 버전을 다운로드하여 설치합니다.</p>
+                        </li>
+                        <li class="step-item">
+                            <strong>VSCode 설치</strong>
+                            <p>code.visualstudio.com에서 편집기를 다운로드합니다.</p>
+                        </li>
+                        <li class="step-item">
+                            <strong>Obsidian API 타입 설치</strong>
+                            <p>터미널에서 실행: npm install -D obsidian</p>
+                        </li>
+                        <li class="step-item">
+                            <strong>플러그인 템플릿 복사</strong>
+                            <p>공식 샘플 플러그인을 기반으로 시작합니다.</p>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>프로젝트 구조</h3>
+                <div class="file-structure">
+                    <div class="file-tree">
+<span class="folder">📁 my-plugin/</span>
+├── <span class="file">📄 main.ts</span> <span class="comment">// 플러그인 메인 파일</span>
+├── <span class="file">📄 manifest.json</span> <span class="comment">// 플러그인 메타데이터</span>
+├── <span class="file">📄 styles.css</span> <span class="comment">// 커스텀 스타일</span>
+├── <span class="file">📄 package.json</span> <span class="comment">// npm 설정</span>
+├── <span class="file">📄 tsconfig.json</span> <span class="comment">// TypeScript 설정</span>
+├── <span class="file">📄 .gitignore</span> <span class="comment">// Git 제외 파일</span>
+├── <span class="folder">📁 src/</span> <span class="comment">// 소스 코드</span>
+│   ├── <span class="file">📄 settings.ts</span>
+│   └── <span class="file">📄 modal.ts</span>
+└── <span class="folder">📁 node_modules/</span> <span class="comment">// 의존성</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>manifest.json 구성</h3>
+                <div class="manifest-editor">
+                    <div class="manifest-field">
+                        <label class="manifest-label">id</label>
+                        <input type="text" class="manifest-input" value="my-obsidian-plugin" />
+                    </div>
+                    <div class="manifest-field">
+                        <label class="manifest-label">name</label>
+                        <input type="text" class="manifest-input" value="My Obsidian Plugin" />
+                    </div>
+                    <div class="manifest-field">
+                        <label class="manifest-label">version</label>
+                        <input type="text" class="manifest-input" value="1.0.0" />
+                    </div>
+                    <div class="manifest-field">
+                        <label class="manifest-label">minAppVersion</label>
+                        <input type="text" class="manifest-input" value="0.15.0" />
+                    </div>
+                    <div class="manifest-field">
+                        <label class="manifest-label">description</label>
+                        <input type="text" class="manifest-input" value="나만의 첫 번째 Obsidian 플러그인" />
+                    </div>
+                    <div class="manifest-field">
+                        <label class="manifest-label">author</label>
+                        <input type="text" class="manifest-input" value="Your Name" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="basics">
+            <h2>3. 기본 플러그인 구조</h2>
+            
+            <div class="card">
+                <h3>Hello World 플러그인</h3>
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <span class="editor-title">main.ts</span>
+                    </div>
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="keyword">import</span> { Plugin, Notice } <span class="keyword">from</span> <span class="string">'obsidian'</span>;
+
+<span class="keyword">export default class</span> <span class="type">MyPlugin</span> <span class="keyword">extends</span> <span class="type">Plugin</span> {
+    <span class="comment">// 플러그인이 로드될 때 실행</span>
+    <span class="keyword">async</span> <span class="function">onload</span>() {
+        console.<span class="function">log</span>(<span class="string">'Loading My Plugin'</span>);
+        
+        <span class="comment">// 리본 아이콘 추가</span>
+        <span class="keyword">this</span>.<span class="function">addRibbonIcon</span>(<span class="string">'dice'</span>, <span class="string">'My Plugin'</span>, () => {
+            <span class="keyword">new</span> <span class="type">Notice</span>(<span class="string">'Hello, World!'</span>);
+        });
+        
+        <span class="comment">// 명령어 추가</span>
+        <span class="keyword">this</span>.<span class="function">addCommand</span>({
+            id: <span class="string">'say-hello'</span>,
+            name: <span class="string">'Say Hello'</span>,
+            callback: () => {
+                <span class="keyword">this</span>.<span class="function">sayHello</span>();
+            }
+        });
+        
+        <span class="comment">// 설정 탭 추가</span>
+        <span class="keyword">this</span>.<span class="function">addSettingTab</span>(<span class="keyword">new</span> <span class="type">MyPluginSettingTab</span>(<span class="keyword">this</span>.app, <span class="keyword">this</span>));
+    }
+    
+    <span class="comment">// 플러그인이 언로드될 때 실행</span>
+    <span class="function">onunload</span>() {
+        console.<span class="function">log</span>(<span class="string">'Unloading My Plugin'</span>);
+    }
+    
+    <span class="function">sayHello</span>() {
+        <span class="keyword">const</span> activeFile = <span class="keyword">this</span>.app.workspace.<span class="function">getActiveFile</span>();
+        <span class="keyword">if</span> (activeFile) {
+            <span class="keyword">new</span> <span class="type">Notice</span>(<span class="string">`Hello from ${activeFile.name}!`</span>);
+        } <span class="keyword">else</span> {
+            <span class="keyword">new</span> <span class="type">Notice</span>(<span class="string">'No active file!'</span>);
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>이벤트 처리</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 파일 생성 이벤트 리스닝</span>
+<span class="keyword">this</span>.<span class="function">registerEvent</span>(
+    <span class="keyword">this</span>.app.vault.<span class="function">on</span>(<span class="string">'create'</span>, (file) => {
+        <span class="keyword">if</span> (file <span class="keyword">instanceof</span> <span class="type">TFile</span>) {
+            console.<span class="function">log</span>(<span class="string">`New file created: ${file.path}`</span>);
+        }
+    })
+);
+
+<span class="comment">// 에디터 변경 이벤트</span>
+<span class="keyword">this</span>.<span class="function">registerEvent</span>(
+    <span class="keyword">this</span>.app.workspace.<span class="function">on</span>(<span class="string">'editor-change'</span>, (editor, info) => {
+        <span class="keyword">const</span> cursor = editor.<span class="function">getCursor</span>();
+        console.<span class="function">log</span>(<span class="string">`Cursor at line ${cursor.line}, ch ${cursor.ch}`</span>);
+    })
+);
+
+<span class="comment">// 레이아웃 준비 이벤트</span>
+<span class="keyword">this</span>.app.workspace.<span class="function">onLayoutReady</span>(() => {
+    console.<span class="function">log</span>(<span class="string">'Workspace is ready!'</span>);
+});</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>설정 저장 및 로드</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="keyword">interface</span> <span class="type">MyPluginSettings</span> {
+    mySetting: <span class="type">string</span>;
+    enableFeature: <span class="type">boolean</span>;
+    maxItems: <span class="type">number</span>;
+}
+
+<span class="keyword">const</span> DEFAULT_SETTINGS: <span class="type">MyPluginSettings</span> = {
+    mySetting: <span class="string">'default'</span>,
+    enableFeature: <span class="keyword">true</span>,
+    maxItems: <span class="number">10</span>
+}
+
+<span class="keyword">export default class</span> <span class="type">MyPlugin</span> <span class="keyword">extends</span> <span class="type">Plugin</span> {
+    settings: <span class="type">MyPluginSettings</span>;
+    
+    <span class="keyword">async</span> <span class="function">onload</span>() {
+        <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">loadSettings</span>();
+    }
+    
+    <span class="keyword">async</span> <span class="function">loadSettings</span>() {
+        <span class="keyword">this</span>.settings = Object.<span class="function">assign</span>(
+            {}, 
+            DEFAULT_SETTINGS, 
+            <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">loadData</span>()
+        );
+    }
+    
+    <span class="keyword">async</span> <span class="function">saveSettings</span>() {
+        <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">saveData</span>(<span class="keyword">this</span>.settings);
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="api">
+            <h2>4. Obsidian API 핵심 요소</h2>
+            
+            <div class="card">
+                <h3>Vault API</h3>
+                <div class="api-reference">
+                    <div class="api-method">
+                        <div class="method-signature">vault.create(path: string, data: string)</div>
+                        <div class="method-description">새 파일을 생성합니다</div>
+                    </div>
+                    <div class="api-method">
+                        <div class="method-signature">vault.read(file: TFile)</div>
+                        <div class="method-description">파일 내용을 읽습니다</div>
+                    </div>
+                    <div class="api-method">
+                        <div class="method-signature">vault.modify(file: TFile, data: string)</div>
+                        <div class="method-description">파일 내용을 수정합니다</div>
+                    </div>
+                    <div class="api-method">
+                        <div class="method-signature">vault.delete(file: TAbstractFile)</div>
+                        <div class="method-description">파일을 삭제합니다</div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 파일 작업 예제</span>
+<span class="keyword">async</span> <span class="function">createDailyNote</span>() {
+    <span class="keyword">const</span> date = <span class="keyword">new</span> <span class="type">Date</span>();
+    <span class="keyword">const</span> fileName = <span class="string">`Daily/${date.toISOString().split('T')[0]}.md`</span>;
+    
+    <span class="comment">// 파일이 이미 존재하는지 확인</span>
+    <span class="keyword">const</span> file = <span class="keyword">this</span>.app.vault.<span class="function">getAbstractFileByPath</span>(fileName);
+    <span class="keyword">if</span> (file) {
+        <span class="keyword">new</span> <span class="type">Notice</span>(<span class="string">'Daily note already exists!'</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="comment">// 템플릿 내용 생성</span>
+    <span class="keyword">const</span> template = <span class="string">`# Daily Note - ${date.toLocaleDateString()}
+
+## Today's Goals
+- [ ] 
+
+## Notes
+
+
+## Reflection
+`</span>;
+    
+    <span class="comment">// 파일 생성</span>
+    <span class="keyword">await</span> <span class="keyword">this</span>.app.vault.<span class="function">create</span>(fileName, template);
+    
+    <span class="comment">// 생성된 파일 열기</span>
+    <span class="keyword">const</span> newFile = <span class="keyword">this</span>.app.vault.<span class="function">getAbstractFileByPath</span>(fileName);
+    <span class="keyword">if</span> (newFile <span class="keyword">instanceof</span> <span class="type">TFile</span>) {
+        <span class="keyword">await</span> <span class="keyword">this</span>.app.workspace.<span class="function">getLeaf</span>().<span class="function">openFile</span>(newFile);
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Editor API</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 에디터 명령어 추가</span>
+<span class="keyword">this</span>.<span class="function">addCommand</span>({
+    id: <span class="string">'insert-timestamp'</span>,
+    name: <span class="string">'Insert Timestamp'</span>,
+    editorCallback: (editor: <span class="type">Editor</span>, view: <span class="type">MarkdownView</span>) => {
+        <span class="keyword">const</span> cursor = editor.<span class="function">getCursor</span>();
+        <span class="keyword">const</span> timestamp = <span class="keyword">new</span> <span class="type">Date</span>().<span class="function">toLocaleString</span>();
+        
+        <span class="comment">// 현재 커서 위치에 타임스탬프 삽입</span>
+        editor.<span class="function">replaceRange</span>(timestamp, cursor);
+        
+        <span class="comment">// 커서를 타임스탬프 끝으로 이동</span>
+        editor.<span class="function">setCursor</span>({
+            line: cursor.line,
+            ch: cursor.ch + timestamp.length
+        });
+    }
+});
+
+<span class="comment">// 선택된 텍스트 처리</span>
+<span class="keyword">this</span>.<span class="function">addCommand</span>({
+    id: <span class="string">'uppercase-selection'</span>,
+    name: <span class="string">'Convert to Uppercase'</span>,
+    editorCallback: (editor: <span class="type">Editor</span>) => {
+        <span class="keyword">const</span> selection = editor.<span class="function">getSelection</span>();
+        <span class="keyword">if</span> (selection) {
+            editor.<span class="function">replaceSelection</span>(selection.<span class="function">toUpperCase</span>());
+        }
+    }
+});
+
+<span class="comment">// 라인 조작</span>
+<span class="keyword">this</span>.<span class="function">addCommand</span>({
+    id: <span class="string">'duplicate-line'</span>,
+    name: <span class="string">'Duplicate Current Line'</span>,
+    editorCallback: (editor: <span class="type">Editor</span>) => {
+        <span class="keyword">const</span> cursor = editor.<span class="function">getCursor</span>();
+        <span class="keyword">const</span> line = editor.<span class="function">getLine</span>(cursor.line);
+        
+        editor.<span class="function">replaceRange</span>(<span class="string">`\n${line}`</span>, 
+            { line: cursor.line, ch: line.length });
+    }
+});</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Workspace API</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 새 탭에서 파일 열기</span>
+<span class="keyword">async</span> <span class="function">openInNewTab</span>(filePath: <span class="type">string</span>) {
+    <span class="keyword">const</span> file = <span class="keyword">this</span>.app.vault.<span class="function">getAbstractFileByPath</span>(filePath);
+    <span class="keyword">if</span> (file <span class="keyword">instanceof</span> <span class="type">TFile</span>) {
+        <span class="keyword">const</span> leaf = <span class="keyword">this</span>.app.workspace.<span class="function">getLeaf</span>(<span class="string">'tab'</span>);
+        <span class="keyword">await</span> leaf.<span class="function">openFile</span>(file);
+    }
+}
+
+<span class="comment">// 사이드바에 뷰 추가</span>
+<span class="keyword">this</span>.<span class="function">registerView</span>(
+    VIEW_TYPE_EXAMPLE,
+    (leaf) => <span class="keyword">new</span> <span class="type">ExampleView</span>(leaf)
+);
+
+<span class="keyword">this</span>.<span class="function">addCommand</span>({
+    id: <span class="string">'open-example-view'</span>,
+    name: <span class="string">'Open Example View'</span>,
+    callback: () => {
+        <span class="keyword">this</span>.<span class="function">activateView</span>();
+    }
+});
+
+<span class="keyword">async</span> <span class="function">activateView</span>() {
+    <span class="keyword">const</span> { workspace } = <span class="keyword">this</span>.app;
+    
+    <span class="keyword">let</span> leaf: <span class="type">WorkspaceLeaf</span> | <span class="keyword">null</span> = <span class="keyword">null</span>;
+    <span class="keyword">const</span> leaves = workspace.<span class="function">getLeavesOfType</span>(VIEW_TYPE_EXAMPLE);
+    
+    <span class="keyword">if</span> (leaves.length > <span class="number">0</span>) {
+        leaf = leaves[<span class="number">0</span>];
+    } <span class="keyword">else</span> {
+        leaf = workspace.<span class="function">getRightLeaf</span>(<span class="keyword">false</span>);
+        <span class="keyword">await</span> leaf.<span class="function">setViewState</span>({ type: VIEW_TYPE_EXAMPLE });
+    }
+    
+    workspace.<span class="function">revealLeaf</span>(leaf);
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="ui-components">
+            <h2>5. UI 컴포넌트 구현</h2>
+            
+            <div class="card">
+                <h3>모달 다이얼로그</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="keyword">import</span> { App, Modal, Setting } <span class="keyword">from</span> <span class="string">'obsidian'</span>;
+
+<span class="keyword">class</span> <span class="type">InputModal</span> <span class="keyword">extends</span> <span class="type">Modal</span> {
+    result: <span class="type">string</span>;
+    onSubmit: (result: <span class="type">string</span>) => <span class="type">void</span>;
+    
+    <span class="keyword">constructor</span>(app: <span class="type">App</span>, onSubmit: (result: <span class="type">string</span>) => <span class="type">void</span>) {
+        <span class="keyword">super</span>(app);
+        <span class="keyword">this</span>.onSubmit = onSubmit;
+    }
+    
+    <span class="function">onOpen</span>() {
+        <span class="keyword">const</span> { contentEl } = <span class="keyword">this</span>;
+        
+        contentEl.<span class="function">createEl</span>(<span class="string">'h2'</span>, { text: <span class="string">'Enter your input'</span> });
+        
+        <span class="keyword">new</span> <span class="type">Setting</span>(contentEl)
+            .<span class="function">setName</span>(<span class="string">'Name'</span>)
+            .<span class="function">setDesc</span>(<span class="string">'Enter a name for the new note'</span>)
+            .<span class="function">addText</span>((text) =>
+                text
+                    .<span class="function">setPlaceholder</span>(<span class="string">'Example: My New Note'</span>)
+                    .<span class="function">setValue</span>(<span class="keyword">this</span>.result)
+                    .<span class="function">onChange</span>((value) => {
+                        <span class="keyword">this</span>.result = value;
+                    })
+            );
+        
+        <span class="keyword">new</span> <span class="type">Setting</span>(contentEl)
+            .<span class="function">addButton</span>((btn) =>
+                btn
+                    .<span class="function">setButtonText</span>(<span class="string">'Submit'</span>)
+                    .<span class="function">setCta</span>()
+                    .<span class="function">onClick</span>(() => {
+                        <span class="keyword">this</span>.<span class="function">close</span>();
+                        <span class="keyword">this</span>.<span class="function">onSubmit</span>(<span class="keyword">this</span>.result);
+                    })
+            );
+    }
+    
+    <span class="function">onClose</span>() {
+        <span class="keyword">const</span> { contentEl } = <span class="keyword">this</span>;
+        contentEl.<span class="function">empty</span>();
+    }
+}
+
+<span class="comment">// 모달 사용 예제</span>
+<span class="keyword">this</span>.<span class="function">addCommand</span>({
+    id: <span class="string">'open-input-modal'</span>,
+    name: <span class="string">'Open Input Modal'</span>,
+    callback: () => {
+        <span class="keyword">new</span> <span class="type">InputModal</span>(<span class="keyword">this</span>.app, (result) => {
+            <span class="keyword">new</span> <span class="type">Notice</span>(<span class="string">`You entered: ${result}`</span>);
+        }).<span class="function">open</span>();
+    }
+});</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>설정 탭</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="keyword">import</span> { App, Plugin, PluginSettingTab, Setting } <span class="keyword">from</span> <span class="string">'obsidian'</span>;
+
+<span class="keyword">class</span> <span class="type">MyPluginSettingTab</span> <span class="keyword">extends</span> <span class="type">PluginSettingTab</span> {
+    plugin: <span class="type">MyPlugin</span>;
+    
+    <span class="keyword">constructor</span>(app: <span class="type">App</span>, plugin: <span class="type">MyPlugin</span>) {
+        <span class="keyword">super</span>(app, plugin);
+        <span class="keyword">this</span>.plugin = plugin;
+    }
+    
+    <span class="function">display</span>(): <span class="type">void</span> {
+        <span class="keyword">const</span> { containerEl } = <span class="keyword">this</span>;
+        containerEl.<span class="function">empty</span>();
+        
+        containerEl.<span class="function">createEl</span>(<span class="string">'h2'</span>, { text: <span class="string">'Plugin Settings'</span> });
+        
+        <span class="comment">// 텍스트 설정</span>
+        <span class="keyword">new</span> <span class="type">Setting</span>(containerEl)
+            .<span class="function">setName</span>(<span class="string">'Default folder'</span>)
+            .<span class="function">setDesc</span>(<span class="string">'Where to create new notes'</span>)
+            .<span class="function">addText</span>((text) =>
+                text
+                    .<span class="function">setPlaceholder</span>(<span class="string">'Example: Daily Notes'</span>)
+                    .<span class="function">setValue</span>(<span class="keyword">this</span>.plugin.settings.defaultFolder)
+                    .<span class="function">onChange</span>(<span class="keyword">async</span> (value) => {
+                        <span class="keyword">this</span>.plugin.settings.defaultFolder = value;
+                        <span class="keyword">await</span> <span class="keyword">this</span>.plugin.<span class="function">saveSettings</span>();
+                    })
+            );
+        
+        <span class="comment">// 토글 설정</span>
+        <span class="keyword">new</span> <span class="type">Setting</span>(containerEl)
+            .<span class="function">setName</span>(<span class="string">'Enable auto-save'</span>)
+            .<span class="function">setDesc</span>(<span class="string">'Automatically save notes every 5 minutes'</span>)
+            .<span class="function">addToggle</span>((toggle) =>
+                toggle
+                    .<span class="function">setValue</span>(<span class="keyword">this</span>.plugin.settings.autoSave)
+                    .<span class="function">onChange</span>(<span class="keyword">async</span> (value) => {
+                        <span class="keyword">this</span>.plugin.settings.autoSave = value;
+                        <span class="keyword">await</span> <span class="keyword">this</span>.plugin.<span class="function">saveSettings</span>();
+                    })
+            );
+        
+        <span class="comment">// 드롭다운 설정</span>
+        <span class="keyword">new</span> <span class="type">Setting</span>(containerEl)
+            .<span class="function">setName</span>(<span class="string">'Date format'</span>)
+            .<span class="function">setDesc</span>(<span class="string">'How to format dates'</span>)
+            .<span class="function">addDropdown</span>((dropdown) =>
+                dropdown
+                    .<span class="function">addOption</span>(<span class="string">'YYYY-MM-DD'</span>, <span class="string">'ISO format'</span>)
+                    .<span class="function">addOption</span>(<span class="string">'DD/MM/YYYY'</span>, <span class="string">'European format'</span>)
+                    .<span class="function">addOption</span>(<span class="string">'MM/DD/YYYY'</span>, <span class="string">'US format'</span>)
+                    .<span class="function">setValue</span>(<span class="keyword">this</span>.plugin.settings.dateFormat)
+                    .<span class="function">onChange</span>(<span class="keyword">async</span> (value) => {
+                        <span class="keyword">this</span>.plugin.settings.dateFormat = value;
+                        <span class="keyword">await</span> <span class="keyword">this</span>.plugin.<span class="function">saveSettings</span>();
+                    })
+            );
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>사이드바 뷰</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="keyword">import</span> { ItemView, WorkspaceLeaf } <span class="keyword">from</span> <span class="string">'obsidian'</span>;
+
+<span class="keyword">export const</span> VIEW_TYPE_EXAMPLE = <span class="string">'example-view'</span>;
+
+<span class="keyword">export class</span> <span class="type">ExampleView</span> <span class="keyword">extends</span> <span class="type">ItemView</span> {
+    <span class="keyword">constructor</span>(leaf: <span class="type">WorkspaceLeaf</span>) {
+        <span class="keyword">super</span>(leaf);
+    }
+    
+    <span class="function">getViewType</span>() {
+        <span class="keyword">return</span> VIEW_TYPE_EXAMPLE;
+    }
+    
+    <span class="function">getDisplayText</span>() {
+        <span class="keyword">return</span> <span class="string">'Example View'</span>;
+    }
+    
+    <span class="function">getIcon</span>() {
+        <span class="keyword">return</span> <span class="string">'folder'</span>;
+    }
+    
+    <span class="keyword">async</span> <span class="function">onOpen</span>() {
+        <span class="keyword">const</span> container = <span class="keyword">this</span>.containerEl.children[<span class="number">1</span>];
+        container.<span class="function">empty</span>();
+        container.<span class="function">createEl</span>(<span class="string">'h4'</span>, { text: <span class="string">'Example View'</span> });
+        
+        <span class="comment">// 파일 목록 표시</span>
+        <span class="keyword">const</span> files = <span class="keyword">this</span>.app.vault.<span class="function">getMarkdownFiles</span>();
+        <span class="keyword">const</span> list = container.<span class="function">createEl</span>(<span class="string">'ul'</span>);
+        
+        files.<span class="function">slice</span>(<span class="number">0</span>, <span class="number">10</span>).<span class="function">forEach</span>(file => {
+            <span class="keyword">const</span> li = list.<span class="function">createEl</span>(<span class="string">'li'</span>);
+            <span class="keyword">const</span> link = li.<span class="function">createEl</span>(<span class="string">'a'</span>, {
+                text: file.name,
+                href: <span class="string">'#'</span>
+            });
+            
+            link.<span class="function">addEventListener</span>(<span class="string">'click'</span>, (e) => {
+                e.<span class="function">preventDefault</span>();
+                <span class="keyword">this</span>.app.workspace.<span class="function">getLeaf</span>().<span class="function">openFile</span>(file);
+            });
+        });
+    }
+    
+    <span class="keyword">async</span> <span class="function">onClose</span>() {
+        <span class="comment">// 정리 작업</span>
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="advanced">
+            <h2>6. 고급 기능 구현</h2>
+            
+            <div class="card">
+                <h3>파일 시스템 감시</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 특정 폴더의 변경사항 감시</span>
+<span class="keyword">class</span> <span class="type">FolderWatcher</span> {
+    plugin: <span class="type">Plugin</span>;
+    watchedFolder: <span class="type">string</span>;
+    
+    <span class="keyword">constructor</span>(plugin: <span class="type">Plugin</span>, folder: <span class="type">string</span>) {
+        <span class="keyword">this</span>.plugin = plugin;
+        <span class="keyword">this</span>.watchedFolder = folder;
+        <span class="keyword">this</span>.<span class="function">startWatching</span>();
+    }
+    
+    <span class="function">startWatching</span>() {
+        <span class="comment">// 파일 생성 감지</span>
+        <span class="keyword">this</span>.plugin.<span class="function">registerEvent</span>(
+            <span class="keyword">this</span>.plugin.app.vault.<span class="function">on</span>(<span class="string">'create'</span>, (file) => {
+                <span class="keyword">if</span> (file <span class="keyword">instanceof</span> <span class="type">TFile</span> && 
+                    file.path.<span class="function">startsWith</span>(<span class="keyword">this</span>.watchedFolder)) {
+                    <span class="keyword">this</span>.<span class="function">onFileCreated</span>(file);
+                }
+            })
+        );
+        
+        <span class="comment">// 파일 수정 감지</span>
+        <span class="keyword">this</span>.plugin.<span class="function">registerEvent</span>(
+            <span class="keyword">this</span>.plugin.app.vault.<span class="function">on</span>(<span class="string">'modify'</span>, (file) => {
+                <span class="keyword">if</span> (file <span class="keyword">instanceof</span> <span class="type">TFile</span> && 
+                    file.path.<span class="function">startsWith</span>(<span class="keyword">this</span>.watchedFolder)) {
+                    <span class="keyword">this</span>.<span class="function">onFileModified</span>(file);
+                }
+            })
+        );
+    }
+    
+    <span class="keyword">async</span> <span class="function">onFileCreated</span>(file: <span class="type">TFile</span>) {
+        <span class="comment">// 새 파일에 템플릿 적용</span>
+        <span class="keyword">const</span> template = <span class="string">`---
+created: ${<span class="keyword">new</span> <span class="type">Date</span>().<span class="function">toISOString</span>()}
+tags: []
+---
+
+# ${file.basename}
+`</span>;
+        
+        <span class="keyword">const</span> content = <span class="keyword">await</span> <span class="keyword">this</span>.plugin.app.vault.<span class="function">read</span>(file);
+        <span class="keyword">if</span> (!content) {
+            <span class="keyword">await</span> <span class="keyword">this</span>.plugin.app.vault.<span class="function">modify</span>(file, template);
+        }
+    }
+    
+    <span class="keyword">async</span> <span class="function">onFileModified</span>(file: <span class="type">TFile</span>) {
+        <span class="comment">// 수정 시각 업데이트</span>
+        <span class="keyword">const</span> content = <span class="keyword">await</span> <span class="keyword">this</span>.plugin.app.vault.<span class="function">read</span>(file);
+        <span class="keyword">const</span> updated = content.<span class="function">replace</span>(
+            /modified: .*/,
+            <span class="string">`modified: ${<span class="keyword">new</span> <span class="type">Date</span>().<span class="function">toISOString</span>()}`</span>
+        );
+        
+        <span class="keyword">if</span> (updated !== content) {
+            <span class="keyword">await</span> <span class="keyword">this</span>.plugin.app.vault.<span class="function">modify</span>(file, updated);
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Markdown 프로세서</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 커스텀 코드 블록 렌더러</span>
+<span class="keyword">this</span>.<span class="function">registerMarkdownCodeBlockProcessor</span>(
+    <span class="string">'mermaid'</span>,
+    (source, el, ctx) => {
+        <span class="keyword">const</span> container = el.<span class="function">createDiv</span>({ cls: <span class="string">'mermaid-container'</span> });
+        
+        <span class="comment">// Mermaid 다이어그램 렌더링</span>
+        <span class="keyword">try</span> {
+            mermaid.<span class="function">render</span>(<span class="string">'mermaid-'</span> + Math.<span class="function">random</span>(), source)
+                .<span class="function">then</span>(({ svg }) => {
+                    container.innerHTML = svg;
+                });
+        } <span class="keyword">catch</span> (e) {
+            container.<span class="function">createEl</span>(<span class="string">'pre'</span>, { text: e.message });
+        }
+    }
+);
+
+<span class="comment">// 커스텀 포스트 프로세서</span>
+<span class="keyword">this</span>.<span class="function">registerMarkdownPostProcessor</span>((element, context) => {
+    <span class="comment">// 모든 외부 링크에 아이콘 추가</span>
+    <span class="keyword">const</span> links = element.<span class="function">querySelectorAll</span>(<span class="string">'a'</span>);
+    links.<span class="function">forEach</span>(link => {
+        <span class="keyword">const</span> href = link.<span class="function">getAttribute</span>(<span class="string">'href'</span>);
+        <span class="keyword">if</span> (href && href.<span class="function">startsWith</span>(<span class="string">'http'</span>)) {
+            link.<span class="function">addClass</span>(<span class="string">'external-link'</span>);
+            link.<span class="function">createSpan</span>({ 
+                cls: <span class="string">'external-link-icon'</span>,
+                text: <span class="string">' 🔗'</span>
+            });
+        }
+    });
+});</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>CSS 스타일링</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* styles.css */</span>
+<span class="comment">/* 플러그인 커스텀 스타일 */</span>
+
+<span class="keyword">.my-plugin-container</span> {
+    <span class="property">padding</span>: <span class="number">1rem</span>;
+    <span class="property">background-color</span>: var(--background-secondary);
+    <span class="property">border-radius</span>: <span class="number">8px</span>;
+    <span class="property">margin</span>: <span class="number">1rem</span> <span class="number">0</span>;
+}
+
+<span class="keyword">.my-plugin-button</span> {
+    <span class="property">background-color</span>: var(--interactive-accent);
+    <span class="property">color</span>: var(--text-on-accent);
+    <span class="property">border</span>: none;
+    <span class="property">padding</span>: <span class="number">0.5rem</span> <span class="number">1rem</span>;
+    <span class="property">border-radius</span>: <span class="number">4px</span>;
+    <span class="property">cursor</span>: pointer;
+    <span class="property">transition</span>: all <span class="number">0.2s</span> ease;
+}
+
+<span class="keyword">.my-plugin-button:hover</span> {
+    <span class="property">background-color</span>: var(--interactive-accent-hover);
+    <span class="property">transform</span>: <span class="function">translateY</span>(<span class="number">-2px</span>);
+}
+
+<span class="comment">/* 테마 적응형 스타일 */</span>
+<span class="keyword">.theme-dark</span> <span class="keyword">.my-plugin-highlight</span> {
+    <span class="property">background-color</span>: <span class="function">rgba</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">0</span>, <span class="number">0.2</span>);
+}
+
+<span class="keyword">.theme-light</span> <span class="keyword">.my-plugin-highlight</span> {
+    <span class="property">background-color</span>: <span class="function">rgba</span>(<span class="number">255</span>, <span class="number">255</span>, <span class="number">0</span>, <span class="number">0.4</span>);
+}
+
+<span class="comment">/* 애니메이션 */</span>
+<span class="keyword">@keyframes</span> fadeIn {
+    <span class="keyword">from</span> { <span class="property">opacity</span>: <span class="number">0</span>; <span class="property">transform</span>: <span class="function">translateY</span>(<span class="number">10px</span>); }
+    <span class="keyword">to</span> { <span class="property">opacity</span>: <span class="number">1</span>; <span class="property">transform</span>: <span class="function">translateY</span>(<span class="number">0</span>); }
+}
+
+<span class="keyword">.my-plugin-animated</span> {
+    <span class="property">animation</span>: fadeIn <span class="number">0.3s</span> ease-out;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="debugging">
+            <h2>7. 디버깅과 테스트</h2>
+            
+            <div class="card">
+                <h3>개발 환경 설정</h3>
+                <div class="debug-tools">
+                    <h4>Hot Reload 설정</h4>
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="comment">// package.json</span>
+{
+  <span class="string">"scripts"</span>: {
+    <span class="string">"dev"</span>: <span class="string">"node esbuild.config.mjs"</span>,
+    <span class="string">"build"</span>: <span class="string">"tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"</span>
+  }
+}
+
+<span class="comment">// esbuild.config.mjs</span>
+<span class="keyword">import</span> esbuild <span class="keyword">from</span> <span class="string">'esbuild'</span>;
+<span class="keyword">import</span> process <span class="keyword">from</span> <span class="string">'process'</span>;
+
+<span class="keyword">const</span> banner = <span class="string">`/*
+THIS IS A GENERATED/BUNDLED FILE BY ESBUILD
+*/`</span>;
+
+<span class="keyword">const</span> prod = (process.argv[<span class="number">2</span>] === <span class="string">'production'</span>);
+
+esbuild.<span class="function">build</span>({
+    banner: {
+        js: banner,
+    },
+    entryPoints: [<span class="string">'main.ts'</span>],
+    bundle: <span class="keyword">true</span>,
+    external: [
+        <span class="string">'obsidian'</span>,
+        <span class="string">'electron'</span>,
+        <span class="string">'@codemirror/autocomplete'</span>,
+        <span class="string">'@codemirror/collab'</span>,
+        <span class="string">'@codemirror/commands'</span>,
+        <span class="string">'@codemirror/language'</span>,
+        <span class="string">'@codemirror/lint'</span>,
+        <span class="string">'@codemirror/search'</span>,
+        <span class="string">'@codemirror/state'</span>,
+        <span class="string">'@codemirror/view'</span>,
+        <span class="string">'@lezer/common'</span>,
+        <span class="string">'@lezer/highlight'</span>,
+        <span class="string">'@lezer/lr'</span>
+    ],
+    format: <span class="string">'cjs'</span>,
+    watch: !prod,
+    target: <span class="string">'es2018'</span>,
+    logLevel: <span class="string">'info'</span>,
+    sourcemap: prod ? <span class="keyword">false</span> : <span class="string">'inline'</span>,
+    treeShaking: <span class="keyword">true</span>,
+    outfile: <span class="string">'main.js'</span>,
+}).<span class="function">catch</span>(() => process.<span class="function">exit</span>(<span class="number">1</span>));</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>콘솔 로깅</h3>
+                <div class="console-output">
+                    <div class="console-line">
+                        <span class="console-prefix">[Plugin]</span>
+                        <span class="console-log">Loading My Plugin v1.0.0</span>
+                    </div>
+                    <div class="console-line">
+                        <span class="console-prefix">[Plugin]</span>
+                        <span class="console-log">Settings loaded: {defaultFolder: "Daily Notes", autoSave: true}</span>
+                    </div>
+                    <div class="console-line">
+                        <span class="console-prefix">[Plugin]</span>
+                        <span class="console-warn">Warning: API deprecated - use workspace.getActiveFile() instead</span>
+                    </div>
+                    <div class="console-line">
+                        <span class="console-prefix">[Plugin]</span>
+                        <span class="console-error">Error: File not found: "missing.md"</span>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 디버그 로깅 유틸리티</span>
+<span class="keyword">class</span> <span class="type">Logger</span> {
+    <span class="keyword">private</span> prefix: <span class="type">string</span>;
+    <span class="keyword">private</span> debug: <span class="type">boolean</span>;
+    
+    <span class="keyword">constructor</span>(prefix: <span class="type">string</span>, debug = <span class="keyword">false</span>) {
+        <span class="keyword">this</span>.prefix = prefix;
+        <span class="keyword">this</span>.debug = debug;
+    }
+    
+    <span class="function">log</span>(message: <span class="type">string</span>, ...args: <span class="type">any</span>[]) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.debug) {
+            console.<span class="function">log</span>(<span class="string">`[${<span class="keyword">this</span>.prefix}]`</span>, message, ...args);
+        }
+    }
+    
+    <span class="function">warn</span>(message: <span class="type">string</span>, ...args: <span class="type">any</span>[]) {
+        console.<span class="function">warn</span>(<span class="string">`[${<span class="keyword">this</span>.prefix}]`</span>, message, ...args);
+    }
+    
+    <span class="function">error</span>(message: <span class="type">string</span>, error?: <span class="type">Error</span>) {
+        console.<span class="function">error</span>(<span class="string">`[${<span class="keyword">this</span>.prefix}]`</span>, message, error);
+        <span class="keyword">if</span> (error?.stack) {
+            console.<span class="function">error</span>(error.stack);
+        }
+    }
+    
+    <span class="function">time</span>(label: <span class="type">string</span>) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.debug) {
+            console.<span class="function">time</span>(<span class="string">`[${<span class="keyword">this</span>.prefix}] ${label}`</span>);
+        }
+    }
+    
+    <span class="function">timeEnd</span>(label: <span class="type">string</span>) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.debug) {
+            console.<span class="function">timeEnd</span>(<span class="string">`[${<span class="keyword">this</span>.prefix}] ${label}`</span>);
+        }
+    }
+}
+
+<span class="comment">// 사용 예</span>
+<span class="keyword">const</span> logger = <span class="keyword">new</span> <span class="type">Logger</span>(<span class="string">'MyPlugin'</span>, <span class="keyword">true</span>);
+logger.<span class="function">log</span>(<span class="string">'Plugin initialized'</span>);
+logger.<span class="function">time</span>(<span class="string">'File processing'</span>);
+<span class="comment">// ... 작업 수행</span>
+logger.<span class="function">timeEnd</span>(<span class="string">'File processing'</span>);</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="examples">
+            <h2>8. 실제 플러그인 예제</h2>
+            
+            <div class="card">
+                <h3>플러그인 아이디어</h3>
+                <div class="plugin-examples">
+                    <div class="example-grid">
+                        <div class="example-card">
+                            <div class="example-icon">📅</div>
+                            <div class="example-title">Daily Note Creator</div>
+                            <div class="example-description">
+                                매일 자동으로 일일 노트를 생성하고 템플릿을 적용
+                            </div>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">🏷️</div>
+                            <div class="example-title">Tag Manager</div>
+                            <div class="example-description">
+                                태그를 시각화하고 일괄 관리할 수 있는 도구
+                            </div>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">🔗</div>
+                            <div class="example-title">Link Analyzer</div>
+                            <div class="example-description">
+                                깨진 링크를 찾고 백링크를 분석하는 플러그인
+                            </div>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">📊</div>
+                            <div class="example-title">Word Counter</div>
+                            <div class="example-description">
+                                실시간 단어 수 계산 및 읽기 시간 표시
+                            </div>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">🎨</div>
+                            <div class="example-title">Theme Switcher</div>
+                            <div class="example-description">
+                                시간대별 자동 테마 변경 기능
+                            </div>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">🔍</div>
+                            <div class="example-title">Quick Switcher+</div>
+                            <div class="example-description">
+                                향상된 파일 검색 및 네비게이션
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>완전한 플러그인 예제: Word Counter</h3>
+                <div class="interactive-demo">
+                    <div class="demo-controls">
+                        <button class="demo-button" onclick="countWords()">Count Words</button>
+                        <button class="demo-button" onclick="toggleCounter()">Toggle Counter</button>
+                        <button class="demo-button" onclick="showStats()">Show Stats</button>
+                    </div>
+                    <div class="demo-output" id="demo-output">
+                        플러그인 데모 출력이 여기에 표시됩니다...
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="keyword">import</span> { Plugin, MarkdownView, Notice } <span class="keyword">from</span> <span class="string">'obsidian'</span>;
+
+<span class="keyword">interface</span> <span class="type">WordCountSettings</span> {
+    showInStatusBar: <span class="type">boolean</span>;
+    wordsPerMinute: <span class="type">number</span>;
+    showReadingTime: <span class="type">boolean</span>;
+}
+
+<span class="keyword">export default class</span> <span class="type">WordCountPlugin</span> <span class="keyword">extends</span> <span class="type">Plugin</span> {
+    settings: <span class="type">WordCountSettings</span>;
+    statusBarItem: <span class="type">HTMLElement</span>;
+    
+    <span class="keyword">async</span> <span class="function">onload</span>() {
+        <span class="comment">// 설정 로드</span>
+        <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">loadSettings</span>();
+        
+        <span class="comment">// 상태바 아이템 추가</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.settings.showInStatusBar) {
+            <span class="keyword">this</span>.statusBarItem = <span class="keyword">this</span>.<span class="function">addStatusBarItem</span>();
+        }
+        
+        <span class="comment">// 에디터 변경 이벤트 등록</span>
+        <span class="keyword">this</span>.<span class="function">registerEvent</span>(
+            <span class="keyword">this</span>.app.workspace.<span class="function">on</span>(<span class="string">'editor-change'</span>, () => {
+                <span class="keyword">this</span>.<span class="function">updateWordCount</span>();
+            })
+        );
+        
+        <span class="comment">// 파일 열기 이벤트</span>
+        <span class="keyword">this</span>.<span class="function">registerEvent</span>(
+            <span class="keyword">this</span>.app.workspace.<span class="function">on</span>(<span class="string">'file-open'</span>, () => {
+                <span class="keyword">this</span>.<span class="function">updateWordCount</span>();
+            })
+        );
+        
+        <span class="comment">// 명령어 추가</span>
+        <span class="keyword">this</span>.<span class="function">addCommand</span>({
+            id: <span class="string">'show-word-count'</span>,
+            name: <span class="string">'Show word count'</span>,
+            callback: () => {
+                <span class="keyword">this</span>.<span class="function">showWordCountNotice</span>();
+            }
+        });
+    }
+    
+    <span class="function">updateWordCount</span>() {
+        <span class="keyword">const</span> view = <span class="keyword">this</span>.app.workspace.<span class="function">getActiveViewOfType</span>(<span class="type">MarkdownView</span>);
+        <span class="keyword">if</span> (!view) <span class="keyword">return</span>;
+        
+        <span class="keyword">const</span> editor = view.editor;
+        <span class="keyword">const</span> text = editor.<span class="function">getValue</span>();
+        
+        <span class="keyword">const</span> wordCount = <span class="keyword">this</span>.<span class="function">countWords</span>(text);
+        <span class="keyword">const</span> charCount = text.length;
+        <span class="keyword">const</span> readingTime = Math.<span class="function">ceil</span>(wordCount / <span class="keyword">this</span>.settings.wordsPerMinute);
+        
+        <span class="keyword">if</span> (<span class="keyword">this</span>.statusBarItem) {
+            <span class="keyword">let</span> statusText = <span class="string">`Words: ${wordCount}`</span>;
+            <span class="keyword">if</span> (<span class="keyword">this</span>.settings.showReadingTime) {
+                statusText += <span class="string">` | ${readingTime} min read`</span>;
+            }
+            <span class="keyword">this</span>.statusBarItem.<span class="function">setText</span>(statusText);
+        }
+    }
+    
+    <span class="function">countWords</span>(text: <span class="type">string</span>): <span class="type">number</span> {
+        <span class="comment">// 마크다운 문법 제거</span>
+        text = text.<span class="function">replace</span>(/```[\s\S]*?```/g, <span class="string">''</span>); <span class="comment">// 코드 블록</span>
+        text = text.<span class="function">replace</span>(/`.*?`/g, <span class="string">''</span>); <span class="comment">// 인라인 코드</span>
+        text = text.<span class="function">replace</span>(/\[.*?\]\(.*?\)/g, <span class="string">''</span>); <span class="comment">// 링크</span>
+        text = text.<span class="function">replace</span>(/[#*_~]/g, <span class="string">''</span>); <span class="comment">// 마크다운 기호</span>
+        
+        <span class="comment">// 단어 수 계산</span>
+        <span class="keyword">const</span> words = text.<span class="function">match</span>(/\b\w+\b/g);
+        <span class="keyword">return</span> words ? words.length : <span class="number">0</span>;
+    }
+    
+    <span class="function">showWordCountNotice</span>() {
+        <span class="keyword">const</span> view = <span class="keyword">this</span>.app.workspace.<span class="function">getActiveViewOfType</span>(<span class="type">MarkdownView</span>);
+        <span class="keyword">if</span> (!view) {
+            <span class="keyword">new</span> <span class="type">Notice</span>(<span class="string">'No active document'</span>);
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="keyword">const</span> text = view.editor.<span class="function">getValue</span>();
+        <span class="keyword">const</span> wordCount = <span class="keyword">this</span>.<span class="function">countWords</span>(text);
+        <span class="keyword">const</span> readingTime = Math.<span class="function">ceil</span>(wordCount / <span class="keyword">this</span>.settings.wordsPerMinute);
+        
+        <span class="keyword">new</span> <span class="type">Notice</span>(<span class="string">`
+Words: ${wordCount}
+Characters: ${text.length}
+Reading time: ${readingTime} minutes
+        `</span>);
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>실습 과제</h2>
+            
+            <div class="practice-exercises">
+                <h3>이번 강의의 실습 과제</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🔌 과제 1: Hello World 플러그인</span>
+                            <span class="difficulty-badge difficulty-easy">초급</span>
+                        </div>
+                        <p>기본적인 플러그인을 만들어보세요:</p>
+                        <ul>
+                            <li>개발 환경 설정</li>
+                            <li>리본 아이콘 추가</li>
+                            <li>간단한 명령어 구현</li>
+                            <li>Notice 메시지 표시</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">⚙️ 과제 2: 설정 페이지 구현</span>
+                            <span class="difficulty-badge difficulty-medium">중급</span>
+                        </div>
+                        <p>설정 가능한 플러그인을 만드세요:</p>
+                        <ul>
+                            <li>설정 탭 추가</li>
+                            <li>다양한 설정 옵션 구현</li>
+                            <li>설정 저장 및 로드</li>
+                            <li>설정에 따른 동작 변경</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🚀 과제 3: 실용적인 플러그인</span>
+                            <span class="difficulty-badge difficulty-hard">고급</span>
+                        </div>
+                        <p>실제로 유용한 플러그인을 개발하세요:</p>
+                        <ul>
+                            <li>아이디어 구상 및 설계</li>
+                            <li>핵심 기능 구현</li>
+                            <li>UI/UX 최적화</li>
+                            <li>에러 처리 및 테스트</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>FAQ</h2>
+            
+            <div class="faq-section">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        플러그인 개발에 TypeScript가 꼭 필요한가요?
+                    </div>
+                    <div class="faq-answer">
+                        필수는 아니지만 강력히 권장합니다. TypeScript는 타입 안정성, 자동완성, 더 나은 에러 감지 등의 이점을 제공하여 개발 경험을 크게 향상시킵니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        개발 중인 플러그인을 어떻게 테스트하나요?
+                    </div>
+                    <div class="faq-answer">
+                        Obsidian의 '.obsidian/plugins' 폴더에 플러그인 폴더를 직접 복사하고, 설정에서 '커뮤니티 플러그인' 제한을 해제한 후 플러그인을 활성화하여 테스트할 수 있습니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        플러그인을 커뮤니티에 배포하려면 어떻게 해야 하나요?
+                    </div>
+                    <div class="faq-answer">
+                        GitHub에 리포지토리를 만들고, 필요한 파일들(main.js, manifest.json, styles.css)을 포함한 릴리즈를 생성한 후, Obsidian 플러그인 리포지토리에 PR을 제출하면 됩니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        플러그인이 Obsidian 업데이트 후 작동하지 않아요
+                    </div>
+                    <div class="faq-answer">
+                        Obsidian API는 계속 발전하므로 가끔 호환성 문제가 발생할 수 있습니다. 공식 API 문서를 확인하고, deprecated된 메서드를 새로운 것으로 교체해야 합니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        플러그인 성능을 최적화하는 방법은?
+                    </div>
+                    <div class="faq-answer">
+                        이벤트 리스너를 최소화하고, 무거운 작업은 비동기로 처리하며, 불필요한 DOM 조작을 피하고, 메모리 누수를 방지하기 위해 리소스를 적절히 정리하세요.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>추가 학습 자료</h2>
+            
+            <div class="resources-section">
+                <h3>플러그인 개발 관련 자료</h3>
+                <ul class="resource-list">
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📚 Obsidian API 공식 문서
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🎥 플러그인 개발 튜토리얼 시리즈
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📝 Sample Plugin 소스 코드
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🛠️ 플러그인 개발자 도구 모음
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            💡 커뮤니티 플러그인 베스트 프랙티스
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="next-lesson">
+            <h3>다음 강의 안내</h3>
+            <p>제22강: CSS 커스터마이징 - 나만의 Obsidian 테마 만들기</p>
+            <p>CSS를 활용하여 Obsidian의 외관을 완전히 커스터마이징하는 방법을 배웁니다.</p>
+        </div>
+    </div>
+
+    <script>
+        // FAQ 토글 기능
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 코드 복사 기능
+        function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('pre code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '복사됨!';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    button.textContent = '복사';
+                    button.style.background = 'var(--accent-color)';
+                }, 2000);
+            });
+        }
+
+        // 인터랙티브 데모 기능
+        function countWords() {
+            const output = document.getElementById('demo-output');
+            const sampleText = "This is a sample text with several words to count.";
+            const wordCount = sampleText.split(' ').length;
+            output.textContent = `Sample text: "${sampleText}"\nWord count: ${wordCount} words`;
+        }
+
+        function toggleCounter() {
+            const output = document.getElementById('demo-output');
+            output.textContent = "Word counter toggled! Status bar item would appear/disappear.";
+        }
+
+        function showStats() {
+            const output = document.getElementById('demo-output');
+            output.textContent = `Document Statistics:
+- Words: 1,234
+- Characters: 6,789
+- Reading time: 5 minutes
+- Paragraphs: 12
+- Average words per paragraph: 103`;
+        }
+
+        // 설정 입력 필드 상호작용
+        document.querySelectorAll('.manifest-input').forEach(input => {
+            input.addEventListener('input', () => {
+                input.style.borderColor = 'var(--plugin-color)';
+                setTimeout(() => {
+                    input.style.borderColor = 'var(--border-color)';
+                }, 1000);
+            });
+        });
+
+        // 페이지 로드 애니메이션
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.section').forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // 예제 카드 클릭 이벤트
+        document.querySelectorAll('.example-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.querySelector('.example-title').textContent;
+                const output = document.getElementById('demo-output');
+                output.textContent = `Selected plugin idea: ${title}\nClick "Show Stats" to see a demo implementation.`;
+            });
+        });
+    </script>
+</body>
+</html>

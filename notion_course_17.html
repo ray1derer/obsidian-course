@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제17강: 모바일 활용법 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+            --purple-color: #b48ead;
+            --orange-color: #d08770;
+            --mobile-color: #81a1c1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            left: 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-color) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--mobile-color) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 모바일 디바이스 프레임 */
+        .device-frame {
+            width: 320px;
+            height: 640px;
+            margin: 2rem auto;
+            background: var(--primary-color);
+            border-radius: 36px;
+            padding: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .device-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            border-radius: 26px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .device-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 25px;
+            background: var(--primary-color);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .device-content {
+            padding: 40px 20px 20px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        /* 플랫폼 비교 */
+        .platform-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .platform-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--mobile-color) 0%, var(--accent-color) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .platform-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--mobile-color);
+        }
+
+        .platform-card h3 {
+            color: var(--mobile-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .platform-card .icon {
+            font-size: 2rem;
+        }
+
+        /* 제스처 가이드 */
+        .gesture-guide {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .gesture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gesture-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gesture-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gesture-visual {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: var(--hover-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gesture-visual::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--mobile-color) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple 2s infinite;
+        }
+
+        @keyframes ripple {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+        }
+
+        /* 워크플로우 섹션 */
+        .workflow-section {
+            margin: 4rem 0;
+        }
+
+        .workflow-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .workflow-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--mobile-color);
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .workflow-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .workflow-content {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 0 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .workflow-content:hover {
+            border-color: var(--mobile-color);
+            transform: scale(1.02);
+        }
+
+        .workflow-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--mobile-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--bg-color);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        /* 빠른 캡처 템플릿 */
+        .capture-templates {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .template-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--mobile-color);
+        }
+
+        .template-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .template-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--hover-bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .template-code {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        /* 설정 가이드 */
+        .settings-guide {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .settings-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .setting-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--mobile-color);
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover {
+            transform: translateX(10px);
+            border-left-color: var(--accent-color);
+        }
+
+        .setting-item h4 {
+            color: var(--mobile-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* 플러그인 추천 */
+        .plugin-recommendations {
+            margin: 4rem 0;
+        }
+
+        .plugin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .plugin-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plugin-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--mobile-color) 0%, var(--purple-color) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .plugin-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .plugin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .plugin-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--mobile-color);
+            color: var(--bg-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        /* 실습 섹션 */
+        .practice-section {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .practice-tasks {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-task {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-task::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--warning-color);
+        }
+
+        .practice-task h4 {
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .difficulty {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            background: var(--hover-bg);
+        }
+
+        .difficulty.easy { color: var(--success-color); }
+        .difficulty.medium { color: var(--warning-color); }
+        .difficulty.hard { color: var(--error-color); }
+
+        /* 코드 블록 */
+        .code-block {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--hover-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        /* FAQ 섹션 */
+        .faq-section {
+            margin: 4rem 0;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--mobile-color);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--mobile-color);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 팁 박스들 */
+        .tip-box {
+            background: var(--hover-bg);
+            border-left: 4px solid var(--warning-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .tip-box::before {
+            content: '💡';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .tip-box p {
+            margin-left: 2rem;
+        }
+
+        .warning-box {
+            background: rgba(191, 97, 106, 0.1);
+            border-left: 4px solid var(--error-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .warning-box::before {
+            content: '⚠️';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .warning-box p {
+            margin-left: 2rem;
+        }
+
+        /* 스크린샷 갤러리 */
+        .screenshot-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .screenshot-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .screenshot-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .screenshot-caption {
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--mobile-color);
+        }
+
+        /* 진행 표시기 */
+        .progress-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 2px solid var(--mobile-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .progress-indicator:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .progress-text {
+            font-weight: bold;
+            color: var(--mobile-color);
+            font-size: 0.9rem;
+        }
+
+        /* 뱃지 스타일 */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 0.25rem;
+        }
+
+        .badge.mobile {
+            background: var(--mobile-color);
+            color: var(--bg-color);
+        }
+
+        .badge.essential {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .badge.pro {
+            background: var(--purple-color);
+            color: var(--bg-color);
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .platform-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-step {
+                flex-direction: column !important;
+            }
+
+            .workflow-content {
+                margin: 1rem 0;
+            }
+
+            .device-frame {
+                transform: scale(0.8);
+                margin: 1rem auto;
+            }
+        }
+
+        /* 애니메이션 효과 */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 모바일 UI 시뮬레이션 */
+        .mobile-ui {
+            background: var(--bg-color);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .mobile-navbar {
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .mobile-nav-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-item:hover {
+            color: var(--mobile-color);
+            transform: scale(1.1);
+        }
+
+        .mobile-nav-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .mobile-nav-label {
+            font-size: 0.8rem;
+        }
+
+        /* 스와이프 인디케이터 */
+        .swipe-indicator {
+            position: relative;
+            height: 100px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .swipe-hand {
+            position: absolute;
+            left: 20%;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            animation: swipe 2s infinite;
+        }
+
+        @keyframes swipe {
+            0% { left: 20%; }
+            50% { left: 70%; }
+            100% { left: 20%; }
+        }
+
+        .swipe-trail {
+            position: absolute;
+            top: 50%;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--mobile-color) 50%, transparent 100%);
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p class="subtitle">당신의 생각을 구조화하는 가장 강력한 도구</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_index.html">강좌 홈</a></li>
+            <li><a href="notion_course_16.html">이전 강의</a></li>
+            <li><a href="#" class="active">제17강</a></li>
+            <li><a href="notion_course_18.html">다음 강의</a></li>
+            <li><a href="#practice">실습하기</a></li>
+            <li><a href="#quiz">퀴즈</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제17강: 모바일 활용법</h1>
+            <p class="subtitle">언제 어디서나 아이디어를 캡처하고 노트를 관리하세요</p>
+            <div class="badge mobile">모바일</div>
+            <div class="badge essential">필수</div>
+            <div class="badge pro">프로 팁</div>
+        </div>
+
+        <!-- 모바일 앱 소개 -->
+        <section class="intro-section">
+            <h2>📱 Obsidian 모바일의 힘</h2>
+            <p>Obsidian 모바일 앱은 데스크톱 버전의 강력한 기능을 손안에 담았습니다. 이동 중에도 아이디어를 놓치지 않고, 언제든지 노트에 접근할 수 있습니다.</p>
+            
+            <div class="device-frame">
+                <div class="device-screen">
+                    <div class="device-notch"></div>
+                    <div class="device-content">
+                        <div class="mobile-ui">
+                            <h3 style="color: var(--mobile-color); margin-bottom: 1rem;">📝 빠른 메모</h3>
+                            <p style="font-size: 0.9rem; margin-bottom: 1rem;">오늘의 아이디어: 모바일에서도 강력한 마크다운 편집이 가능합니다!</p>
+                            <div class="mobile-navbar">
+                                <div class="mobile-nav-item">
+                                    <span class="mobile-nav-icon">📁</span>
+                                    <span class="mobile-nav-label">파일</span>
+                                </div>
+                                <div class="mobile-nav-item">
+                                    <span class="mobile-nav-icon">🔍</span>
+                                    <span class="mobile-nav-label">검색</span>
+                                </div>
+                                <div class="mobile-nav-item">
+                                    <span class="mobile-nav-icon">✏️</span>
+                                    <span class="mobile-nav-label">편집</span>
+                                </div>
+                                <div class="mobile-nav-item">
+                                    <span class="mobile-nav-icon">⚙️</span>
+                                    <span class="mobile-nav-label">설정</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 플랫폼별 비교 -->
+        <section class="platform-comparison">
+            <div class="platform-card">
+                <h3><span class="icon">🍎</span> iOS (iPhone/iPad)</h3>
+                <ul>
+                    <li><strong>장점:</strong>
+                        <ul>
+                            <li>원활한 iCloud 동기화</li>
+                            <li>Share Extension 지원</li>
+                            <li>iPad에서 Split View 지원</li>
+                            <li>Apple Pencil 지원 (iPad)</li>
+                        </ul>
+                    </li>
+                    <li><strong>제한사항:</strong>
+                        <ul>
+                            <li>일부 커뮤니티 플러그인 미지원</li>
+                            <li>파일 시스템 접근 제한</li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="tip-box">
+                    <p>💡 iOS 14 이상 권장, iPad에서는 키보드 단축키 완벽 지원</p>
+                </div>
+            </div>
+
+            <div class="platform-card">
+                <h3><span class="icon">🤖</span> Android</h3>
+                <ul>
+                    <li><strong>장점:</strong>
+                        <ul>
+                            <li>로컬 파일 시스템 완전 접근</li>
+                            <li>다양한 동기화 옵션</li>
+                            <li>외부 키보드 완벽 지원</li>
+                            <li>더 많은 플러그인 호환</li>
+                        </ul>
+                    </li>
+                    <li><strong>제한사항:</strong>
+                        <ul>
+                            <li>기기별 성능 차이</li>
+                            <li>Share 기능 제한적</li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="tip-box">
+                    <p>💡 Android 7.0 이상 권장, 충분한 RAM(4GB+) 필요</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 제스처 가이드 -->
+        <section class="gesture-guide">
+            <h2>👆 필수 제스처와 단축키</h2>
+            <div class="gesture-grid">
+                <div class="gesture-item">
+                    <div class="gesture-visual">👆</div>
+                    <h4>탭하여 편집</h4>
+                    <p>노트를 탭하면 편집 모드로 전환</p>
+                </div>
+
+                <div class="gesture-item">
+                    <div class="gesture-visual">👉</div>
+                    <h4>스와이프로 탐색</h4>
+                    <p>좌우 스와이프로 사이드바 열기/닫기</p>
+                </div>
+
+                <div class="gesture-item">
+                    <div class="gesture-visual">🤏</div>
+                    <h4>핀치 줌</h4>
+                    <p>두 손가락으로 텍스트 크기 조절</p>
+                </div>
+
+                <div class="gesture-item">
+                    <div class="gesture-visual">👆👆</div>
+                    <h4>더블 탭</h4>
+                    <p>단어 선택, 트리플 탭으로 단락 선택</p>
+                </div>
+
+                <div class="gesture-item">
+                    <div class="gesture-visual">📱</div>
+                    <h4>길게 누르기</h4>
+                    <p>컨텍스트 메뉴 표시</p>
+                </div>
+
+                <div class="gesture-item">
+                    <div class="gesture-visual">⬇️</div>
+                    <h4>풀다운 새로고침</h4>
+                    <p>동기화 강제 실행</p>
+                </div>
+            </div>
+
+            <div class="swipe-indicator">
+                <div class="swipe-hand">👉</div>
+                <div class="swipe-trail"></div>
+            </div>
+        </section>
+
+        <!-- 모바일 워크플로우 -->
+        <section class="workflow-section">
+            <h2>🔄 효율적인 모바일 워크플로우</h2>
+            <div class="workflow-timeline">
+                <div class="workflow-step">
+                    <div class="workflow-icon">💡</div>
+                    <div class="workflow-content">
+                        <h4>1. 빠른 캡처</h4>
+                        <p>아이디어가 떠오르면 즉시 Daily Note나 Inbox에 기록</p>
+                        <ul>
+                            <li>위젯으로 원탭 접근</li>
+                            <li>음성 입력 활용</li>
+                            <li>Share Extension으로 웹 콘텐츠 저장</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="workflow-icon">📝</div>
+                    <div class="workflow-content">
+                        <h4>2. 이동 중 편집</h4>
+                        <p>대중교통이나 대기 시간을 활용한 노트 정리</p>
+                        <ul>
+                            <li>오프라인 모드 활용</li>
+                            <li>간단한 태그 추가</li>
+                            <li>링크 생성</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="workflow-icon">🔍</div>
+                    <div class="workflow-content">
+                        <h4>3. 빠른 검색</h4>
+                        <p>필요한 정보를 즉시 찾아 참조</p>
+                        <ul>
+                            <li>스타 표시한 노트 우선 접근</li>
+                            <li>최근 노트 활용</li>
+                            <li>태그 기반 필터링</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workflow-step">
+                    <div class="workflow-icon">🔄</div>
+                    <div class="workflow-content">
+                        <h4>4. 동기화</h4>
+                        <p>데스크톱과 완벽한 동기화 유지</p>
+                        <ul>
+                            <li>Wi-Fi 연결 시 자동 동기화</li>
+                            <li>충돌 해결</li>
+                            <li>선택적 동기화로 용량 관리</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 빠른 캡처 템플릿 -->
+        <section class="capture-section">
+            <h2>⚡ 빠른 캡처 템플릿</h2>
+            <div class="capture-templates">
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-icon">💭</div>
+                        <div>
+                            <h3>Quick Thought</h3>
+                            <p>순간적인 아이디어 캡처</p>
+                        </div>
+                    </div>
+                    <div class="template-code">
+---
+created: {{date}} {{time}}
+tags: [quick-thought]
+---
+
+💭 {{title}}
+
+{{body}}
+
+#inbox #mobile
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-icon">📸</div>
+                        <div>
+                            <h3>Photo Note</h3>
+                            <p>사진과 함께 메모</p>
+                        </div>
+                    </div>
+                    <div class="template-code">
+---
+created: {{date}} {{time}}
+type: photo-note
+location: {{location}}
+---
+
+## 📸 {{title}}
+
+![[photo.jpg]]
+
+### 메모
+{{cursor}}
+
+### 컨텍스트
+- 장소: 
+- 상황: 
+- 관련:
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-icon">🎙️</div>
+                        <div>
+                            <h3>Voice Memo</h3>
+                            <p>음성 메모 전사</p>
+                        </div>
+                    </div>
+                    <div class="template-code">
+---
+created: {{date}} {{time}}
+type: voice-memo
+duration: {{duration}}
+---
+
+## 🎙️ 음성 메모
+
+### 전사
+{{transcription}}
+
+### 핵심 포인트
+- 
+
+### 후속 조치
+- [ ] 
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <div class="template-header">
+                        <div class="template-icon">🔗</div>
+                        <div>
+                            <h3>Web Clip</h3>
+                            <p>웹 콘텐츠 저장</p>
+                        </div>
+                    </div>
+                    <div class="template-code">
+---
+created: {{date}} {{time}}
+source: {{url}}
+author: {{author}}
+tags: [web-clip]
+---
+
+# {{title}}
+
+> {{selection}}
+
+## 내 생각
+{{cursor}}
+
+## 원문
+[{{title}}]({{url}})
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 모바일 설정 최적화 -->
+        <section class="settings-guide">
+            <h2>⚙️ 모바일 최적화 설정</h2>
+            <div class="settings-list">
+                <div class="setting-item">
+                    <h4>1. 인터페이스 설정</h4>
+                    <ul>
+                        <li><strong>폰트 크기:</strong> 가독성을 위해 16px 이상 권장</li>
+                        <li><strong>줄 간격:</strong> 1.5 이상으로 설정</li>
+                        <li><strong>사이드바:</strong> 스와이프로 열기 활성화</li>
+                        <li><strong>도구 모음:</strong> 자주 사용하는 기능만 표시</li>
+                    </ul>
+                </div>
+
+                <div class="setting-item">
+                    <h4>2. 편집기 설정</h4>
+                    <ul>
+                        <li><strong>자동 저장:</strong> 1-2초로 설정</li>
+                        <li><strong>맞춤법 검사:</strong> 시스템 설정 활용</li>
+                        <li><strong>스마트 구두점:</strong> 비활성화 (마크다운 충돌 방지)</li>
+                        <li><strong>Vim 모드:</strong> 모바일에서는 비추천</li>
+                    </ul>
+                </div>
+
+                <div class="setting-item">
+                    <h4>3. 동기화 설정</h4>
+                    <ul>
+                        <li><strong>자동 동기화:</strong> Wi-Fi에서만 활성화</li>
+                        <li><strong>첨부파일:</strong> 크기 제한 설정 (5MB)</li>
+                        <li><strong>선택적 동기화:</strong> 자주 사용하는 폴더만</li>
+                        <li><strong>오프라인 사용:</strong> 중요 노트 다운로드</li>
+                    </ul>
+                </div>
+
+                <div class="setting-item">
+                    <h4>4. 성능 최적화</h4>
+                    <ul>
+                        <li><strong>플러그인:</strong> 필수 플러그인만 활성화</li>
+                        <li><strong>테마:</strong> 가벼운 테마 사용</li>
+                        <li><strong>미리보기:</strong> 이미지 크기 제한</li>
+                        <li><strong>캐시:</strong> 정기적으로 정리</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 모바일 플러그인 추천 -->
+        <section class="plugin-recommendations">
+            <h2>🔌 모바일 친화적 플러그인</h2>
+            <div class="plugin-grid">
+                <div class="plugin-card">
+                    <div class="plugin-badge">필수</div>
+                    <h3>📱 Mobile Toolbar</h3>
+                    <p>모바일에 최적화된 도구 모음을 제공합니다.</p>
+                    <ul>
+                        <li>커스터마이징 가능한 버튼</li>
+                        <li>제스처 단축키</li>
+                        <li>빠른 포맷팅</li>
+                    </ul>
+                </div>
+
+                <div class="plugin-card">
+                    <div class="plugin-badge">추천</div>
+                    <h3>🎤 Audio Recorder</h3>
+                    <p>음성 메모를 직접 녹음하고 노트에 삽입합니다.</p>
+                    <ul>
+                        <li>원터치 녹음</li>
+                        <li>자동 전사 (추가 설정 필요)</li>
+                        <li>녹음 파일 관리</li>
+                    </ul>
+                </div>
+
+                <div class="plugin-card">
+                    <div class="plugin-badge">유용</div>
+                    <h3>📍 Map View</h3>
+                    <p>위치 기반 노트를 지도에 표시합니다.</p>
+                    <ul>
+                        <li>GPS 태깅</li>
+                        <li>위치별 노트 필터링</li>
+                        <li>여행 일지 작성</li>
+                    </ul>
+                </div>
+
+                <div class="plugin-card">
+                    <div class="plugin-badge">생산성</div>
+                    <h3>⚡ Quick Switcher++</h3>
+                    <p>향상된 파일 전환 기능을 제공합니다.</p>
+                    <ul>
+                        <li>퍼지 검색</li>
+                        <li>최근 파일 우선</li>
+                        <li>헤딩 검색</li>
+                    </ul>
+                </div>
+
+                <div class="plugin-card">
+                    <div class="plugin-badge">편의</div>
+                    <h3>🔖 Starred</h3>
+                    <p>자주 사용하는 노트에 빠르게 접근합니다.</p>
+                    <ul>
+                        <li>즐겨찾기 관리</li>
+                        <li>폴더 단위 스타</li>
+                        <li>검색 쿼리 저장</li>
+                    </ul>
+                </div>
+
+                <div class="plugin-card">
+                    <div class="plugin-badge">보안</div>
+                    <h3>🔐 Obsidian Lock</h3>
+                    <p>앱 잠금으로 프라이버시를 보호합니다.</p>
+                    <ul>
+                        <li>PIN/생체 인증</li>
+                        <li>자동 잠금</li>
+                        <li>개별 노트 암호화</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 모바일 전용 워크플로우 -->
+        <section class="mobile-workflows">
+            <h2>📲 모바일 전용 워크플로우</h2>
+            
+            <div class="workflow-content">
+                <h3>1. 일일 리뷰 워크플로우</h3>
+                <div class="code-block" data-language="Workflow">
+                    <code>아침 루틴 (5분)
+├── Daily Note 생성
+├── 어제 완료 작업 체크
+├── 오늘의 우선순위 설정
+└── 캘린더 이벤트 확인
+
+점심 체크인 (2분)
+├── 오전 진행상황 업데이트
+├── 오후 계획 조정
+└── 빠른 메모 정리
+
+저녁 마무리 (5분)
+├── 완료 작업 표시
+├── 내일 준비사항 메모
+├── 감사 일기 작성
+└── 동기화 확인</code>
+                </div>
+            </div>
+
+            <div class="workflow-content">
+                <h3>2. 독서 노트 워크플로우</h3>
+                <ul>
+                    <li>📖 읽으면서: 하이라이트와 짧은 메모</li>
+                    <li>📝 쉬는 시간: 핵심 아이디어 정리</li>
+                    <li>💭 나중에: 데스크톱에서 상세 분석</li>
+                    <li>🔗 연결: 관련 노트와 링크 생성</li>
+                </ul>
+            </div>
+
+            <div class="workflow-content">
+                <h3>3. 회의 노트 워크플로우</h3>
+                <ol>
+                    <li><strong>회의 전:</strong> 템플릿으로 구조 준비</li>
+                    <li><strong>회의 중:</strong> 
+                        <ul>
+                            <li>음성 녹음 (허가 필요)</li>
+                            <li>핵심 포인트만 입력</li>
+                            <li>액션 아이템 체크박스</li>
+                        </ul>
+                    </li>
+                    <li><strong>회의 후:</strong> 정리 및 팔로업 작성</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 실습 과제 -->
+        <section id="practice" class="practice-section">
+            <h2>🎯 실습 과제</h2>
+            <p>모바일에서 Obsidian을 효과적으로 활용하는 방법을 실습해보세요.</p>
+            
+            <div class="practice-tasks">
+                <div class="practice-task">
+                    <h4>과제 1: 모바일 환경 설정 <span class="difficulty easy">초급</span></h4>
+                    <p>모바일 사용에 최적화된 환경을 구성하세요.</p>
+                    <ul>
+                        <li>모바일 앱 설치 및 볼트 연결</li>
+                        <li>인터페이스 설정 최적화</li>
+                        <li>필수 플러그인 설치 및 설정</li>
+                        <li>동기화 방법 선택 및 구성</li>
+                        <li>위젯/바로가기 설정</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 2: 빠른 캡처 시스템 구축 <span class="difficulty medium">중급</span></h4>
+                    <p>아이디어를 놓치지 않는 캡처 시스템을 만드세요.</p>
+                    <ul>
+                        <li>Quick Capture 템플릿 생성</li>
+                        <li>Share Extension 설정 (iOS)</li>
+                        <li>음성 메모 워크플로우 구축</li>
+                        <li>사진 노트 자동화</li>
+                        <li>Inbox 처리 루틴 확립</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 3: 모바일 전용 대시보드 <span class="difficulty hard">고급</span></h4>
+                    <p>모바일에서 쉽게 접근할 수 있는 대시보드를 만드세요.</p>
+                    <ul>
+                        <li>모바일 친화적 레이아웃 설계</li>
+                        <li>터치 친화적 버튼과 링크</li>
+                        <li>자주 사용하는 기능 바로가기</li>
+                        <li>오늘의 포커스 섹션</li>
+                        <li>빠른 상태 업데이트 시스템</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>보너스 과제: 완전한 모바일 워크플로우 <span class="difficulty hard">고급</span></h4>
+                    <p>데스크톱 없이도 완전한 작업이 가능한 시스템을 구축하세요.</p>
+                    <ul>
+                        <li>모바일 전용 볼트 구조 설계</li>
+                        <li>효율적인 태그 시스템</li>
+                        <li>모바일 친화적 템플릿 라이브러리</li>
+                        <li>자동화된 일일/주간 리뷰</li>
+                        <li>오프라인 작업 전략</li>
+                        <li>백업 및 복구 계획</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 스크린샷 갤러리 -->
+        <section class="screenshot-section">
+            <h2>📸 모바일 UI 살펴보기</h2>
+            <div class="screenshot-gallery">
+                <div class="screenshot-item">
+                    <img src="mobile-home.jpg" alt="홈 화면">
+                    <div class="screenshot-caption">홈 화면</div>
+                </div>
+                <div class="screenshot-item">
+                    <img src="mobile-editor.jpg" alt="편집기">
+                    <div class="screenshot-caption">편집기 뷰</div>
+                </div>
+                <div class="screenshot-item">
+                    <img src="mobile-graph.jpg" alt="그래프 뷰">
+                    <div class="screenshot-caption">그래프 뷰</div>
+                </div>
+                <div class="screenshot-item">
+                    <img src="mobile-search.jpg" alt="검색">
+                    <div class="screenshot-caption">검색 기능</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section">
+            <h2>❓ 자주 묻는 질문</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    모바일에서 플러그인이 작동하지 않아요
+                </div>
+                <div class="faq-answer">
+                    <p>모바일 플러그인 문제 해결 방법:</p>
+                    <ul>
+                        <li>모든 플러그인이 모바일을 지원하는 것은 아닙니다</li>
+                        <li>플러그인 설명에서 모바일 지원 여부 확인</li>
+                        <li>설정 → 커뮤니티 플러그인 → 해당 플러그인 재시작</li>
+                        <li>앱을 완전히 종료 후 재시작</li>
+                        <li>플러그인 최신 버전 업데이트</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    동기화가 느리거나 실패해요
+                </div>
+                <div class="faq-answer">
+                    <p>동기화 문제 해결 방법:</p>
+                    <ul>
+                        <li><strong>네트워크 확인:</strong> Wi-Fi 연결 상태 확인</li>
+                        <li><strong>용량 확인:</strong> 기기 저장 공간 확보</li>
+                        <li><strong>큰 파일:</strong> 대용량 첨부파일 제외</li>
+                        <li><strong>동기화 재설정:</strong> 설정에서 동기화 연결 해제 후 재연결</li>
+                        <li><strong>선택적 동기화:</strong> 필요한 폴더만 동기화</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    모바일에서 타이핑이 불편해요
+                </div>
+                <div class="faq-answer">
+                    <p>모바일 타이핑 개선 방법:</p>
+                    <ul>
+                        <li><strong>외부 키보드:</strong> 블루투스 키보드 연결</li>
+                        <li><strong>음성 입력:</strong> 시스템 음성 입력 활용</li>
+                        <li><strong>텍스트 확장:</strong> 자주 사용하는 구문 단축키 설정</li>
+                        <li><strong>스와이프 키보드:</strong> Gboard, SwiftKey 등 활용</li>
+                        <li><strong>템플릿:</strong> 미리 만든 구조 활용</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    배터리 소모가 심해요
+                </div>
+                <div class="faq-answer">
+                    <p>배터리 절약 방법:</p>
+                    <ul>
+                        <li>실시간 동기화 대신 수동 동기화 사용</li>
+                        <li>불필요한 플러그인 비활성화</li>
+                        <li>어두운 테마 사용</li>
+                        <li>백그라운드 새로고침 제한</li>
+                        <li>오프라인 모드 활용</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    파일을 찾기 어려워요
+                </div>
+                <div class="faq-answer">
+                    <p>모바일에서 효율적인 파일 관리:</p>
+                    <ul>
+                        <li><strong>즐겨찾기:</strong> 자주 사용하는 노트 스타 표시</li>
+                        <li><strong>최근 파일:</strong> 최근 파일 목록 활용</li>
+                        <li><strong>태그:</strong> 모바일 친화적 태그 체계</li>
+                        <li><strong>폴더 구조:</strong> 단순하고 직관적인 구조</li>
+                        <li><strong>검색:</strong> 강력한 검색 기능 활용</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 추가 리소스 -->
+        <section class="resources-section">
+            <h2>📚 추가 학습 리소스</h2>
+            <div class="platform-comparison">
+                <div class="platform-card">
+                    <h3>📖 공식 문서</h3>
+                    <ul>
+                        <li>Obsidian Mobile 공식 가이드</li>
+                        <li>iOS/Android 별 설정 가이드</li>
+                        <li>모바일 플러그인 호환성 목록</li>
+                        <li>트러블슈팅 가이드</li>
+                    </ul>
+                </div>
+                <div class="platform-card">
+                    <h3>🎥 추천 영상</h3>
+                    <ul>
+                        <li>"모바일 Obsidian 완벽 활용법"</li>
+                        <li>"아이폰/아이패드 워크플로우"</li>
+                        <li>"안드로이드 최적화 가이드"</li>
+                        <li>"모바일 생산성 팁 10가지"</li>
+                    </ul>
+                </div>
+                <div class="platform-card">
+                    <h3>🛠️ 추천 액세서리</h3>
+                    <ul>
+                        <li>블루투스 키보드 (접이식)</li>
+                        <li>스타일러스 펜</li>
+                        <li>태블릿 스탠드</li>
+                        <li>외장 배터리</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 다음 강의 예고 -->
+        <section class="next-preview">
+            <h2>🔮 다음 강의 예고</h2>
+            <div class="feature-showcase">
+                <h3>제18강: 팀 협업과 공유</h3>
+                <div class="feature-content">
+                    <p>다음 강의에서는 Obsidian을 활용한 팀 협업 방법을 배웁니다:</p>
+                    <ul>
+                        <li>공유 볼트 설정과 관리</li>
+                        <li>권한 관리와 보안</li>
+                        <li>협업 워크플로우 설계</li>
+                        <li>충돌 해결과 버전 관리</li>
+                        <li>팀 템플릿과 가이드라인</li>
+                        <li>커뮤니케이션 통합</li>
+                    </ul>
+                    <p>개인 도구를 넘어 팀의 집단 지성을 구축하는 방법을 알아봅니다!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 진행률 표시 -->
+    <div class="progress-indicator" onclick="scrollToTop()">
+        <span class="progress-text">17/30</span>
+    </div>
+
+    <script>
+        // FAQ 토글
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 맨 위로 스크롤
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 스크롤 진행률
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrolled / total) * 100;
+            
+            const progressIndicator = document.querySelector('.progress-indicator');
+            if (progress > 10) {
+                progressIndicator.style.opacity = '1';
+            } else {
+                progressIndicator.style.opacity = '0.5';
+            }
+        });
+
+        // 애니메이션 효과
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.platform-card, .practice-task, .template-card, .plugin-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 제스처 아이템 호버 효과
+        document.querySelectorAll('.gesture-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                const visual = this.querySelector('.gesture-visual');
+                visual.style.animation = 'ripple 1s infinite';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                const visual = this.querySelector('.gesture-visual');
+                visual.style.animation = '';
+            });
+        });
+
+        // 모바일 네비게이션 시뮬레이션
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.mobile-nav-item').forEach(i => {
+                    i.style.color = '';
+                });
+                this.style.color = 'var(--mobile-color)';
+            });
+        });
+
+        // 디바이스 프레임 애니메이션
+        const deviceFrame = document.querySelector('.device-frame');
+        if (deviceFrame) {
+            window.addEventListener('scroll', () => {
+                const rect = deviceFrame.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                
+                if (isVisible) {
+                    const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
+                    const rotation = Math.min(scrollPercent * 10, 10);
+                    deviceFrame.style.transform = `perspective(1000px) rotateY(${rotation}deg)`;
+                }
+            });
+        }
+
+        // 스크린샷 갤러리 클릭
+        document.querySelectorAll('.screenshot-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // 실제 구현에서는 라이트박스나 모달로 확대 표시
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
+            });
+        });
+
+        // 템플릿 복사
+        document.querySelectorAll('.template-code').forEach(code => {
+            code.addEventListener('click', function() {
+                const text = this.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const card = this.closest('.template-card');
+                    const originalBg = card.style.background;
+                    card.style.background = 'var(--success-color)';
+                    setTimeout(() => {
+                        card.style.background = originalBg;
+                    }, 300);
+                });
+            });
+        });
+
+        // 워크플로우 스텝 애니메이션
+        const workflowObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateX(0)';
+                    }, index * 200);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.workflow-step').forEach(step => {
+            step.style.opacity = '0';
+            step.style.transform = 'translateX(-50px)';
+            step.style.transition = 'all 0.5s ease';
+            workflowObserver.observe(step);
+        });
+
+        // 터치 제스처 시뮬레이션 (데스크톱용)
+        let touchSimulation = false;
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 't' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                touchSimulation = !touchSimulation;
+                document.body.style.cursor = touchSimulation ? 'pointer' : 'default';
+                console.log(`Touch simulation: ${touchSimulation ? 'ON' : 'OFF'}`);
+            }
+        });
+    </script>
+</body>
+</html>

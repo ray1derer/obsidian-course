@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제11강: 고급 마크다운과 LaTeX | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-superscript"></i> 제11강: 고급 마크다운과 LaTeX</h1>
+                <p class="lesson-subtitle">수식, 다이어그램, 고급 포맷팅 마스터하기</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 중급</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 45분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: 고급 문법</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson10.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제11강: 고급 마크다운과 LaTeX</span>
+            <a href="lesson12.html" class="nav-link next">
+                다음 강의 <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>LaTeX를 사용한 수학 공식 작성법 익히기</li>
+                    <li>Mermaid를 활용한 다이어그램 생성하기</li>
+                    <li>고급 마크다운 테이블과 포맷팅 마스터하기</li>
+                    <li>코드 블록과 신택스 하이라이팅 활용하기</li>
+                    <li>Callout과 Admonition으로 시각적 강조하기</li>
+                </ul>
+            </section>
+
+            <section class="latex-basics">
+                <h2><i class="fas fa-square-root-alt"></i> LaTeX 수식 작성</h2>
+                
+                <h3>인라인 수식과 블록 수식</h3>
+                
+                <div class="latex-comparison">
+                    <div class="latex-type">
+                        <h4>인라인 수식</h4>
+                        <div class="code-example">
+                            <pre><code>아인슈타인의 공식 $E = mc^2$는 에너지와 질량의 관계를 나타냅니다.</code></pre>
+                        </div>
+                        <div class="render-preview">
+                            아인슈타인의 공식 <span class="math">E = mc²</span>는 에너지와 질량의 관계를 나타냅니다.
+                        </div>
+                    </div>
+                    <div class="latex-type">
+                        <h4>블록 수식</h4>
+                        <div class="code-example">
+                            <pre><code>$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$</code></pre>
+                        </div>
+                        <div class="render-preview math-block">
+                            ∫<sub>-∞</sub><sup>∞</sup> e<sup>-x²</sup> dx = √π
+                        </div>
+                    </div>
+                </div>
+
+                <h3>기본 수식 문법</h3>
+                
+                <div class="latex-syntax-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>기능</th>
+                                <th>LaTeX 코드</th>
+                                <th>결과</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>위첨자</td>
+                                <td><code>x^2</code></td>
+                                <td>x²</td>
+                            </tr>
+                            <tr>
+                                <td>아래첨자</td>
+                                <td><code>x_i</code></td>
+                                <td>x<sub>i</sub></td>
+                            </tr>
+                            <tr>
+                                <td>분수</td>
+                                <td><code>\frac{a}{b}</code></td>
+                                <td>a/b</td>
+                            </tr>
+                            <tr>
+                                <td>제곱근</td>
+                                <td><code>\sqrt{x}</code></td>
+                                <td>√x</td>
+                            </tr>
+                            <tr>
+                                <td>그리스 문자</td>
+                                <td><code>\alpha, \beta, \gamma</code></td>
+                                <td>α, β, γ</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>복잡한 수식 예제</h3>
+                
+                <div class="complex-latex">
+                    <div class="latex-example">
+                        <h4>이차 방정식의 해</h4>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-language">LaTeX</span>
+                                <button class="copy-button">복사</button>
+                            </div>
+                            <pre><code>$$
+x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="latex-example">
+                        <h4>행렬</h4>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-language">LaTeX</span>
+                                <button class="copy-button">복사</button>
+                            </div>
+                            <pre><code>$$
+\begin{bmatrix}
+a_{11} & a_{12} & a_{13} \\
+a_{21} & a_{22} & a_{23} \\
+a_{31} & a_{32} & a_{33}
+\end{bmatrix}
+$$</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="latex-example">
+                        <h4>적분과 미분</h4>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-language">LaTeX</span>
+                                <button class="copy-button">복사</button>
+                            </div>
+                            <pre><code>$$
+\frac{\partial f}{\partial x} = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}
+$$
+
+$$
+\int_a^b f(x)dx = F(b) - F(a)
+$$</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="latex-example">
+                        <h4>수열과 급수</h4>
+                        <div class="code-example">
+                            <div class="code-header">
+                                <span class="code-language">LaTeX</span>
+                                <button class="copy-button">복사</button>
+                            </div>
+                            <pre><code>$$
+\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}
+$$
+
+$$
+\lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n = e
+$$</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mermaid-diagrams">
+                <h2><i class="fas fa-project-diagram"></i> Mermaid 다이어그램</h2>
+                
+                <h3>플로우차트</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Mermaid</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>```mermaid
+flowchart TD
+    A[시작] --> B{조건 확인}
+    B -->|예| C[작업 실행]
+    B -->|아니오| D[대안 작업]
+    C --> E[결과 처리]
+    D --> E
+    E --> F[종료]
+```</code></pre>
+                </div>
+
+                <h3>시퀀스 다이어그램</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Mermaid</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>```mermaid
+sequenceDiagram
+    participant 사용자
+    participant 서버
+    participant 데이터베이스
+    
+    사용자->>서버: 로그인 요청
+    서버->>데이터베이스: 사용자 정보 조회
+    데이터베이스-->>서버: 사용자 정보 반환
+    서버-->>사용자: 로그인 성공/실패
+```</code></pre>
+                </div>
+
+                <h3>간트 차트</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Mermaid</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>```mermaid
+gantt
+    title 프로젝트 일정
+    dateFormat  YYYY-MM-DD
+    section 기획
+    요구사항 분석    :a1, 2024-01-01, 7d
+    설계             :after a1, 5d
+    section 개발
+    백엔드 개발      :2024-01-10, 14d
+    프론트엔드 개발  :2024-01-15, 10d
+    section 테스트
+    통합 테스트      :2024-01-25, 5d
+```</code></pre>
+                </div>
+
+                <h3>파이 차트</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Mermaid</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>```mermaid
+pie title 시간 분배
+    "코딩" : 40
+    "회의" : 20
+    "문서 작성" : 15
+    "학습" : 15
+    "기타" : 10
+```</code></pre>
+                </div>
+            </section>
+
+            <section class="advanced-tables">
+                <h2><i class="fas fa-table"></i> 고급 테이블</h2>
+                
+                <h3>정렬이 있는 테이블</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Markdown</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>| 왼쪽 정렬 | 가운데 정렬 | 오른쪽 정렬 |
+|:----------|:-----------:|------------:|
+| 내용 1    | 내용 2      | 내용 3      |
+| 긴 내용이 들어가도 | 정렬이 유지됩니다 | 123,456 |</code></pre>
+                </div>
+
+                <h3>복잡한 테이블 (HTML 사용)</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">HTML</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code><table>
+  <thead>
+    <tr>
+      <th rowspan="2">항목</th>
+      <th colspan="3">2024년 분기별 실적</th>
+    </tr>
+    <tr>
+      <th>1분기</th>
+      <th>2분기</th>
+      <th>3분기</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>매출</td>
+      <td>1,000</td>
+      <td>1,200</td>
+      <td>1,500</td>
+    </tr>
+    <tr>
+      <td>이익</td>
+      <td>200</td>
+      <td>250</td>
+      <td>300</td>
+    </tr>
+  </tbody>
+</table></code></pre>
+                </div>
+            </section>
+
+            <section class="code-blocks">
+                <h2><i class="fas fa-code"></i> 고급 코드 블록</h2>
+                
+                <h3>라인 넘버와 하이라이팅</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">JavaScript</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code class="language-javascript line-numbers">```javascript {1,3-5}
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+console.log(fibonacci(10)); // 55
+```</code></pre>
+                </div>
+
+                <h3>다양한 언어 지원</h3>
+                
+                <div class="language-examples">
+                    <div class="lang-example">
+                        <h4>Python</h4>
+                        <div class="code-example">
+                            <pre><code class="language-python">def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quicksort(left) + middle + quicksort(right)</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="lang-example">
+                        <h4>SQL</h4>
+                        <div class="code-example">
+                            <pre><code class="language-sql">SELECT 
+    u.name,
+    COUNT(o.id) as order_count,
+    SUM(o.total) as total_spent
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+GROUP BY u.id
+HAVING COUNT(o.id) > 5
+ORDER BY total_spent DESC;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="callouts">
+                <h2><i class="fas fa-exclamation-circle"></i> Callouts와 Admonitions</h2>
+                
+                <h3>기본 Callout 문법</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Markdown</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>> [!note]
+> 이것은 기본 노트 callout입니다.
+
+> [!tip] 유용한 팁
+> 제목을 추가할 수도 있습니다.
+
+> [!warning]- 접을 수 있는 경고
+> 마이너스(-)를 추가하면 기본적으로 접혀있습니다.
+
+> [!danger]+ 항상 열려있는 위험
+> 플러스(+)를 추가하면 항상 열려있습니다.</code></pre>
+                </div>
+
+                <h3>Callout 종류</h3>
+                
+                <div class="callout-gallery">
+                    <div class="callout-demo note">
+                        <strong>[!note]</strong> 일반 정보
+                    </div>
+                    <div class="callout-demo abstract">
+                        <strong>[!abstract]</strong> 요약, 개요
+                    </div>
+                    <div class="callout-demo info">
+                        <strong>[!info]</strong> 정보
+                    </div>
+                    <div class="callout-demo tip">
+                        <strong>[!tip]</strong> 팁, 힌트
+                    </div>
+                    <div class="callout-demo success">
+                        <strong>[!success]</strong> 성공, 완료
+                    </div>
+                    <div class="callout-demo question">
+                        <strong>[!question]</strong> 질문, FAQ
+                    </div>
+                    <div class="callout-demo warning">
+                        <strong>[!warning]</strong> 경고, 주의
+                    </div>
+                    <div class="callout-demo failure">
+                        <strong>[!failure]</strong> 실패, 오류
+                    </div>
+                    <div class="callout-demo danger">
+                        <strong>[!danger]</strong> 위험
+                    </div>
+                    <div class="callout-demo bug">
+                        <strong>[!bug]</strong> 버그
+                    </div>
+                    <div class="callout-demo example">
+                        <strong>[!example]</strong> 예시
+                    </div>
+                    <div class="callout-demo quote">
+                        <strong>[!quote]</strong> 인용
+                    </div>
+                </div>
+
+                <h3>중첩 Callout</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Markdown</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>> [!example] 중첩 예제
+> 이것은 외부 callout입니다.
+> 
+> > [!note]
+> > 이것은 내부 callout입니다.
+> > 
+> > > [!tip]
+> > > 더 깊은 중첩도 가능합니다.</code></pre>
+                </div>
+            </section>
+
+            <section class="advanced-formatting">
+                <h2><i class="fas fa-paint-brush"></i> 고급 포맷팅 기법</h2>
+                
+                <h3>텍스트 장식</h3>
+                
+                <div class="formatting-examples">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>효과</th>
+                                <th>마크다운</th>
+                                <th>결과</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>하이라이트</td>
+                                <td><code>==중요한 텍스트==</code></td>
+                                <td><mark>중요한 텍스트</mark></td>
+                            </tr>
+                            <tr>
+                                <td>취소선</td>
+                                <td><code>~~취소된 내용~~</code></td>
+                                <td><del>취소된 내용</del></td>
+                            </tr>
+                            <tr>
+                                <td>위첨자</td>
+                                <td><code>x^2^</code></td>
+                                <td>x<sup>2</sup></td>
+                            </tr>
+                            <tr>
+                                <td>아래첨자</td>
+                                <td><code>H~2~O</code></td>
+                                <td>H<sub>2</sub>O</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>HTML 임베드</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">HTML</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code><details>
+  <summary>클릭하여 펼치기</summary>
+  
+  숨겨진 내용이 여기에 표시됩니다.
+  - 목록 항목 1
+  - 목록 항목 2
+</details>
+
+<kbd>Ctrl</kbd> + <kbd>C</kbd>
+
+<progress value="70" max="100">70%</progress></code></pre>
+                </div>
+            </section>
+
+            <section class="practice-exercise">
+                <h2><i class="fas fa-dumbbell"></i> 실습 과제</h2>
+                
+                <div class="exercise-container">
+                    <h3>기본 실습</h3>
+                    <div class="checklist">
+                        <label><input type="checkbox"> 간단한 수학 공식을 LaTeX로 작성하기</label>
+                        <label><input type="checkbox"> 플로우차트 다이어그램 만들기</label>
+                        <label><input type="checkbox"> 정렬이 있는 테이블 생성하기</label>
+                        <label><input type="checkbox"> 다양한 callout 타입 사용해보기</label>
+                        <label><input type="checkbox"> 코드 블록에 언어별 하이라이팅 적용하기</label>
+                        <label><input type="checkbox"> HTML 태그로 고급 포맷팅하기</label>
+                    </div>
+
+                    <h3>심화 과제</h3>
+                    <div class="challenge-box">
+                        <h4><i class="fas fa-trophy"></i> 기술 문서 작성</h4>
+                        <p>다음 요소를 모두 포함한 기술 문서를 작성하세요:</p>
+                        <ol>
+                            <li>복잡한 수학 공식 (행렬, 적분 등)</li>
+                            <li>시스템 아키텍처 다이어그램</li>
+                            <li>성능 비교 테이블</li>
+                            <li>다양한 언어의 코드 예제</li>
+                            <li>중요도별 callout 사용</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tips-tricks">
+                <h2><i class="fas fa-magic"></i> 팁과 트릭</h2>
+                
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h3><i class="fas fa-keyboard"></i> 단축키</h3>
+                        <ul>
+                            <li>인라인 코드: <kbd>`</kbd> 백틱</li>
+                            <li>코드 블록: <kbd>```</kbd> 세 개의 백틱</li>
+                            <li>수식 모드: <kbd>$</kbd> 또는 <kbd>$$</kbd></li>
+                        </ul>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-lightbulb"></i> LaTeX 팁</h3>
+                        <ul>
+                            <li>자주 쓰는 수식은 템플릿으로 저장</li>
+                            <li>복잡한 수식은 여러 줄로 나누기</li>
+                            <li>align 환경으로 정렬하기</li>
+                        </ul>
+                    </div>
+                    <div class="tip-card">
+                        <h3><i class="fas fa-chart-line"></i> 다이어그램 팁</h3>
+                        <ul>
+                            <li>간단한 구조부터 시작</li>
+                            <li>Mermaid Live Editor 활용</li>
+                            <li>테마와 스타일 커스터마이징</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-book-reader"></i> 핵심 정리</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <i class="fas fa-square-root-alt"></i>
+                        <h3>수식 작성</h3>
+                        <p>LaTeX로 복잡한 수학 공식도 아름답게</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-project-diagram"></i>
+                        <h3>시각화</h3>
+                        <p>Mermaid로 다이어그램을 코드처럼</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-palette"></i>
+                        <h3>포맷팅</h3>
+                        <p>다양한 시각적 요소로 가독성 향상</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="navigation-guide">
+                <h2><i class="fas fa-compass"></i> 다음 단계</h2>
+                <p>고급 마크다운과 LaTeX를 마스터했다면, 다음 강의에서는 Canvas 기능을 활용한 시각적 사고에 대해 배워보겠습니다.</p>
+                <div class="next-lesson-preview">
+                    <h3>다음 강의 미리보기: Canvas로 시각적 사고하기</h3>
+                    <ul>
+                        <li>Canvas의 개념과 활용법</li>
+                        <li>마인드맵과 다이어그램 그리기</li>
+                        <li>노트와 Canvas 연동하기</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer class="lesson-footer">
+            <div class="footer-content">
+                <p>옵시디언 마스터 클래스 | 제11강: 고급 마크다운과 LaTeX</p>
+                <div class="footer-links">
+                    <a href="../index.html"><i class="fas fa-home"></i> 홈</a>
+                    <a href="lesson10.html"><i class="fas fa-arrow-left"></i> 이전</a>
+                    <a href="lesson12.html"><i class="fas fa-arrow-right"></i> 다음</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>

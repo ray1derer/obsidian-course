@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제30강: 대규모 볼트 관리 | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-database"></i> 제30강: 대규모 볼트 관리</h1>
+                <p class="lesson-subtitle">수천, 수만 개의 노트를 효율적으로 관리하는 전문가의 노하우</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 고급</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 75분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: 시스템 관리</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson29.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제30강: 대규모 볼트 관리</span>
+            <a href="lesson31.html" class="nav-link next">
+                다음 강의 <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>수천 개 노트의 효율적 관리 전략 수립하기</li>
+                    <li>성능 최적화 및 인덱싱 기법 마스터하기</li>
+                    <li>볼트 구조 설계 및 리팩토링 수행하기</li>
+                    <li>백업 및 복구 전략 구현하기</li>
+                    <li>대규모 팀 협업 관리 시스템 구축하기</li>
+                </ul>
+            </section>
+
+            <section class="scale-understanding">
+                <h2><i class="fas fa-chart-line"></i> 대규모 볼트의 이해</h2>
+                
+                <div class="scale-classification">
+                    <h3>볼트 규모별 분류</h3>
+                    <div class="scale-grid">
+                        <div class="scale-category small">
+                            <h4><i class="fas fa-seedling"></i> 소규모</h4>
+                            <p class="note-count">&lt; 1,000개 노트</p>
+                            <ul>
+                                <li>개인 사용 중심</li>
+                                <li>단순한 폴더 구조</li>
+                                <li>수동 관리 가능</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="scale-category medium">
+                            <h4><i class="fas fa-tree"></i> 중규모</h4>
+                            <p class="note-count">1,000 - 10,000개 노트</p>
+                            <ul>
+                                <li>체계적 구조 필요</li>
+                                <li>자동화 도입 필요</li>
+                                <li>검색 최적화 중요</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="scale-category large">
+                            <h4><i class="fas fa-city"></i> 대규모</h4>
+                            <p class="note-count">10,000 - 100,000개 노트</p>
+                            <ul>
+                                <li>전문적 관리 필수</li>
+                                <li>성능 최적화 핵심</li>
+                                <li>팀 협업 고려</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="scale-category enterprise">
+                            <h4><i class="fas fa-globe"></i> 초대규모</h4>
+                            <p class="note-count">&gt; 100,000개 노트</p>
+                            <ul>
+                                <li>엔터프라이즈 수준</li>
+                                <li>분산 시스템 고려</li>
+                                <li>전용 인프라 필요</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="challenges">
+                    <h3>대규모 볼트의 주요 과제</h3>
+                    <div class="challenge-cards">
+                        <div class="challenge-card">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <h4>성능 저하</h4>
+                            <ul>
+                                <li>검색 속도 감소</li>
+                                <li>인덱싱 시간 증가</li>
+                                <li>UI 반응성 저하</li>
+                                <li>메모리 사용량 증가</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="challenge-card">
+                            <i class="fas fa-sitemap"></i>
+                            <h4>관리 복잡성</h4>
+                            <ul>
+                                <li>중복 콘텐츠 문제</li>
+                                <li>구조 일관성 유지</li>
+                                <li>명명 규칙 관리</li>
+                                <li>품질 관리 어려움</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="challenge-card">
+                            <i class="fas fa-users"></i>
+                            <h4>협업 문제</h4>
+                            <ul>
+                                <li>동시 편집 충돌</li>
+                                <li>권한 관리 복잡성</li>
+                                <li>버전 관리 이슈</li>
+                                <li>커뮤니케이션 오버헤드</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="challenge-card">
+                            <i class="fas fa-server"></i>
+                            <h4>기술적 한계</h4>
+                            <ul>
+                                <li>파일 시스템 제한</li>
+                                <li>동기화 속도 문제</li>
+                                <li>백업 시간 증가</li>
+                                <li>플러그인 성능 저하</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="scalable-architecture">
+                <h2><i class="fas fa-building"></i> 확장 가능한 아키텍처</h2>
+
+                <div class="architecture-design">
+                    <h3>계층적 구조 설계</h3>
+                    <pre><code class="language-javascript">// 대규모 볼트 아키텍처
+class ScalableVaultArchitecture {
+  constructor() {
+    this.config = {
+      maxNodesPerFolder: 1000,
+      indexBatchSize: 100,
+      cacheSize: 10000,
+      shardingEnabled: true,
+      compressionEnabled: true
+    };
+    
+    this.structure = new VaultStructure();
+    this.indexer = new AdvancedIndexer();
+    this.cache = new HierarchicalCache();
+    this.monitor = new PerformanceMonitor();
+  }
+
+  // 볼트 초기화
+  async initialize(vaultPath) {
+    console.log('Initializing scalable vault architecture...');
+    
+    // 1. 구조 분석
+    const analysis = await this.analyzeVaultStructure(vaultPath);
+    
+    // 2. 최적화 제안
+    const optimizations = this.suggestOptimizations(analysis);
+    
+    // 3. 구조 재구성
+    if (optimizations.restructureNeeded) {
+      await this.restructureVault(vaultPath, optimizations);
+    }
+    
+    // 4. 인덱싱 시작
+    await this.indexer.buildIndex(vaultPath);
+    
+    // 5. 캐시 초기화
+    await this.cache.initialize();
+    
+    // 6. 모니터링 시작
+    this.monitor.start();
+  }
+
+  // 볼트 구조 분석
+  async analyzeVaultStructure(vaultPath) {
+    const stats = {
+      totalNotes: 0,
+      folderDepth: new Map(),
+      largestFolders: [],
+      fileTypes: new Map(),
+      orphanedNotes: [],
+      duplicates: []
+    };
+
+    await this.walkVault(vaultPath, (file, depth) => {
+      stats.totalNotes++;
+      stats.folderDepth.set(depth, (stats.folderDepth.get(depth) || 0) + 1);
+      
+      const ext = path.extname(file);
+      stats.fileTypes.set(ext, (stats.fileTypes.get(ext) || 0) + 1);
+    });
+
+    return stats;
+  }
+}</code></pre>
+
+                    <h3>샤딩 전략</h3>
+                    <div class="sharding-strategy">
+                        <div class="strategy-diagram">
+                            <div class="shard-container">
+                                <h4>시간 기반 샤딩</h4>
+                                <div class="shard-structure">
+                                    <div class="shard">2024/</div>
+                                    <div class="shard">2023/</div>
+                                    <div class="shard">2022/</div>
+                                    <div class="shard">Archive/</div>
+                                </div>
+                            </div>
+                            
+                            <div class="shard-container">
+                                <h4>카테고리 기반 샤딩</h4>
+                                <div class="shard-structure">
+                                    <div class="shard">Projects/</div>
+                                    <div class="shard">Research/</div>
+                                    <div class="shard">Personal/</div>
+                                    <div class="shard">Team/</div>
+                                </div>
+                            </div>
+                            
+                            <div class="shard-container">
+                                <h4>해시 기반 샤딩</h4>
+                                <div class="shard-structure">
+                                    <div class="shard">0-3/</div>
+                                    <div class="shard">4-7/</div>
+                                    <div class="shard">8-B/</div>
+                                    <div class="shard">C-F/</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <pre><code class="language-javascript">// 샤딩 구현
+class VaultSharding {
+  constructor(strategy = 'hybrid') {
+    this.strategy = strategy;
+    this.shardMap = new Map();
+  }
+
+  // 하이브리드 샤딩 전략
+  getShard(note) {
+    switch (this.strategy) {
+      case 'time':
+        return this.getTimeShard(note);
+      
+      case 'category':
+        return this.getCategoryShard(note);
+      
+      case 'hash':
+        return this.getHashShard(note);
+      
+      case 'hybrid':
+        return this.getHybridShard(note);
+      
+      default:
+        return 'default';
+    }
+  }
+
+  getHybridShard(note) {
+    // 1차: 연도별 분류
+    const year = new Date(note.created).getFullYear();
+    
+    // 2차: 카테고리별 분류
+    const category = note.metadata.category || 'uncategorized';
+    
+    // 3차: 해시 기반 분산 (카테고리가 너무 크면)
+    const categorySize = this.getCategorySize(year, category);
+    if (categorySize > 1000) {
+      const hash = this.hashString(note.id);
+      const bucket = hash % 10;
+      return `${year}/${category}/${bucket}`;
+    }
+    
+    return `${year}/${category}`;
+  }
+
+  // 파일 시스템 최적화
+  async optimizeFileSystem() {
+    // 1. 큰 폴더 분할
+    const largeFolders = await this.findLargeFolders();
+    for (const folder of largeFolders) {
+      await this.splitFolder(folder);
+    }
+    
+    // 2. 깊은 계층 평탄화
+    const deepPaths = await this.findDeepPaths();
+    for (const path of deepPaths) {
+      await this.flattenPath(path);
+    }
+    
+    // 3. 인덱스 파일 생성
+    await this.createIndexFiles();
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="performance-optimization">
+                <h2><i class="fas fa-rocket"></i> 성능 최적화</h2>
+
+                <div class="optimization-techniques">
+                    <h3>1. 고급 인덱싱 시스템</h3>
+                    <pre><code class="language-javascript">// 고성능 인덱싱 시스템
+class AdvancedIndexer {
+  constructor() {
+    this.index = new InvertedIndex();
+    this.cache = new LRUCache(10000);
+    this.bloom = new BloomFilter(1000000, 0.01);
+    this.trie = new Trie();
+  }
+
+  // 증분 인덱싱
+  async incrementalIndex(changes) {
+    const batch = [];
+    
+    for (const change of changes) {
+      switch (change.type) {
+        case 'create':
+        case 'modify':
+          batch.push(this.indexFile(change.path));
+          break;
+        
+        case 'delete':
+          this.removeFromIndex(change.path);
+          break;
+        
+        case 'rename':
+          this.updateIndex(change.oldPath, change.newPath);
+          break;
+      }
+    }
+    
+    // 배치 처리
+    await Promise.all(batch);
+    
+    // 인덱스 압축 (필요시)
+    if (this.shouldCompact()) {
+      await this.compactIndex();
+    }
+  }
+
+  // 병렬 검색
+  async parallelSearch(query, options = {}) {
+    const { 
+      maxResults = 100,
+      fuzzy = true,
+      boost = {}
+    } = options;
+
+    // 1. 빠른 필터링 (Bloom Filter)
+    const candidates = this.bloom.mightContain(query) 
+      ? await this.getCandidates(query)
+      : [];
+
+    // 2. 병렬 스코어링
+    const scoringTasks = this.splitForParallel(candidates, 4);
+    const scores = await Promise.all(
+      scoringTasks.map(task => 
+        this.scoreDocuments(task, query, boost)
+      )
+    );
+
+    // 3. 결과 병합 및 정렬
+    return this.mergeAndSort(scores, maxResults);
+  }
+
+  // 메모리 효율적인 인덱스 구조
+  createEfficientIndex() {
+    return {
+      // 주 인덱스: 압축된 포스팅 리스트
+      main: new CompressedPostingList(),
+      
+      // 위치 인덱스: 구문 검색용
+      positions: new PositionalIndex(),
+      
+      // 메타데이터 인덱스: 빠른 필터링
+      metadata: new MetadataIndex(),
+      
+      // 링크 그래프: 관계 분석
+      linkGraph: new GraphIndex(),
+      
+      // 통계: 스코어링용
+      statistics: new IndexStatistics()
+    };
+  }
+}</code></pre>
+
+                    <h3>2. 캐싱 전략</h3>
+                    <div class="caching-layers">
+                        <div class="cache-layer">
+                            <h4><i class="fas fa-memory"></i> 메모리 캐시</h4>
+                            <pre><code class="language-javascript">// 계층적 캐싱 시스템
+class HierarchicalCache {
+  constructor() {
+    // L1: 핫 데이터 (자주 접근)
+    this.l1 = new LRUCache(1000);
+    
+    // L2: 웜 데이터 (가끔 접근)
+    this.l2 = new LRUCache(5000);
+    
+    // L3: 콜드 데이터 (드물게 접근)
+    this.l3 = new DiskCache();
+    
+    this.stats = new CacheStatistics();
+  }
+
+  async get(key) {
+    // L1 체크
+    let value = this.l1.get(key);
+    if (value) {
+      this.stats.l1Hit();
+      return value;
+    }
+
+    // L2 체크
+    value = this.l2.get(key);
+    if (value) {
+      this.stats.l2Hit();
+      this.promote(key, value, 'l1');
+      return value;
+    }
+
+    // L3 체크
+    value = await this.l3.get(key);
+    if (value) {
+      this.stats.l3Hit();
+      this.promote(key, value, 'l2');
+      return value;
+    }
+
+    this.stats.miss();
+    return null;
+  }
+
+  // 적응형 캐시 크기 조정
+  async adaptCacheSize() {
+    const hitRate = this.stats.getHitRate();
+    const memoryPressure = this.getMemoryPressure();
+
+    if (hitRate < 0.8 && memoryPressure < 0.7) {
+      // 캐시 크기 증가
+      this.l1.resize(this.l1.size * 1.2);
+      this.l2.resize(this.l2.size * 1.1);
+    } else if (memoryPressure > 0.9) {
+      // 캐시 크기 감소
+      this.l1.resize(this.l1.size * 0.8);
+      this.l2.resize(this.l2.size * 0.9);
+    }
+  }
+}</code></pre>
+                        </div>
+
+                        <div class="cache-layer">
+                            <h4><i class="fas fa-hdd"></i> 디스크 캐시</h4>
+                            <pre><code class="language-javascript">// 디스크 기반 캐시
+class DiskCache {
+  constructor(cachePath) {
+    this.cachePath = cachePath;
+    this.indexDB = new IndexedDB('cache-index');
+    this.compression = new CompressionEngine();
+  }
+
+  async set(key, value) {
+    // 압축
+    const compressed = await this.compression.compress(value);
+    
+    // 청크 분할 (큰 데이터)
+    const chunks = this.splitIntoChunks(compressed);
+    
+    // 병렬 저장
+    await Promise.all(
+      chunks.map((chunk, index) => 
+        this.saveChunk(key, index, chunk)
+      )
+    );
+    
+    // 인덱스 업데이트
+    await this.indexDB.put(key, {
+      chunks: chunks.length,
+      size: compressed.length,
+      timestamp: Date.now()
+    });
+  }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>3. 쿼리 최적화</h3>
+                    <pre><code class="language-javascript">// 쿼리 최적화 엔진
+class QueryOptimizer {
+  constructor() {
+    this.queryCache = new Map();
+    this.queryPlanner = new QueryPlanner();
+    this.statistics = new QueryStatistics();
+  }
+
+  async optimizeQuery(query) {
+    // 1. 쿼리 파싱 및 분석
+    const parsed = this.parseQuery(query);
+    
+    // 2. 쿼리 플랜 생성
+    const plans = this.queryPlanner.generatePlans(parsed);
+    
+    // 3. 비용 추정
+    const costs = await Promise.all(
+      plans.map(plan => this.estimateCost(plan))
+    );
+    
+    // 4. 최적 플랜 선택
+    const optimalPlan = plans[costs.indexOf(Math.min(...costs))];
+    
+    // 5. 플랜 캐싱
+    this.queryCache.set(query, optimalPlan);
+    
+    return optimalPlan;
+  }
+
+  // 쿼리 재작성
+  rewriteQuery(query) {
+    const rewrites = [];
+    
+    // 1. 공통 서브쿼리 추출
+    const commonSubqueries = this.extractCommonSubqueries(query);
+    if (commonSubqueries.length > 0) {
+      rewrites.push(this.factorOutCommon(query, commonSubqueries));
+    }
+    
+    // 2. 조건 단순화
+    const simplified = this.simplifyConditions(query);
+    if (simplified !== query) {
+      rewrites.push(simplified);
+    }
+    
+    // 3. 인덱스 활용 최대화
+    const indexed = this.optimizeForIndexes(query);
+    if (indexed !== query) {
+      rewrites.push(indexed);
+    }
+    
+    return rewrites;
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="backup-recovery">
+                <h2><i class="fas fa-shield-alt"></i> 백업 및 복구 전략</h2>
+
+                <div class="backup-strategies">
+                    <h3>다층 백업 시스템</h3>
+                    <div class="backup-layers">
+                        <div class="backup-layer">
+                            <h4><i class="fas fa-clock"></i> 실시간 백업</h4>
+                            <ul>
+                                <li>변경사항 즉시 백업</li>
+                                <li>버전 관리 시스템 연동</li>
+                                <li>충돌 자동 해결</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="backup-layer">
+                            <h4><i class="fas fa-calendar-day"></i> 일일 스냅샷</h4>
+                            <ul>
+                                <li>전체 볼트 스냅샷</li>
+                                <li>증분 백업</li>
+                                <li>압축 저장</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="backup-layer">
+                            <h4><i class="fas fa-archive"></i> 장기 아카이브</h4>
+                            <ul>
+                                <li>월간 전체 백업</li>
+                                <li>오프사이트 저장</li>
+                                <li>암호화 보관</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <pre><code class="language-javascript">// 통합 백업 시스템
+class IntegratedBackupSystem {
+  constructor(vaultPath, config) {
+    this.vaultPath = vaultPath;
+    this.config = config;
+    
+    // 백업 전략
+    this.strategies = {
+      realtime: new RealtimeBackup(),
+      snapshot: new SnapshotBackup(),
+      archive: new ArchiveBackup()
+    };
+    
+    // 백업 저장소
+    this.storage = {
+      local: new LocalStorage(config.localPath),
+      cloud: new CloudStorage(config.cloudProvider),
+      offsite: new OffsiteStorage(config.offsiteUrl)
+    };
+  }
+
+  // 자동 백업 스케줄러
+  async startBackupSchedule() {
+    // 실시간 백업
+    this.watchForChanges();
+    
+    // 일일 스냅샷
+    this.scheduleDailySnapshot();
+    
+    // 주간 검증
+    this.scheduleWeeklyVerification();
+    
+    // 월간 아카이브
+    this.scheduleMonthlyArchive();
+  }
+
+  // 지능형 백업
+  async intelligentBackup(changes) {
+    // 1. 변경 유형 분석
+    const changeAnalysis = this.analyzeChanges(changes);
+    
+    // 2. 백업 전략 선택
+    const strategy = this.selectStrategy(changeAnalysis);
+    
+    // 3. 백업 실행
+    const backup = await strategy.execute(changes);
+    
+    // 4. 검증
+    await this.verifyBackup(backup);
+    
+    // 5. 메타데이터 업데이트
+    await this.updateBackupMetadata(backup);
+    
+    return backup;
+  }
+
+  // 복구 시스템
+  async restore(options = {}) {
+    const {
+      targetDate = null,
+      selective = false,
+      verifyIntegrity = true
+    } = options;
+
+    // 1. 백업 선택
+    const backup = await this.selectBackup(targetDate);
+    
+    // 2. 무결성 검증
+    if (verifyIntegrity) {
+      const isValid = await this.verifyIntegrity(backup);
+      if (!isValid) {
+        throw new Error('Backup integrity check failed');
+      }
+    }
+    
+    // 3. 복구 준비
+    await this.prepareRestore(backup);
+    
+    // 4. 선택적 복구
+    if (selective) {
+      return await this.selectiveRestore(backup, options.selection);
+    }
+    
+    // 5. 전체 복구
+    return await this.fullRestore(backup);
+  }
+
+  // 재해 복구 계획
+  async disasterRecovery() {
+    console.log('Initiating disaster recovery...');
+    
+    // 1. 손상 평가
+    const damage = await this.assessDamage();
+    
+    // 2. 복구 가능한 백업 찾기
+    const viableBackups = await this.findViableBackups();
+    
+    // 3. 최적 복구 경로 선택
+    const recoveryPath = this.planRecoveryPath(damage, viableBackups);
+    
+    // 4. 단계별 복구 실행
+    for (const step of recoveryPath) {
+      await this.executeRecoveryStep(step);
+    }
+    
+    // 5. 복구 검증
+    return await this.verifyRecovery();
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="team-management">
+                <h2><i class="fas fa-users-cog"></i> 대규모 팀 협업 관리</h2>
+
+                <div class="team-systems">
+                    <h3>1. 권한 관리 시스템</h3>
+                    <pre><code class="language-javascript">// 고급 권한 관리
+class AdvancedPermissionSystem {
+  constructor() {
+    this.roles = new RoleManager();
+    this.permissions = new PermissionManager();
+    this.audit = new AuditLogger();
+  }
+
+  // 역할 기반 접근 제어 (RBAC)
+  async setupRBAC() {
+    // 기본 역할 정의
+    const roles = {
+      admin: {
+        name: 'Administrator',
+        permissions: ['*'], // 모든 권한
+        inherits: []
+      },
+      
+      editor: {
+        name: 'Editor',
+        permissions: [
+          'note.create',
+          'note.edit',
+          'note.delete',
+          'folder.create',
+          'tag.manage'
+        ],
+        inherits: ['viewer']
+      },
+      
+      contributor: {
+        name: 'Contributor',
+        permissions: [
+          'note.create',
+          'note.edit.own',
+          'comment.create'
+        ],
+        inherits: ['viewer']
+      },
+      
+      viewer: {
+        name: 'Viewer',
+        permissions: [
+          'note.read',
+          'folder.list',
+          'search.execute'
+        ],
+        inherits: []
+      }
+    };
+
+    for (const [key, role] of Object.entries(roles)) {
+      await this.roles.create(key, role);
+    }
+  }
+
+  // 동적 권한 확인
+  async checkPermission(user, resource, action) {
+    // 1. 사용자 역할 확인
+    const userRoles = await this.getUserRoles(user);
+    
+    // 2. 리소스 정책 확인
+    const resourcePolicy = await this.getResourcePolicy(resource);
+    
+    // 3. 컨텍스트 권한 확인
+    const contextPermissions = await this.getContextPermissions({
+      user,
+      resource,
+      action,
+      time: new Date(),
+      location: user.location
+    });
+    
+    // 4. 권한 계산
+    const hasPermission = this.calculatePermission(
+      userRoles,
+      resourcePolicy,
+      contextPermissions,
+      action
+    );
+    
+    // 5. 감사 로그
+    await this.audit.log({
+      user,
+      resource,
+      action,
+      granted: hasPermission,
+      timestamp: new Date()
+    });
+    
+    return hasPermission;
+  }
+
+  // 팀 기반 폴더 구조
+  async setupTeamFolders(teams) {
+    const structure = {
+      shared: {
+        path: '/Shared',
+        permissions: 'all.read',
+        subfolders: ['Resources', 'Templates', 'Guidelines']
+      },
+      
+      teams: {},
+      
+      projects: {
+        path: '/Projects',
+        permissions: 'project-based',
+        structure: 'dynamic'
+      },
+      
+      personal: {
+        path: '/Personal/{{username}}',
+        permissions: 'owner-only',
+        quota: '10GB'
+      }
+    };
+
+    // 팀별 폴더 생성
+    for (const team of teams) {
+      structure.teams[team.id] = {
+        path: `/Teams/${team.name}`,
+        permissions: {
+          read: `team:${team.id}`,
+          write: `team:${team.id}:editor`,
+          admin: `team:${team.id}:lead`
+        },
+        subfolders: ['Documents', 'Meetings', 'Archive']
+      };
+    }
+
+    return structure;
+  }
+}</code></pre>
+
+                    <h3>2. 충돌 해결 시스템</h3>
+                    <pre><code class="language-javascript">// 지능형 충돌 해결
+class ConflictResolutionSystem {
+  constructor() {
+    this.detector = new ConflictDetector();
+    this.resolver = new ConflictResolver();
+    this.merger = new ThreeWayMerger();
+  }
+
+  // 충돌 감지 및 해결
+  async handleConflict(local, remote, base) {
+    // 1. 충돌 유형 분석
+    const conflictType = this.detector.analyzeConflict(local, remote, base);
+    
+    // 2. 자동 해결 시도
+    if (this.canAutoResolve(conflictType)) {
+      return await this.autoResolve(local, remote, base, conflictType);
+    }
+    
+    // 3. 지능형 병합 시도
+    const mergeResult = await this.intelligentMerge(local, remote, base);
+    
+    if (mergeResult.success) {
+      return mergeResult.merged;
+    }
+    
+    // 4. 수동 해결 필요
+    return await this.prepareManualResolution(local, remote, base, mergeResult.conflicts);
+  }
+
+  // 지능형 병합
+  async intelligentMerge(local, remote, base) {
+    // 1. 구조적 차이 분석
+    const diff = {
+      local: this.diff(base, local),
+      remote: this.diff(base, remote)
+    };
+    
+    // 2. 의미론적 분석
+    const semanticAnalysis = await this.analyzeSemantics(diff);
+    
+    // 3. 충돌 영역 식별
+    const conflicts = this.identifyConflicts(diff, semanticAnalysis);
+    
+    // 4. 병합 전략 선택
+    const strategy = this.selectMergeStrategy(conflicts, semanticAnalysis);
+    
+    // 5. 병합 실행
+    return await strategy.merge(local, remote, base, conflicts);
+  }
+
+  // 실시간 협업 동기화
+  async setupRealtimeCollaboration() {
+    return {
+      // 작업 잠금 관리
+      lockManager: new LockManager({
+        granularity: 'paragraph', // 문단 단위 잠금
+        timeout: 30000, // 30초 타임아웃
+        autoRelease: true
+      }),
+      
+      // 변경사항 스트리밍
+      changeStream: new ChangeStream({
+        protocol: 'websocket',
+        compression: true,
+        batching: {
+          interval: 100, // 100ms 배치
+          maxSize: 50 // 최대 50개 변경사항
+        }
+      }),
+      
+      // 커서 및 선택 공유
+      presenceManager: new PresenceManager({
+        sharesCursor: true,
+        sharesSelection: true,
+        showsUserInfo: true
+      }),
+      
+      // 충돌 예방
+      conflictPrevention: new ConflictPrevention({
+        optimisticLocking: true,
+        operationalTransform: true,
+        crdt: true // Conflict-free Replicated Data Types
+      })
+    };
+  }
+}</code></pre>
+
+                    <h3>3. 워크플로우 자동화</h3>
+                    <div class="workflow-automation">
+                        <h4>팀 프로세스 자동화</h4>
+                        <pre><code class="language-javascript">// 팀 워크플로우 자동화
+const teamWorkflowAutomation = {
+  // 콘텐츠 리뷰 프로세스
+  contentReview: {
+    trigger: 'note.created || note.updated',
+    conditions: [
+      'note.metadata.requiresReview === true',
+      'note.author !== note.reviewer'
+    ],
+    workflow: [
+      {
+        action: 'assign-reviewer',
+        logic: 'round-robin || expertise-based'
+      },
+      {
+        action: 'notify-reviewer',
+        channels: ['email', 'slack', 'in-app']
+      },
+      {
+        action: 'set-deadline',
+        duration: '48h'
+      },
+      {
+        action: 'track-progress',
+        reminders: ['24h', '1h']
+      }
+    ]
+  },
+
+  // 지식 승인 프로세스
+  knowledgeApproval: {
+    stages: [
+      {
+        name: 'technical-review',
+        reviewers: 'technical-experts',
+        criteria: ['accuracy', 'completeness', 'clarity']
+      },
+      {
+        name: 'editorial-review',
+        reviewers: 'editors',
+        criteria: ['grammar', 'style', 'formatting']
+      },
+      {
+        name: 'final-approval',
+        reviewers: 'team-leads',
+        criteria: ['alignment', 'value', 'quality']
+      }
+    ],
+    
+    automation: {
+      autoAssign: true,
+      parallelReviews: true,
+      escalation: {
+        enabled: true,
+        after: '72h',
+        to: 'manager'
+      }
+    }
+  },
+
+  // 팀 미팅 자동화
+  meetingAutomation: {
+    preMeeting: [
+      'create-agenda-template',
+      'collect-updates',
+      'prepare-materials',
+      'send-reminders'
+    ],
+    
+    duringMeeting: [
+      'real-time-notes',
+      'action-item-capture',
+      'decision-tracking'
+    ],
+    
+    postMeeting: [
+      'distribute-minutes',
+      'create-action-tasks',
+      'schedule-follow-ups',
+      'update-project-status'
+    ]
+  }
+};</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="monitoring-analytics">
+                <h2><i class="fas fa-chart-bar"></i> 모니터링과 분석</h2>
+
+                <div class="monitoring-system">
+                    <h3>볼트 상태 대시보드</h3>
+                    <div class="dashboard-mockup">
+                        <div class="dashboard-header">
+                            <h4>Vault Analytics Dashboard</h4>
+                            <div class="time-range">Last 30 days</div>
+                        </div>
+                        
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-icon"><i class="fas fa-file-alt"></i></div>
+                                <div class="metric-value">45,283</div>
+                                <div class="metric-label">Total Notes</div>
+                                <div class="metric-change positive">+2.3%</div>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <div class="metric-icon"><i class="fas fa-users"></i></div>
+                                <div class="metric-value">127</div>
+                                <div class="metric-label">Active Users</div>
+                                <div class="metric-change positive">+5.8%</div>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <div class="metric-icon"><i class="fas fa-link"></i></div>
+                                <div class="metric-value">189,542</div>
+                                <div class="metric-label">Total Links</div>
+                                <div class="metric-change positive">+12.4%</div>
+                            </div>
+                            
+                            <div class="metric-card">
+                                <div class="metric-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="metric-value">0.23s</div>
+                                <div class="metric-label">Avg. Search Time</div>
+                                <div class="metric-change negative">-15.2%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="charts-container">
+                            <div class="chart">
+                                <h5>Growth Trend</h5>
+                                <div class="chart-placeholder">📈 Note creation over time</div>
+                            </div>
+                            
+                            <div class="chart">
+                                <h5>User Activity</h5>
+                                <div class="chart-placeholder">📊 Daily active users</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <pre><code class="language-javascript">// 볼트 모니터링 시스템
+class VaultMonitoringSystem {
+  constructor() {
+    this.metrics = new MetricsCollector();
+    this.alerts = new AlertManager();
+    this.analytics = new AnalyticsEngine();
+    this.dashboard = new DashboardServer();
+  }
+
+  // 실시간 메트릭 수집
+  async collectMetrics() {
+    return {
+      // 볼트 크기 메트릭
+      size: {
+        totalNotes: await this.countNotes(),
+        totalSize: await this.calculateSize(),
+        averageNoteSize: await this.averageSize(),
+        largestFolders: await this.findLargestFolders()
+      },
+      
+      // 성능 메트릭
+      performance: {
+        searchLatency: await this.measureSearchLatency(),
+        indexingTime: await this.measureIndexingTime(),
+        pluginPerformance: await this.measurePluginPerformance(),
+        startupTime: await this.measureStartupTime()
+      },
+      
+      // 사용자 활동
+      activity: {
+        activeUsers: await this.countActiveUsers(),
+        editsPerDay: await this.countDailyEdits(),
+        searchQueries: await this.analyzeSearchQueries(),
+        popularNotes: await this.findPopularNotes()
+      },
+      
+      // 품질 메트릭
+      quality: {
+        brokenLinks: await this.findBrokenLinks(),
+        orphanedNotes: await this.findOrphanedNotes(),
+        duplicateContent: await this.detectDuplicates(),
+        outdatedNotes: await this.findOutdatedNotes()
+      }
+    };
+  }
+
+  // 지능형 경고 시스템
+  async setupAlerts() {
+    // 성능 경고
+    this.alerts.register({
+      name: 'HighSearchLatency',
+      condition: 'performance.searchLatency > 500ms',
+      severity: 'warning',
+      action: 'optimize-index'
+    });
+
+    // 용량 경고
+    this.alerts.register({
+      name: 'StorageThreshold',
+      condition: 'size.totalSize > capacity * 0.9',
+      severity: 'critical',
+      action: 'archive-old-content'
+    });
+
+    // 품질 경고
+    this.alerts.register({
+      name: 'QualityDegradation',
+      condition: 'quality.brokenLinks > 100',
+      severity: 'warning',
+      action: 'run-maintenance'
+    });
+  }
+
+  // 예측 분석
+  async predictiveAnalytics() {
+    const historical = await this.getHistoricalData();
+    
+    return {
+      // 성장 예측
+      growthProjection: await this.ml.predict({
+        model: 'growth-forecast',
+        data: historical.noteCount,
+        horizon: 90 // 90일 예측
+      }),
+      
+      // 성능 예측
+      performanceProjection: await this.ml.predict({
+        model: 'performance-degradation',
+        data: historical.performance,
+        factors: ['size', 'users', 'complexity']
+      }),
+      
+      // 유지보수 필요성
+      maintenanceSchedule: await this.ml.recommend({
+        model: 'maintenance-optimizer',
+        data: historical,
+        constraints: ['uptime', 'performance']
+      })
+    };
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="best-practices">
+                <h2><i class="fas fa-medal"></i> 대규모 볼트 관리 베스트 프랙티스</h2>
+
+                <div class="practices-grid">
+                    <div class="practice-card">
+                        <h3><i class="fas fa-folder-tree"></i> 구조 설계</h3>
+                        <ul>
+                            <li>계층적이고 확장 가능한 폴더 구조</li>
+                            <li>일관된 명명 규칙 적용</li>
+                            <li>메타데이터 기반 조직화</li>
+                            <li>정기적인 구조 리팩토링</li>
+                        </ul>
+                    </div>
+
+                    <div class="practice-card">
+                        <h3><i class="fas fa-rocket"></i> 성능 최적화</h3>
+                        <ul>
+                            <li>정기적인 인덱스 재구축</li>
+                            <li>캐시 전략 최적화</li>
+                            <li>불필요한 플러그인 제거</li>
+                            <li>대용량 파일 외부 저장</li>
+                        </ul>
+                    </div>
+
+                    <div class="practice-card">
+                        <h3><i class="fas fa-shield-alt"></i> 안정성 확보</h3>
+                        <ul>
+                            <li>자동화된 백업 시스템</li>
+                            <li>버전 관리 통합</li>
+                            <li>정기적인 무결성 검사</li>
+                            <li>재해 복구 계획 수립</li>
+                        </ul>
+                    </div>
+
+                    <div class="practice-card">
+                        <h3><i class="fas fa-users"></i> 팀 협업</h3>
+                        <ul>
+                            <li>명확한 권한 체계</li>
+                            <li>효율적인 워크플로우</li>
+                            <li>커뮤니케이션 채널 통합</li>
+                            <li>지식 공유 문화 구축</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="practice">
+                <h2><i class="fas fa-laptop-code"></i> 실습: 대규모 볼트 최적화</h2>
+
+                <div class="practice-content">
+                    <h3>프로젝트: 10,000개 노트 볼트 최적화</h3>
+                    
+                    <div class="practice-steps">
+                        <h4>Step 1: 현재 상태 분석</h4>
+                        <pre><code class="language-javascript">// 볼트 분석 스크립트
+async function analyzeVault() {
+  const stats = {
+    structure: await analyzeStructure(),
+    performance: await measurePerformance(),
+    quality: await assessQuality()
+  };
+  
+  console.log('Vault Analysis Results:', stats);
+  return generateOptimizationPlan(stats);
+}</code></pre>
+
+                        <h4>Step 2: 구조 재설계</h4>
+                        <ul>
+                            <li>폴더 계층 평탄화</li>
+                            <li>샤딩 전략 적용</li>
+                            <li>인덱스 파일 생성</li>
+                        </ul>
+
+                        <h4>Step 3: 성능 튜닝</h4>
+                        <ul>
+                            <li>캐시 크기 조정</li>
+                            <li>검색 인덱스 최적화</li>
+                            <li>플러그인 성능 프로파일링</li>
+                        </ul>
+
+                        <h4>Step 4: 자동화 구현</h4>
+                        <ul>
+                            <li>백업 자동화 설정</li>
+                            <li>유지보수 스크립트 작성</li>
+                            <li>모니터링 대시보드 구축</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-check-circle"></i> 핵심 정리</h2>
+                
+                <div class="key-points">
+                    <div class="point">
+                        <h3><i class="fas fa-star"></i> 확장성</h3>
+                        <ul>
+                            <li>계층적 구조와 샤딩 전략</li>
+                            <li>성능 저하 없는 성장 관리</li>
+                            <li>자동화된 구조 최적화</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-star"></i> 성능</h3>
+                        <ul>
+                            <li>고급 인덱싱과 캐싱</li>
+                            <li>쿼리 최적화 기법</li>
+                            <li>병렬 처리와 비동기 작업</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="point">
+                        <h3><i class="fas fa-star"></i> 안정성</h3>
+                        <ul>
+                            <li>다층 백업 시스템</li>
+                            <li>지능형 충돌 해결</li>
+                            <li>실시간 모니터링</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h3><i class="fas fa-forward"></i> 다음 단계</h3>
+                    <p>마지막 강의에서는 지금까지 배운 모든 내용을 통합하여 실전 프로젝트를 구축해보겠습니다.</p>
+                </div>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3><i class="fas fa-bookmark"></i> 이 강의의 핵심</h3>
+                <ul>
+                    <li>대규모 볼트 아키텍처</li>
+                    <li>성능 최적화 전략</li>
+                    <li>백업 및 복구 시스템</li>
+                    <li>팀 협업 관리</li>
+                    <li>모니터링과 분석</li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3><i class="fas fa-lightbulb"></i> 프로 팁</h3>
+                <div class="tip-box">
+                    <p>대규모 볼트는 처음부터 계획적으로 설계하는 것이 중요합니다. 나중에 리팩토링하는 것보다 처음부터 확장성을 고려하세요.</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section resources">
+                <h3><i class="fas fa-book"></i> 추가 학습 자료</h3>
+                <ul>
+                    <li><a href="#" class="resource-link">대규모 시스템 설계 가이드</a></li>
+                    <li><a href="#" class="resource-link">성능 최적화 체크리스트</a></li>
+                    <li><a href="#" class="resource-link">백업 전략 템플릿</a></li>
+                    <li><a href="#" class="resource-link">팀 협업 도구 비교</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="progress-tracker">
+            <div class="progress-bar" style="width: 85.71%;"></div>
+            <span class="progress-text">30/35 강의 완료</span>
+        </div>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>

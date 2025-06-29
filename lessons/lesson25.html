@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제25강: 연구와 논문 작성 | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-graduation-cap"></i> 제25강: 연구와 논문 작성</h1>
+                <p class="lesson-subtitle">학술적 글쓰기를 위한 옵시디언 활용법</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 고급</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 60분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: 학술 활용</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson24.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제25강: 연구와 논문 작성</span>
+            <a href="lesson26.html" class="nav-link next">
+                다음 강의 <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>학술적 글쓰기를 위한 옵시디언 환경 구축하기</li>
+                    <li>참고문헌 관리와 인용 시스템 활용하기</li>
+                    <li>연구 노트 조직화와 체계적 관리</li>
+                    <li>논문 작성 워크플로우 최적화하기</li>
+                    <li>협업과 버전 관리 전략 수립하기</li>
+                </ul>
+            </section>
+
+            <section class="academic-setup">
+                <h2><i class="fas fa-university"></i> 학술 작업 환경 구축</h2>
+                
+                <h3>필수 플러그인 설치</h3>
+                
+                <div class="plugin-grid">
+                    <div class="plugin-item">
+                        <h4><i class="fas fa-book"></i> Citations</h4>
+                        <p>Zotero, Mendeley와 연동하여 참고문헌 관리</p>
+                        <div class="plugin-features">
+                            <span>BibTeX 지원</span>
+                            <span>인라인 인용</span>
+                            <span>참고문헌 목록 생성</span>
+                        </div>
+                    </div>
+                    
+                    <div class="plugin-item">
+                        <h4><i class="fas fa-file-pdf"></i> Annotator</h4>
+                        <p>PDF 논문에 직접 주석 달기</p>
+                        <div class="plugin-features">
+                            <span>하이라이트</span>
+                            <span>메모 추가</span>
+                            <span>노트 연동</span>
+                        </div>
+                    </div>
+                    
+                    <div class="plugin-item">
+                        <h4><i class="fas fa-file-export"></i> Pandoc Plugin</h4>
+                        <p>다양한 학술 형식으로 내보내기</p>
+                        <div class="plugin-features">
+                            <span>LaTeX 변환</span>
+                            <span>Word 문서</span>
+                            <span>학술지 템플릿</span>
+                        </div>
+                    </div>
+                    
+                    <div class="plugin-item">
+                        <h4><i class="fas fa-chart-line"></i> Obsidian Charts</h4>
+                        <p>연구 데이터 시각화</p>
+                        <div class="plugin-features">
+                            <span>통계 차트</span>
+                            <span>데이터 연동</span>
+                            <span>인터랙티브</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>폴더 구조 설계</h3>
+                
+                <div class="folder-structure">
+                    <div class="folder-tree">
+                        <pre>
+📁 Research/
+├── 📁 01_Literature/
+│   ├── 📁 Papers/
+│   │   ├── 📁 To_Read/
+│   │   ├── 📁 Reading/
+│   │   └── 📁 Completed/
+│   ├── 📁 Books/
+│   └── 📁 Reviews/
+├── 📁 02_Projects/
+│   ├── 📁 Project_A/
+│   │   ├── 📄 README.md
+│   │   ├── 📁 Data/
+│   │   ├── 📁 Analysis/
+│   │   ├── 📁 Drafts/
+│   │   └── 📁 Submissions/
+│   └── 📁 Project_B/
+├── 📁 03_Notes/
+│   ├── 📁 Daily_Notes/
+│   ├── 📁 Meeting_Notes/
+│   ├── 📁 Ideas/
+│   └── 📁 Questions/
+├── 📁 04_Writing/
+│   ├── 📁 Papers/
+│   ├── 📁 Proposals/
+│   └── 📁 Presentations/
+├── 📁 05_References/
+│   ├── 📄 Bibliography.bib
+│   └── 📁 Citation_Styles/
+└── 📁 Templates/
+    ├── 📄 Paper_Template.md
+    ├── 📄 Literature_Note.md
+    └── 📄 Research_Log.md
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="reference-management">
+                <h2><i class="fas fa-bookmark"></i> 참고문헌 관리</h2>
+                
+                <h3>Zotero 연동 설정</h3>
+                
+                <div class="setup-guide">
+                    <div class="step-by-step">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Zotero Better BibTeX 설치</h4>
+                                <p>Zotero에서 Better BibTeX 확장 설치</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>자동 내보내기 설정</h4>
+                                <p>BibTeX 파일을 Obsidian 볼트로 자동 동기화</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Citations 플러그인 설정</h4>
+                                <p>BibTeX 파일 경로 지정 및 인용 스타일 선택</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>인용 문법</h3>
+                
+                <div class="citation-examples">
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Markdown</span>
+                            <button class="copy-button">복사</button>
+                        </div>
+                        <pre><code># 인라인 인용
+최근 연구에 따르면 [@smith2023], 이 방법론은 효과적입니다.
+
+# 다중 인용
+여러 연구에서 확인되었습니다 [@jones2022; @brown2023; @lee2023].
+
+# 페이지 번호 포함
+구체적인 내용은 다음을 참조하세요 [@wilson2023, pp. 45-47].
+
+# 접두사/접미사
+이전 연구 [see @taylor2022, for review]와 달리...
+
+# 저자 제외
+연구 결과 [-@anderson2023]는 다음과 같습니다.</code></pre>
+                    </div>
+                </div>
+
+                <h3>참고문헌 목록 생성</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Markdown</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># References
+
+```dataview
+TABLE 
+  authors as "저자",
+  year as "연도",
+  title as "제목",
+  journal as "저널"
+FROM "Literature/Papers"
+WHERE cited = true
+SORT year DESC
+```
+
+## 또는 자동 생성
+
+{{bibliography}}</code></pre>
+                </div>
+            </section>
+
+            <section class="literature-notes">
+                <h2><i class="fas fa-sticky-note"></i> 문헌 노트 작성법</h2>
+                
+                <h3>문헌 노트 템플릿</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Markdown Template</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>---
+title: "{{title}}"
+authors: {{authors}}
+year: {{year}}
+journal: {{journal}}
+doi: {{doi}}
+tags: [literature, {{tags}}]
+status: reading
+created: {{date}}
+---
+
+# {{title}}
+
+## 📋 서지 정보
+- **저자**: {{authors}}
+- **연도**: {{year}}
+- **저널**: {{journal}}
+- **DOI**: [{{doi}}](https://doi.org/{{doi}})
+
+## 🎯 연구 목적
+{{research_question}}
+
+## 🔍 방법론
+{{methodology}}
+
+## 📊 주요 결과
+{{key_findings}}
+
+## 💡 핵심 인사이트
+- 
+- 
+- 
+
+## 🔗 관련 연구
+- [[관련논문1]]
+- [[관련논문2]]
+
+## ❓ 의문점/비판
+- 
+- 
+
+## 📝 인용할 문구
+> {{quote1}}
+> -- p. {{page1}}
+
+> {{quote2}}
+> -- p. {{page2}}
+
+## 🏷️ 키워드
+#{{keyword1}} #{{keyword2}} #{{keyword3}}</code></pre>
+                </div>
+
+                <h3>문헌 리뷰 매트릭스</h3>
+                
+                <div class="review-matrix">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>연구</th>
+                                <th>주요 개념</th>
+                                <th>방법론</th>
+                                <th>결과</th>
+                                <th>한계점</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Smith (2023)</td>
+                                <td>개념 A, B</td>
+                                <td>질적 연구</td>
+                                <td>긍정적 효과</td>
+                                <td>표본 크기</td>
+                            </tr>
+                            <tr>
+                                <td>Jones (2022)</td>
+                                <td>개념 B, C</td>
+                                <td>양적 연구</td>
+                                <td>부분적 효과</td>
+                                <td>지역 한정</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="research-workflow">
+                <h2><i class="fas fa-project-diagram"></i> 연구 워크플로우</h2>
+                
+                <div class="workflow-diagram">
+                    <div class="workflow-stage">
+                        <h3>1. 문헌 수집</h3>
+                        <ul>
+                            <li>키워드 검색</li>
+                            <li>참고문헌 추적</li>
+                            <li>Zotero 저장</li>
+                        </ul>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-stage">
+                        <h3>2. 문헌 분석</h3>
+                        <ul>
+                            <li>PDF 주석</li>
+                            <li>문헌 노트 작성</li>
+                            <li>태그 분류</li>
+                        </ul>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-stage">
+                        <h3>3. 종합 분석</h3>
+                        <ul>
+                            <li>주제별 정리</li>
+                            <li>갭 분석</li>
+                            <li>연구 질문 도출</li>
+                        </ul>
+                    </div>
+                    <div class="workflow-arrow">→</div>
+                    <div class="workflow-stage">
+                        <h3>4. 논문 작성</h3>
+                        <ul>
+                            <li>개요 작성</li>
+                            <li>섹션별 작성</li>
+                            <li>인용 관리</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>연구 일지 템플릿</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Research Log Template</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># 연구 일지 - {{date:YYYY-MM-DD}}
+
+## 🎯 오늘의 목표
+- [ ] 
+- [ ] 
+- [ ] 
+
+## 📚 읽은 문헌
+- [[Paper1]] - 주요 내용
+- [[Paper2]] - 주요 내용
+
+## 🔬 실험/분석
+### 수행한 작업
+- 
+
+### 결과
+- 
+
+### 문제점
+- 
+
+## 💡 아이디어/통찰
+- 
+
+## 🤝 미팅/토론
+- 참석자: 
+- 주요 논의: 
+- 액션 아이템: 
+
+## 📝 작성 진행 상황
+- [ ] Introduction - 70% 완료
+- [ ] Methods - 50% 완료
+- [ ] Results - 20% 완료
+
+## 🎯 내일 할 일
+- 
+- 
+
+## 🔗 관련 노트
+- [[Project_Overview]]
+- [[Research_Question]]
+- [[Methodology]]</code></pre>
+                </div>
+            </section>
+
+            <section class="writing-process">
+                <h2><i class="fas fa-pen-fancy"></i> 논문 작성 프로세스</h2>
+                
+                <h3>논문 구조 템플릿</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Paper Structure</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># {{Paper Title}}
+
+## Abstract
+{{150-250 words summary}}
+
+**Keywords**: {{keyword1}}, {{keyword2}}, {{keyword3}}
+
+## 1. Introduction
+### 1.1 Background
+![[Background_Notes]]
+
+### 1.2 Literature Review
+![[Literature_Review]]
+
+### 1.3 Research Gap
+![[Research_Gap_Analysis]]
+
+### 1.4 Research Questions
+1. RQ1: {{question1}}
+2. RQ2: {{question2}}
+
+## 2. Theoretical Framework
+![[Theoretical_Framework]]
+
+## 3. Methodology
+### 3.1 Research Design
+![[Research_Design]]
+
+### 3.2 Data Collection
+![[Data_Collection_Methods]]
+
+### 3.3 Data Analysis
+![[Analysis_Plan]]
+
+## 4. Results
+### 4.1 Descriptive Statistics
+![[Descriptive_Stats]]
+
+### 4.2 Main Findings
+![[Main_Results]]
+
+### 4.3 Additional Analyses
+![[Additional_Analyses]]
+
+## 5. Discussion
+### 5.1 Interpretation of Results
+![[Results_Interpretation]]
+
+### 5.2 Theoretical Implications
+![[Theoretical_Implications]]
+
+### 5.3 Practical Implications
+![[Practical_Implications]]
+
+### 5.4 Limitations
+![[Study_Limitations]]
+
+### 5.5 Future Research
+![[Future_Directions]]
+
+## 6. Conclusion
+![[Conclusion]]
+
+## References
+{{bibliography}}
+
+## Appendices
+### Appendix A: Survey Instruments
+![[Survey_Questions]]
+
+### Appendix B: Additional Tables
+![[Supplementary_Tables]]</code></pre>
+                </div>
+
+                <h3>섹션별 작성 가이드</h3>
+                
+                <div class="writing-guide">
+                    <div class="section-guide">
+                        <h4><i class="fas fa-file-alt"></i> Introduction</h4>
+                        <div class="guide-content">
+                            <h5>구조</h5>
+                            <ol>
+                                <li>일반적 배경 (General → Specific)</li>
+                                <li>문제 제기</li>
+                                <li>기존 연구의 한계</li>
+                                <li>연구 목적과 기여</li>
+                            </ol>
+                            <h5>체크리스트</h5>
+                            <ul class="checklist">
+                                <li>Hook이 있는가?</li>
+                                <li>연구의 중요성이 명확한가?</li>
+                                <li>Research gap이 명시되었는가?</li>
+                                <li>연구 질문이 구체적인가?</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section-guide">
+                        <h4><i class="fas fa-flask"></i> Methods</h4>
+                        <div class="guide-content">
+                            <h5>포함 사항</h5>
+                            <ul>
+                                <li>연구 설계 및 접근법</li>
+                                <li>참여자/표본 정보</li>
+                                <li>측정 도구 및 검증</li>
+                                <li>자료 수집 절차</li>
+                                <li>분석 방법</li>
+                            </ul>
+                            <h5>작성 팁</h5>
+                            <ul>
+                                <li>재현 가능하도록 상세히</li>
+                                <li>과거 시제 사용</li>
+                                <li>윤리적 고려사항 포함</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section-guide">
+                        <h4><i class="fas fa-chart-bar"></i> Results</h4>
+                        <div class="guide-content">
+                            <h5>구성 원칙</h5>
+                            <ul>
+                                <li>연구 질문 순서대로</li>
+                                <li>기술통계 → 추론통계</li>
+                                <li>텍스트, 표, 그림 상호보완</li>
+                                <li>객관적 서술 (해석 X)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section-guide">
+                        <h4><i class="fas fa-comments"></i> Discussion</h4>
+                        <div class="guide-content">
+                            <h5>논의 포인트</h5>
+                            <ol>
+                                <li>주요 발견 요약</li>
+                                <li>이론적 기여</li>
+                                <li>실무적 시사점</li>
+                                <li>한계점과 미래 연구</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="data-visualization">
+                <h2><i class="fas fa-chart-line"></i> 데이터 시각화</h2>
+                
+                <h3>Obsidian Charts 활용</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Chart.js</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>```chart
+type: bar
+labels: [Group A, Group B, Group C, Control]
+series:
+  - title: Pre-test
+    data: [45, 43, 46, 44]
+  - title: Post-test
+    data: [68, 65, 69, 47]
+tension: 0.2
+width: 80%
+labelColors: false
+fill: false
+beginAtZero: true
+```</code></pre>
+                </div>
+
+                <h3>통계 분석 연동</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">R Integration</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>```r
+# R 코드 블록 (R 플러그인 필요)
+library(ggplot2)
+data <- read.csv("research_data.csv")
+
+# 기술통계
+summary(data)
+
+# 시각화
+ggplot(data, aes(x=group, y=score, fill=condition)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title="Group Comparison", 
+       x="Group", 
+       y="Score")
+
+# 통계 검정
+t.test(score ~ condition, data=data)
+```</code></pre>
+                </div>
+            </section>
+
+            <section class="collaboration">
+                <h2><i class="fas fa-users"></i> 협업과 버전 관리</h2>
+                
+                <h3>Git을 활용한 버전 관리</h3>
+                
+                <div class="git-workflow">
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Git Commands</span>
+                            <button class="copy-button">복사</button>
+                        </div>
+                        <pre><code># 브랜치 전략
+git checkout -b feature/introduction-revision
+git add Writing/Papers/Paper1/01_Introduction.md
+git commit -m "Revise introduction based on reviewer feedback"
+
+# 공동 저자와 병합
+git checkout main
+git merge feature/methods-section
+
+# 태그로 버전 관리
+git tag -a v1.0-submission -m "First submission version"
+git tag -a v2.0-revision -m "Revised after peer review"</code></pre>
+                    </div>
+                </div>
+
+                <h3>코멘트와 리뷰 시스템</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Comment Syntax</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>원래 텍스트입니다. %%[저자1: 이 부분 수정 필요]%%
+
+%%[리뷰어A: 
+- 근거가 부족합니다
+- 참고문헌 추가 필요
+]%%
+
+> [!note] 공동저자 피드백
+> 이 섹션은 다음과 같이 수정하면 좋겠습니다:
+> 1. 더 구체적인 예시 추가
+> 2. 이론적 배경 강화
+
+<!-- TODO: 통계 분석 재실행 필요 -->
+<!-- FIXME: 그림 3 해상도 개선 -->
+<!-- NOTE: 에디터 확인 사항 --></code></pre>
+                </div>
+            </section>
+
+            <section class="export-submission">
+                <h2><i class="fas fa-file-export"></i> 내보내기와 투고</h2>
+                
+                <h3>학술지 형식 변환</h3>
+                
+                <div class="export-options">
+                    <div class="export-method">
+                        <h4>LaTeX 변환</h4>
+                        <div class="code-example">
+                            <pre><code># Pandoc을 통한 LaTeX 변환
+pandoc paper.md -o paper.tex \
+  --template=ieee-template.tex \
+  --bibliography=references.bib \
+  --csl=ieee.csl \
+  --pdf-engine=xelatex</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="export-method">
+                        <h4>Word 문서 변환</h4>
+                        <div class="code-example">
+                            <pre><code># Word 형식으로 변환
+pandoc paper.md -o paper.docx \
+  --reference-doc=journal-template.docx \
+  --bibliography=references.bib \
+  --csl=apa-7th.csl</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>투고 체크리스트 템플릿</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Submission Checklist</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># 논문 투고 체크리스트 - {{Journal Name}}
+
+## 📋 일반 요구사항
+- [ ] 단어 수 제한 확인 (현재: {{word_count}}/{{limit}})
+- [ ] 저자 정보 블라인드 처리
+- [ ] 이해상충 선언문 작성
+- [ ] 저자 기여도 명시
+- [ ] 윤리 승인 번호 포함
+
+## 📄 원고 준비
+- [ ] 제목 페이지 별도 작성
+- [ ] 초록 단어 수 확인 ({{abstract_words}}/250)
+- [ ] 키워드 5-7개 선정
+- [ ] 본문 형식 지침 준수
+  - [ ] 폰트: Times New Roman 12pt
+  - [ ] 줄 간격: Double
+  - [ ] 여백: 1 inch
+  - [ ] 페이지 번호
+
+## 🖼️ 그림과 표
+- [ ] 모든 그림 고해상도 (300 DPI 이상)
+- [ ] 그림 파일 별도 제출
+- [ ] 표 형식 통일
+- [ ] 그림/표 번호와 설명
+
+## 📚 참고문헌
+- [ ] 저널 스타일 가이드 준수
+- [ ] DOI 링크 포함
+- [ ] 모든 인용 본문에 대응
+- [ ] 알파벳 순서 정렬
+
+## 💾 제출 파일
+- [ ] 메인 원고 (저자정보 제외)
+- [ ] 제목 페이지
+- [ ] 그림 파일들
+- [ ] 보충 자료
+- [ ] 커버 레터
+
+## ✉️ 커버 레터 포함사항
+- [ ] 에디터 인사말
+- [ ] 연구 중요성 요약
+- [ ] 저널 적합성 설명
+- [ ] 독창성 선언
+- [ ] 추천 리뷰어 3명</code></pre>
+                </div>
+            </section>
+
+            <section class="academic-plugins">
+                <h2><i class="fas fa-puzzle-piece"></i> 학술 작업 전용 플러그인</h2>
+                
+                <div class="plugin-showcase">
+                    <div class="academic-plugin">
+                        <h3><i class="fas fa-microscope"></i> Research Assistant</h3>
+                        <p>AI 기반 문헌 요약 및 분석</p>
+                        <div class="plugin-demo">
+                            <div class="code-example">
+                                <pre><code>## AI 요약 생성
+![[paper.pdf#summarize]]
+
+## 핵심 개념 추출
+![[paper.pdf#key-concepts]]
+
+## 방법론 분석
+![[paper.pdf#methodology]]</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="academic-plugin">
+                        <h3><i class="fas fa-language"></i> Academic Translator</h3>
+                        <p>학술 번역 및 교정</p>
+                        <div class="plugin-demo">
+                            <div class="code-example">
+                                <pre><code><!-- 영문 교정 -->
+::proofreading[This research investigate the effect...]
+
+<!-- 학술 번역 -->
+::translate[이 연구는 ... 효과를 조사한다]::en</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="research-templates">
+                <h2><i class="fas fa-file-alt"></i> 연구 템플릿 갤러리</h2>
+                
+                <div class="template-gallery">
+                    <div class="template-card">
+                        <h3>체계적 문헌고찰</h3>
+                        <div class="template-preview">
+                            <div class="code-snippet">
+                                <pre><code># Systematic Review Protocol
+## Search Strategy
+- Databases: 
+- Keywords: 
+- Inclusion Criteria:
+- Exclusion Criteria:
+
+## PRISMA Flow Diagram
+![[PRISMA_Template]]</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <h3>실험 연구 프로토콜</h3>
+                        <div class="template-preview">
+                            <div class="code-snippet">
+                                <pre><code># Experiment Protocol
+## Hypotheses
+H1: 
+H2: 
+
+## Variables
+- IV: 
+- DV: 
+- Control: 
+
+## Procedure
+1. 
+2.</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <h3>질적 연구 코딩</h3>
+                        <div class="template-preview">
+                            <div class="code-snippet">
+                                <pre><code># Interview Coding
+## Themes
+### Theme 1: {{theme}}
+- Code 1.1: 
+  - Quote: ""
+  - Participant: 
+  
+### Theme 2: {{theme}}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="practice-exercise">
+                <h2><i class="fas fa-dumbbell"></i> 실습 과제</h2>
+                
+                <div class="exercise-container">
+                    <h3>기본 실습</h3>
+                    <div class="checklist">
+                        <label><input type="checkbox"> Citations 플러그인 설치 및 설정</label>
+                        <label><input type="checkbox"> 문헌 노트 템플릿 생성</label>
+                        <label><input type="checkbox"> 샘플 논문에 인용 추가</label>
+                        <label><input type="checkbox"> 참고문헌 목록 자동 생성</label>
+                        <label><input type="checkbox"> PDF 논문에 주석 달기</label>
+                        <label><input type="checkbox"> 연구 일지 작성</label>
+                    </div>
+
+                    <h3>심화 과제</h3>
+                    <div class="challenge-box">
+                        <h4><i class="fas fa-trophy"></i> 미니 문헌 고찰</h4>
+                        <p>특정 주제에 대한 문헌 고찰을 작성하세요:</p>
+                        <ol>
+                            <li>5개 이상의 논문 수집 및 정리</li>
+                            <li>문헌 노트 작성</li>
+                            <li>주제별 종합 분석</li>
+                            <li>Research gap 도출</li>
+                            <li>참고문헌 목록 생성</li>
+                            <li>LaTeX 또는 Word로 내보내기</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="troubleshooting">
+                <h2><i class="fas fa-tools"></i> 문제 해결</h2>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> Zotero 연동이 안 돼요</h3>
+                        <ul>
+                            <li>Better BibTeX 설치 확인</li>
+                            <li>자동 내보내기 경로 확인</li>
+                            <li>.bib 파일 권한 확인</li>
+                            <li>Citations 플러그인 재시작</li>
+                        </ul>
+                    </div>
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> 인용 형식이 잘못되었어요</h3>
+                        <ul>
+                            <li>CSL 파일 확인</li>
+                            <li>BibTeX 항목 형식 검증</li>
+                            <li>플러그인 설정에서 스타일 변경</li>
+                        </ul>
+                    </div>
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> 내보내기가 깨져요</h3>
+                        <ul>
+                            <li>Pandoc 설치 확인</li>
+                            <li>템플릿 파일 경로 확인</li>
+                            <li>인코딩 설정 (UTF-8)</li>
+                            <li>이미지 경로 절대/상대 확인</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="resources">
+                <h2><i class="fas fa-book"></i> 추가 리소스</h2>
+                
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <h3><i class="fas fa-graduation-cap"></i> 학술 작성 가이드</h3>
+                        <ul>
+                            <li>APA Style Guide</li>
+                            <li>IEEE Editorial Style</li>
+                            <li>Nature Formatting Guide</li>
+                            <li>Academic Phrasebank</li>
+                        </ul>
+                    </div>
+                    <div class="resource-card">
+                        <h3><i class="fas fa-tools"></i> 유용한 도구</h3>
+                        <ul>
+                            <li>Grammarly - 문법 검사</li>
+                            <li>DeepL - 학술 번역</li>
+                            <li>Connected Papers - 문헌 네트워크</li>
+                            <li>Scite.ai - 인용 맥락 분석</li>
+                        </ul>
+                    </div>
+                    <div class="resource-card">
+                        <h3><i class="fas fa-database"></i> 학술 데이터베이스</h3>
+                        <ul>
+                            <li>Google Scholar</li>
+                            <li>PubMed</li>
+                            <li>Web of Science</li>
+                            <li>Scopus</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-book-reader"></i> 핵심 정리</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <i class="fas fa-university"></i>
+                        <h3>체계적 관리</h3>
+                        <p>문헌부터 최종 원고까지 일원화된 시스템</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-link"></i>
+                        <h3>연결된 사고</h3>
+                        <p>아이디어와 인용의 유기적 연결</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-sync"></i>
+                        <h3>효율적 프로세스</h3>
+                        <p>자동화와 템플릿으로 시간 절약</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="navigation-guide">
+                <h2><i class="fas fa-compass"></i> 다음 단계</h2>
+                <p>학술적 글쓰기를 위한 옵시디언 활용법을 마스터했다면, 다음 강의에서는 프로젝트 관리 시스템 구축에 대해 배워보겠습니다.</p>
+                <div class="next-lesson-preview">
+                    <h3>다음 강의 미리보기: 프로젝트 관리 시스템</h3>
+                    <ul>
+                        <li>프로젝트 관리 방법론 통합</li>
+                        <li>작업 추적과 진행 상황 관리</li>
+                        <li>팀 협업 워크플로우</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer class="lesson-footer">
+            <div class="footer-content">
+                <p>옵시디언 마스터 클래스 | 제25강: 연구와 논문 작성</p>
+                <div class="footer-links">
+                    <a href="../index.html"><i class="fas fa-home"></i> 홈</a>
+                    <a href="lesson24.html"><i class="fas fa-arrow-left"></i> 이전</a>
+                    <a href="lesson26.html"><i class="fas fa-arrow-right"></i> 다음</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>

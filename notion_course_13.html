@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제13강: 노트 간 관계 설계와 MOC - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            left: 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-color) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--info-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* MOC 구조 시각화 */
+        .moc-visualization {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .moc-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .moc-level {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .moc-node {
+            background: var(--secondary-color);
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            min-width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .moc-node:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--warning-color);
+        }
+
+        .moc-node.home {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--info-color) 100%);
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .moc-node.index {
+            background: var(--hover-bg);
+            border-color: var(--warning-color);
+        }
+
+        .moc-node.topic {
+            background: var(--card-bg);
+            border-color: var(--success-color);
+        }
+
+        .moc-node.note {
+            background: var(--bg-color);
+            border-color: var(--border-color);
+            min-width: 150px;
+            padding: 1rem;
+        }
+
+        /* MOC 템플릿 갤러리 */
+        .moc-templates {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .moc-template {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .moc-template:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-color);
+        }
+
+        .moc-template h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .moc-template .icon {
+            font-size: 2rem;
+        }
+
+        .moc-template .description {
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .moc-template .structure {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* 링크 전략 섹션 */
+        .linking-strategies {
+            margin: 4rem 0;
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .strategy-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .strategy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--info-color) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .strategy-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .strategy-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .strategy-card .example {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* 인터랙티브 MOC 빌더 */
+        .moc-builder {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .builder-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .builder-button {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .builder-button:hover {
+            background: var(--info-color);
+            transform: scale(1.05);
+        }
+
+        .builder-canvas {
+            background: var(--card-bg);
+            border-radius: 12px;
+            min-height: 400px;
+            padding: 2rem;
+            position: relative;
+            border: 2px dashed var(--border-color);
+        }
+
+        /* 코드 블록 스타일 */
+        .code-block {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--hover-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        .code-block code {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* 모범 사례 섹션 */
+        .best-practices {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .practice-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--success-color);
+            transition: all 0.3s ease;
+        }
+
+        .practice-item:hover {
+            transform: translateX(10px);
+            border-left-color: var(--warning-color);
+        }
+
+        .practice-item h4 {
+            color: var(--success-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .practice-item .icon {
+            font-size: 1.5rem;
+        }
+
+        /* 동적 MOC 예제 */
+        .dynamic-moc-section {
+            margin: 4rem 0;
+        }
+
+        .dynamic-example {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .dynamic-example h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .dataview-example {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--info-color);
+        }
+
+        /* 실습 섹션 */
+        .practice-section {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .practice-tasks {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-task {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-task::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--warning-color);
+        }
+
+        .practice-task h4 {
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .practice-task .difficulty {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            background: var(--hover-bg);
+        }
+
+        .difficulty.easy { color: var(--success-color); }
+        .difficulty.medium { color: var(--warning-color); }
+        .difficulty.hard { color: var(--error-color); }
+
+        /* FAQ 섹션 */
+        .faq-section {
+            margin: 4rem 0;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent-color);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 팁 박스 */
+        .tip-box {
+            background: var(--hover-bg);
+            border-left: 4px solid var(--warning-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .tip-box::before {
+            content: '💡';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .tip-box p {
+            margin-left: 2rem;
+        }
+
+        /* 경고 박스 */
+        .warning-box {
+            background: rgba(191, 97, 106, 0.1);
+            border-left: 4px solid var(--error-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .warning-box::before {
+            content: '⚠️';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .warning-box p {
+            margin-left: 2rem;
+        }
+
+        /* 성공 박스 */
+        .success-box {
+            background: rgba(163, 190, 140, 0.1);
+            border-left: 4px solid var(--success-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .success-box::before {
+            content: '✅';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .success-box p {
+            margin-left: 2rem;
+        }
+
+        /* 진행 표시기 */
+        .progress-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .progress-indicator:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .progress-text {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        /* 뱃지 스타일 */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 0.25rem;
+        }
+
+        .badge.new {
+            background: var(--success-color);
+            color: var(--bg-color);
+        }
+
+        .badge.advanced {
+            background: var(--warning-color);
+            color: var(--bg-color);
+        }
+
+        .badge.essential {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            nav ul {
+                padding: 0 1rem;
+            }
+
+            nav li {
+                margin: 0.25rem 0.5rem;
+            }
+
+            .moc-level {
+                flex-direction: column;
+            }
+
+            .strategy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .moc-templates {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 로딩 애니메이션 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 애니메이션 효과 */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.5s ease;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 검색 바 */
+        .search-bar {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            padding: 1rem 2rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(136, 192, 208, 0.2);
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            flex: 1;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-bar button {
+            background: var(--accent-color);
+            border: none;
+            color: var(--bg-color);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .search-bar button:hover {
+            background: var(--info-color);
+            transform: scale(1.05);
+        }
+
+        /* 인터랙티브 다이어그램 */
+        .interactive-diagram {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .diagram-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .control-button {
+            background: var(--hover-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border-color: var(--accent-color);
+        }
+
+        .control-button.active {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border-color: var(--accent-color);
+        }
+
+        /* 시각적 계층 구조 */
+        .hierarchy-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .hierarchy-node {
+            position: absolute;
+            background: var(--secondary-color);
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .hierarchy-node:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .hierarchy-line {
+            position: absolute;
+            background: var(--border-color);
+            z-index: 0;
+        }
+
+        /* 체크리스트 */
+        .checklist {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: var(--hover-bg);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            background: var(--secondary-color);
+            transform: translateX(5px);
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checklist-item.completed {
+            opacity: 0.7;
+            text-decoration: line-through;
+        }
+
+        /* 다이어그램 레전드 */
+        .diagram-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid var(--border-color);
+        }
+
+        /* 비디오 컨테이너 */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            margin: 2rem 0;
+            background: var(--bg-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p class="subtitle">당신의 생각을 구조화하는 가장 강력한 도구</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_index.html">강좌 홈</a></li>
+            <li><a href="notion_course_12.html">이전 강의</a></li>
+            <li><a href="#" class="active">제13강</a></li>
+            <li><a href="notion_course_14.html">다음 강의</a></li>
+            <li><a href="#practice">실습하기</a></li>
+            <li><a href="#quiz">퀴즈</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제13강: 노트 간 관계 설계와 MOC</h1>
+            <p class="subtitle">Map of Content로 지식의 체계적인 구조를 만들어보세요</p>
+            <div class="badge essential">핵심 개념</div>
+            <div class="badge advanced">고급 기법</div>
+        </div>
+
+        <!-- MOC 소개 섹션 -->
+        <section class="intro-section">
+            <h2>🗺️ Map of Content(MOC)란?</h2>
+            <p>MOC는 관련 노트들을 한 곳에 모아 체계적으로 정리한 인덱스 노트입니다. 단순한 목록이 아닌, 주제별로 구조화된 지식의 지도 역할을 합니다.</p>
+            
+            <div class="moc-visualization">
+                <h3>MOC 계층 구조 예시</h3>
+                <div class="moc-diagram">
+                    <div class="moc-level">
+                        <div class="moc-node home">🏠 홈 MOC</div>
+                    </div>
+                    <div class="moc-level">
+                        <div class="moc-node index">📚 독서 MOC</div>
+                        <div class="moc-node index">💼 프로젝트 MOC</div>
+                        <div class="moc-node index">🧠 학습 MOC</div>
+                    </div>
+                    <div class="moc-level">
+                        <div class="moc-node topic">철학 도서</div>
+                        <div class="moc-node topic">비즈니스 도서</div>
+                        <div class="moc-node topic">자기계발</div>
+                    </div>
+                    <div class="moc-level">
+                        <div class="moc-node note">책 노트 1</div>
+                        <div class="moc-node note">책 노트 2</div>
+                        <div class="moc-node note">책 노트 3</div>
+                        <div class="moc-node note">책 노트 4</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MOC의 장점 -->
+        <section class="benefits-section">
+            <h2>✨ MOC를 사용해야 하는 이유</h2>
+            <div class="strategy-grid">
+                <div class="strategy-card">
+                    <h3>1. 구조적 탐색</h3>
+                    <p>수백 개의 노트 속에서 원하는 정보를 빠르게 찾을 수 있습니다. 폴더 구조와 달리 유연하고 다차원적인 접근이 가능합니다.</p>
+                    <div class="example">
+                        <p>📂 전통적 폴더: /2024/프로젝트/웹개발/</p>
+                        <p>🗺️ MOC: [[프로젝트 MOC]] → [[웹개발 MOC]] → 관련 노트들</p>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>2. 지식의 맥락화</h3>
+                    <p>단순히 노트를 나열하는 것이 아니라, 관계와 맥락을 함께 제공하여 더 깊은 이해를 돕습니다.</p>
+                    <div class="example">
+                        <p>## 프로그래밍 언어 MOC</p>
+                        <p>### 정적 타입 언어</p>
+                        <p>- [[TypeScript]] - JavaScript의 슈퍼셋</p>
+                        <p>- [[Java]] - 엔터프라이즈 표준</p>
+                        <p>### 동적 타입 언어</p>
+                        <p>- [[Python]] - 데이터 사이언스 최적</p>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>3. 점진적 요약</h3>
+                    <p>MOC 자체가 해당 주제의 요약 역할을 하며, 필요에 따라 더 깊이 들어갈 수 있는 진입점을 제공합니다.</p>
+                    <div class="example">
+                        <p>🎯 MOC 레벨: 전체 개요</p>
+                        <p>📝 개별 노트: 상세 내용</p>
+                        <p>🔍 원자 노트: 핵심 개념</p>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>4. 유기적 성장</h3>
+                    <p>고정된 구조가 아니라 지식이 늘어남에 따라 자연스럽게 확장되고 재구성될 수 있습니다.</p>
+                    <div class="example">
+                        <p>처음: 5개 노트 → 단순 목록</p>
+                        <p>성장: 20개 노트 → 카테고리 분류</p>
+                        <p>성숙: 100개 노트 → 하위 MOC 생성</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MOC 템플릿 갤러리 -->
+        <section class="template-section">
+            <h2>📋 MOC 템플릿 예시</h2>
+            <div class="moc-templates">
+                <div class="moc-template" onclick="showTemplate('project')">
+                    <h3><span class="icon">💼</span> 프로젝트 MOC</h3>
+                    <p class="description">프로젝트 관리를 위한 구조화된 MOC 템플릿</p>
+                    <div class="structure">
+# 프로젝트명 MOC
+
+## 📋 프로젝트 개요
+- [[프로젝트 계획서]]
+- [[요구사항 문서]]
+- [[일정표]]
+
+## 👥 팀 & 역할
+- [[팀원 연락처]]
+- [[역할 분담표]]
+
+## 📊 진행 현황
+- [[주간 보고서]]
+- [[이슈 트래커]]
+
+## 📁 산출물
+- [[설계 문서]]
+- [[코드 저장소]]
+- [[최종 보고서]]
+                    </div>
+                </div>
+
+                <div class="moc-template" onclick="showTemplate('learning')">
+                    <h3><span class="icon">📚</span> 학습 MOC</h3>
+                    <p class="description">체계적인 학습을 위한 MOC 구조</p>
+                    <div class="structure">
+# [주제] 학습 MOC
+
+## 🎯 학습 목표
+- [ ] 목표 1
+- [ ] 목표 2
+
+## 📖 학습 자료
+### 필수 자료
+- [[핵심 교재]]
+- [[온라인 강의]]
+
+### 참고 자료
+- [[추천 도서]]
+- [[유용한 링크]]
+
+## 📝 학습 노트
+### Week 1
+- [[개념 정리 1]]
+- [[실습 노트 1]]
+
+## 💡 인사이트
+- [[핵심 깨달음]]
+- [[적용 아이디어]]
+                    </div>
+                </div>
+
+                <div class="moc-template" onclick="showTemplate('research')">
+                    <h3><span class="icon">🔬</span> 연구 MOC</h3>
+                    <p class="description">학술 연구를 위한 체계적인 MOC</p>
+                    <div class="structure">
+# [주제] 연구 MOC
+
+## 🔍 연구 문제
+- [[연구 질문]]
+- [[가설]]
+
+## 📚 문헌 검토
+### 핵심 문헌
+- [[논문1 - 저자(연도)]]
+- [[논문2 - 저자(연도)]]
+
+### 이론적 배경
+- [[이론 A]]
+- [[이론 B]]
+
+## 🔬 방법론
+- [[연구 설계]]
+- [[데이터 수집]]
+- [[분석 방법]]
+
+## 📊 결과
+- [[통계 분석]]
+- [[시각화]]
+
+## 💭 논의
+- [[해석]]
+- [[한계점]]
+- [[후속 연구]]
+                    </div>
+                </div>
+
+                <div class="moc-template" onclick="showTemplate('daily')">
+                    <h3><span class="icon">📅</span> 일일 MOC</h3>
+                    <p class="description">매일의 활동을 정리하는 MOC</p>
+                    <div class="structure">
+# 2024-01-15 일일 MOC
+
+## 🌅 오늘의 시작
+- [[모닝 루틴]]
+- [[오늘의 목표]]
+
+## 💼 업무
+### 완료
+- [x] [[프로젝트 A - 작업1]]
+- [x] [[미팅 노트 - 팀회의]]
+
+### 진행중
+- [ ] [[프로젝트 B - 기획]]
+
+## 📚 학습
+- [[오늘 배운 것]]
+- [[읽은 아티클]]
+
+## 💭 회고
+- [[오늘의 성찰]]
+- [[개선점]]
+
+## 🔗 관련 링크
+- [[주간 리뷰]]
+- [[월간 목표]]
+                    </div>
+                </div>
+
+                <div class="moc-template" onclick="showTemplate('knowledge')">
+                    <h3><span class="icon">🧠</span> 지식 영역 MOC</h3>
+                    <p class="description">특정 지식 분야를 체계화하는 MOC</p>
+                    <div class="structure">
+# [분야] 지식 MOC
+
+## 🏛️ 기초 개념
+- [[핵심 용어 정리]]
+- [[기본 원리]]
+
+## 📊 주요 이론
+### 고전 이론
+- [[이론 1 - 창시자]]
+- [[이론 2 - 창시자]]
+
+### 현대 이론
+- [[최신 연구 동향]]
+- [[패러다임 변화]]
+
+## 🛠️ 실용적 적용
+- [[실무 활용 사례]]
+- [[도구와 기법]]
+
+## 🌐 관련 분야
+- [[연관 분야 1]]
+- [[학제간 연구]]
+
+## 📚 추천 자료
+- [[입문서]]
+- [[심화 자료]]
+                    </div>
+                </div>
+
+                <div class="moc-template" onclick="showTemplate('creative')">
+                    <h3><span class="icon">🎨</span> 창작 MOC</h3>
+                    <p class="description">창작 활동을 위한 영감과 자료 정리</p>
+                    <div class="structure">
+# [프로젝트] 창작 MOC
+
+## 💡 아이디어 뱅크
+- [[초기 구상]]
+- [[브레인스토밍]]
+- [[레퍼런스 수집]]
+
+## 🎭 캐릭터/요소
+- [[주인공 설정]]
+- [[세계관 구축]]
+- [[플롯 구조]]
+
+## ✍️ 작업 진행
+### 초고
+- [[1장 - 도입부]]
+- [[2장 - 전개]]
+
+### 수정본
+- [[1차 수정]]
+- [[피드백 반영]]
+
+## 🔍 리서치
+- [[시대적 배경]]
+- [[전문 지식]]
+
+## 📌 영감
+- [[인용구 모음]]
+- [[이미지 보드]]
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MOC 설계 원칙 -->
+        <section class="best-practices">
+            <h2>🎯 효과적인 MOC 설계 원칙</h2>
+            <div class="practice-list">
+                <div class="practice-item">
+                    <h4><span class="icon">📐</span> 1. 적절한 크기 유지</h4>
+                    <p>하나의 MOC가 너무 커지면 오히려 탐색이 어려워집니다. 20-30개 항목을 넘어가면 하위 MOC로 분할을 고려하세요.</p>
+                    <div class="tip-box">
+                        <p>💡 팁: MOC가 스크롤 2-3페이지를 넘어가면 분할 시점입니다.</p>
+                    </div>
+                </div>
+
+                <div class="practice-item">
+                    <h4><span class="icon">🏷️</span> 2. 명확한 명명 규칙</h4>
+                    <p>MOC는 쉽게 식별할 수 있도록 일관된 명명 규칙을 따르세요.</p>
+                    <div class="code-block" data-language="Examples">
+                        <code>✅ 좋은 예시:
+- 프로그래밍 MOC
+- 2024년 독서 MOC
+- Python 학습 MOC
+
+❌ 피해야 할 예시:
+- 인덱스
+- 목록
+- 정리</code>
+                    </div>
+                </div>
+
+                <div class="practice-item">
+                    <h4><span class="icon">🔄</span> 3. 양방향 링크 활용</h4>
+                    <p>MOC에서 개별 노트로의 링크뿐만 아니라, 개별 노트에서도 관련 MOC로의 백링크를 추가하세요.</p>
+                    <div class="code-block" data-language="Markdown">
+                        <code># 개별 노트 상단
+---
+up: [[프로그래밍 MOC]]
+related: [[Python MOC]], [[웹개발 MOC]]
+---</code>
+                    </div>
+                </div>
+
+                <div class="practice-item">
+                    <h4><span class="icon">📝</span> 4. 컨텍스트 추가</h4>
+                    <p>단순히 링크만 나열하지 말고, 각 항목에 대한 간단한 설명을 추가하여 맥락을 제공하세요.</p>
+                    <div class="code-block" data-language="Markdown">
+                        <code>## 핵심 개념
+- [[OOP]] - 객체지향 프로그래밍의 기본 원칙과 패턴
+- [[함수형 프로그래밍]] - 불변성과 순수 함수를 중심으로 한 패러다임
+- [[디자인 패턴]] - 재사용 가능한 소프트웨어 설계 해결책</code>
+                    </div>
+                </div>
+
+                <div class="practice-item">
+                    <h4><span class="icon">🎨</span> 5. 시각적 구조화</h4>
+                    <p>이모지, 헤딩, 구분선 등을 활용하여 시각적으로 구조를 명확히 하세요.</p>
+                    <div class="code-block" data-language="Markdown">
+                        <code># 📚 독서 MOC
+
+## 🎯 읽는 중
+- [[원자적 습관]] ⭐⭐⭐⭐⭐
+- [[생각의 지도]] ⭐⭐⭐⭐
+
+---
+
+## ✅ 완독
+### 2024년
+- [[제2의 뇌]] - 디지털 정보 관리의 혁명
+- [[딥 워크]] - 몰입의 기술
+
+### 2023년
+- [[안티프래질]] - 불확실성에서 이익을 얻는 법</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 동적 MOC 섹션 -->
+        <section class="dynamic-moc-section">
+            <h2>🔄 동적 MOC 만들기</h2>
+            <p>Dataview 플러그인을 활용하면 자동으로 업데이트되는 동적 MOC를 만들 수 있습니다.</p>
+
+            <div class="dynamic-example">
+                <h3>1. 태그 기반 동적 MOC</h3>
+                <div class="dataview-example">
+                    <div class="code-block" data-language="Dataview">
+                        <code>```dataview
+TABLE file.ctime as "생성일", tags as "태그"
+FROM #프로젝트 
+WHERE !contains(file.path, "Templates")
+SORT file.ctime DESC
+LIMIT 20
+```</code>
+                    </div>
+                    <p>특정 태그가 있는 모든 노트를 자동으로 수집하여 표시합니다.</p>
+                </div>
+            </div>
+
+            <div class="dynamic-example">
+                <h3>2. 폴더 기반 동적 MOC</h3>
+                <div class="dataview-example">
+                    <div class="code-block" data-language="Dataview">
+                        <code>```dataview
+LIST
+FROM "Projects/2024"
+WHERE file.name != this.file.name
+SORT file.name ASC
+```</code>
+                    </div>
+                    <p>특정 폴더의 모든 파일을 자동으로 나열합니다.</p>
+                </div>
+            </div>
+
+            <div class="dynamic-example">
+                <h3>3. 메타데이터 기반 동적 MOC</h3>
+                <div class="dataview-example">
+                    <div class="code-block" data-language="Dataview">
+                        <code>```dataview
+TABLE status as "상태", priority as "우선순위", due as "마감일"
+FROM "Tasks"
+WHERE status != "완료"
+SORT priority DESC, due ASC
+```</code>
+                    </div>
+                    <p>프론트매터의 메타데이터를 기반으로 자동 정렬된 목록을 생성합니다.</p>
+                </div>
+            </div>
+
+            <div class="dynamic-example">
+                <h3>4. 관계 기반 동적 MOC</h3>
+                <div class="dataview-example">
+                    <div class="code-block" data-language="Dataview">
+                        <code>```dataview
+TABLE WITHOUT ID
+  file.link as "노트",
+  length(file.inlinks) as "들어오는 링크",
+  length(file.outlinks) as "나가는 링크"
+FROM ""
+WHERE length(file.inlinks) > 5
+SORT length(file.inlinks) DESC
+```</code>
+                    </div>
+                    <p>많은 백링크를 가진 중요 노트들을 자동으로 찾아 표시합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 링크 전략 섹션 -->
+        <section class="linking-strategies">
+            <h2>🔗 효과적인 링크 전략</h2>
+            <div class="strategy-grid">
+                <div class="strategy-card">
+                    <h3>Trail Guide 패턴</h3>
+                    <p>독자가 따라갈 수 있는 명확한 경로를 제공하는 방식입니다.</p>
+                    <div class="example">
+                        <p>시작 → [[기초 개념]] → [[중급 기법]] → [[고급 응용]]</p>
+                        <p>각 노트 하단에 "다음: [[다음 주제]]" 링크 추가</p>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>Hub and Spoke 패턴</h3>
+                    <p>중심 MOC에서 관련 주제들이 방사형으로 연결되는 구조입니다.</p>
+                    <div class="example">
+                        <p>중심: [[웹개발 MOC]]</p>
+                        <p>├── [[프론트엔드]]</p>
+                        <p>├── [[백엔드]]</p>
+                        <p>└── [[DevOps]]</p>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>Matrix 패턴</h3>
+                    <p>두 개 이상의 차원으로 노트를 분류하고 교차점을 만드는 방식입니다.</p>
+                    <div class="example">
+                        <p>차원1: 프로그래밍 언어 (Python, JavaScript, Java)</p>
+                        <p>차원2: 개념 (OOP, 함수형, 비동기)</p>
+                        <p>교차점: [[Python OOP]], [[JavaScript 비동기]]</p>
+                    </div>
+                </div>
+
+                <div class="strategy-card">
+                    <h3>Zettelkasten 스타일</h3>
+                    <p>원자적 노트들을 유기적으로 연결하여 지식 네트워크를 구축합니다.</p>
+                    <div class="example">
+                        <p>구조 노트: 큰 주제의 개요</p>
+                        <p>영구 노트: 하나의 아이디어</p>
+                        <p>문헌 노트: 출처와 인용</p>
+                        <p>모두 상호 연결되어 네트워크 형성</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 인터랙티브 MOC 빌더 -->
+        <section class="moc-builder">
+            <h2>🛠️ MOC 구조 설계하기</h2>
+            <p>아래 도구를 사용하여 자신만의 MOC 구조를 설계해보세요.</p>
+            
+            <div class="builder-controls">
+                <button class="builder-button" onclick="addMOCNode('index')">인덱스 MOC 추가</button>
+                <button class="builder-button" onclick="addMOCNode('topic')">주제 MOC 추가</button>
+                <button class="builder-button" onclick="addMOCNode('note')">개별 노트 추가</button>
+                <button class="builder-button" onclick="clearBuilder()">초기화</button>
+            </div>
+            
+            <div class="builder-canvas" id="moc-builder">
+                <p style="text-align: center; opacity: 0.7;">버튼을 클릭하여 MOC 구조를 만들어보세요</p>
+            </div>
+        </section>
+
+        <!-- 실습 과제 섹션 -->
+        <section id="practice" class="practice-section">
+            <h2>🎯 실습 과제</h2>
+            <p>이번 강의에서 배운 MOC 개념을 직접 실습해보세요.</p>
+            
+            <div class="practice-tasks">
+                <div class="practice-task">
+                    <h4>과제 1: 첫 번째 MOC 만들기 <span class="difficulty easy">초급</span></h4>
+                    <p>가장 관심 있는 주제를 선택하여 첫 MOC를 만들어보세요.</p>
+                    <ul>
+                        <li>주제 선정 (예: 취미, 학습 중인 분야)</li>
+                        <li>관련 노트 5-10개 생성</li>
+                        <li>MOC에서 각 노트로 링크 연결</li>
+                        <li>각 링크에 간단한 설명 추가</li>
+                        <li>시각적 구조화 (이모지, 헤딩 활용)</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 2: 계층적 MOC 구조 구축 <span class="difficulty medium">중급</span></h4>
+                    <p>홈 MOC를 중심으로 2-3단계의 계층 구조를 만들어보세요.</p>
+                    <ul>
+                        <li>홈 MOC 생성 (최상위)</li>
+                        <li>3-4개의 주요 영역 MOC 생성</li>
+                        <li>각 영역별 하위 주제 MOC 추가</li>
+                        <li>MOC 간 상호 링크 설정</li>
+                        <li>네비게이션 경로 명확히 표시</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 3: 동적 MOC 구현 <span class="difficulty hard">고급</span></h4>
+                    <p>Dataview를 활용하여 자동 업데이트되는 MOC를 만들어보세요.</p>
+                    <ul>
+                        <li>Dataview 플러그인 설치</li>
+                        <li>노트에 일관된 태그/메타데이터 추가</li>
+                        <li>최근 수정된 노트 MOC 생성</li>
+                        <li>상태별 프로젝트 MOC 구현</li>
+                        <li>백링크 기반 인기 노트 MOC 제작</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>보너스 과제: MOC 템플릿 제작 <span class="difficulty hard">고급</span></h4>
+                    <p>자주 사용하는 MOC 구조를 템플릿으로 만들어보세요.</p>
+                    <ul>
+                        <li>Templater 플러그인 활용</li>
+                        <li>변수를 활용한 동적 템플릿</li>
+                        <li>자동 날짜/시간 삽입</li>
+                        <li>조건부 섹션 포함</li>
+                        <li>커뮤니티에 공유하고 피드백 받기</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 체크리스트 섹션 -->
+        <section class="checklist">
+            <h2>✅ MOC 구축 체크리스트</h2>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <input type="checkbox">
+                <span>MOC의 목적과 범위를 명확히 정의했나요?</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <input type="checkbox">
+                <span>일관된 명명 규칙을 사용하고 있나요?</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <input type="checkbox">
+                <span>각 링크에 충분한 컨텍스트를 제공했나요?</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <input type="checkbox">
+                <span>시각적 구조화로 가독성을 높였나요?</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <input type="checkbox">
+                <span>양방향 링크를 활용하고 있나요?</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <input type="checkbox">
+                <span>MOC가 너무 크지 않은가요? (20-30개 항목)</span>
+            </div>
+            <div class="checklist-item" onclick="toggleCheck(this)">
+                <input type="checkbox">
+                <span>정기적으로 MOC를 업데이트하고 있나요?</span>
+            </div>
+        </section>
+
+        <!-- FAQ 섹션 -->
+        <section class="faq-section">
+            <h2>❓ 자주 묻는 질문</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    MOC와 태그의 차이점은 무엇인가요?
+                </div>
+                <div class="faq-answer">
+                    <p>태그는 단순한 분류 도구이지만, MOC는 구조와 맥락을 제공합니다:</p>
+                    <ul>
+                        <li><strong>태그:</strong> 일차원적 분류, 자동 그룹핑, 검색 용이</li>
+                        <li><strong>MOC:</strong> 계층적 구조, 맥락 제공, 커스텀 정렬, 설명 추가 가능</li>
+                        <li>두 방식을 함께 사용하면 더욱 강력한 조직 시스템을 만들 수 있습니다</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    MOC는 언제 만들어야 하나요?
+                </div>
+                <div class="faq-answer">
+                    <p>MOC 생성의 적절한 시점:</p>
+                    <ul>
+                        <li>특정 주제의 노트가 10개 이상 모였을 때</li>
+                        <li>노트 간의 관계를 정리하고 싶을 때</li>
+                        <li>새로운 프로젝트나 학습을 시작할 때</li>
+                        <li>기존 노트들을 재구성할 필요가 있을 때</li>
+                        <li>처음부터 MOC를 만들 필요는 없습니다. 유기적으로 성장시키세요</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    하나의 노트가 여러 MOC에 속할 수 있나요?
+                </div>
+                <div class="faq-answer">
+                    <p>네, 그것이 MOC의 큰 장점 중 하나입니다:</p>
+                    <ul>
+                        <li>폴더와 달리 한 노트가 여러 MOC에 동시에 속할 수 있습니다</li>
+                        <li>다양한 관점에서 같은 정보에 접근 가능</li>
+                        <li>예: "Python 웹 스크래핑" 노트는 "Python MOC"와 "웹개발 MOC" 모두에 포함 가능</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    MOC가 너무 복잡해지면 어떻게 해야 하나요?
+                </div>
+                <div class="faq-answer">
+                    <p>MOC 복잡도 관리 방법:</p>
+                    <ul>
+                        <li>하나의 MOC가 30개 이상의 항목을 가지면 분할 고려</li>
+                        <li>하위 MOC를 생성하여 계층화</li>
+                        <li>관련성이 낮은 항목은 별도 MOC로 분리</li>
+                        <li>정기적인 리팩토링으로 구조 최적화</li>
+                        <li>필요하면 아카이브 MOC 생성</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Graph View와 MOC를 어떻게 함께 활용하나요?
+                </div>
+                <div class="faq-answer">
+                    <p>두 기능은 상호보완적입니다:</p>
+                    <ul>
+                        <li><strong>Graph View:</strong> 전체적인 연결 패턴 파악, 예상치 못한 연결 발견</li>
+                        <li><strong>MOC:</strong> 의도적이고 구조화된 탐색 경로 제공</li>
+                        <li>Graph View에서 클러스터를 발견하면 MOC로 정리</li>
+                        <li>MOC의 구조를 Graph View로 시각적 검증</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 추가 리소스 -->
+        <section class="resources-section">
+            <h2>📚 추가 학습 리소스</h2>
+            <div class="strategy-grid">
+                <div class="strategy-card">
+                    <h3>📖 추천 도서</h3>
+                    <ul>
+                        <li>『How to Take Smart Notes』 - Sönke Ahrens</li>
+                        <li>『Building a Second Brain』 - Tiago Forte</li>
+                        <li>『The Zettelkasten Method』</li>
+                    </ul>
+                </div>
+                <div class="strategy-card">
+                    <h3>🎥 비디오 자료</h3>
+                    <ul>
+                        <li>YouTube: "MOC 완벽 가이드"</li>
+                        <li>Obsidian 공식 채널 MOC 튜토리얼</li>
+                        <li>커뮤니티 MOC 쇼케이스</li>
+                    </ul>
+                </div>
+                <div class="strategy-card">
+                    <h3>🌐 온라인 리소스</h3>
+                    <ul>
+                        <li>Obsidian Forum - MOC 카테고리</li>
+                        <li>Reddit r/ObsidianMD</li>
+                        <li>Discord Obsidian 커뮤니티</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 다음 강의 예고 -->
+        <section class="next-preview">
+            <h2>🔮 다음 강의 예고</h2>
+            <div class="feature-showcase">
+                <h3>제14강: 메타데이터와 속성 활용</h3>
+                <div class="feature-content">
+                    <p>다음 강의에서는 노트의 메타데이터를 활용한 고급 관리 기법을 배웁니다:</p>
+                    <ul>
+                        <li>YAML 프론트매터 완벽 가이드</li>
+                        <li>커스텀 속성 설계와 활용</li>
+                        <li>메타데이터 기반 자동화</li>
+                        <li>Dataview로 메타데이터 쿼리하기</li>
+                        <li>템플릿과 메타데이터 통합</li>
+                        <li>워크플로우 최적화</li>
+                    </ul>
+                    <p>구조화된 데이터로 노트를 더욱 강력하게 만드는 방법을 알아봅니다!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 진행률 표시 -->
+    <div class="progress-indicator" onclick="scrollToTop()">
+        <span class="progress-text">13/30</span>
+    </div>
+
+    <script>
+        // MOC 노드 추가 함수
+        let nodeCount = 0;
+        const builderCanvas = document.getElementById('moc-builder');
+
+        function addMOCNode(type) {
+            if (nodeCount === 0) {
+                builderCanvas.innerHTML = '';
+            }
+
+            const node = document.createElement('div');
+            node.className = `moc-node ${type}`;
+            node.style.position = 'relative';
+            node.style.display = 'inline-block';
+            node.style.margin = '10px';
+            
+            let content = '';
+            switch(type) {
+                case 'index':
+                    content = `📚 ${type} MOC ${nodeCount + 1}`;
+                    break;
+                case 'topic':
+                    content = `📁 주제 ${nodeCount + 1}`;
+                    break;
+                case 'note':
+                    content = `📝 노트 ${nodeCount + 1}`;
+                    break;
+            }
+            
+            node.textContent = content;
+            node.contentEditable = true;
+            
+            builderCanvas.appendChild(node);
+            nodeCount++;
+        }
+
+        function clearBuilder() {
+            builderCanvas.innerHTML = '<p style="text-align: center; opacity: 0.7;">버튼을 클릭하여 MOC 구조를 만들어보세요</p>';
+            nodeCount = 0;
+        }
+
+        // 템플릿 표시 함수
+        function showTemplate(templateType) {
+            // 템플릿 클릭 시 하이라이트 효과
+            event.currentTarget.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                event.currentTarget.style.transform = '';
+            }, 200);
+        }
+
+        // 체크리스트 토글
+        function toggleCheck(item) {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            item.classList.toggle('completed', checkbox.checked);
+        }
+
+        // FAQ 토글
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 맨 위로 스크롤
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 스크롤 진행률 표시
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrolled / total) * 100;
+
+            const progressIndicator = document.querySelector('.progress-indicator');
+            if (progress > 10) {
+                progressIndicator.style.opacity = '1';
+            } else {
+                progressIndicator.style.opacity = '0.5';
+            }
+        });
+
+        // 애니메이션 효과
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // 애니메이션 대상 요소들
+        document.querySelectorAll('.strategy-card, .practice-task, .moc-template, .practice-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // MOC 노드 호버 효과
+        document.querySelectorAll('.moc-node').forEach(node => {
+            node.addEventListener('mouseenter', () => {
+                node.style.transform = 'translateY(-5px) scale(1.05)';
+            });
+            node.addEventListener('mouseleave', () => {
+                node.style.transform = '';
+            });
+        });
+
+        // 키보드 단축키
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'k':
+                        e.preventDefault();
+                        document.querySelector('.search-bar input')?.focus();
+                        break;
+                    case '/':
+                        e.preventDefault();
+                        // 검색 기능 활성화
+                        break;
+                }
+            }
+        });
+
+        // 다이어그램 인터랙션
+        let selectedDiagramView = 'hierarchy';
+
+        function switchDiagramView(view) {
+            selectedDiagramView = view;
+            const buttons = document.querySelectorAll('.control-button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(view)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 다이어그램 업데이트 로직
+            updateDiagram(view);
+        }
+
+        function updateDiagram(view) {
+            // 실제 구현에서는 다이어그램을 동적으로 변경
+            console.log(`Switching to ${view} view`);
+        }
+
+        // 로컬 스토리지 활용
+        function saveMOCStructure() {
+            const structure = {
+                nodes: [],
+                timestamp: new Date().toISOString()
+            };
+            
+            document.querySelectorAll('#moc-builder .moc-node').forEach(node => {
+                structure.nodes.push({
+                    type: node.className.replace('moc-node ', ''),
+                    content: node.textContent
+                });
+            });
+            
+            localStorage.setItem('moc-structure', JSON.stringify(structure));
+        }
+
+        function loadMOCStructure() {
+            const saved = localStorage.getItem('moc-structure');
+            if (saved) {
+                const structure = JSON.parse(saved);
+                // 저장된 구조 복원
+                console.log('Loaded structure:', structure);
+            }
+        }
+
+        // 페이지 로드 시 저장된 구조 불러오기
+        window.addEventListener('load', loadMOCStructure);
+    </script>
+</body>
+</html>

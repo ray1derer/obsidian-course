@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제19강: API와 통합 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+            --purple-color: #b48ead;
+            --orange-color: #d08770;
+            --api-color: #d08770;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            left: 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-color) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--api-color) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* API 플로우 다이어그램 */
+        .api-flow {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .flow-node {
+            flex: 1;
+            background: var(--hover-bg);
+            border: 2px solid var(--api-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .flow-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-color);
+        }
+
+        .flow-node h4 {
+            color: var(--api-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: var(--api-color);
+            animation: slide 2s ease-in-out infinite;
+        }
+
+        @keyframes slide {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        /* URI 스키마 섹션 */
+        .uri-section {
+            margin: 4rem 0;
+        }
+
+        .uri-examples {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .uri-example {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .uri-example:hover {
+            border-color: var(--api-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .uri-example h3 {
+            color: var(--api-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .uri-code {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            border-left: 4px solid var(--api-color);
+            overflow-x: auto;
+        }
+
+        /* 통합 도구 그리드 */
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .integration-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .integration-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--api-color) 0%, var(--accent-color) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .integration-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .integration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--api-color);
+        }
+
+        .integration-card h3 {
+            color: var(--api-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .integration-card .icon {
+            font-size: 2rem;
+        }
+
+        /* API 코드 예제 */
+        .api-examples {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .code-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .code-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--api-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .code-tab:hover::after,
+        .code-tab.active::after {
+            transform: scaleX(1);
+        }
+
+        .code-tab.active {
+            color: var(--api-color);
+        }
+
+        .code-content {
+            display: none;
+        }
+
+        .code-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 코드 블록 */
+        .code-block {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--hover-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        .code-block code {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* 자동화 워크플로우 */
+        .automation-workflow {
+            margin: 4rem 0;
+        }
+
+        .workflow-builder {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .workflow-steps {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: var(--hover-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            border-color: var(--api-color);
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            background: var(--api-color);
+            color: var(--bg-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            color: var(--api-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* 플러그인 개발 섹션 */
+        .plugin-dev-section {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .dev-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .dev-feature {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--api-color);
+            transition: all 0.3s ease;
+        }
+
+        .dev-feature:hover {
+            transform: translateX(10px);
+            border-left-color: var(--accent-color);
+        }
+
+        /* 실습 섹션 */
+        .practice-section {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .practice-tasks {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-task {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-task::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--warning-color);
+        }
+
+        .practice-task h4 {
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .difficulty {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            background: var(--hover-bg);
+        }
+
+        .difficulty.easy { color: var(--success-color); }
+        .difficulty.medium { color: var(--warning-color); }
+        .difficulty.hard { color: var(--error-color); }
+
+        /* FAQ 섹션 */
+        .faq-section {
+            margin: 4rem 0;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--api-color);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--api-color);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 팁 박스들 */
+        .tip-box {
+            background: var(--hover-bg);
+            border-left: 4px solid var(--warning-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .tip-box::before {
+            content: '💡';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .tip-box p {
+            margin-left: 2rem;
+        }
+
+        .warning-box {
+            background: rgba(191, 97, 106, 0.1);
+            border-left: 4px solid var(--error-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .warning-box::before {
+            content: '⚠️';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .warning-box p {
+            margin-left: 2rem;
+        }
+
+        /* API 테스터 */
+        .api-tester {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .tester-controls {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tester-input {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .tester-input:focus {
+            border-color: var(--api-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(208, 135, 112, 0.2);
+        }
+
+        .test-button {
+            background: var(--api-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .test-button:hover {
+            background: var(--orange-color);
+            transform: scale(1.05);
+        }
+
+        .test-result {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            min-height: 100px;
+        }
+
+        /* 진행 표시기 */
+        .progress-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 2px solid var(--api-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .progress-indicator:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .progress-text {
+            font-weight: bold;
+            color: var(--api-color);
+            font-size: 0.9rem;
+        }
+
+        /* 뱃지 스타일 */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 0.25rem;
+        }
+
+        .badge.api {
+            background: var(--api-color);
+            color: var(--bg-color);
+        }
+
+        .badge.advanced {
+            background: var(--purple-color);
+            color: var(--bg-color);
+        }
+
+        .badge.developer {
+            background: var(--info-color);
+            color: var(--bg-color);
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .integration-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .code-tabs {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* 애니메이션 효과 */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* API 플로우 애니메이션 */
+        .data-flow {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--api-color);
+            border-radius: 50%;
+            animation: flow 3s linear infinite;
+        }
+
+        @keyframes flow {
+            0% { left: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+
+        /* 커스텀 스크롤바 */
+        .code-block::-webkit-scrollbar,
+        .uri-code::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .code-block::-webkit-scrollbar-track,
+        .uri-code::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        .code-block::-webkit-scrollbar-thumb,
+        .uri-code::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .code-block::-webkit-scrollbar-thumb:hover,
+        .uri-code::-webkit-scrollbar-thumb:hover {
+            background: var(--api-color);
+        }
+
+        /* 상태 인디케이터 */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: blink 2s infinite;
+        }
+
+        .status-indicator.active {
+            background: var(--success-color);
+        }
+
+        .status-indicator.pending {
+            background: var(--warning-color);
+        }
+
+        .status-indicator.error {
+            background: var(--error-color);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* 메서드 뱃지 */
+        .method-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .method-badge.get {
+            background: var(--success-color);
+            color: var(--bg-color);
+        }
+
+        .method-badge.post {
+            background: var(--warning-color);
+            color: var(--bg-color);
+        }
+
+        .method-badge.put {
+            background: var(--info-color);
+            color: var(--bg-color);
+        }
+
+        .method-badge.delete {
+            background: var(--error-color);
+            color: var(--bg-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p class="subtitle">당신의 생각을 구조화하는 가장 강력한 도구</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_index.html">강좌 홈</a></li>
+            <li><a href="notion_course_18.html">이전 강의</a></li>
+            <li><a href="#" class="active">제19강</a></li>
+            <li><a href="notion_course_20.html">다음 강의</a></li>
+            <li><a href="#practice">실습하기</a></li>
+            <li><a href="#quiz">퀴즈</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제19강: API와 통합</h1>
+            <p class="subtitle">Obsidian을 당신의 디지털 워크플로우의 중심으로 만드세요</p>
+            <div class="badge api">API</div>
+            <div class="badge advanced">고급</div>
+            <div class="badge developer">개발자</div>
+        </div>
+
+        <!-- API 소개 -->
+        <section class="intro-section">
+            <h2>🔌 Obsidian API와 통합의 힘</h2>
+            <p>Obsidian은 다양한 API와 통합 방법을 제공하여 외부 도구 및 서비스와 연결할 수 있습니다. URI 스키마, 플러그인 API, 외부 자동화 도구를 활용하여 완전히 자동화된 워크플로우를 구축할 수 있습니다.</p>
+            
+            <div class="api-flow">
+                <h3>통합 아키텍처</h3>
+                <div class="flow-diagram">
+                    <div class="flow-node">
+                        <h4>외부 앱</h4>
+                        <p>웹 브라우저, 모바일 앱, 데스크톱 도구</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node">
+                        <h4>Obsidian URI</h4>
+                        <p>노트 열기, 생성, 검색 실행</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-node">
+                        <h4>Obsidian Core</h4>
+                        <p>플러그인 API, 이벤트 처리</p>
+                    </div>
+                </div>
+                <div class="data-flow"></div>
+            </div>
+        </section>
+
+        <!-- Obsidian URI 스키마 -->
+        <section class="uri-section">
+            <h2>🔗 Obsidian URI 스키마</h2>
+            <p>Obsidian URI를 사용하면 외부 애플리케이션에서 Obsidian의 기능을 직접 호출할 수 있습니다.</p>
+
+            <div class="uri-examples">
+                <div class="uri-example">
+                    <h3>📄 노트 열기</h3>
+                    <p>특정 노트를 열거나 생성합니다.</p>
+                    <div class="uri-code">
+                        obsidian://open?vault=MyVault&file=Daily%20Notes/2024-01-25
+                    </div>
+                    <div class="code-block" data-language="JavaScript">
+                        <code>// JavaScript에서 사용
+const vault = "MyVault";
+const file = "Daily Notes/2024-01-25";
+const uri = `obsidian://open?vault=${encodeURIComponent(vault)}&file=${encodeURIComponent(file)}`;
+window.location.href = uri;</code>
+                    </div>
+                </div>
+
+                <div class="uri-example">
+                    <h3>✏️ 새 노트 생성</h3>
+                    <p>템플릿과 내용을 포함한 새 노트를 생성합니다.</p>
+                    <div class="uri-code">
+                        obsidian://new?vault=MyVault&name=Meeting%20Notes&content=# Meeting%20Notes%0A%0ADate:%20{{date}}
+                    </div>
+                    <div class="code-block" data-language="Python">
+                        <code># Python에서 사용
+import urllib.parse
+import webbrowser
+
+vault = "MyVault"
+name = "Meeting Notes"
+content = """# Meeting Notes
+
+Date: {{date}}
+Attendees: 
+Agenda: 
+"""
+
+params = {
+    'vault': vault,
+    'name': name,
+    'content': content
+}
+
+uri = f"obsidian://new?{urllib.parse.urlencode(params)}"
+webbrowser.open(uri)</code>
+                    </div>
+                </div>
+
+                <div class="uri-example">
+                    <h3>🔍 검색 실행</h3>
+                    <p>Obsidian에서 직접 검색을 실행합니다.</p>
+                    <div class="uri-code">
+                        obsidian://search?vault=MyVault&query=tag:#important%20modified:today
+                    </div>
+                    <div class="tip-box">
+                        <p>💡 복잡한 검색 쿼리는 URL 인코딩이 필요합니다. 공백은 %20, #은 %23으로 변환됩니다.</p>
+                    </div>
+                </div>
+
+                <div class="uri-example">
+                    <h3>🎯 특정 위치로 이동</h3>
+                    <p>노트의 특정 헤딩이나 블록으로 직접 이동합니다.</p>
+                    <div class="uri-code">
+                        obsidian://open?vault=MyVault&file=Documentation&heading=Installation
+                    </div>
+                    <div class="uri-code">
+                        obsidian://open?vault=MyVault&file=Notes&block=block-id-123
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 외부 도구 통합 -->
+        <section class="integration-section">
+            <h2>🛠️ 외부 도구와의 통합</h2>
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <h3><span class="icon">⚡</span> Zapier</h3>
+                    <p>노코드 자동화 플랫폼</p>
+                    <ul>
+                        <li>Gmail → Obsidian 노트 생성</li>
+                        <li>Google Calendar → Daily Note</li>
+                        <li>RSS Feed → 자동 클리핑</li>
+                        <li>Todoist → 작업 동기화</li>
+                    </ul>
+                    <div class="code-block" data-language="Webhook">
+                        <code>// Zapier Webhook to Obsidian
+POST https://hooks.zapier.com/hooks/catch/123456/abcdef/
+{
+  "title": "{{title}}",
+  "content": "{{content}}",
+  "tags": ["zapier", "automation"]
+}</code>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <h3><span class="icon">🔄</span> IFTTT</h3>
+                    <p>If This Then That 자동화</p>
+                    <ul>
+                        <li>위치 기반 노트 생성</li>
+                        <li>음성 메모 → 텍스트 노트</li>
+                        <li>소셜 미디어 북마크</li>
+                        <li>스마트홈 이벤트 로깅</li>
+                    </ul>
+                    <div class="method-badge get">GET</div>
+                    <div class="method-badge post">POST</div>
+                </div>
+
+                <div class="integration-card">
+                    <h3><span class="icon">🤖</span> Make (Integromat)</h3>
+                    <p>고급 시나리오 자동화</p>
+                    <ul>
+                        <li>복잡한 워크플로우 설계</li>
+                        <li>조건부 로직 처리</li>
+                        <li>데이터 변환 및 필터링</li>
+                        <li>멀티스텝 프로세스</li>
+                    </ul>
+                    <div class="status-indicator active"></div>
+                    <span>실시간 동기화</span>
+                </div>
+
+                <div class="integration-card">
+                    <h3><span class="icon">🐍</span> Python Scripts</h3>
+                    <p>커스텀 스크립트 자동화</p>
+                    <div class="code-block" data-language="Python">
+                        <code>import os
+import datetime
+
+# Obsidian 볼트 경로
+vault_path = "/path/to/vault"
+
+# 일일 노트 생성
+today = datetime.date.today()
+note_path = f"{vault_path}/Daily/{today}.md"
+
+content = f"""# {today}
+
+## 오늘의 할 일
+- [ ] 
+
+## 일정
+- 
+
+## 메모
+- 
+"""
+
+with open(note_path, 'w') as f:
+    f.write(content)</code>
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <h3><span class="icon">🍎</span> Shortcuts (iOS)</h3>
+                    <p>Apple 기기 자동화</p>
+                    <ul>
+                        <li>Siri 음성 명령</li>
+                        <li>위젯 빠른 실행</li>
+                        <li>Share Sheet 통합</li>
+                        <li>자동화 트리거</li>
+                    </ul>
+                    <div class="uri-code">
+                        shortcuts://run-shortcut?name=ObsidianCapture&input={{text}}
+                    </div>
+                </div>
+
+                <div class="integration-card">
+                    <h3><span class="icon">📧</span> Email to Obsidian</h3>
+                    <p>이메일로 노트 생성</p>
+                    <ul>
+                        <li>전용 이메일 주소 설정</li>
+                        <li>제목 → 노트 제목</li>
+                        <li>본문 → 노트 내용</li>
+                        <li>첨부파일 자동 저장</li>
+                    </ul>
+                    <div class="warning-box">
+                        <p>⚠️ 보안을 위해 전용 이메일 주소를 사용하고 스팸 필터를 설정하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API 코드 예제 -->
+        <section class="api-examples">
+            <h2>💻 API 활용 예제</h2>
+            <div class="code-tabs">
+                <button class="code-tab active" onclick="showCodeExample('javascript')">JavaScript</button>
+                <button class="code-tab" onclick="showCodeExample('python')">Python</button>
+                <button class="code-tab" onclick="showCodeExample('shell')">Shell Script</button>
+                <button class="code-tab" onclick="showCodeExample('applescript')">AppleScript</button>
+            </div>
+
+            <div id="javascript" class="code-content active">
+                <h3>브라우저 확장 프로그램</h3>
+                <div class="code-block" data-language="JavaScript">
+                    <code>// Chrome Extension - Web Clipper
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === "clipToObsidian") {
+        const selection = window.getSelection().toString();
+        const title = document.title;
+        const url = window.location.href;
+        
+        const content = `# ${title}
+
+> ${selection}
+
+Source: [${title}](${url})
+Clipped: ${new Date().toISOString()}
+
+#web-clip #${new URL(url).hostname}`;
+
+        const obsidianUri = `obsidian://new?vault=MyVault&name=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}`;
+        
+        window.open(obsidianUri);
+        sendResponse({status: "success"});
+    }
+});</code>
+                </div>
+            </div>
+
+            <div id="python" class="code-content">
+                <h3>자동 백업 스크립트</h3>
+                <div class="code-block" data-language="Python">
+                    <code>#!/usr/bin/env python3
+import os
+import shutil
+import datetime
+import subprocess
+
+# 설정
+VAULT_PATH = "/path/to/obsidian/vault"
+BACKUP_PATH = "/path/to/backup"
+GIT_REMOTE = "origin"
+
+def backup_vault():
+    """Obsidian 볼트 백업"""
+    # 타임스탬프
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # 1. 파일 백업
+    backup_dir = os.path.join(BACKUP_PATH, f"backup_{timestamp}")
+    shutil.copytree(VAULT_PATH, backup_dir)
+    print(f"✅ 백업 완료: {backup_dir}")
+    
+    # 2. Git 커밋
+    os.chdir(VAULT_PATH)
+    subprocess.run(["git", "add", "."])
+    subprocess.run(["git", "commit", "-m", f"Auto backup: {timestamp}"])
+    subprocess.run(["git", "push", GIT_REMOTE, "main"])
+    print("✅ Git 푸시 완료")
+    
+    # 3. 오래된 백업 정리 (30일 이상)
+    cleanup_old_backups()
+
+def cleanup_old_backups():
+    """30일 이상 된 백업 삭제"""
+    cutoff = datetime.datetime.now() - datetime.timedelta(days=30)
+    
+    for item in os.listdir(BACKUP_PATH):
+        item_path = os.path.join(BACKUP_PATH, item)
+        if os.path.isdir(item_path):
+            mtime = datetime.datetime.fromtimestamp(os.path.getmtime(item_path))
+            if mtime < cutoff:
+                shutil.rmtree(item_path)
+                print(f"🗑️ 삭제: {item}")
+
+if __name__ == "__main__":
+    backup_vault()</code>
+                </div>
+            </div>
+
+            <div id="shell" class="code-content">
+                <h3>일일 리포트 생성</h3>
+                <div class="code-block" data-language="Bash">
+                    <code>#!/bin/bash
+# daily_report.sh - Obsidian 일일 리포트 생성
+
+VAULT_PATH="/path/to/vault"
+TODAY=$(date +%Y-%m-%d)
+REPORT_PATH="$VAULT_PATH/Reports/daily_$TODAY.md"
+
+# 통계 수집
+TOTAL_NOTES=$(find "$VAULT_PATH" -name "*.md" | wc -l)
+MODIFIED_TODAY=$(find "$VAULT_PATH" -name "*.md" -mtime 0 | wc -l)
+CREATED_TODAY=$(find "$VAULT_PATH" -name "*.md" -ctime 0 | wc -l)
+
+# 리포트 생성
+cat > "$REPORT_PATH" << EOF
+# 일일 리포트: $TODAY
+
+## 📊 통계
+- 전체 노트 수: $TOTAL_NOTES
+- 오늘 수정된 노트: $MODIFIED_TODAY
+- 오늘 생성된 노트: $CREATED_TODAY
+
+## 📝 오늘 생성된 노트
+$(find "$VAULT_PATH" -name "*.md" -ctime 0 -exec basename {} \; | sed 's/^/- /')
+
+## 🔄 오늘 수정된 노트
+$(find "$VAULT_PATH" -name "*.md" -mtime 0 -exec basename {} \; | sed 's/^/- /')
+
+## 🏷️ 인기 태그
+$(grep -h "^tags:" "$VAULT_PATH"/**/*.md 2>/dev/null | sed 's/tags://g' | tr ',' '\n' | sort | uniq -c | sort -nr | head -10)
+
+---
+Generated: $(date +"%Y-%m-%d %H:%M:%S")
+EOF
+
+# Obsidian에서 열기
+open "obsidian://open?vault=$(basename "$VAULT_PATH")&file=Reports/daily_$TODAY.md"</code>
+                </div>
+            </div>
+
+            <div id="applescript" class="code-content">
+                <h3>macOS 자동화</h3>
+                <div class="code-block" data-language="AppleScript">
+                    <code>-- Quick Capture from Any App
+on run
+    -- 현재 선택된 텍스트 가져오기
+    tell application "System Events"
+        keystroke "c" using command down
+        delay 0.1
+    end tell
+    
+    set selectedText to the clipboard
+    set currentApp to name of current application
+    set captureTime to (current date) as string
+    
+    -- 노트 내용 생성
+    set noteContent to "# Quick Capture" & return & return
+    set noteContent to noteContent & "**From:** " & currentApp & return
+    set noteContent to noteContent & "**Time:** " & captureTime & return & return
+    set noteContent to noteContent & "> " & selectedText & return & return
+    set noteContent to noteContent & "#quick-capture #" & currentApp
+    
+    -- URL 인코딩
+    set noteTitle to "Capture " & (current date)
+    set encodedTitle to do shell script "python -c 'import urllib; print urllib.quote(\"" & noteTitle & "\")'"
+    set encodedContent to do shell script "python -c 'import urllib; print urllib.quote(\"" & noteContent & "\")'"
+    
+    -- Obsidian URI 생성 및 실행
+    set obsidianURI to "obsidian://new?vault=MyVault&name=" & encodedTitle & "&content=" & encodedContent
+    
+    open location obsidianURI
+    
+    -- 알림
+    display notification "Captured to Obsidian!" with title "Quick Capture"
+end run</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- 자동화 워크플로우 -->
+        <section class="automation-workflow">
+            <h2>🔄 자동화 워크플로우 구축</h2>
+            <div class="workflow-builder">
+                <h3>📚 자동 독서 노트 시스템</h3>
+                <p>Goodreads → Obsidian 자동 동기화 워크플로우</p>
+                
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>RSS 피드 모니터링</h4>
+                            <p>Goodreads의 "Currently Reading" RSS 피드를 모니터링</p>
+                            <div class="code-block" data-language="URL">
+                                <code>https://www.goodreads.com/review/list_rss/USER_ID?shelf=currently-reading</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>데이터 추출</h4>
+                            <p>책 정보 파싱 (제목, 저자, ISBN, 표지)</p>
+                            <div class="code-block" data-language="JSON">
+                                <code>{
+  "title": "Building a Second Brain",
+  "author": "Tiago Forte",
+  "isbn": "1982167386",
+  "cover": "https://covers.openlibrary.org/b/isbn/1982167386-L.jpg",
+  "started": "2024-01-25"
+}</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>템플릿 적용</h4>
+                            <p>독서 노트 템플릿에 데이터 삽입</p>
+                            <div class="code-block" data-language="Markdown">
+                                <code># 📚 {{title}}
+
+![Cover]({{cover}})
+
+## 📖 도서 정보
+- **저자**: {{author}}
+- **ISBN**: {{isbn}}
+- **시작일**: {{started}}
+- **완료일**: 
+- **평점**: ⭐⭐⭐⭐⭐
+
+## 🎯 읽기 목표
+- 
+
+## 📝 주요 내용
+### 1장: 
+
+## 💭 인사이트
+- 
+
+## 📌 인용구
+> 
+
+## 🔗 관련 노트
+- 
+
+#book #reading/{{year}}</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Obsidian 노트 생성</h4>
+                            <p>URI 스키마로 노트 자동 생성</p>
+                            <div class="uri-code">
+                                obsidian://new?vault=MyVault&folder=Books&name={{title}}&content={{encoded_content}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 플러그인 개발 -->
+        <section class="plugin-dev-section">
+            <h2>🔧 커스텀 플러그인 개발</h2>
+            <p>Obsidian의 플러그인 API를 활용하여 완전히 커스터마이즈된 통합을 구현할 수 있습니다.</p>
+
+            <div class="dev-features">
+                <div class="dev-feature">
+                    <h4>📱 기본 플러그인 구조</h4>
+                    <div class="code-block" data-language="TypeScript">
+                        <code>import { Plugin, Notice } from 'obsidian';
+
+export default class MyIntegrationPlugin extends Plugin {
+    async onload() {
+        // 명령어 추가
+        this.addCommand({
+            id: 'sync-external-data',
+            name: 'Sync External Data',
+            callback: () => this.syncData()
+        });
+
+        // 리본 아이콘 추가
+        this.addRibbonIcon('sync', 'Sync', () => {
+            this.syncData();
+        });
+
+        // 설정 탭 추가
+        this.addSettingTab(new MySettingTab(this.app, this));
+    }
+
+    async syncData() {
+        new Notice('Syncing data...');
+        
+        // API 호출
+        const response = await fetch('https://api.example.com/data');
+        const data = await response.json();
+        
+        // 노트 생성
+        const file = await this.app.vault.create(
+            `Synced/${Date.now()}.md`,
+            JSON.stringify(data, null, 2)
+        );
+        
+        new Notice('Sync complete!');
+    }
+}</code>
+                    </div>
+                </div>
+
+                <div class="dev-feature">
+                    <h4>🔌 외부 API 연동</h4>
+                    <p>REST API, GraphQL, WebSocket 등 다양한 프로토콜 지원</p>
+                </div>
+
+                <div class="dev-feature">
+                    <h4>🎨 UI 커스터마이징</h4>
+                    <p>모달, 사이드바, 커스텀 뷰 추가 가능</p>
+                </div>
+
+                <div class="dev-feature">
+                    <h4>⚡ 이벤트 핸들링</h4>
+                    <p>파일 변경, 노트 생성 등 다양한 이벤트 감지</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- API 테스터 -->
+        <section class="api-tester-section">
+            <h2>🧪 API 테스터</h2>
+            <div class="api-tester">
+                <h3>Obsidian URI 테스터</h3>
+                <div class="tester-controls">
+                    <input type="text" class="tester-input" id="vault-name" placeholder="Vault 이름">
+                    <input type="text" class="tester-input" id="file-name" placeholder="파일 이름">
+                    <textarea class="tester-input" id="content" placeholder="노트 내용" rows="4"></textarea>
+                    <button class="test-button" onclick="testURI()">URI 생성 및 테스트</button>
+                </div>
+                <div class="test-result" id="test-result">
+                    생성된 URI가 여기에 표시됩니다...
+                </div>
+            </div>
+        </section>
+
+        <!-- 실습 과제 -->
+        <section id="practice" class="practice-section">
+            <h2>🎯 실습 과제</h2>
+            <p>API와 통합을 활용한 자동화 시스템을 구축해보세요.</p>
+            
+            <div class="practice-tasks">
+                <div class="practice-task">
+                    <h4>과제 1: 기본 URI 활용 <span class="difficulty easy">초급</span></h4>
+                    <p>Obsidian URI를 활용한 기본적인 자동화를 구현하세요.</p>
+                    <ul>
+                        <li>브라우저 북마클릿 만들기</li>
+                        <li>터미널 alias 설정</li>
+                        <li>모바일 위젯 구성</li>
+                        <li>이메일 템플릿 생성</li>
+                        <li>캘린더 이벤트 연동</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 2: 자동화 워크플로우 <span class="difficulty medium">중급</span></h4>
+                    <p>외부 서비스와 연동하는 자동화 워크플로우를 구축하세요.</p>
+                    <ul>
+                        <li>RSS 피드 → 노트 자동 생성</li>
+                        <li>이메일 → 작업 노트 변환</li>
+                        <li>캘린더 → Daily Note 동기화</li>
+                        <li>GitHub Issues → 프로젝트 노트</li>
+                        <li>Twitter 북마크 → 연구 노트</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 3: 커스텀 통합 개발 <span class="difficulty hard">고급</span></h4>
+                    <p>Python/JavaScript로 커스텀 통합 솔루션을 개발하세요.</p>
+                    <ul>
+                        <li>웹 스크래퍼 + Obsidian 통합</li>
+                        <li>음성 인식 → 노트 생성 시스템</li>
+                        <li>실시간 데이터 대시보드</li>
+                        <li>멀티소스 데이터 집계기</li>
+                        <li>AI 기반 노트 분류 시스템</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>보너스 과제: 플러그인 개발 <span class="difficulty hard">고급</span></h4>
+                    <p>자신만의 Obsidian 플러그인을 개발하세요.</p>
+                    <ul>
+                        <li>외부 API 클라이언트 플러그인</li>
+                        <li>커스텀 동기화 플러그인</li>
+                        <li>자동 번역 플러그인</li>
+                        <li>소셜 미디어 퍼블리싱 플러그인</li>
+                        <li>데이터 시각화 플러그인</li>
+                        <li>팀 협업 강화 플러그인</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section">
+            <h2>❓ 자주 묻는 질문</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    Obsidian URI가 작동하지 않아요
+                </div>
+                <div class="faq-answer">
+                    <p>URI 스키마 문제 해결 방법:</p>
+                    <ul>
+                        <li><strong>프로토콜 핸들러 등록:</strong> Obsidian이 기본 앱으로 설정되어 있는지 확인</li>
+                        <li><strong>인코딩 확인:</strong> 특수문자는 반드시 URL 인코딩 필요</li>
+                        <li><strong>볼트 이름:</strong> 정확한 볼트 이름 사용 (대소문자 구분)</li>
+                        <li><strong>경로 구분자:</strong> 슬래시(/) 사용, 백슬래시(\) 사용 금지</li>
+                        <li><strong>권한 문제:</strong> 앱 권한 설정 확인</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    외부 API 호출 시 CORS 에러가 발생해요
+                </div>
+                <div class="faq-answer">
+                    <p>CORS 문제 해결 방법:</p>
+                    <ul>
+                        <li><strong>프록시 서버:</strong> 중간 서버를 통해 API 호출</li>
+                        <li><strong>플러그인 개발:</strong> Obsidian 플러그인 내에서 호출</li>
+                        <li><strong>로컬 서버:</strong> Python/Node.js 로컬 서버 활용</li>
+                        <li><strong>CORS 정책:</strong> API 제공자에게 도메인 추가 요청</li>
+                    </ul>
+                    <div class="code-block" data-language="JavaScript">
+                        <code>// 프록시 서버 예제
+const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+const apiUrl = 'https://api.example.com/data';
+
+fetch(proxyUrl + apiUrl)
+    .then(response => response.json())
+    .then(data => console.log(data));</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    자동화가 너무 많은 노트를 생성해요
+                </div>
+                <div class="faq-answer">
+                    <p>자동화 관리 방법:</p>
+                    <ul>
+                        <li><strong>중복 방지:</strong> 생성 전 기존 노트 확인</li>
+                        <li><strong>일괄 처리:</strong> 여러 항목을 하나의 노트로 통합</li>
+                        <li><strong>아카이브:</strong> 오래된 자동 생성 노트 정리</li>
+                        <li><strong>필터링:</strong> 중요한 데이터만 선별하여 저장</li>
+                        <li><strong>폴더 구조:</strong> 자동 생성 노트 전용 폴더 사용</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    플러그인 개발을 시작하려면 어떻게 해야 하나요?
+                </div>
+                <div class="faq-answer">
+                    <p>플러그인 개발 시작하기:</p>
+                    <ol>
+                        <li><strong>개발 환경 설정:</strong>
+                            <ul>
+                                <li>Node.js 설치</li>
+                                <li>TypeScript 설정</li>
+                                <li>Obsidian API 문서 숙지</li>
+                            </ul>
+                        </li>
+                        <li><strong>샘플 플러그인 복제:</strong>
+                            <div class="code-block" data-language="Bash">
+                                <code>git clone https://github.com/obsidianmd/obsidian-sample-plugin
+cd obsidian-sample-plugin
+npm install
+npm run dev</code>
+                            </div>
+                        </li>
+                        <li><strong>개발자 모드 활성화:</strong> 설정 → 커뮤니티 플러그인 → 개발자 모드</li>
+                        <li><strong>핫 리로드:</strong> 개발 중 자동 새로고침 설정</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    보안은 어떻게 관리하나요?
+                </div>
+                <div class="faq-answer">
+                    <p>API 통합 보안 관리:</p>
+                    <ul>
+                        <li><strong>API 키 관리:</strong> 환경 변수나 별도 설정 파일에 저장</li>
+                        <li><strong>접근 제한:</strong> 필요한 권한만 부여</li>
+                        <li><strong>데이터 검증:</strong> 외부 데이터 삽입 전 검증</li>
+                        <li><strong>HTTPS 사용:</strong> 모든 API 통신은 암호화</li>
+                        <li><strong>로그 관리:</strong> 민감한 정보는 로그에서 제외</li>
+                    </ul>
+                    <div class="warning-box">
+                        <p>⚠️ API 키나 비밀번호를 절대 Git에 커밋하지 마세요!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 추가 리소스 -->
+        <section class="resources-section">
+            <h2>📚 추가 학습 리소스</h2>
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <h3>📖 공식 문서</h3>
+                    <ul>
+                        <li>Obsidian URI 스키마 문서</li>
+                        <li>플러그인 API 레퍼런스</li>
+                        <li>개발자 가이드</li>
+                        <li>보안 Best Practices</li>
+                    </ul>
+                </div>
+                <div class="integration-card">
+                    <h3>🛠️ 개발 도구</h3>
+                    <ul>
+                        <li>Obsidian Plugin Template</li>
+                        <li>API Testing Tools (Postman, Insomnia)</li>
+                        <li>Webhook Debugging (webhook.site)</li>
+                        <li>URL Encoder/Decoder</li>
+                    </ul>
+                </div>
+                <div class="integration-card">
+                    <h3>💻 예제 프로젝트</h3>
+                    <ul>
+                        <li>Obsidian Web Clipper</li>
+                        <li>Auto Backup System</li>
+                        <li>Social Media Integration</li>
+                        <li>Voice Note Transcriber</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 다음 강의 예고 -->
+        <section class="next-preview">
+            <h2>🔮 다음 강의 예고</h2>
+            <div class="feature-showcase">
+                <h3>제20강: 성능 최적화</h3>
+                <div class="feature-content">
+                    <p>다음 강의에서는 대규모 볼트를 효율적으로 관리하는 방법을 배웁니다:</p>
+                    <ul>
+                        <li>볼트 크기와 성능의 관계</li>
+                        <li>인덱싱 최적화 기법</li>
+                        <li>플러그인 성능 관리</li>
+                        <li>대용량 파일 처리 전략</li>
+                        <li>검색 성능 개선</li>
+                        <li>시작 시간 단축 방법</li>
+                    </ul>
+                    <p>수천 개의 노트도 빠르게 처리하는 최적화 기법을 알아봅니다!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 진행률 표시 -->
+    <div class="progress-indicator" onclick="scrollToTop()">
+        <span class="progress-text">19/30</span>
+    </div>
+
+    <script>
+        // 코드 예제 탭 전환
+        function showCodeExample(language) {
+            const tabs = document.querySelectorAll('.code-tab');
+            const contents = document.querySelectorAll('.code-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(language).classList.add('active');
+        }
+
+        // URI 테스터
+        function testURI() {
+            const vault = document.getElementById('vault-name').value;
+            const file = document.getElementById('file-name').value;
+            const content = document.getElementById('content').value;
+            
+            if (!vault || !file) {
+                document.getElementById('test-result').textContent = '볼트 이름과 파일 이름을 입력하세요.';
+                return;
+            }
+            
+            const uri = `obsidian://new?vault=${encodeURIComponent(vault)}&name=${encodeURIComponent(file)}&content=${encodeURIComponent(content)}`;
+            
+            const result = document.getElementById('test-result');
+            result.innerHTML = `
+                <strong>생성된 URI:</strong><br>
+                <code style="word-break: break-all;">${uri}</code><br><br>
+                <button onclick="window.open('${uri}')" style="background: var(--api-color); color: var(--bg-color); border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">
+                    Obsidian에서 열기
+                </button>
+            `;
+        }
+
+        // FAQ 토글
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 맨 위로 스크롤
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 스크롤 진행률
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrolled / total) * 100;
+            
+            const progressIndicator = document.querySelector('.progress-indicator');
+            if (progress > 10) {
+                progressIndicator.style.opacity = '1';
+            } else {
+                progressIndicator.style.opacity = '0.5';
+            }
+        });
+
+        // 애니메이션 효과
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.integration-card, .practice-task, .uri-example').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 코드 블록 복사
+        document.querySelectorAll('.code-block, .uri-code').forEach(block => {
+            block.style.cursor = 'pointer';
+            block.addEventListener('click', function() {
+                const code = this.textContent.trim();
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalBg = this.style.background;
+                    this.style.background = 'var(--success-color)';
+                    setTimeout(() => {
+                        this.style.background = originalBg;
+                    }, 300);
+                });
+            });
+        });
+
+        // Flow 노드 호버 효과
+        document.querySelectorAll('.flow-node').forEach(node => {
+            node.addEventListener('mouseenter', function() {
+                this.style.background = 'var(--api-color)';
+                this.style.color = 'var(--bg-color)';
+            });
+            
+            node.addEventListener('mouseleave', function() {
+                this.style.background = '';
+                this.style.color = '';
+            });
+        });
+
+        // 워크플로우 스텝 애니메이션
+        const workflowObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateX(0)';
+                    }, index * 200);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.workflow-step').forEach(step => {
+            step.style.opacity = '0';
+            step.style.transform = 'translateX(-50px)';
+            step.style.transition = 'all 0.5s ease';
+            workflowObserver.observe(step);
+        });
+
+        // API 플로우 애니메이션
+        const dataFlow = document.querySelector('.data-flow');
+        if (dataFlow) {
+            setInterval(() => {
+                const newFlow = dataFlow.cloneNode(true);
+                dataFlow.parentNode.appendChild(newFlow);
+                setTimeout(() => newFlow.remove(), 3000);
+            }, 1500);
+        }
+
+        // 메서드 뱃지 인터랙션
+        document.querySelectorAll('.method-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                const method = this.textContent;
+                console.log(`Method: ${method}`);
+                // 실제 구현에서는 메서드별 예제 표시
+            });
+        });
+
+        // 키보드 단축키
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 't':
+                        e.preventDefault();
+                        document.getElementById('vault-name').focus();
+                        break;
+                    case 'g':
+                        e.preventDefault();
+                        testURI();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

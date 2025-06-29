@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제22강: CSS 커스터마이징 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+            --purple-color: #b48ead;
+            --orange-color: #d08770;
+            --css-color: #d08770;
+            --theme-color: #b48ead;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--css-color) 0%, transparent 70%);
+            opacity: 0.2;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-50px, -50px) rotate(120deg); }
+            66% { transform: translate(50px, -30px) rotate(240deg); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--css-color), var(--theme-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(odd) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(even) {
+            animation-delay: 0.4s;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--accent-color), var(--css-color));
+            border-radius: 3px;
+        }
+
+        .section h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--css-color);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(208, 135, 112, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--css-color);
+        }
+
+        .css-editor {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .editor-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--error-color);
+        }
+
+        .editor-dot:nth-child(2) {
+            background: var(--warning-color);
+        }
+
+        .editor-dot:nth-child(3) {
+            background: var(--success-color);
+        }
+
+        .editor-title {
+            margin-left: auto;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .css-code {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #d4d4d4;
+            position: relative;
+        }
+
+        .css-code .selector {
+            color: #d7ba7d;
+        }
+
+        .css-code .property {
+            color: #9cdcfe;
+        }
+
+        .css-code .value {
+            color: #ce9178;
+        }
+
+        .css-code .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .css-code .important {
+            color: #569cd6;
+        }
+
+        .css-code .variable {
+            color: #c586c0;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(136, 192, 208, 0.3);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        .theme-preview {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .preview-item {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--css-color), var(--theme-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .preview-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .preview-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .preview-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--css-color);
+        }
+
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.2);
+            border-color: var(--accent-color);
+        }
+
+        .css-variables {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .variable-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .variable-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .variable-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .variable-name {
+            font-family: 'Courier New', monospace;
+            color: var(--theme-color);
+            font-size: 0.9rem;
+        }
+
+        .variable-value {
+            margin-left: auto;
+            padding: 0.3rem 0.8rem;
+            background: var(--hover-bg);
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .snippet-gallery {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .snippet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .snippet-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .snippet-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--css-color), var(--theme-color));
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .snippet-card:hover::after {
+            transform: translateY(0);
+        }
+
+        .snippet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .snippet-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--css-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .snippet-description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .snippet-preview {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .theme-switcher {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .theme-option {
+            flex: 1;
+            min-width: 150px;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .theme-option:hover {
+            transform: scale(1.05);
+            border-color: var(--css-color);
+        }
+
+        .theme-option.active {
+            border-color: var(--accent-color);
+            box-shadow: 0 5px 20px rgba(136, 192, 208, 0.3);
+        }
+
+        .theme-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-name {
+            font-weight: bold;
+            color: var(--css-color);
+        }
+
+        .interactive-demo {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            padding: 0.8rem 1.5rem;
+            background: var(--css-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(208, 135, 112, 0.3);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        .demo-preview {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-height: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .style-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .style-input:focus {
+            outline: none;
+            border-color: var(--css-color);
+            box-shadow: 0 0 0 3px rgba(208, 135, 112, 0.2);
+        }
+
+        .best-practices {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--css-color) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .practice-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .practice-card:hover {
+            border-color: var(--css-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .practice-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .practice-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--css-color);
+        }
+
+        .practice-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .faq-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--css-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        .resources-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .resource-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .resource-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--css-color);
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-link {
+            color: var(--theme-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-link:hover {
+            color: var(--accent-color);
+        }
+
+        .practice-exercises {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .exercise-list {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .exercise-item {
+            background: rgba(46, 52, 64, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--css-color);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--css-color);
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: var(--success-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-medium {
+            background: var(--warning-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-hard {
+            background: var(--error-color);
+            color: var(--text-color);
+        }
+
+        .next-lesson {
+            background: linear-gradient(135deg, var(--css-color) 0%, var(--theme-color) 100%);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .next-lesson::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .next-lesson h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .next-lesson p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+
+            .snippet-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-options {
+                flex-direction: column;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p>체계적으로 배우는 노션 활용법</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_01.html">기초과정</a></li>
+            <li><a href="notion_course_12.html">중급과정</a></li>
+            <li><a href="notion_course_21.html">고급과정</a></li>
+            <li><a href="#basics">CSS기초</a></li>
+            <li><a href="#variables">변수시스템</a></li>
+            <li><a href="#snippets">스니펫</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제22강: CSS 커스터마이징</h1>
+            <p>CSS를 활용하여 나만의 Obsidian 테마를 만들고 UI를 완벽하게 커스터마이징합니다</p>
+            <div class="badge-container">
+                <span class="badge badge-advanced">고급</span>
+                <span class="badge badge-duration">75분</span>
+                <span class="badge badge-css">CSS</span>
+            </div>
+        </div>
+
+        <section class="section" id="introduction">
+            <h2>1. CSS 커스터마이징 소개</h2>
+            
+            <div class="card">
+                <h3>Obsidian의 CSS 시스템</h3>
+                <p>Obsidian은 강력한 CSS 커스터마이징 시스템을 제공합니다. CSS 스니펫, 커스텀 테마, CSS 변수를 통해 모든 UI 요소를 자유롭게 스타일링할 수 있습니다.</p>
+                
+                <div class="css-variables">
+                    <h4>주요 CSS 변수</h4>
+                    <div class="variable-list">
+                        <div class="variable-item">
+                            <span class="variable-name">--background-primary</span>
+                            <span class="variable-value">#1e1e1e</span>
+                        </div>
+                        <div class="variable-item">
+                            <span class="variable-name">--background-secondary</span>
+                            <span class="variable-value">#252525</span>
+                        </div>
+                        <div class="variable-item">
+                            <span class="variable-name">--text-normal</span>
+                            <span class="variable-value">#dcddde</span>
+                        </div>
+                        <div class="variable-item">
+                            <span class="variable-name">--text-muted</span>
+                            <span class="variable-value">#999</span>
+                        </div>
+                        <div class="variable-item">
+                            <span class="variable-name">--interactive-accent</span>
+                            <span class="variable-value">#7f6df2</span>
+                        </div>
+                        <div class="variable-item">
+                            <span class="variable-name">--interactive-hover</span>
+                            <span class="variable-value">#6653d3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>CSS 적용 방법</h3>
+                <ul>
+                    <li><strong>CSS 스니펫</strong>: .obsidian/snippets 폴더에 .css 파일 추가</li>
+                    <li><strong>커스텀 테마</strong>: 완전한 테마 파일 생성 및 배포</li>
+                    <li><strong>개발자 도구</strong>: 실시간 CSS 수정 및 테스트</li>
+                    <li><strong>Style Settings 플러그인</strong>: GUI로 CSS 변수 조정</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="basics">
+            <h2>2. CSS 기초 개념</h2>
+            
+            <div class="card">
+                <h3>기본 선택자</h3>
+                <div class="css-editor">
+                    <div class="editor-header">
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <span class="editor-title">basic-selectors.css</span>
+                    </div>
+                    <div class="css-code">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="comment">/* 클래스 선택자 */</span>
+<span class="selector">.markdown-preview-view</span> {
+    <span class="property">font-family</span>: <span class="value">'Pretendard', sans-serif</span>;
+    <span class="property">line-height</span>: <span class="value">1.8</span>;
+}
+
+<span class="comment">/* ID 선택자 */</span>
+<span class="selector">#app-container</span> {
+    <span class="property">background</span>: <span class="value">var(--background-primary)</span>;
+}
+
+<span class="comment">/* 속성 선택자 */</span>
+<span class="selector">a[href^="http"]</span> {
+    <span class="property">color</span>: <span class="value">var(--text-accent)</span>;
+    <span class="property">text-decoration</span>: <span class="value">underline</span>;
+}
+
+<span class="comment">/* 의사 클래스 */</span>
+<span class="selector">.nav-file-title:hover</span> {
+    <span class="property">background</span>: <span class="value">var(--background-modifier-hover)</span>;
+    <span class="property">cursor</span>: <span class="value">pointer</span>;
+}
+
+<span class="comment">/* 자손 선택자 */</span>
+<span class="selector">.markdown-preview-view h1</span> {
+    <span class="property">margin-top</span>: <span class="value">2rem</span>;
+    <span class="property">color</span>: <span class="value">var(--text-title-h1)</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Obsidian 전용 클래스</h3>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* 워크스페이스 */</span>
+<span class="selector">.workspace</span> {
+    <span class="property">background-color</span>: <span class="value">var(--background-primary)</span>;
+}
+
+<span class="comment">/* 사이드바 */</span>
+<span class="selector">.workspace-ribbon</span> {
+    <span class="property">background</span>: <span class="value">var(--background-secondary-alt)</span>;
+    <span class="property">border-right</span>: <span class="value">1px solid var(--background-modifier-border)</span>;
+}
+
+<span class="comment">/* 파일 탐색기 */</span>
+<span class="selector">.nav-folder-title</span> {
+    <span class="property">font-weight</span>: <span class="value">600</span>;
+    <span class="property">color</span>: <span class="value">var(--text-muted)</span>;
+}
+
+<span class="comment">/* 에디터 */</span>
+<span class="selector">.cm-editor</span> {
+    <span class="property">font-size</span>: <span class="value">16px</span>;
+    <span class="property">line-height</span>: <span class="value">1.6</span>;
+}
+
+<span class="comment">/* 상태바 */</span>
+<span class="selector">.status-bar</span> {
+    <span class="property">background</span>: <span class="value">var(--background-secondary)</span>;
+    <span class="property">border-top</span>: <span class="value">1px solid var(--background-modifier-border)</span>;
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>반응형 디자인</h3>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* 모바일 스타일 */</span>
+<span class="selector">@media (max-width: 768px)</span> {
+    <span class="selector">.markdown-preview-view</span> {
+        <span class="property">font-size</span>: <span class="value">14px</span>;
+        <span class="property">padding</span>: <span class="value">1rem</span>;
+    }
+    
+    <span class="selector">.nav-file-title</span> {
+        <span class="property">font-size</span>: <span class="value">13px</span>;
+    }
+}
+
+<span class="comment">/* 태블릿 스타일 */</span>
+<span class="selector">@media (min-width: 769px) and (max-width: 1024px)</span> {
+    <span class="selector">.workspace-split</span> {
+        <span class="property">min-width</span>: <span class="value">300px</span>;
+    }
+}
+
+<span class="comment">/* 데스크톱 스타일 */</span>
+<span class="selector">@media (min-width: 1025px)</span> {
+    <span class="selector">.markdown-preview-view</span> {
+        <span class="property">max-width</span>: <span class="value">900px</span>;
+        <span class="property">margin</span>: <span class="value">0 auto</span>;
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="variables">
+            <h2>3. CSS 변수 시스템</h2>
+            
+            <div class="card">
+                <h3>테마 변수 커스터마이징</h3>
+                <div class="css-editor">
+                    <div class="editor-header">
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <span class="editor-title">theme-variables.css</span>
+                    </div>
+                    <div class="css-code">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="selector">:root</span> {
+    <span class="comment">/* 색상 팔레트 */</span>
+    <span class="property">--color-base-00</span>: <span class="value">#1e1e1e</span>;
+    <span class="property">--color-base-10</span>: <span class="value">#242424</span>;
+    <span class="property">--color-base-20</span>: <span class="value">#262626</span>;
+    <span class="property">--color-base-25</span>: <span class="value">#2a2a2a</span>;
+    <span class="property">--color-base-30</span>: <span class="value">#363636</span>;
+    <span class="property">--color-base-35</span>: <span class="value">#3f3f3f</span>;
+    <span class="property">--color-base-40</span>: <span class="value">#555</span>;
+    <span class="property">--color-base-50</span>: <span class="value">#666</span>;
+    <span class="property">--color-base-60</span>: <span class="value">#999</span>;
+    <span class="property">--color-base-70</span>: <span class="value">#bababa</span>;
+    <span class="property">--color-base-100</span>: <span class="value">#dadada</span>;
+    
+    <span class="comment">/* 배경색 */</span>
+    <span class="property">--background-primary</span>: <span class="value">var(--color-base-00)</span>;
+    <span class="property">--background-primary-alt</span>: <span class="value">var(--color-base-10)</span>;
+    <span class="property">--background-secondary</span>: <span class="value">var(--color-base-20)</span>;
+    <span class="property">--background-secondary-alt</span>: <span class="value">var(--color-base-25)</span>;
+    
+    <span class="comment">/* 텍스트 색상 */</span>
+    <span class="property">--text-normal</span>: <span class="value">var(--color-base-100)</span>;
+    <span class="property">--text-muted</span>: <span class="value">var(--color-base-70)</span>;
+    <span class="property">--text-faint</span>: <span class="value">var(--color-base-50)</span>;
+    
+    <span class="comment">/* 인터랙티브 요소 */</span>
+    <span class="property">--interactive-normal</span>: <span class="value">var(--color-base-30)</span>;
+    <span class="property">--interactive-hover</span>: <span class="value">var(--color-base-35)</span>;
+    <span class="property">--interactive-accent</span>: <span class="value">#7f6df2</span>;
+    <span class="property">--interactive-accent-rgb</span>: <span class="value">127, 109, 242</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>커스텀 변수 생성</h3>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="selector">.theme-dark</span> {
+    <span class="comment">/* 커스텀 색상 변수 */</span>
+    <span class="property">--my-accent-color</span>: <span class="value">#ff6b6b</span>;
+    <span class="property">--my-success-color</span>: <span class="value">#51cf66</span>;
+    <span class="property">--my-warning-color</span>: <span class="value">#ffd93d</span>;
+    <span class="property">--my-error-color</span>: <span class="value">#ff6b6b</span>;
+    
+    <span class="comment">/* 커스텀 간격 변수 */</span>
+    <span class="property">--my-spacing-xs</span>: <span class="value">0.25rem</span>;
+    <span class="property">--my-spacing-sm</span>: <span class="value">0.5rem</span>;
+    <span class="property">--my-spacing-md</span>: <span class="value">1rem</span>;
+    <span class="property">--my-spacing-lg</span>: <span class="value">2rem</span>;
+    <span class="property">--my-spacing-xl</span>: <span class="value">3rem</span>;
+    
+    <span class="comment">/* 커스텀 폰트 변수 */</span>
+    <span class="property">--my-font-ui</span>: <span class="value">'Inter', -apple-system, sans-serif</span>;
+    <span class="property">--my-font-text</span>: <span class="value">'Pretendard', sans-serif</span>;
+    <span class="property">--my-font-code</span>: <span class="value">'JetBrains Mono', monospace</span>;
+}
+
+<span class="comment">/* 변수 사용 예시 */</span>
+<span class="selector">.my-custom-element</span> {
+    <span class="property">background</span>: <span class="value">var(--my-accent-color)</span>;
+    <span class="property">padding</span>: <span class="value">var(--my-spacing-md)</span>;
+    <span class="property">font-family</span>: <span class="value">var(--my-font-ui)</span>;
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>다크/라이트 테마 대응</h3>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* 라이트 테마 변수 */</span>
+<span class="selector">.theme-light</span> {
+    <span class="property">--background-primary</span>: <span class="value">#ffffff</span>;
+    <span class="property">--background-secondary</span>: <span class="value">#f3f3f3</span>;
+    <span class="property">--text-normal</span>: <span class="value">#2e3338</span>;
+    <span class="property">--text-muted</span>: <span class="value">#8e8e90</span>;
+}
+
+<span class="comment">/* 다크 테마 변수 */</span>
+<span class="selector">.theme-dark</span> {
+    <span class="property">--background-primary</span>: <span class="value">#1e1e1e</span>;
+    <span class="property">--background-secondary</span>: <span class="value">#252525</span>;
+    <span class="property">--text-normal</span>: <span class="value">#dcddde</span>;
+    <span class="property">--text-muted</span>: <span class="value">#999999</span>;
+}
+
+<span class="comment">/* 자동 테마 감지 */</span>
+<span class="selector">@media (prefers-color-scheme: dark)</span> {
+    <span class="selector">:root</span> {
+        <span class="property">--auto-theme-bg</span>: <span class="value">#1e1e1e</span>;
+        <span class="property">--auto-theme-text</span>: <span class="value">#dcddde</span>;
+    }
+}
+
+<span class="selector">@media (prefers-color-scheme: light)</span> {
+    <span class="selector">:root</span> {
+        <span class="property">--auto-theme-bg</span>: <span class="value">#ffffff</span>;
+        <span class="property">--auto-theme-text</span>: <span class="value">#2e3338</span>;
+    }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="snippets">
+            <h2>4. 실용적인 CSS 스니펫</h2>
+            
+            <div class="card">
+                <h3>인기 CSS 스니펫 갤러리</h3>
+                <div class="snippet-gallery">
+                    <div class="snippet-grid">
+                        <div class="snippet-card">
+                            <div class="snippet-title">📝 읽기 전용 라인 너비</div>
+                            <div class="snippet-description">
+                                읽기 모드에서 최적의 가독성을 위한 라인 너비 제한
+                            </div>
+                            <div class="snippet-preview">
+                                <code>.markdown-preview-view {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 2rem;
+}</code>
+                            </div>
+                        </div>
+
+                        <div class="snippet-card">
+                            <div class="snippet-title">🎨 체크박스 스타일링</div>
+                            <div class="snippet-description">
+                                작업 상태에 따른 다채로운 체크박스 디자인
+                            </div>
+                            <div class="snippet-preview">
+                                <code>input[type=checkbox]:checked {
+    background: #51cf66;
+    border-color: #51cf66;
+}
+
+.task-list-item.is-checked {
+    text-decoration: line-through;
+    opacity: 0.7;
+}</code>
+                            </div>
+                        </div>
+
+                        <div class="snippet-card">
+                            <div class="snippet-title">🏷️ 태그 꾸미기</div>
+                            <div class="snippet-description">
+                                태그를 알약 모양으로 스타일링
+                            </div>
+                            <div class="snippet-preview">
+                                <code>.tag {
+    background: var(--interactive-accent);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+}</code>
+                            </div>
+                        </div>
+
+                        <div class="snippet-card">
+                            <div class="snippet-title">📊 테이블 개선</div>
+                            <div class="snippet-description">
+                                보기 좋은 테이블 스타일링
+                            </div>
+                            <div class="snippet-preview">
+                                <code>table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    background: var(--background-secondary);
+    font-weight: 600;
+}
+
+tr:nth-child(even) {
+    background: var(--background-primary-alt);
+}</code>
+                            </div>
+                        </div>
+
+                        <div class="snippet-card">
+                            <div class="snippet-title">💡 콜아웃 커스터마이징</div>
+                            <div class="snippet-description">
+                                다양한 콜아웃 타입별 스타일
+                            </div>
+                            <div class="snippet-preview">
+                                <code>.callout[data-callout="info"] {
+    --callout-color: 66, 153, 225;
+    --callout-icon: info-circle;
+}
+
+.callout[data-callout="warning"] {
+    --callout-color: 236, 201, 75;
+    --callout-icon: alert-triangle;
+}</code>
+                            </div>
+                        </div>
+
+                        <div class="snippet-card">
+                            <div class="snippet-title">🔗 링크 효과</div>
+                            <div class="snippet-description">
+                                호버 시 부드러운 언더라인 애니메이션
+                            </div>
+                            <div class="snippet-preview">
+                                <code>a {
+    position: relative;
+    text-decoration: none;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--interactive-accent);
+    transition: width 0.3s;
+}
+
+a:hover::after {
+    width: 100%;
+}</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>고급 스니펫 예제</h3>
+                <div class="css-editor">
+                    <div class="editor-header">
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <span class="editor-title">advanced-snippets.css</span>
+                    </div>
+                    <div class="css-code">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="comment">/* 제목 번호 자동 추가 */</span>
+<span class="selector">body</span> {
+    <span class="property">counter-reset</span>: <span class="value">h1counter h2counter h3counter</span>;
+}
+
+<span class="selector">.markdown-preview-view h1</span> {
+    <span class="property">counter-increment</span>: <span class="value">h1counter</span>;
+    <span class="property">counter-reset</span>: <span class="value">h2counter</span>;
+}
+
+<span class="selector">.markdown-preview-view h1::before</span> {
+    <span class="property">content</span>: <span class="value">counter(h1counter) ". "</span>;
+    <span class="property">color</span>: <span class="value">var(--text-muted)</span>;
+}
+
+<span class="selector">.markdown-preview-view h2</span> {
+    <span class="property">counter-increment</span>: <span class="value">h2counter</span>;
+    <span class="property">counter-reset</span>: <span class="value">h3counter</span>;
+}
+
+<span class="selector">.markdown-preview-view h2::before</span> {
+    <span class="property">content</span>: <span class="value">counter(h1counter) "." counter(h2counter) ". "</span>;
+    <span class="property">color</span>: <span class="value">var(--text-muted)</span>;
+}
+
+<span class="comment">/* 플로팅 액션 버튼 */</span>
+<span class="selector">.workspace-leaf-content::after</span> {
+    <span class="property">content</span>: <span class="value">'+'</span>;
+    <span class="property">position</span>: <span class="value">fixed</span>;
+    <span class="property">bottom</span>: <span class="value">2rem</span>;
+    <span class="property">right</span>: <span class="value">2rem</span>;
+    <span class="property">width</span>: <span class="value">3rem</span>;
+    <span class="property">height</span>: <span class="value">3rem</span>;
+    <span class="property">background</span>: <span class="value">var(--interactive-accent)</span>;
+    <span class="property">color</span>: <span class="value">white</span>;
+    <span class="property">border-radius</span>: <span class="value">50%</span>;
+    <span class="property">display</span>: <span class="value">flex</span>;
+    <span class="property">align-items</span>: <span class="value">center</span>;
+    <span class="property">justify-content</span>: <span class="value">center</span>;
+    <span class="property">font-size</span>: <span class="value">1.5rem</span>;
+    <span class="property">cursor</span>: <span class="value">pointer</span>;
+    <span class="property">box-shadow</span>: <span class="value">0 4px 12px rgba(0,0,0,0.15)</span>;
+    <span class="property">transition</span>: <span class="value">all 0.3s</span>;
+}
+
+<span class="selector">.workspace-leaf-content::after:hover</span> {
+    <span class="property">transform</span>: <span class="value">scale(1.1)</span>;
+    <span class="property">box-shadow</span>: <span class="value">0 6px 20px rgba(0,0,0,0.2)</span>;
+}
+
+<span class="comment">/* 코드 블록 언어 표시 */</span>
+<span class="selector">pre[class*="language-"]::before</span> {
+    <span class="property">content</span>: <span class="value">attr(class)</span>;
+    <span class="property">position</span>: <span class="value">absolute</span>;
+    <span class="property">top</span>: <span class="value">0</span>;
+    <span class="property">right</span>: <span class="value">0</span>;
+    <span class="property">padding</span>: <span class="value">0.2rem 0.6rem</span>;
+    <span class="property">background</span>: <span class="value">var(--background-secondary)</span>;
+    <span class="property">color</span>: <span class="value">var(--text-muted)</span>;
+    <span class="property">font-size</span>: <span class="value">0.8rem</span>;
+    <span class="property">border-radius</span>: <span class="value">0 0 0 0.5rem</span>;
+}
+
+<span class="selector">pre[class="language-javascript"]::before</span> {
+    <span class="property">content</span>: <span class="value">"JavaScript"</span>;
+    <span class="property">background</span>: <span class="value">#f7df1e</span>;
+    <span class="property">color</span>: <span class="value">#000</span>;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="ui-customization">
+            <h2>5. UI 요소 커스터마이징</h2>
+            
+            <div class="card">
+                <h3>파일 탐색기 스타일링</h3>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* 파일 탐색기 개선 */</span>
+<span class="selector">.nav-folder-title</span> {
+    <span class="property">position</span>: <span class="value">relative</span>;
+    <span class="property">padding-left</span>: <span class="value">1.5rem</span>;
+}
+
+<span class="comment">/* 폴더 아이콘 커스터마이징 */</span>
+<span class="selector">.nav-folder-title::before</span> {
+    <span class="property">content</span>: <span class="value">'📁'</span>;
+    <span class="property">position</span>: <span class="value">absolute</span>;
+    <span class="property">left</span>: <span class="value">0</span>;
+    <span class="property">transition</span>: <span class="value">transform 0.2s</span>;
+}
+
+<span class="selector">.nav-folder.is-collapsed .nav-folder-title::before</span> {
+    <span class="property">content</span>: <span class="value">'📂'</span>;
+}
+
+<span class="comment">/* 파일 타입별 아이콘 */</span>
+<span class="selector">.nav-file-title[data-path$=".md"]::before</span> {
+    <span class="property">content</span>: <span class="value">'📝'</span>;
+    <span class="property">margin-right</span>: <span class="value">0.5rem</span>;
+}
+
+<span class="selector">.nav-file-title[data-path$=".pdf"]::before</span> {
+    <span class="property">content</span>: <span class="value">'📄'</span>;
+    <span class="property">margin-right</span>: <span class="value">0.5rem</span>;
+}
+
+<span class="selector">.nav-file-title[data-path$=".png"], 
+.nav-file-title[data-path$=".jpg"]::before</span> {
+    <span class="property">content</span>: <span class="value">'🖼️'</span>;
+    <span class="property">margin-right</span>: <span class="value">0.5rem</span>;
+}
+
+<span class="comment">/* 활성 파일 강조 */</span>
+<span class="selector">.nav-file.is-active</span> {
+    <span class="property">background</span>: <span class="value">var(--interactive-accent)</span>;
+    <span class="property">color</span>: <span class="value">white</span>;
+    <span class="property">border-radius</span>: <span class="value">6px</span>;
+}
+
+<span class="selector">.nav-file.is-active .nav-file-title</span> {
+    <span class="property">color</span>: <span class="value">white</span> <span class="important">!important</span>;
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>에디터 커스터마이징</h3>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* 에디터 폰트 및 간격 */</span>
+<span class="selector">.cm-editor</span> {
+    <span class="property">font-family</span>: <span class="value">'iA Writer Quattro', 'Noto Sans KR', sans-serif</span>;
+    <span class="property">font-size</span>: <span class="value">16px</span>;
+    <span class="property">line-height</span>: <span class="value">1.8</span>;
+}
+
+<span class="comment">/* 선택 영역 스타일 */</span>
+<span class="selector">.cm-editor .cm-selectionBackground</span> {
+    <span class="property">background-color</span>: <span class="value">rgba(127, 109, 242, 0.3)</span> <span class="important">!important</span>;
+}
+
+<span class="comment">/* 커서 스타일 */</span>
+<span class="selector">.cm-editor .cm-cursor</span> {
+    <span class="property">border-left-color</span>: <span class="value">var(--interactive-accent)</span> <span class="important">!important</span>;
+    <span class="property">border-left-width</span>: <span class="value">3px</span>;
+}
+
+<span class="comment">/* 줄 번호 스타일 */</span>
+<span class="selector">.cm-lineNumbers .cm-gutterElement</span> {
+    <span class="property">color</span>: <span class="value">var(--text-faint)</span>;
+    <span class="property">font-size</span>: <span class="value">0.85em</span>;
+    <span class="property">padding</span>: <span class="value">0 1rem</span>;
+}
+
+<span class="comment">/* 현재 줄 강조 */</span>
+<span class="selector">.cm-editor .cm-activeLine</span> {
+    <span class="property">background-color</span>: <span class="value">rgba(255, 255, 255, 0.05)</span>;
+}
+
+<span class="comment">/* 접기 가능한 영역 */</span>
+<span class="selector">.cm-foldGutter .cm-gutterElement</span> {
+    <span class="property">cursor</span>: <span class="value">pointer</span>;
+    <span class="property">opacity</span>: <span class="value">0.5</span>;
+    <span class="property">transition</span>: <span class="value">opacity 0.2s</span>;
+}
+
+<span class="selector">.cm-foldGutter .cm-gutterElement:hover</span> {
+    <span class="property">opacity</span>: <span class="value">1</span>;
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>탭과 헤더 스타일링</h3>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* 탭 스타일 */</span>
+<span class="selector">.workspace-tab-header</span> {
+    <span class="property">background</span>: <span class="value">transparent</span>;
+    <span class="property">border-bottom</span>: <span class="value">2px solid transparent</span>;
+    <span class="property">transition</span>: <span class="value">all 0.3s</span>;
+}
+
+<span class="selector">.workspace-tab-header:hover</span> {
+    <span class="property">background</span>: <span class="value">var(--background-modifier-hover)</span>;
+}
+
+<span class="selector">.workspace-tab-header.is-active</span> {
+    <span class="property">background</span>: <span class="value">var(--background-primary)</span>;
+    <span class="property">border-bottom-color</span>: <span class="value">var(--interactive-accent)</span>;
+}
+
+<span class="comment">/* 탭 닫기 버튼 */</span>
+<span class="selector">.workspace-tab-header-inner-close-button</span> {
+    <span class="property">opacity</span>: <span class="value">0</span>;
+    <span class="property">transition</span>: <span class="value">opacity 0.2s</span>;
+}
+
+<span class="selector">.workspace-tab-header:hover .workspace-tab-header-inner-close-button</span> {
+    <span class="property">opacity</span>: <span class="value">0.7</span>;
+}
+
+<span class="comment">/* 헤더 스타일 */</span>
+<span class="selector">.view-header</span> {
+    <span class="property">background</span>: <span class="value">var(--background-secondary)</span>;
+    <span class="property">border-bottom</span>: <span class="value">1px solid var(--background-modifier-border)</span>;
+}
+
+<span class="selector">.view-header-title</span> {
+    <span class="property">font-weight</span>: <span class="value">600</span>;
+    <span class="property">font-size</span>: <span class="value">1.1em</span>;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="theme-creation">
+            <h2>6. 테마 만들기</h2>
+            
+            <div class="card">
+                <h3>테마 구조</h3>
+                <div class="file-structure">
+                    <pre><code>📁 My-Obsidian-Theme/
+├── 📄 manifest.json
+├── 📄 theme.css
+├── 📄 README.md
+├── 📄 screenshot.png
+└── 📁 assets/
+    ├── 🖼️ preview-dark.png
+    └── 🖼️ preview-light.png</code></pre>
+                </div>
+
+                <h4>manifest.json</h4>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code>{
+    <span class="property">"name"</span>: <span class="value">"My Custom Theme"</span>,
+    <span class="property">"version"</span>: <span class="value">"1.0.0"</span>,
+    <span class="property">"minAppVersion"</span>: <span class="value">"0.16.0"</span>,
+    <span class="property">"author"</span>: <span class="value">"Your Name"</span>,
+    <span class="property">"authorUrl"</span>: <span class="value">"https://your-website.com"</span>
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>테마 프리뷰</h3>
+                <div class="theme-preview">
+                    <div class="preview-container">
+                        <div class="preview-item">
+                            <div class="preview-title">🌙 다크 테마</div>
+                            <div class="color-palette">
+                                <div class="color-swatch" style="background: #1e1e1e"></div>
+                                <div class="color-swatch" style="background: #252525"></div>
+                                <div class="color-swatch" style="background: #7f6df2"></div>
+                                <div class="color-swatch" style="background: #dcddde"></div>
+                            </div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-title">☀️ 라이트 테마</div>
+                            <div class="color-palette">
+                                <div class="color-swatch" style="background: #ffffff"></div>
+                                <div class="color-swatch" style="background: #f3f3f3"></div>
+                                <div class="color-swatch" style="background: #5e50ee"></div>
+                                <div class="color-swatch" style="background: #2e3338"></div>
+                            </div>
+                        </div>
+                        <div class="preview-item">
+                            <div class="preview-title">🎨 커스텀 테마</div>
+                            <div class="color-palette">
+                                <div class="color-swatch" style="background: #2d3748"></div>
+                                <div class="color-swatch" style="background: #1a202c"></div>
+                                <div class="color-swatch" style="background: #ed8936"></div>
+                                <div class="color-swatch" style="background: #e2e8f0"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>테마 스위처 구현</h3>
+                <div class="theme-switcher">
+                    <h4>테마 선택</h4>
+                    <div class="theme-options">
+                        <div class="theme-option active" data-theme="dark">
+                            <div class="theme-icon">🌙</div>
+                            <div class="theme-name">Dark</div>
+                        </div>
+                        <div class="theme-option" data-theme="light">
+                            <div class="theme-icon">☀️</div>
+                            <div class="theme-name">Light</div>
+                        </div>
+                        <div class="theme-option" data-theme="auto">
+                            <div class="theme-icon">🌓</div>
+                            <div class="theme-name">Auto</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="interactive-demo">
+            <h2>7. 인터랙티브 CSS 에디터</h2>
+            
+            <div class="card">
+                <h3>실시간 CSS 테스트</h3>
+                <div class="interactive-demo">
+                    <textarea class="style-input" id="custom-css" placeholder="/* 여기에 CSS를 입력하세요 */
+.demo-preview {
+    background: #ff6b6b;
+    color: white;
+    padding: 2rem;
+    border-radius: 12px;
+}"></textarea>
+                    <div class="demo-controls">
+                        <button class="demo-button" onclick="applyCustomCSS()">CSS 적용</button>
+                        <button class="demo-button" onclick="resetCSS()">초기화</button>
+                        <button class="demo-button" onclick="loadExample()">예제 로드</button>
+                    </div>
+                    <div class="demo-preview" id="demo-preview">
+                        <h4>미리보기 영역</h4>
+                        <p>이 영역에 CSS가 적용됩니다. 위의 텍스트 영역에 CSS를 입력하고 '적용' 버튼을 클릭하세요.</p>
+                        <button>샘플 버튼</button>
+                        <a href="#">샘플 링크</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="best-practices">
+            <h2>8. CSS 모범 사례</h2>
+            
+            <div class="card">
+                <h3>CSS 작성 가이드라인</h3>
+                <div class="best-practices">
+                    <div class="practice-grid">
+                        <div class="practice-card">
+                            <div class="practice-icon">🎯</div>
+                            <div class="practice-title">특정성 관리</div>
+                            <div class="practice-description">
+                                !important 사용을 최소화하고, 클래스 선택자를 우선적으로 사용하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🔧</div>
+                            <div class="practice-title">CSS 변수 활용</div>
+                            <div class="practice-description">
+                                하드코딩된 값 대신 CSS 변수를 사용하여 테마 호환성을 유지하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">📱</div>
+                            <div class="practice-title">반응형 디자인</div>
+                            <div class="practice-description">
+                                미디어 쿼리를 사용하여 모바일과 데스크톱 환경을 모두 고려하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">⚡</div>
+                            <div class="practice-title">성능 최적화</div>
+                            <div class="practice-description">
+                                복잡한 선택자와 과도한 애니메이션을 피하여 성능을 유지하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🌐</div>
+                            <div class="practice-title">크로스 플랫폼</div>
+                            <div class="practice-description">
+                                모든 운영체제에서 일관된 표시를 위해 시스템 폰트를 고려하세요.
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">📝</div>
+                            <div class="practice-title">문서화</div>
+                            <div class="practice-description">
+                                CSS 코드에 주석을 추가하여 목적과 사용법을 명확히 하세요.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>디버깅 팁</h3>
+                <div class="css-code">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">/* 개발자 도구 활용 */</span>
+<span class="comment">/* Ctrl+Shift+I (Windows/Linux) 또는 Cmd+Opt+I (Mac) */</span>
+
+<span class="comment">/* 요소 경계 확인용 */</span>
+<span class="selector">* </span>{
+    <span class="property">outline</span>: <span class="value">1px solid red</span> <span class="important">!important</span>;
+}
+
+<span class="comment">/* 특정 요소만 확인 */</span>
+<span class="selector">.workspace-leaf-content *</span> {
+    <span class="property">outline</span>: <span class="value">1px solid blue</span> <span class="important">!important</span>;
+}
+
+<span class="comment">/* z-index 디버깅 */</span>
+<span class="selector">[style*="z-index"]</span> {
+    <span class="property">position</span>: <span class="value">relative</span>;
+    <span class="property">background</span>: <span class="value">rgba(255, 0, 0, 0.2)</span> <span class="important">!important</span>;
+}
+
+<span class="comment">/* 숨겨진 요소 표시 */</span>
+<span class="selector">[style*="display: none"]</span> {
+    <span class="property">display</span>: <span class="value">block</span> <span class="important">!important</span>;
+    <span class="property">opacity</span>: <span class="value">0.5</span> <span class="important">!important</span>;
+    <span class="property">background</span>: <span class="value">yellow</span> <span class="important">!important</span>;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>실습 과제</h2>
+            
+            <div class="practice-exercises">
+                <h3>이번 강의의 실습 과제</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🎨 과제 1: 기본 스니펫 만들기</span>
+                            <span class="difficulty-badge difficulty-easy">초급</span>
+                        </div>
+                        <p>간단한 CSS 스니펫을 만들어보세요:</p>
+                        <ul>
+                            <li>체크박스 스타일 변경</li>
+                            <li>헤더 색상 커스터마이징</li>
+                            <li>링크 호버 효과 추가</li>
+                            <li>태그 모양 꾸미기</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🌈 과제 2: 테마 변수 커스터마이징</span>
+                            <span class="difficulty-badge difficulty-medium">중급</span>
+                        </div>
+                        <p>CSS 변수를 활용한 테마를 만드세요:</p>
+                        <ul>
+                            <li>색상 팔레트 정의</li>
+                            <li>다크/라이트 모드 대응</li>
+                            <li>커스텀 폰트 적용</li>
+                            <li>간격 시스템 구축</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🚀 과제 3: 완전한 테마 개발</span>
+                            <span class="difficulty-badge difficulty-hard">고급</span>
+                        </div>
+                        <p>배포 가능한 Obsidian 테마를 개발하세요:</p>
+                        <ul>
+                            <li>manifest.json 작성</li>
+                            <li>전체 UI 요소 스타일링</li>
+                            <li>스크린샷 및 문서 작성</li>
+                            <li>GitHub 리포지토리 생성</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>FAQ</h2>
+            
+            <div class="faq-section">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        CSS 스니펫이 적용되지 않아요
+                    </div>
+                    <div class="faq-answer">
+                        .obsidian/snippets 폴더에 .css 파일을 저장한 후, 설정 > 외관 > CSS 스니펫에서 토글을 켜야 합니다. 파일명에 공백이 없는지도 확인하세요.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        !important를 사용해야 하나요?
+                    </div>
+                    <div class="faq-answer">
+                        가급적 피하는 것이 좋습니다. 더 구체적인 선택자를 사용하거나 CSS 변수를 재정의하는 방법을 먼저 시도해보세요. 꼭 필요한 경우에만 사용하세요.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        모바일에서 CSS가 다르게 보여요
+                    </div>
+                    <div class="faq-answer">
+                        모바일과 데스크톱의 클래스 구조가 다를 수 있습니다. 미디어 쿼리를 사용하고, 모바일 앱에서 직접 테스트하는 것이 중요합니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        테마를 커뮤니티에 공유하려면?
+                    </div>
+                    <div class="faq-answer">
+                        GitHub에 리포지토리를 만들고, obsidian-releases 리포지토리에 PR을 제출하면 됩니다. 테마 가이드라인을 준수해야 승인됩니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        CSS로 기능을 추가할 수 있나요?
+                    </div>
+                    <div class="faq-answer">
+                        CSS는 스타일링만 가능합니다. 새로운 기능을 추가하려면 플러그인을 개발해야 합니다. 다만 ::before, ::after를 활용한 시각적 요소 추가는 가능합니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>추가 학습 자료</h2>
+            
+            <div class="resources-section">
+                <h3>CSS 커스터마이징 관련 자료</h3>
+                <ul class="resource-list">
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📚 Obsidian CSS 공식 문서
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🎥 CSS 스니펫 튜토리얼 (동영상)
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📝 인기 CSS 스니펫 모음
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🎨 테마 개발 가이드
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            💡 CSS 디버깅 팁과 트릭
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="next-lesson">
+            <h3>다음 강의 안내</h3>
+            <p>제23강: JavaScript로 기능 확장 - 고급 스크립팅과 자동화</p>
+            <p>JavaScript를 활용하여 Obsidian의 기능을 확장하고 복잡한 자동화를 구현합니다.</p>
+        </div>
+    </div>
+
+    <script>
+        // FAQ 토글 기능
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 코드 복사 기능
+        function copyCode(button) {
+            const codeBlock = button.parentElement;
+            const codeText = codeBlock.querySelector('code').textContent;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                button.textContent = '복사됨!';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    button.textContent = '복사';
+                    button.style.background = 'var(--accent-color)';
+                }, 2000);
+            });
+        }
+
+        // 테마 스위처
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.theme-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                const theme = this.dataset.theme;
+                console.log(`테마 변경: ${theme}`);
+            });
+        });
+
+        // 인터랙티브 CSS 데모
+        function applyCustomCSS() {
+            const cssInput = document.getElementById('custom-css').value;
+            const styleTag = document.getElementById('custom-style') || document.createElement('style');
+            styleTag.id = 'custom-style';
+            styleTag.textContent = cssInput;
+            
+            if (!document.getElementById('custom-style')) {
+                document.head.appendChild(styleTag);
+            }
+        }
+
+        function resetCSS() {
+            const styleTag = document.getElementById('custom-style');
+            if (styleTag) {
+                styleTag.remove();
+            }
+            document.getElementById('custom-css').value = '';
+        }
+
+        function loadExample() {
+            const exampleCSS = `.demo-preview {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transform: scale(1);
+    transition: all 0.3s ease;
+}
+
+.demo-preview:hover {
+    transform: scale(1.05);
+}
+
+.demo-preview h4 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.demo-preview button {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.demo-preview button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}`;
+            
+            document.getElementById('custom-css').value = exampleCSS;
+            applyCustomCSS();
+        }
+
+        // 페이지 로드 애니메이션
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.section').forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // 스니펫 카드 클릭 이벤트
+        document.querySelectorAll('.snippet-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const code = this.querySelector('.snippet-preview code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    // 임시 알림 표시
+                    const notification = document.createElement('div');
+                    notification.textContent = '코드가 복사되었습니다!';
+                    notification.style.cssText = `
+                        position: fixed;
+                        bottom: 2rem;
+                        right: 2rem;
+                        background: var(--success-color);
+                        color: white;
+                        padding: 1rem 2rem;
+                        border-radius: 8px;
+                        z-index: 1000;
+                        animation: slideIn 0.3s ease;
+                    `;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

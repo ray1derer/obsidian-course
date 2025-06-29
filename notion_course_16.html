@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제16강: 동기화와 백업 전략 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+            --purple-color: #b48ead;
+            --orange-color: #d08770;
+            --sync-color: #81a1c1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before {
+            left: 0;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-color) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--sync-color) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 동기화 옵션 비교 */
+        .sync-comparison {
+            margin: 4rem 0;
+        }
+
+        .comparison-table {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--hover-bg);
+            color: var(--sync-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(129, 161, 193, 0.1);
+        }
+
+        .feature-check {
+            color: var(--success-color);
+            font-size: 1.2rem;
+        }
+
+        .feature-partial {
+            color: var(--warning-color);
+            font-size: 1.2rem;
+        }
+
+        .feature-cross {
+            color: var(--error-color);
+            font-size: 1.2rem;
+        }
+
+        /* 동기화 설정 가이드 */
+        .sync-guides {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .guide-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--sync-color) 0%, var(--accent-color) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .guide-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .guide-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--sync-color);
+        }
+
+        .guide-card h3 {
+            color: var(--sync-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .guide-card .icon {
+            font-size: 2rem;
+        }
+
+        /* Git 설정 섹션 */
+        .git-setup {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .terminal-block {
+            background: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .terminal-block::before {
+            content: 'Terminal';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--hover-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--sync-color);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .terminal-line {
+            margin: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .terminal-line::before {
+            content: '$';
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* 백업 전략 */
+        .backup-strategy {
+            margin: 4rem 0;
+        }
+
+        .strategy-timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .strategy-timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--sync-color);
+            z-index: -1;
+        }
+
+        .timeline-item {
+            background: var(--card-bg);
+            border: 3px solid var(--sync-color);
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .timeline-item:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(129, 161, 193, 0.5);
+        }
+
+        .timeline-item .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-item .label {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* 자동화 스크립트 */
+        .automation-scripts {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .script-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .script-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .script-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--sync-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .script-tab:hover::after,
+        .script-tab.active::after {
+            transform: scaleX(1);
+        }
+
+        .script-tab.active {
+            color: var(--sync-color);
+        }
+
+        .script-content {
+            display: none;
+        }
+
+        .script-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 충돌 해결 가이드 */
+        .conflict-resolution {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .conflict-example {
+            background: var(--bg-color);
+            border: 2px solid var(--error-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .conflict-example::before {
+            content: '⚠️ 충돌 예시';
+            position: absolute;
+            top: -12px;
+            left: 1rem;
+            background: var(--card-bg);
+            padding: 0 0.5rem;
+            color: var(--error-color);
+            font-weight: bold;
+        }
+
+        /* 모범 사례 */
+        .best-practices {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            border-left: 4px solid var(--success-color);
+            transition: all 0.3s ease;
+        }
+
+        .practice-item:hover {
+            transform: translateX(10px);
+            border-left-color: var(--sync-color);
+        }
+
+        .practice-item h4 {
+            color: var(--success-color);
+            margin-bottom: 1rem;
+        }
+
+        /* 실습 섹션 */
+        .practice-section {
+            background: var(--secondary-color);
+            border-radius: 16px;
+            padding: 3rem;
+            margin: 3rem 0;
+        }
+
+        .practice-tasks {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-task {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-task::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--warning-color);
+        }
+
+        .practice-task h4 {
+            color: var(--warning-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .difficulty {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            background: var(--hover-bg);
+        }
+
+        .difficulty.easy { color: var(--success-color); }
+        .difficulty.medium { color: var(--warning-color); }
+        .difficulty.hard { color: var(--error-color); }
+
+        /* 코드 블록 */
+        .code-block {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--hover-bg);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        .code-block code {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* FAQ 섹션 */
+        .faq-section {
+            margin: 4rem 0;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--sync-color);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--sync-color);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 팁 박스들 */
+        .tip-box {
+            background: var(--hover-bg);
+            border-left: 4px solid var(--warning-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .tip-box::before {
+            content: '💡';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .tip-box p {
+            margin-left: 2rem;
+        }
+
+        .warning-box {
+            background: rgba(191, 97, 106, 0.1);
+            border-left: 4px solid var(--error-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .warning-box::before {
+            content: '⚠️';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .warning-box p {
+            margin-left: 2rem;
+        }
+
+        .success-box {
+            background: rgba(163, 190, 140, 0.1);
+            border-left: 4px solid var(--success-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .success-box::before {
+            content: '✅';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .success-box p {
+            margin-left: 2rem;
+        }
+
+        /* 진행 표시기 */
+        .progress-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 2px solid var(--sync-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .progress-indicator:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .progress-text {
+            font-weight: bold;
+            color: var(--sync-color);
+            font-size: 0.9rem;
+        }
+
+        /* 뱃지 스타일 */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 0.25rem;
+        }
+
+        .badge.essential {
+            background: var(--sync-color);
+            color: var(--bg-color);
+        }
+
+        .badge.security {
+            background: var(--error-color);
+            color: var(--bg-color);
+        }
+
+        .badge.advanced {
+            background: var(--purple-color);
+            color: var(--bg-color);
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .comparison-table {
+                overflow-x: auto;
+            }
+
+            .sync-guides {
+                grid-template-columns: 1fr;
+            }
+
+            .strategy-timeline {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .strategy-timeline::before {
+                top: 0;
+                bottom: 0;
+                left: 50%;
+                width: 2px;
+                height: auto;
+            }
+        }
+
+        /* 애니메이션 효과 */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* 동기화 상태 표시기 */
+        .sync-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--hover-bg);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .sync-status.syncing {
+            color: var(--warning-color);
+        }
+
+        .sync-status.synced {
+            color: var(--success-color);
+        }
+
+        .sync-status.error {
+            color: var(--error-color);
+        }
+
+        .sync-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+
+        /* 파일 트리 스타일 */
+        .file-tree {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+        }
+
+        .file-tree .folder {
+            color: var(--warning-color);
+        }
+
+        .file-tree .file {
+            color: var(--text-color);
+        }
+
+        .file-tree .git-file {
+            color: var(--success-color);
+        }
+
+        /* 비교 차트 */
+        .comparison-chart {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .chart-item {
+            text-align: center;
+        }
+
+        .chart-bar {
+            background: var(--hover-bg);
+            border-radius: 8px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, var(--sync-color), var(--accent-color));
+            transition: height 1s ease;
+        }
+
+        .chart-label {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .chart-value {
+            font-size: 2rem;
+            color: var(--sync-color);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p class="subtitle">당신의 생각을 구조화하는 가장 강력한 도구</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_index.html">강좌 홈</a></li>
+            <li><a href="notion_course_15.html">이전 강의</a></li>
+            <li><a href="#" class="active">제16강</a></li>
+            <li><a href="notion_course_17.html">다음 강의</a></li>
+            <li><a href="#practice">실습하기</a></li>
+            <li><a href="#quiz">퀴즈</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제16강: 동기화와 백업 전략</h1>
+            <p class="subtitle">소중한 노트를 안전하게 보호하고 어디서나 접근하세요</p>
+            <div class="badge essential">필수 지식</div>
+            <div class="badge security">보안</div>
+            <div class="badge advanced">고급</div>
+        </div>
+
+        <!-- 동기화 중요성 -->
+        <section class="intro-section">
+            <h2>🔄 왜 동기화와 백업이 중요한가?</h2>
+            <p>Obsidian 볼트는 당신의 두 번째 뇌입니다. 수년간 축적된 지식과 아이디어가 담긴 이 소중한 자산을 잃는다면 어떨까요? 적절한 동기화와 백업 전략은 다음을 보장합니다:</p>
+            
+            <div class="sync-guides">
+                <div class="guide-card">
+                    <h3><span class="icon">🛡️</span> 데이터 보호</h3>
+                    <p>하드웨어 고장, 실수로 인한 삭제, 랜섬웨어 등으로부터 노트를 안전하게 보호합니다.</p>
+                    <ul>
+                        <li>여러 위치에 사본 보관</li>
+                        <li>버전 관리로 이전 상태 복원</li>
+                        <li>자동 백업으로 최신 상태 유지</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <h3><span class="icon">📱</span> 멀티 디바이스</h3>
+                    <p>데스크톱, 노트북, 태블릿, 스마트폰 등 모든 기기에서 동일한 노트에 접근할 수 있습니다.</p>
+                    <ul>
+                        <li>실시간 동기화</li>
+                        <li>오프라인 작업 지원</li>
+                        <li>충돌 자동 해결</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <h3><span class="icon">👥</span> 협업 가능</h3>
+                    <p>팀원들과 특정 볼트를 공유하여 함께 지식을 구축할 수 있습니다.</p>
+                    <ul>
+                        <li>선택적 공유</li>
+                        <li>권한 관리</li>
+                        <li>변경 이력 추적</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 동기화 옵션 비교 -->
+        <section class="sync-comparison">
+            <h2>🔍 동기화 옵션 비교</h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>옵션</th>
+                            <th>비용</th>
+                            <th>설정 난이도</th>
+                            <th>실시간 동기화</th>
+                            <th>버전 관리</th>
+                            <th>엔드투엔드 암호화</th>
+                            <th>모바일 지원</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Obsidian Sync</strong></td>
+                            <td>$8/월</td>
+                            <td>매우 쉬움</td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>iCloud Drive</strong></td>
+                            <td>무료~$10/월</td>
+                            <td>쉬움</td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-partial">△</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-partial">△</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dropbox</strong></td>
+                            <td>무료~$12/월</td>
+                            <td>쉬움</td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-cross">✗</span></td>
+                            <td><span class="feature-partial">△</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Google Drive</strong></td>
+                            <td>무료~$10/월</td>
+                            <td>보통</td>
+                            <td><span class="feature-partial">△</span></td>
+                            <td><span class="feature-partial">△</span></td>
+                            <td><span class="feature-cross">✗</span></td>
+                            <td><span class="feature-cross">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>OneDrive</strong></td>
+                            <td>무료~$10/월</td>
+                            <td>보통</td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-cross">✗</span></td>
+                            <td><span class="feature-cross">✗</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Git (GitHub/GitLab)</strong></td>
+                            <td>무료</td>
+                            <td>어려움</td>
+                            <td><span class="feature-cross">✗</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-partial">△</span></td>
+                            <td><span class="feature-partial">△</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Syncthing</strong></td>
+                            <td>무료</td>
+                            <td>보통</td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-cross">✗</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                            <td><span class="feature-check">✓</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="tip-box">
+                <p>💡 추천: 간편함을 원한다면 Obsidian Sync, 무료 옵션을 원한다면 Git + 클라우드 스토리지 조합을 추천합니다.</p>
+            </div>
+        </section>
+
+        <!-- Obsidian Sync 설정 -->
+        <section class="sync-guides">
+            <h2>☁️ Obsidian Sync 설정 가이드</h2>
+            <div class="guide-card">
+                <h3>1. Obsidian Sync 구독</h3>
+                <ol>
+                    <li>Obsidian 설정 → 계정 → 로그인</li>
+                    <li>Obsidian Sync 구독 선택</li>
+                    <li>결제 정보 입력 (월 $8 또는 연간 $96)</li>
+                    <li>원격 볼트 생성</li>
+                </ol>
+                
+                <div class="success-box">
+                    <p>✅ Obsidian Sync의 장점: 엔드투엔드 암호화, 버전 히스토리, 선택적 동기화, 최대 10개 볼트 지원</p>
+                </div>
+            </div>
+
+            <div class="guide-card">
+                <h3>2. 동기화 설정</h3>
+                <div class="code-block" data-language="Settings">
+                    <code>설정 → 코어 플러그인 → Sync 활성화
+
+동기화 설정:
+✓ 설정 동기화
+✓ 테마와 스니펫 동기화
+✓ 핫키 동기화
+✓ 활성 코어 플러그인 동기화
+✓ 코어 플러그인 설정 동기화
+✓ 커뮤니티 플러그인 동기화
+
+선택적 동기화:
+• 특정 폴더 제외
+• 대용량 파일 제외 (예: 동영상)
+• .gitignore 패턴 사용 가능</code>
+                </div>
+            </div>
+
+            <div class="guide-card">
+                <h3>3. 버전 히스토리 활용</h3>
+                <p>Obsidian Sync는 파일의 이전 버전을 보관합니다:</p>
+                <ul>
+                    <li>파일 우클릭 → "View sync version history"</li>
+                    <li>최대 1년간 버전 보관 (Plus 플랜)</li>
+                    <li>삭제된 파일도 30일간 복구 가능</li>
+                    <li>차이점 비교 및 복원</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Git 설정 가이드 -->
+        <section class="git-setup">
+            <h2>🔀 Git을 활용한 버전 관리</h2>
+            <p>Git은 개발자들이 사용하는 강력한 버전 관리 도구로, Obsidian 볼트 관리에도 완벽합니다.</p>
+
+            <h3>초기 설정</h3>
+            <div class="terminal-block">
+                <div class="terminal-line">cd /path/to/your/vault</div>
+                <div class="terminal-line">git init</div>
+                <div class="terminal-line">git add .</div>
+                <div class="terminal-line">git commit -m "Initial commit"</div>
+            </div>
+
+            <h3>.gitignore 설정</h3>
+            <div class="code-block" data-language="gitignore">
+                <code># Obsidian 관련
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/app.json
+.obsidian/appearance.json
+.obsidian/hotkeys.json
+.obsidian/core-plugins.json
+.obsidian/core-plugins-migration.json
+
+# 시스템 파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 개인 설정 (선택적)
+.obsidian/plugins/*/data.json
+.trash/
+.obsidian-mobile/
+
+# 대용량 파일
+*.mp4
+*.mov
+*.zip
+*.rar</code>
+            </div>
+
+            <h3>자동 커밋 스크립트</h3>
+            <div class="script-tabs">
+                <button class="script-tab active" onclick="showScript('bash')">Bash (Mac/Linux)</button>
+                <button class="script-tab" onclick="showScript('powershell')">PowerShell (Windows)</button>
+                <button class="script-tab" onclick="showScript('python')">Python (크로스플랫폼)</button>
+            </div>
+
+            <div id="bash" class="script-content active">
+                <div class="code-block" data-language="bash">
+                    <code>#!/bin/bash
+# obsidian-backup.sh
+
+VAULT_PATH="/path/to/your/vault"
+cd "$VAULT_PATH"
+
+# 변경사항 확인
+if [[ -n $(git status -s) ]]; then
+    # 모든 변경사항 추가
+    git add .
+    
+    # 커밋 메시지 생성
+    COMMIT_MSG="Vault backup: $(date '+%Y-%m-%d %H:%M:%S')"
+    git commit -m "$COMMIT_MSG"
+    
+    # 원격 저장소에 푸시
+    git push origin main
+    
+    echo "✅ 백업 완료: $COMMIT_MSG"
+else
+    echo "ℹ️ 변경사항 없음"
+fi</code>
+                </div>
+                
+                <p>cron으로 자동 실행 설정:</p>
+                <div class="terminal-block">
+                    <div class="terminal-line">crontab -e</div>
+                    <div class="terminal-line"># 매시간 백업</div>
+                    <div class="terminal-line">0 * * * * /path/to/obsidian-backup.sh</div>
+                </div>
+            </div>
+
+            <div id="powershell" class="script-content">
+                <div class="code-block" data-language="powershell">
+                    <code># obsidian-backup.ps1
+$vaultPath = "C:\Users\YourName\Documents\ObsidianVault"
+Set-Location $vaultPath
+
+# 변경사항 확인
+$status = git status --porcelain
+if ($status) {
+    # 모든 변경사항 추가
+    git add .
+    
+    # 커밋 메시지 생성
+    $commitMsg = "Vault backup: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+    git commit -m $commitMsg
+    
+    # 원격 저장소에 푸시
+    git push origin main
+    
+    Write-Host "✅ 백업 완료: $commitMsg" -ForegroundColor Green
+} else {
+    Write-Host "ℹ️ 변경사항 없음" -ForegroundColor Blue
+}</code>
+                </div>
+                
+                <p>작업 스케줄러로 자동 실행 설정</p>
+            </div>
+
+            <div id="python" class="script-content">
+                <div class="code-block" data-language="python">
+                    <code>#!/usr/bin/env python3
+# obsidian_backup.py
+
+import os
+import subprocess
+from datetime import datetime
+import sys
+
+VAULT_PATH = "/path/to/your/vault"
+
+def run_git_command(cmd):
+    """Git 명령 실행"""
+    try:
+        result = subprocess.run(
+            cmd, 
+            shell=True, 
+            cwd=VAULT_PATH,
+            capture_output=True,
+            text=True
+        )
+        return result.returncode == 0, result.stdout
+    except Exception as e:
+        return False, str(e)
+
+def backup_vault():
+    """볼트 백업 실행"""
+    # 변경사항 확인
+    success, output = run_git_command("git status --porcelain")
+    
+    if not success:
+        print(f"❌ Git 상태 확인 실패: {output}")
+        return False
+    
+    if not output.strip():
+        print("ℹ️ 변경사항 없음")
+        return True
+    
+    # 변경사항 추가
+    success, _ = run_git_command("git add .")
+    if not success:
+        print("❌ 파일 추가 실패")
+        return False
+    
+    # 커밋
+    commit_msg = f"Vault backup: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    success, _ = run_git_command(f'git commit -m "{commit_msg}"')
+    if not success:
+        print("❌ 커밋 실패")
+        return False
+    
+    # 푸시
+    success, _ = run_git_command("git push origin main")
+    if success:
+        print(f"✅ 백업 완료: {commit_msg}")
+    else:
+        print("⚠️ 푸시 실패 (오프라인일 수 있음)")
+    
+    return True
+
+if __name__ == "__main__":
+    backup_vault()</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- 백업 전략 타임라인 -->
+        <section class="backup-strategy">
+            <h2>📅 3-2-1 백업 전략</h2>
+            <p>안전한 백업을 위한 검증된 전략: 3개의 사본, 2개의 다른 미디어, 1개의 오프사이트 백업</p>
+            
+            <div class="strategy-timeline">
+                <div class="timeline-item">
+                    <span class="icon">💻</span>
+                    <span class="label">로컬<br>원본</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="icon">☁️</span>
+                    <span class="label">클라우드<br>동기화</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="icon">💾</span>
+                    <span class="label">외장<br>하드</span>
+                </div>
+                <div class="timeline-item">
+                    <span class="icon">🏢</span>
+                    <span class="label">원격<br>백업</span>
+                </div>
+            </div>
+
+            <div class="best-practices">
+                <div class="practice-item">
+                    <h4>1. 실시간 동기화</h4>
+                    <p>작업 중인 변경사항을 즉시 클라우드에 동기화</p>
+                    <ul>
+                        <li>Obsidian Sync 또는 Dropbox 실시간 동기화</li>
+                        <li>자동 저장 간격 최소화 (1-2분)</li>
+                        <li>네트워크 연결 상태 모니터링</li>
+                    </ul>
+                </div>
+
+                <div class="practice-item">
+                    <h4>2. 일일 백업</h4>
+                    <p>매일 정해진 시간에 전체 볼트 백업</p>
+                    <ul>
+                        <li>Git 자동 커밋 (매일 자정)</li>
+                        <li>Time Machine / File History 활용</li>
+                        <li>증분 백업으로 공간 절약</li>
+                    </ul>
+                </div>
+
+                <div class="practice-item">
+                    <h4>3. 주간 오프사이트 백업</h4>
+                    <p>물리적으로 다른 위치에 백업 보관</p>
+                    <ul>
+                        <li>클라우드 스토리지 2차 백업</li>
+                        <li>외장 하드 교체 보관</li>
+                        <li>암호화된 압축 파일로 보관</li>
+                    </ul>
+                </div>
+
+                <div class="practice-item">
+                    <h4>4. 월간 아카이브</h4>
+                    <p>장기 보관을 위한 스냅샷 생성</p>
+                    <ul>
+                        <li>전체 볼트 압축 백업</li>
+                        <li>버전별 태그 지정</li>
+                        <li>콜드 스토리지 활용 (AWS Glacier 등)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 선택적 동기화 -->
+        <section class="selective-sync">
+            <h2>🎯 선택적 동기화 전략</h2>
+            <div class="guide-card">
+                <h3>동기화에서 제외할 항목들</h3>
+                <div class="file-tree">
+                    <code>ObsidianVault/
+├── <span class="folder">📁 .obsidian/</span>
+│   ├── <span class="git-file">✓ plugins/</span>  # 동기화
+│   ├── <span class="git-file">✓ themes/</span>   # 동기화
+│   └── <span class="file">✗ workspace.json</span>  # 제외
+├── <span class="folder">📁 Assets/</span>
+│   ├── <span class="git-file">✓ images/</span>  # 동기화 (압축)
+│   └── <span class="file">✗ videos/</span>  # 제외 (대용량)
+├── <span class="folder">📁 Templates/</span>  <span class="git-file"># 전체 동기화</span>
+├── <span class="folder">📁 Daily/</span>      <span class="git-file"># 전체 동기화</span>
+└── <span class="folder">📁 Personal/</span>   <span class="file"># 선택적 제외</span></code>
+                </div>
+
+                <div class="tip-box">
+                    <p>💡 대용량 파일은 Git LFS(Large File Storage)를 사용하거나 별도 클라우드에 보관하세요.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 충돌 해결 -->
+        <section class="conflict-resolution">
+            <h2>⚡ 동기화 충돌 해결</h2>
+            <p>여러 기기에서 동시에 편집할 때 발생할 수 있는 충돌을 해결하는 방법</p>
+
+            <div class="conflict-example">
+                <h4>Git 충돌 예시</h4>
+                <div class="code-block" data-language="diff">
+                    <code><<<<<<< HEAD
+# 프로젝트 계획
+- 1단계: 요구사항 분석
+- 2단계: 설계
+=======
+# 프로젝트 계획
+- 1단계: 시장 조사
+- 2단계: 요구사항 분석
+>>>>>>> origin/main</code>
+                </div>
+            </div>
+
+            <h3>충돌 해결 단계</h3>
+            <ol>
+                <li><strong>충돌 확인:</strong> git status로 충돌 파일 확인</li>
+                <li><strong>파일 열기:</strong> 충돌 마커 찾기 (&lt;&lt;&lt;&lt;&lt;&lt;&lt;)</li>
+                <li><strong>내용 병합:</strong> 필요한 내용 선택 또는 병합</li>
+                <li><strong>마커 제거:</strong> 충돌 마커 모두 삭제</li>
+                <li><strong>커밋:</strong> git add & git commit</li>
+            </ol>
+
+            <div class="warning-box">
+                <p>⚠️ Obsidian Sync는 대부분의 충돌을 자동으로 해결하지만, 복잡한 경우 양쪽 버전을 모두 보존합니다.</p>
+            </div>
+        </section>
+
+        <!-- 모바일 동기화 -->
+        <section class="mobile-sync">
+            <h2>📱 모바일 동기화 설정</h2>
+            <div class="sync-guides">
+                <div class="guide-card">
+                    <h3>iOS (iPhone/iPad)</h3>
+                    <ul>
+                        <li><strong>Obsidian Sync:</strong> 앱 내에서 직접 설정</li>
+                        <li><strong>iCloud Drive:</strong> 
+                            <ol>
+                                <li>설정 → [이름] → iCloud → iCloud Drive 켜기</li>
+                                <li>Obsidian 앱에서 iCloud 볼트 선택</li>
+                            </ol>
+                        </li>
+                        <li><strong>Working Copy:</strong> Git 클라이언트 앱 사용</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <h3>Android</h3>
+                    <ul>
+                        <li><strong>Obsidian Sync:</strong> 앱 내에서 직접 설정</li>
+                        <li><strong>Syncthing:</strong> 
+                            <ol>
+                                <li>Syncthing 앱 설치</li>
+                                <li>폴더 공유 설정</li>
+                                <li>Obsidian에서 로컬 볼트 선택</li>
+                            </ol>
+                        </li>
+                        <li><strong>Autosync:</strong> Dropbox/Google Drive 동기화</li>
+                    </ul>
+                </div>
+
+                <div class="guide-card">
+                    <h3>모바일 최적화 팁</h3>
+                    <ul>
+                        <li>대용량 첨부파일 폴더 제외</li>
+                        <li>오프라인 사용을 위한 선택적 다운로드</li>
+                        <li>배터리 절약 모드에서 동기화 일시정지</li>
+                        <li>Wi-Fi 전용 동기화 설정</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 보안 고려사항 -->
+        <section class="security-section">
+            <h2>🔐 보안 고려사항</h2>
+            <div class="best-practices">
+                <div class="practice-item">
+                    <h4>1. 암호화</h4>
+                    <ul>
+                        <li>Obsidian Sync: 엔드투엔드 암호화 기본 제공</li>
+                        <li>Git: GPG 서명 및 암호화 커밋</li>
+                        <li>클라우드: 전송 중 및 저장 시 암호화 확인</li>
+                        <li>로컬: FileVault/BitLocker 활성화</li>
+                    </ul>
+                </div>
+
+                <div class="practice-item">
+                    <h4>2. 접근 제어</h4>
+                    <ul>
+                        <li>강력한 비밀번호 사용</li>
+                        <li>2단계 인증(2FA) 활성화</li>
+                        <li>기기별 접근 권한 관리</li>
+                        <li>정기적인 접근 로그 검토</li>
+                    </ul>
+                </div>
+
+                <div class="practice-item">
+                    <h4>3. 민감 정보 관리</h4>
+                    <div class="code-block" data-language="markdown">
+                        <code># .gitignore에 추가
+private/
+passwords.md
+credentials/
+*.key
+*.pem
+.env</code>
+                    </div>
+                    <ul>
+                        <li>민감 정보는 별도 암호화 볼트에 보관</li>
+                        <li>공개 저장소에 푸시 전 확인</li>
+                        <li>환경 변수로 민감 정보 분리</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 자동화 워크플로우 -->
+        <section class="automation-scripts">
+            <h2>⚙️ 백업 자동화 워크플로우</h2>
+            <div class="guide-card">
+                <h3>통합 백업 시스템 구축</h3>
+                <div class="code-block" data-language="yaml">
+                    <code># backup-config.yaml
+vault_path: /path/to/obsidian/vault
+backup_destinations:
+  - type: git
+    remote: https://github.com/username/obsidian-backup
+    branch: main
+    
+  - type: cloud
+    service: dropbox
+    path: /Apps/Obsidian/Backup
+    
+  - type: local
+    path: /Volumes/Backup/Obsidian
+    retention_days: 30
+
+schedule:
+  realtime_sync: true
+  daily_backup: "02:00"
+  weekly_archive: "sunday 03:00"
+  
+exclusions:
+  - "*.mp4"
+  - "*.mov"
+  - ".obsidian/workspace.json"
+  - "node_modules/"</code>
+                </div>
+            </div>
+        </section>
+
+        <!-- 실습 과제 -->
+        <section id="practice" class="practice-section">
+            <h2>🎯 실습 과제</h2>
+            <p>안전한 동기화와 백업 시스템을 구축해보세요.</p>
+            
+            <div class="practice-tasks">
+                <div class="practice-task">
+                    <h4>과제 1: 기본 동기화 설정 <span class="difficulty easy">초급</span></h4>
+                    <p>클라우드 스토리지를 이용한 간단한 동기화 구성</p>
+                    <ul>
+                        <li>Dropbox/iCloud/OneDrive 중 하나 선택</li>
+                        <li>Obsidian 볼트를 동기화 폴더로 이동</li>
+                        <li>.gitignore 파일 생성 및 설정</li>
+                        <li>모바일 앱에서 동기화 확인</li>
+                        <li>충돌 시나리오 테스트</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 2: Git 버전 관리 구축 <span class="difficulty medium">중급</span></h4>
+                    <p>Git을 활용한 버전 관리 시스템 설정</p>
+                    <ul>
+                        <li>Git 저장소 초기화</li>
+                        <li>GitHub/GitLab 원격 저장소 생성</li>
+                        <li>.gitignore 최적화</li>
+                        <li>자동 커밋 스크립트 작성</li>
+                        <li>브랜치 전략 수립 (main/develop)</li>
+                        <li>태그를 이용한 버전 관리</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>과제 3: 3-2-1 백업 시스템 <span class="difficulty hard">고급</span></h4>
+                    <p>완전한 백업 시스템 구현</p>
+                    <ul>
+                        <li>실시간 동기화 (Obsidian Sync/클라우드)</li>
+                        <li>Git 자동 백업 (일일/주간)</li>
+                        <li>로컬 백업 (Time Machine/스냅샷)</li>
+                        <li>원격 아카이브 (AWS S3/Backblaze)</li>
+                        <li>백업 검증 자동화</li>
+                        <li>복구 절차 문서화 및 테스트</li>
+                    </ul>
+                </div>
+
+                <div class="practice-task">
+                    <h4>보너스 과제: 팀 협업 환경 <span class="difficulty hard">고급</span></h4>
+                    <p>여러 사람이 함께 사용하는 볼트 구성</p>
+                    <ul>
+                        <li>공유 볼트와 개인 볼트 분리</li>
+                        <li>권한 관리 시스템 구축</li>
+                        <li>충돌 해결 프로세스 정립</li>
+                        <li>변경 이력 추적 시스템</li>
+                        <li>코드 리뷰 프로세스 적용</li>
+                        <li>자동화된 품질 검사</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section">
+            <h2>❓ 자주 묻는 질문</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    어떤 동기화 방법이 가장 좋나요?
+                </div>
+                <div class="faq-answer">
+                    <p>사용 환경에 따라 다릅니다:</p>
+                    <ul>
+                        <li><strong>초보자/간편함 우선:</strong> Obsidian Sync (유료지만 가장 안정적)</li>
+                        <li><strong>Apple 생태계:</strong> iCloud Drive (무료, iOS와 완벽 호환)</li>
+                        <li><strong>개발자/버전 관리 필요:</strong> Git + GitHub (무료, 강력한 버전 관리)</li>
+                        <li><strong>프라이버시 중시:</strong> Syncthing (P2P, 서버 없음)</li>
+                        <li><strong>기업/팀:</strong> Obsidian Sync + Git 조합</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    동기화 중 파일이 손상되면 어떻게 하나요?
+                </div>
+                <div class="faq-answer">
+                    <p>다음 단계로 복구를 시도하세요:</p>
+                    <ol>
+                        <li>Obsidian Sync의 경우: 파일 히스토리에서 이전 버전 복원</li>
+                        <li>Git의 경우: <code>git checkout [commit-hash] -- [file-path]</code></li>
+                        <li>클라우드 스토리지: 서비스별 버전 히스토리 확인</li>
+                        <li>로컬 백업: Time Machine/File History에서 복원</li>
+                        <li>.trash 폴더 확인 (Obsidian 휴지통)</li>
+                    </ol>
+                    <div class="tip-box">
+                        <p>💡 정기적인 백업이 있다면 대부분의 데이터 손실은 복구 가능합니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Git 저장소가 너무 커져서 느려요
+                </div>
+                <div class="faq-answer">
+                    <p>Git 저장소 최적화 방법:</p>
+                    <ul>
+                        <li><strong>대용량 파일 제외:</strong> .gitignore에 이미지/동영상 추가</li>
+                        <li><strong>Git LFS 사용:</strong> 대용량 바이너리 파일은 LFS로 관리</li>
+                        <li><strong>히스토리 정리:</strong> <code>git gc --aggressive</code></li>
+                        <li><strong>얕은 복제:</strong> <code>git clone --depth 1</code></li>
+                        <li><strong>오래된 커밋 압축:</strong> interactive rebase 활용</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    여러 기기에서 플러그인 설정이 동기화되지 않아요
+                </div>
+                <div class="faq-answer">
+                    <p>플러그인 동기화 문제 해결:</p>
+                    <ul>
+                        <li>Obsidian Sync 설정에서 "Sync plugin settings" 활성화 확인</li>
+                        <li>Git 사용 시 .obsidian/plugins/*/data.json 파일 포함 확인</li>
+                        <li>플러그인 버전이 모든 기기에서 동일한지 확인</li>
+                        <li>일부 플러그인은 기기별 설정이 필요할 수 있음</li>
+                        <li>충돌하는 경우 한 기기의 설정을 기준으로 통일</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    보안이 걱정됩니다. 어떻게 보호하나요?
+                </div>
+                <div class="faq-answer">
+                    <p>Obsidian 볼트 보안 강화 방법:</p>
+                    <ul>
+                        <li><strong>암호화:</strong> Obsidian Sync는 E2EE 제공, 또는 Cryptomator 사용</li>
+                        <li><strong>민감 정보 분리:</strong> 별도의 암호화된 볼트 사용</li>
+                        <li><strong>2FA 활성화:</strong> GitHub, Dropbox 등 모든 서비스에 2FA 설정</li>
+                        <li><strong>정기 감사:</strong> 접근 로그 확인, 불필요한 공유 제거</li>
+                        <li><strong>로컬 암호화:</strong> FileVault(Mac), BitLocker(Windows) 활성화</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 추가 리소스 -->
+        <section class="resources-section">
+            <h2>📚 추가 학습 리소스</h2>
+            <div class="sync-guides">
+                <div class="guide-card">
+                    <h3>📖 공식 문서</h3>
+                    <ul>
+                        <li>Obsidian Sync 공식 가이드</li>
+                        <li>Git 기초 튜토리얼</li>
+                        <li>각 클라우드 서비스 동기화 문서</li>
+                        <li>백업 best practices</li>
+                    </ul>
+                </div>
+                <div class="guide-card">
+                    <h3>🛠️ 유용한 도구</h3>
+                    <ul>
+                        <li>rclone - 다양한 클라우드 동기화</li>
+                        <li>restic - 암호화 백업 도구</li>
+                        <li>BorgBackup - 중복 제거 백업</li>
+                        <li>Arq Backup - GUI 백업 솔루션</li>
+                    </ul>
+                </div>
+                <div class="guide-card">
+                    <h3>🎥 추천 영상</h3>
+                    <ul>
+                        <li>"Obsidian 동기화 완벽 가이드"</li>
+                        <li>"Git으로 노트 버전 관리하기"</li>
+                        <li>"3-2-1 백업 전략 구현"</li>
+                        <li>"팀 협업을 위한 Obsidian"</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 다음 강의 예고 -->
+        <section class="next-preview">
+            <h2>🔮 다음 강의 예고</h2>
+            <div class="feature-showcase">
+                <h3>제17강: 모바일 활용법</h3>
+                <div class="feature-content">
+                    <p>다음 강의에서는 스마트폰과 태블릿에서 Obsidian을 효과적으로 사용하는 방법을 배웁니다:</p>
+                    <ul>
+                        <li>iOS/Android 앱 설정 및 최적화</li>
+                        <li>모바일 전용 워크플로우 구축</li>
+                        <li>빠른 캡처와 메모 기법</li>
+                        <li>오프라인 사용과 동기화 전략</li>
+                        <li>모바일 친화적 테마와 플러그인</li>
+                        <li>제스처와 단축키 활용</li>
+                    </ul>
+                    <p>언제 어디서나 아이디어를 캡처하고 노트를 관리하는 방법을 알아봅니다!</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 진행률 표시 -->
+    <div class="progress-indicator" onclick="scrollToTop()">
+        <span class="progress-text">16/30</span>
+    </div>
+
+    <script>
+        // 스크립트 탭 전환
+        function showScript(scriptType) {
+            const tabs = document.querySelectorAll('.script-tab');
+            const contents = document.querySelectorAll('.script-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(scriptType).classList.add('active');
+        }
+
+        // FAQ 토글
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 맨 위로 스크롤
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 스크롤 진행률
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrolled / total) * 100;
+            
+            const progressIndicator = document.querySelector('.progress-indicator');
+            if (progress > 10) {
+                progressIndicator.style.opacity = '1';
+            } else {
+                progressIndicator.style.opacity = '0.5';
+            }
+        });
+
+        // 애니메이션 효과
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.guide-card, .practice-task, .practice-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 타임라인 아이템 클릭 효과
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
+            });
+        });
+
+        // 코드 블록 복사
+        document.querySelectorAll('.code-block').forEach(block => {
+            block.addEventListener('click', function() {
+                const code = this.querySelector('code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalBg = this.style.background;
+                    this.style.background = 'var(--success-color)';
+                    setTimeout(() => {
+                        this.style.background = originalBg;
+                    }, 300);
+                });
+            });
+        });
+
+        // 동기화 상태 시뮬레이션
+        function simulateSyncStatus() {
+            const statuses = ['syncing', 'synced', 'error'];
+            const messages = {
+                'syncing': '동기화 중...',
+                'synced': '동기화 완료',
+                'error': '동기화 오류'
+            };
+            
+            // 실제 구현에서는 실제 동기화 상태를 표시
+            console.log('Sync status simulation');
+        }
+
+        // 차트 애니메이션
+        window.addEventListener('load', () => {
+            const chartFills = document.querySelectorAll('.chart-fill');
+            const heights = ['85%', '70%', '60%', '90%'];
+            
+            chartFills.forEach((fill, index) => {
+                setTimeout(() => {
+                    fill.style.height = heights[index] || '50%';
+                }, index * 200);
+            });
+        });
+
+        // 터미널 타이핑 효과
+        function typeTerminal(element, text, delay = 50) {
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < text.length) {
+                    element.textContent += text[index];
+                    index++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, delay);
+        }
+
+        // 키보드 단축키
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        simulateSyncStatus();
+                        break;
+                    case 'b':
+                        e.preventDefault();
+                        console.log('Backup triggered');
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제23강: JavaScript로 기능 확장 - 노션 마스터 클래스</title>
+    <style>
+        :root {
+            --primary-color: #2e3440;
+            --secondary-color: #3b4252;
+            --accent-color: #88c0d0;
+            --text-color: #eceff4;
+            --bg-color: #1a1a1a;
+            --card-bg: #2e3440;
+            --hover-bg: #434c5e;
+            --border-color: #4c566a;
+            --success-color: #a3be8c;
+            --warning-color: #ebcb8b;
+            --error-color: #bf616a;
+            --info-color: #5e81ac;
+            --purple-color: #b48ead;
+            --orange-color: #d08770;
+            --js-color: #f7df1e;
+            --code-color: #88c0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 192, 208, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        nav {
+            background-color: var(--secondary-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0.5rem 1rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--js-color) 0%, transparent 70%);
+            opacity: 0.2;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-50px, -50px) rotate(120deg); }
+            66% { transform: translate(50px, -30px) rotate(240deg); }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--js-color), var(--code-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section:nth-child(odd) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(even) {
+            animation-delay: 0.4s;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 80%;
+            background: linear-gradient(to bottom, var(--accent-color), var(--js-color));
+            border-radius: 3px;
+        }
+
+        .section h3 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--js-color);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(247, 223, 30, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--js-color);
+        }
+
+        .code-editor {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .editor-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--error-color);
+        }
+
+        .editor-dot:nth-child(2) {
+            background: var(--warning-color);
+        }
+
+        .editor-dot:nth-child(3) {
+            background: var(--success-color);
+        }
+
+        .editor-title {
+            margin-left: auto;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .code-block .type {
+            color: #4ec9b0;
+        }
+
+        .code-block .operator {
+            color: #d4d4d4;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(136, 192, 208, 0.3);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        .interactive-demo {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            padding: 0.8rem 1.5rem;
+            background: var(--js-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(247, 223, 30, 0.3);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        .demo-output {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .console-log {
+            background: #0e0e0e;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #d4d4d4;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .console-line {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .console-prefix {
+            color: var(--info-color);
+            margin-right: 1rem;
+        }
+
+        .console-log-text {
+            color: #d4d4d4;
+        }
+
+        .console-warn {
+            color: var(--warning-color);
+        }
+
+        .console-error {
+            color: var(--error-color);
+        }
+
+        .api-methods {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .method-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .method-item {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--js-color);
+        }
+
+        .method-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .method-signature {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: var(--code-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .method-description {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .method-example {
+            background: var(--card-bg);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        .script-examples {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .example-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .example-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--js-color), var(--code-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .example-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .example-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--js-color);
+        }
+
+        .example-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .example-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--js-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .example-description {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .example-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .example-tag {
+            padding: 0.3rem 0.8rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .automation-builder {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .builder-section {
+            margin-bottom: 2rem;
+        }
+
+        .builder-input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .builder-input:focus {
+            outline: none;
+            border-color: var(--js-color);
+            box-shadow: 0 0 0 3px rgba(247, 223, 30, 0.2);
+        }
+
+        .builder-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .trigger-select, .action-select {
+            padding: 0.8rem 1rem;
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .trigger-select:focus, .action-select:focus {
+            outline: none;
+            border-color: var(--js-color);
+        }
+
+        .best-practices {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .practice-card {
+            background: var(--secondary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practice-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--js-color), var(--code-color));
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .practice-card:hover::after {
+            transform: translateY(0);
+        }
+
+        .practice-card:hover {
+            border-color: var(--js-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .practice-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .practice-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--js-color);
+        }
+
+        .practice-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .debugging-tools {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .debug-panel {
+            background: var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .debug-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .debug-button {
+            padding: 0.5rem 1rem;
+            background: var(--info-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .debug-button:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .faq-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--js-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+
+        .resources-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .resource-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .resource-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--js-color);
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .resource-link {
+            color: var(--code-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .resource-link:hover {
+            color: var(--accent-color);
+        }
+
+        .practice-exercises {
+            background: linear-gradient(135deg, var(--card-bg) 0%, var(--secondary-color) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .exercise-list {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .exercise-item {
+            background: rgba(46, 52, 64, 0.8);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--js-color);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .exercise-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--js-color);
+        }
+
+        .difficulty-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: var(--success-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-medium {
+            background: var(--warning-color);
+            color: var(--primary-color);
+        }
+
+        .difficulty-hard {
+            background: var(--error-color);
+            color: var(--text-color);
+        }
+
+        .next-lesson {
+            background: linear-gradient(135deg, var(--js-color) 0%, var(--code-color) 100%);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .next-lesson::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .next-lesson h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .next-lesson p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
+
+            .builder-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>노션 마스터 클래스</h1>
+            <p>체계적으로 배우는 노션 활용법</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="notion_course_01.html">기초과정</a></li>
+            <li><a href="notion_course_12.html">중급과정</a></li>
+            <li><a href="notion_course_21.html">고급과정</a></li>
+            <li><a href="#basics">JS기초</a></li>
+            <li><a href="#automation">자동화</a></li>
+            <li><a href="#advanced">고급기능</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>제23강: JavaScript로 기능 확장</h1>
+            <p>JavaScript를 활용하여 Obsidian의 기능을 확장하고 강력한 자동화 스크립트를 만들어봅니다</p>
+            <div class="badge-container">
+                <span class="badge badge-advanced">고급</span>
+                <span class="badge badge-duration">90분</span>
+                <span class="badge badge-javascript">JavaScript</span>
+            </div>
+        </div>
+
+        <section class="section" id="introduction">
+            <h2>1. JavaScript 스크립팅 소개</h2>
+            
+            <div class="card">
+                <h3>Obsidian에서 JavaScript 활용하기</h3>
+                <p>Obsidian은 다양한 방법으로 JavaScript를 활용할 수 있습니다. Templater, Dataview JS, QuickAdd 등의 플러그인을 통해 강력한 자동화와 동적 기능을 구현할 수 있습니다.</p>
+                
+                <div class="api-methods">
+                    <h4>주요 JavaScript 활용 방법</h4>
+                    <div class="method-list">
+                        <div class="method-item">
+                            <div class="method-signature">Templater Scripts</div>
+                            <div class="method-description">템플릿에서 JavaScript 코드를 실행하여 동적 콘텐츠 생성</div>
+                        </div>
+                        <div class="method-item">
+                            <div class="method-signature">DataviewJS</div>
+                            <div class="method-description">JavaScript를 사용한 고급 데이터 쿼리 및 시각화</div>
+                        </div>
+                        <div class="method-item">
+                            <div class="method-signature">QuickAdd Macros</div>
+                            <div class="method-description">복잡한 워크플로우를 자동화하는 매크로 스크립트</div>
+                        </div>
+                        <div class="method-item">
+                            <div class="method-signature">Custom Commands</div>
+                            <div class="method-description">플러그인 API를 통한 커스텀 명령어 생성</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>필요한 플러그인</h3>
+                <ul>
+                    <li><strong>Templater</strong>: 고급 템플릿 기능과 JavaScript 실행</li>
+                    <li><strong>Dataview</strong>: 데이터 쿼리와 JavaScript API</li>
+                    <li><strong>QuickAdd</strong>: 매크로와 자동화 워크플로우</li>
+                    <li><strong>CustomJS</strong>: 재사용 가능한 JavaScript 함수 라이브러리</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section" id="basics">
+            <h2>2. JavaScript 기초</h2>
+            
+            <div class="card">
+                <h3>Obsidian API 기본</h3>
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <span class="editor-title">obsidian-basics.js</span>
+                    </div>
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="comment">// Obsidian 앱 객체 접근</span>
+<span class="keyword">const</span> app = <span class="keyword">this</span>.app;
+
+<span class="comment">// 현재 활성 파일 가져오기</span>
+<span class="keyword">const</span> activeFile = app.workspace.<span class="function">getActiveFile</span>();
+<span class="keyword">if</span> (activeFile) {
+    console.<span class="function">log</span>(<span class="string">`현재 파일: ${activeFile.name}`</span>);
+}
+
+<span class="comment">// 볼트의 모든 마크다운 파일</span>
+<span class="keyword">const</span> files = app.vault.<span class="function">getMarkdownFiles</span>();
+console.<span class="function">log</span>(<span class="string">`총 ${files.length}개의 마크다운 파일`</span>);
+
+<span class="comment">// 파일 내용 읽기</span>
+<span class="keyword">const</span> content = <span class="keyword">await</span> app.vault.<span class="function">read</span>(activeFile);
+console.<span class="function">log</span>(<span class="string">`파일 크기: ${content.length} 글자`</span>);
+
+<span class="comment">// 메타데이터 캐시 접근</span>
+<span class="keyword">const</span> cache = app.metadataCache.<span class="function">getFileCache</span>(activeFile);
+<span class="keyword">if</span> (cache?.frontmatter) {
+    console.<span class="function">log</span>(<span class="string">'프론트매터:'</span>, cache.frontmatter);
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>날짜와 시간 처리</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 현재 날짜와 시간</span>
+<span class="keyword">const</span> now = <span class="keyword">new</span> <span class="type">Date</span>();
+<span class="keyword">const</span> year = now.<span class="function">getFullYear</span>();
+<span class="keyword">const</span> month = String(now.<span class="function">getMonth</span>() + <span class="number">1</span>).<span class="function">padStart</span>(<span class="number">2</span>, <span class="string">'0'</span>);
+<span class="keyword">const</span> day = String(now.<span class="function">getDate</span>()).<span class="function">padStart</span>(<span class="number">2</span>, <span class="string">'0'</span>);
+
+<span class="comment">// 포맷된 날짜</span>
+<span class="keyword">const</span> formattedDate = <span class="string">`${year}-${month}-${day}`</span>;
+<span class="keyword">const</span> koreanDate = <span class="string">`${year}년 ${month}월 ${day}일`</span>;
+
+<span class="comment">// 요일 구하기</span>
+<span class="keyword">const</span> weekdays = [<span class="string">'일'</span>, <span class="string">'월'</span>, <span class="string">'화'</span>, <span class="string">'수'</span>, <span class="string">'목'</span>, <span class="string">'금'</span>, <span class="string">'토'</span>];
+<span class="keyword">const</span> weekday = weekdays[now.<span class="function">getDay</span>()];
+
+<span class="comment">// 타임스탬프</span>
+<span class="keyword">const</span> timestamp = now.<span class="function">toISOString</span>();
+<span class="keyword">const</span> unixTime = Math.<span class="function">floor</span>(now.<span class="function">getTime</span>() / <span class="number">1000</span>);
+
+<span class="comment">// 상대적 시간 계산</span>
+<span class="keyword">function</span> <span class="function">getRelativeTime</span>(date) {
+    <span class="keyword">const</span> diff = <span class="keyword">new</span> <span class="type">Date</span>() - date;
+    <span class="keyword">const</span> days = Math.<span class="function">floor</span>(diff / (<span class="number">1000</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span>));
+    
+    <span class="keyword">if</span> (days === <span class="number">0</span>) <span class="keyword">return</span> <span class="string">'오늘'</span>;
+    <span class="keyword">if</span> (days === <span class="number">1</span>) <span class="keyword">return</span> <span class="string">'어제'</span>;
+    <span class="keyword">if</span> (days < <span class="number">7</span>) <span class="keyword">return</span> <span class="string">`${days}일 전`</span>;
+    <span class="keyword">if</span> (days < <span class="number">30</span>) <span class="keyword">return</span> <span class="string">`${Math.floor(days / 7)}주 전`</span>;
+    <span class="keyword">return</span> <span class="string">`${Math.floor(days / 30)}개월 전`</span>;
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>문자열 처리</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 제목에서 안전한 파일명 생성</span>
+<span class="keyword">function</span> <span class="function">sanitizeFileName</span>(title) {
+    <span class="keyword">return</span> title
+        .<span class="function">replace</span>(/[\\/:*?"<>|]/g, <span class="string">'-'</span>)  <span class="comment">// 특수문자 제거</span>
+        .<span class="function">replace</span>(/\s+/g, <span class="string">' '</span>)           <span class="comment">// 연속 공백 제거</span>
+        .<span class="function">trim</span>()                          <span class="comment">// 앞뒤 공백 제거</span>
+        .<span class="function">slice</span>(<span class="number">0</span>, <span class="number">200</span>);                  <span class="comment">// 길이 제한</span>
+}
+
+<span class="comment">// 슬러그 생성 (URL 친화적)</span>
+<span class="keyword">function</span> <span class="function">createSlug</span>(text) {
+    <span class="keyword">return</span> text
+        .<span class="function">toLowerCase</span>()
+        .<span class="function">replace</span>(/[^\w\s가-힣]/g, <span class="string">''</span>)
+        .<span class="function">replace</span>(/\s+/g, <span class="string">'-'</span>)
+        .<span class="function">replace</span>(/-+/g, <span class="string">'-'</span>);
+}
+
+<span class="comment">// 텍스트 요약</span>
+<span class="keyword">function</span> <span class="function">summarizeText</span>(text, maxLength = <span class="number">200</span>) {
+    <span class="keyword">if</span> (text.length <= maxLength) <span class="keyword">return</span> text;
+    <span class="keyword">return</span> text.<span class="function">slice</span>(<span class="number">0</span>, maxLength).<span class="function">trim</span>() + <span class="string">'...'</span>;
+}
+
+<span class="comment">// 단어 수 계산</span>
+<span class="keyword">function</span> <span class="function">countWords</span>(text) {
+    <span class="keyword">const</span> words = text.<span class="function">match</span>(/\b\w+\b/g);
+    <span class="keyword">const</span> koreanChars = text.<span class="function">match</span>(/[가-힣]/g);
+    <span class="keyword">return</span> (words?.length || <span class="number">0</span>) + Math.<span class="function">floor</span>((koreanChars?.length || <span class="number">0</span>) / <span class="number">5</span>);
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="templater">
+            <h2>3. Templater 스크립트</h2>
+            
+            <div class="card">
+                <h3>동적 템플릿 생성</h3>
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <span class="editor-title">daily-note-template.js</span>
+                    </div>
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="comment">// Templater 템플릿 예제</span>
+<span class="string">---
+created: <% tp.date.now("YYYY-MM-DD HH:mm") %>
+tags: [daily, <% tp.date.now("YYYY/MM") %>]
+weather: <% await tp.web.random_weather() %>
+---</span>
+
+# 📅 <% tp.date.now("YYYY년 MM월 DD일 dddd") %>
+
+## 🌅 오늘의 시작
+<span class="operator"><%*</span>
+<span class="comment">// 오늘의 격언 가져오기</span>
+<span class="keyword">const</span> quotes = [
+    <span class="string">"오늘 하루도 최선을 다하자"</span>,
+    <span class="string">"작은 진전이라도 진전이다"</span>,
+    <span class="string">"꾸준함이 완벽함을 이긴다"</span>
+];
+<span class="keyword">const</span> randomQuote = quotes[Math.<span class="function">floor</span>(Math.<span class="function">random</span>() * quotes.length)];
+tR += <span class="string">`> "${randomQuote}"\n\n`</span>;
+
+<span class="comment">// 어제 노트 링크</span>
+<span class="keyword">const</span> yesterday = moment().<span class="function">subtract</span>(<span class="number">1</span>, <span class="string">'days'</span>).<span class="function">format</span>(<span class="string">'YYYY-MM-DD'</span>);
+<span class="keyword">const</span> yesterdayFile = tp.file.<span class="function">find_tfile</span>(<span class="string">`Daily/${yesterday}`</span>);
+<span class="keyword">if</span> (yesterdayFile) {
+    tR += <span class="string">`📌 [[${yesterday}|어제 노트]]\n\n`</span>;
+}
+<span class="operator">%></span>
+
+## ✅ 오늘의 할 일
+<span class="operator"><%*</span>
+<span class="comment">// 미완료 작업 가져오기</span>
+<span class="keyword">const</span> files = app.vault.<span class="function">getMarkdownFiles</span>();
+<span class="keyword">const</span> incompleteTasks = [];
+
+<span class="keyword">for</span> (<span class="keyword">const</span> file <span class="keyword">of</span> files) {
+    <span class="keyword">if</span> (file.path.<span class="function">startsWith</span>(<span class="string">'Daily/'</span>) && file.path !== tp.file.path) {
+        <span class="keyword">const</span> content = <span class="keyword">await</span> app.vault.<span class="function">read</span>(file);
+        <span class="keyword">const</span> tasks = content.<span class="function">match</span>(/- \[ \] .+/g);
+        <span class="keyword">if</span> (tasks) {
+            incompleteTasks.<span class="function">push</span>(...tasks);
+        }
+    }
+}
+
+<span class="keyword">if</span> (incompleteTasks.length > <span class="number">0</span>) {
+    tR += <span class="string">`### 📋 이월된 작업\n`</span>;
+    incompleteTasks.<span class="function">forEach</span>(task => {
+        tR += task + <span class="string">'\n'</span>;
+    });
+}
+<span class="operator">%></span>
+
+### 🎯 오늘의 목표
+- [ ] 
+- [ ] 
+- [ ] 
+
+## 📝 노트
+
+
+## 🌙 하루 마무리
+### 오늘의 성과
+
+
+### 내일을 위한 메모</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>사용자 입력 처리</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 사용자 입력을 받는 템플릿</span>
+<span class="operator"><%*</span>
+<span class="comment">// 프로젝트 템플릿</span>
+<span class="keyword">const</span> projectName = <span class="keyword">await</span> tp.system.<span class="function">prompt</span>(<span class="string">"프로젝트 이름:"</span>);
+<span class="keyword">const</span> projectType = <span class="keyword">await</span> tp.system.<span class="function">suggester</span>(
+    [<span class="string">"개인"</span>, <span class="string">"업무"</span>, <span class="string">"학습"</span>, <span class="string">"취미"</span>],
+    [<span class="string">"personal"</span>, <span class="string">"work"</span>, <span class="string">"study"</span>, <span class="string">"hobby"</span>]
+);
+<span class="keyword">const</span> deadline = <span class="keyword">await</span> tp.system.<span class="function">prompt</span>(<span class="string">"마감일 (YYYY-MM-DD):"</span>);
+
+<span class="comment">// 파일명 생성</span>
+<span class="keyword">const</span> fileName = <span class="string">`Projects/${projectType}/${projectName}`</span>;
+<span class="keyword">await</span> tp.file.<span class="function">rename</span>(fileName);
+
+<span class="comment">// 관련 폴더 생성</span>
+<span class="keyword">const</span> folders = [
+    <span class="string">`${fileName}/Resources`</span>,
+    <span class="string">`${fileName}/Tasks`</span>,
+    <span class="string">`${fileName}/Notes`</span>
+];
+
+<span class="keyword">for</span> (<span class="keyword">const</span> folder <span class="keyword">of</span> folders) {
+    <span class="keyword">if</span> (!app.vault.<span class="function">getAbstractFileByPath</span>(folder)) {
+        <span class="keyword">await</span> app.vault.<span class="function">createFolder</span>(folder);
+    }
+}
+<span class="operator">%></span>
+
+# 🚀 <%= projectName %>
+
+## 📋 프로젝트 정보
+- **유형**: <%= projectType %>
+- **시작일**: <%= tp.date.now("YYYY-MM-DD") %>
+- **마감일**: <%= deadline %>
+- **상태**: 🟡 진행중
+
+## 🎯 프로젝트 목표
+
+
+## 📊 진행 상황
+- [ ] 기획 단계
+- [ ] 실행 단계
+- [ ] 검토 단계
+- [ ] 완료
+
+## 📁 관련 문서
+- [[<%= fileName %>/Resources/참고자료]]
+- [[<%= fileName %>/Tasks/작업목록]]
+- [[<%= fileName %>/Notes/회의록]]</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>외부 API 연동</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="comment">// 날씨 API 호출 예제</span>
+<span class="operator"><%*</span>
+<span class="keyword">async function</span> <span class="function">getWeather</span>(city = <span class="string">"Seoul"</span>) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(
+            <span class="string">`https://wttr.in/${city}?format=%C+%t`</span>
+        );
+        <span class="keyword">const</span> weather = <span class="keyword">await</span> response.<span class="function">text</span>();
+        <span class="keyword">return</span> weather.<span class="function">trim</span>();
+    } <span class="keyword">catch</span> (error) {
+        <span class="keyword">return</span> <span class="string">"날씨 정보 없음"</span>;
+    }
+}
+
+<span class="keyword">const</span> weather = <span class="keyword">await</span> <span class="function">getWeather</span>();
+tR += <span class="string">`🌤️ 오늘의 날씨: ${weather}\n\n`</span>;
+
+<span class="comment">// GitHub 통계 가져오기</span>
+<span class="keyword">async function</span> <span class="function">getGitHubStats</span>(username) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(
+            <span class="string">`https://api.github.com/users/${username}`</span>
+        );
+        <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+        <span class="keyword">return</span> {
+            repos: data.public_repos,
+            followers: data.followers,
+            following: data.following
+        };
+    } <span class="keyword">catch</span> (error) {
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }
+}
+
+<span class="comment">// 환율 정보</span>
+<span class="keyword">async function</span> <span class="function">getExchangeRate</span>() {
+    <span class="comment">// API 호출 로직</span>
+    <span class="keyword">return</span> <span class="string">"1 USD = 1,350 KRW"</span>;
+}
+<span class="operator">%></span></code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="dataview">
+            <h2>4. DataviewJS 고급 활용</h2>
+            
+            <div class="card">
+                <h3>동적 대시보드 생성</h3>
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <span class="editor-title">dashboard.js</span>
+                    </div>
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="string">```dataviewjs
+// 프로젝트 대시보드
+const projects = dv.pages('"Projects"')
+    .where(p => p.status && p.status !== "완료")
+    .sort(p => p.deadline, 'asc');
+
+// 상태별 집계
+const statusCount = {
+    planning: projects.where(p => p.status === "기획").length,
+    active: projects.where(p => p.status === "진행중").length,
+    review: projects.where(p => p.status === "검토").length
+};
+
+// 차트 생성
+dv.el("div", `
+<div style="display: flex; gap: 20px; margin: 20px 0;">
+    <div style="flex: 1; background: var(--background-secondary); padding: 20px; border-radius: 10px;">
+        <h3>📊 프로젝트 현황</h3>
+        <div style="font-size: 2em; color: var(--text-accent);">${projects.length}</div>
+        <div>진행중인 프로젝트</div>
+    </div>
+    <div style="flex: 1; background: var(--background-secondary); padding: 20px; border-radius: 10px;">
+        <h3>⏰ 긴급 작업</h3>
+        <div style="font-size: 2em; color: var(--text-error);">${
+            projects.where(p => {
+                const deadline = moment(p.deadline);
+                return deadline.diff(moment(), 'days') <= 3;
+            }).length
+        }</div>
+        <div>3일 내 마감</div>
+    </div>
+</div>
+`);
+
+// 프로젝트 목록
+dv.header(3, "📋 프로젝트 목록");
+
+const table = projects.map(p => {
+    const daysLeft = moment(p.deadline).diff(moment(), 'days');
+    const urgency = daysLeft <= 3 ? "🔴" : daysLeft <= 7 ? "🟡" : "🟢";
+    
+    return [
+        p.file.link,
+        p.type || "-",
+        p.status || "-",
+        urgency + " " + p.deadline,
+        daysLeft + "일"
+    ];
+});
+
+dv.table(
+    ["프로젝트", "유형", "상태", "마감일", "남은 기간"],
+    table
+);
+```</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>통계 분석과 시각화</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="string">```dataviewjs
+// 월별 노트 작성 통계
+const pages = dv.pages()
+    .where(p => p.file.cday)
+    .groupBy(p => p.file.cday.toFormat("yyyy-MM"))
+    .sort(g => g.key, 'desc');
+
+// 차트 데이터 준비
+const chartData = pages.slice(0, 12).map(month => ({
+    month: month.key,
+    count: month.rows.length,
+    words: month.rows.map(p => p.file.size).reduce((a, b) => a + b, 0)
+}));
+
+// SVG 차트 생성
+const maxCount = Math.max(...chartData.map(d => d.count));
+const chartWidth = 600;
+const chartHeight = 300;
+const barWidth = chartWidth / chartData.length - 10;
+
+dv.el("div", `
+<svg width="${chartWidth}" height="${chartHeight}" style="background: var(--background-secondary); border-radius: 10px; padding: 20px;">
+    ${chartData.map((data, i) => {
+        const barHeight = (data.count / maxCount) * (chartHeight - 40);
+        const x = i * (barWidth + 10) + 20;
+        const y = chartHeight - barHeight - 20;
+        
+        return `
+            <rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" 
+                  fill="var(--text-accent)" opacity="0.8" rx="5">
+                <title>${data.month}: ${data.count}개 노트</title>
+            </rect>
+            <text x="${x + barWidth/2}" y="${chartHeight - 5}" 
+                  text-anchor="middle" fill="var(--text-muted)" font-size="12">
+                ${data.month.slice(5)}
+            </text>
+            <text x="${x + barWidth/2}" y="${y - 5}" 
+                  text-anchor="middle" fill="var(--text-normal)" font-size="14">
+                ${data.count}
+            </text>
+        `;
+    }).join('')}
+</svg>
+`);
+
+// 상세 통계 테이블
+dv.header(3, "📈 월별 상세 통계");
+
+const stats = chartData.map(d => [
+    d.month,
+    d.count + "개",
+    Math.round(d.words / 1000) + "K",
+    Math.round(d.words / d.count) + "자"
+]);
+
+dv.table(
+    ["월", "노트 수", "총 크기", "평균 크기"],
+    stats
+);
+```</span></code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>인터랙티브 요소</h3>
+                <div class="code-block">
+                    <button class="copy-button" onclick="copyCode(this)">복사</button>
+                    <pre><code><span class="string">```dataviewjs
+// 할 일 관리 대시보드
+const tasks = dv.pages()
+    .file.tasks
+    .where(t => !t.completed)
+    .sort(t => t.due || "9999-99-99");
+
+// 우선순위별 분류
+const highPriority = tasks.where(t => t.text.includes("🔴"));
+const mediumPriority = tasks.where(t => t.text.includes("🟡"));
+const lowPriority = tasks.where(t => t.text.includes("🟢"));
+
+// 인터랙티브 버튼 생성
+dv.el("div", `
+<div style="display: flex; gap: 10px; margin-bottom: 20px;">
+    <button onclick="this.nextElementSibling.style.display='block'; 
+                     this.nextElementSibling.nextElementSibling.style.display='none';
+                     this.nextElementSibling.nextElementSibling.nextElementSibling.style.display='none';"
+            style="padding: 10px 20px; background: var(--text-error); 
+                   color: white; border: none; border-radius: 5px; cursor: pointer;">
+        🔴 긴급 (${highPriority.length})
+    </button>
+    <button onclick="this.previousElementSibling.nextElementSibling.style.display='none';
+                     this.nextElementSibling.style.display='block';
+                     this.nextElementSibling.nextElementSibling.style.display='none';"
+            style="padding: 10px 20px; background: var(--text-warning); 
+                   color: black; border: none; border-radius: 5px; cursor: pointer;">
+        🟡 중요 (${mediumPriority.length})
+    </button>
+    <button onclick="this.previousElementSibling.previousElementSibling.nextElementSibling.style.display='none';
+                     this.previousElementSibling.nextElementSibling.style.display='none';
+                     this.nextElementSibling.style.display='block';"
+            style="padding: 10px 20px; background: var(--text-success); 
+                   color: white; border: none; border-radius: 5px; cursor: pointer;">
+        🟢 일반 (${lowPriority.length})
+    </button>
+</div>
+
+<div id="high-tasks">
+    ${dv.taskList(highPriority, false)}
+</div>
+<div id="medium-tasks" style="display: none;">
+    ${dv.taskList(mediumPriority, false)}
+</div>
+<div id="low-tasks" style="display: none;">
+    ${dv.taskList(lowPriority, false)}
+</div>
+`);
+
+// 진행률 표시
+const totalTasks = dv.pages().file.tasks.length;
+const completedTasks = dv.pages().file.tasks.where(t => t.completed).length;
+const progress = Math.round((completedTasks / totalTasks) * 100);
+
+dv.el("div", `
+<div style="margin-top: 30px;">
+    <h3>📊 전체 진행률</h3>
+    <div style="background: var(--background-modifier-border); 
+                height: 30px; border-radius: 15px; overflow: hidden;">
+        <div style="background: linear-gradient(90deg, var(--text-accent), var(--text-accent-hover));
+                    width: ${progress}%; height: 100%; 
+                    display: flex; align-items: center; justify-content: center;
+                    color: white; font-weight: bold;">
+            ${progress}%
+        </div>
+    </div>
+    <p style="text-align: center; margin-top: 10px;">
+        ${completedTasks} / ${totalTasks} 완료
+    </p>
+</div>
+`);
+```</span></code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="automation">
+            <h2>5. 자동화 스크립트</h2>
+            
+            <div class="card">
+                <h3>QuickAdd 매크로</h3>
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <div class="editor-dot"></div>
+                        <span class="editor-title">book-notes-macro.js</span>
+                    </div>
+                    <div class="code-block">
+                        <button class="copy-button" onclick="copyCode(this)">복사</button>
+                        <pre><code><span class="comment">// 도서 노트 생성 매크로</span>
+<span class="keyword">module</span>.exports = <span class="keyword">async</span> (params) => {
+    <span class="keyword">const</span> { app, quickAddApi } = params;
+    
+    <span class="comment">// ISBN으로 도서 정보 검색</span>
+    <span class="keyword">const</span> isbn = <span class="keyword">await</span> quickAddApi.<span class="function">inputPrompt</span>(<span class="string">"ISBN 입력:"</span>);
+    <span class="keyword">if</span> (!isbn) <span class="keyword">return</span>;
+    
+    <span class="comment">// Google Books API 호출</span>
+    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">fetch</span>(
+        <span class="string">`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`</span>
+    );
+    <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="function">json</span>();
+    
+    <span class="keyword">if</span> (!data.items || data.items.length === <span class="number">0</span>) {
+        <span class="keyword">await</span> quickAddApi.<span class="function">infoDialog</span>(<span class="string">"도서를 찾을 수 없습니다."</span>);
+        <span class="keyword">return</span>;
+    }
+    
+    <span class="keyword">const</span> book = data.items[<span class="number">0</span>].volumeInfo;
+    
+    <span class="comment">// 파일명 생성</span>
+    <span class="keyword">const</span> fileName = <span class="string">`Books/${book.title} - ${book.authors?.[0] || '저자미상'}`</span>;
+    
+    <span class="comment">// 템플릿 생성</span>
+    <span class="keyword">const</span> template = <span class="string">`---
+title: "${book.title}"
+author: ${JSON.stringify(book.authors || [])}
+isbn: "${isbn}"
+publisher: "${book.publisher || ''}"
+publishedDate: "${book.publishedDate || ''}"
+pageCount: ${book.pageCount || 0}
+categories: ${JSON.stringify(book.categories || [])}
+rating: 
+status: 읽는중
+startDate: ${moment().format('YYYY-MM-DD')}
+endDate: 
+tags: [book, ${book.categories?.[0] || 'uncategorized'}]
+created: ${moment().format('YYYY-MM-DD HH:mm')}
+---
+
+# 📚 ${book.title}
+
+## 📖 도서 정보
+- **저자**: ${book.authors?.join(', ') || '저자미상'}
+- **출판사**: ${book.publisher || ''}
+- **출판일**: ${book.publishedDate || ''}
+- **페이지**: ${book.pageCount || 0}p
+- **카테고리**: ${book.categories?.join(', ') || ''}
+
+## 📝 책 소개
+${book.description || ''}
+
+## 🎯 읽기 목표
+- [ ] 
+
+## 💭 주요 내용
+
+
+## 📌 인상깊은 구절
+
+
+## 🤔 나의 생각
+
+
+## 🔗 관련 링크
+- [Google Books](https://books.google.com/books?id=${data.items[0].id})
+${book.infoLink ? `- [상세 정보](${book.infoLink})` : ''}
+`</span>;
+    
+    <span class="comment">// 파일 생성</span>
+    <span class="keyword">const</span> file = <span class="keyword">await</span> app.vault.<span class="function">create</span>(fileName + <span class="string">'.md'</span>, template);
+    
+    <span class="comment">// 파일 열기</span>
+    <span class="keyword">await</span> app.workspace.<span class="function">getLeaf</span>().<span class="function">openFile</span>(file);
+    
+    <span class="keyword">await</span> quickAddApi.<span class="function">infoDialog</span>(<span class="string">`도서 노트가 생성되었습니다: ${book.title}`</span>);
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>자동화 워크플로우</h3>
+                <div class="automation-builder">
+                    <h4>자동화 빌더</h4>
+                    <div class="builder-section">
+                        <label>트리거 선택:</label>
+                        <select class="trigger-select" id="trigger-select">
+                            <option value="file-create">파일 생성 시</option>
+                            <option value="file-modify">파일 수정 시</option>
+                            <option value="daily">매일 특정 시간</option>
+                            <option value="tag-add">태그 추가 시</option>
+                            <option value="command">명령어 실행</option>
+                        </select>
+                    </div>
+                    <div class="builder-section">
+                        <label>액션 선택:</label>
+                        <select class="action-select" id="action-select">
+                            <option value="create-note">노트 생성</option>
+                            <option value="update-frontmatter">프론트매터 업데이트</option>
+                            <option value="add-content">콘텐츠 추가</option>
+                            <option value="run-script">스크립트 실행</option>
+                            <option value="send-notification">알림 보내기</option>
+                        </select>
+                    </div>
+                    <div class="builder-section">
+                        <label>스크립트 코드:</label>
+                        <textarea class="builder-input" id="automation-script" placeholder="// 자동화 스크립트를 입력하세요"></textarea>
+                    </div>
+                    <div class="builder-controls">
+                        <button class="demo-button" onclick="generateAutomation()">스크립트 생성</button>
+                        <button class="demo-button" onclick="testAutomation()">테스트</button>
+                        <button class="demo-button" onclick="saveAutomation()">저장</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="advanced">
+            <h2>6. 고급 스크립트 예제</h2>
+            
+            <div class="card">
+                <h3>실용적인 스크립트 갤러리</h3>
+                <div class="script-examples">
+                    <div class="example-grid">
+                        <div class="example-card" onclick="loadExample('weekly-review')">
+                            <div class="example-icon">📊</div>
+                            <div class="example-title">주간 리뷰 생성기</div>
+                            <div class="example-description">
+                                지난 주의 활동을 분석하고 자동으로 주간 리뷰를 생성
+                            </div>
+                            <div class="example-tags">
+                                <span class="example-tag">Templater</span>
+                                <span class="example-tag">분석</span>
+                            </div>
+                        </div>
+
+                        <div class="example-card" onclick="loadExample('tag-hierarchy')">
+                            <div class="example-icon">🏷️</div>
+                            <div class="example-title">태그 계층 구조화</div>
+                            <div class="example-description">
+                                중첩 태그를 분석하여 계층적 구조로 시각화
+                            </div>
+                            <div class="example-tags">
+                                <span class="example-tag">DataviewJS</span>
+                                <span class="example-tag">시각화</span>
+                            </div>
+                        </div>
+
+                        <div class="example-card" onclick="loadExample('note-linker')">
+                            <div class="example-icon">🔗</div>
+                            <div class="example-title">스마트 노트 연결</div>
+                            <div class="example-description">
+                                콘텐츠 유사도를 분석하여 관련 노트 자동 연결
+                            </div>
+                            <div class="example-tags">
+                                <span class="example-tag">QuickAdd</span>
+                                <span class="example-tag">AI</span>
+                            </div>
+                        </div>
+
+                        <div class="example-card" onclick="loadExample('habit-tracker')">
+                            <div class="example-icon">📈</div>
+                            <div class="example-title">습관 트래커</div>
+                            <div class="example-description">
+                                일일 습관을 추적하고 진행 상황을 시각화
+                            </div>
+                            <div class="example-tags">
+                                <span class="example-tag">DataviewJS</span>
+                                <span class="example-tag">차트</span>
+                            </div>
+                        </div>
+
+                        <div class="example-card" onclick="loadExample('meeting-minutes')">
+                            <div class="example-icon">🎙️</div>
+                            <div class="example-title">회의록 자동화</div>
+                            <div class="example-description">
+                                회의 정보를 입력받아 구조화된 회의록 생성
+                            </div>
+                            <div class="example-tags">
+                                <span class="example-tag">Templater</span>
+                                <span class="example-tag">폼</span>
+                            </div>
+                        </div>
+
+                        <div class="example-card" onclick="loadExample('knowledge-graph')">
+                            <div class="example-icon">🧠</div>
+                            <div class="example-title">지식 그래프 분석</div>
+                            <div class="example-description">
+                                노트 간 연결을 분석하여 지식 구조 파악
+                            </div>
+                            <div class="example-tags">
+                                <span class="example-tag">Graph</span>
+                                <span class="example-tag">분석</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>인터랙티브 데모</h3>
+                <div class="interactive-demo">
+                    <div class="demo-controls">
+                        <button class="demo-button" onclick="runDemo('file-stats')">파일 통계</button>
+                        <button class="demo-button" onclick="runDemo('tag-cloud')">태그 클라우드</button>
+                        <button class="demo-button" onclick="runDemo('link-analysis')">링크 분석</button>
+                        <button class="demo-button" onclick="runDemo('daily-summary')">일일 요약</button>
+                    </div>
+                    <div class="demo-output" id="demo-output">
+                        데모 결과가 여기에 표시됩니다...
+                    </div>
+                    <div class="console-log" id="console-output" style="display: none;">
+                        <div class="console-line">
+                            <span class="console-prefix">></span>
+                            <span class="console-log-text">콘솔 출력이 여기에 표시됩니다...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="debugging">
+            <h2>7. 디버깅과 최적화</h2>
+            
+            <div class="card">
+                <h3>디버깅 도구</h3>
+                <div class="debugging-tools">
+                    <div class="debug-panel">
+                        <h4>디버그 콘솔</h4>
+                        <div class="debug-controls">
+                            <button class="debug-button" onclick="enableDebugMode()">디버그 모드</button>
+                            <button class="debug-button" onclick="clearConsole()">콘솔 클리어</button>
+                            <button class="debug-button" onclick="showPerformance()">성능 분석</button>
+                        </div>
+                        <div class="code-block">
+                            <button class="copy-button" onclick="copyCode(this)">복사</button>
+                            <pre><code><span class="comment">// 디버깅 헬퍼 함수</span>
+<span class="keyword">const</span> debug = {
+    <span class="function">log</span>: (...args) => {
+        <span class="keyword">if</span> (window.DEBUG_MODE) {
+            console.<span class="function">log</span>(<span class="string">'[DEBUG]'</span>, ...args);
+        }
+    },
+    
+    <span class="function">time</span>: (label) => {
+        <span class="keyword">if</span> (window.DEBUG_MODE) {
+            console.<span class="function">time</span>(label);
+        }
+    },
+    
+    <span class="function">timeEnd</span>: (label) => {
+        <span class="keyword">if</span> (window.DEBUG_MODE) {
+            console.<span class="function">timeEnd</span>(label);
+        }
+    },
+    
+    <span class="function">trace</span>: () => {
+        <span class="keyword">if</span> (window.DEBUG_MODE) {
+            console.<span class="function">trace</span>();
+        }
+    }
+};
+
+<span class="comment">// 에러 처리</span>
+<span class="keyword">function</span> <span class="function">safeExecute</span>(fn, fallback = <span class="keyword">null</span>) {
+    <span class="keyword">try</span> {
+        <span class="keyword">return</span> <span class="function">fn</span>();
+    } <span class="keyword">catch</span> (error) {
+        console.<span class="function">error</span>(<span class="string">'실행 중 오류:'</span>, error);
+        <span class="keyword">return</span> fallback;
+    }
+}
+
+<span class="comment">// 성능 측정</span>
+<span class="keyword">function</span> <span class="function">measurePerformance</span>(fn, label) {
+    <span class="keyword">const</span> start = performance.<span class="function">now</span>();
+    <span class="keyword">const</span> result = <span class="function">fn</span>();
+    <span class="keyword">const</span> end = performance.<span class="function">now</span>();
+    
+    console.<span class="function">log</span>(<span class="string">`${label}: ${(end - start).toFixed(2)}ms`</span>);
+    <span class="keyword">return</span> result;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>성능 최적화 팁</h3>
+                <div class="best-practices">
+                    <div class="practice-grid">
+                        <div class="practice-card">
+                            <div class="practice-icon">⚡</div>
+                            <div class="practice-title">배치 처리</div>
+                            <div class="practice-description">
+                                여러 파일을 처리할 때는 개별 처리보다 배치 처리를 사용하여 성능 향상
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">💾</div>
+                            <div class="practice-title">캐싱 활용</div>
+                            <div class="practice-description">
+                                반복적으로 사용되는 데이터는 캐시에 저장하여 재계산 방지
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🔄</div>
+                            <div class="practice-title">비동기 처리</div>
+                            <div class="practice-description">
+                                긴 작업은 async/await를 사용하여 UI 블로킹 방지
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">📊</div>
+                            <div class="practice-title">점진적 렌더링</div>
+                            <div class="practice-description">
+                                대량의 데이터는 한 번에 렌더링하지 말고 점진적으로 표시
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🎯</div>
+                            <div class="practice-title">선택적 실행</div>
+                            <div class="practice-description">
+                                필요한 경우에만 스크립트를 실행하도록 조건 검사 추가
+                            </div>
+                        </div>
+                        <div class="practice-card">
+                            <div class="practice-icon">🧹</div>
+                            <div class="practice-title">메모리 관리</div>
+                            <div class="practice-description">
+                                사용 후 불필요한 객체는 null로 설정하여 가비지 컬렉션 유도
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>실습 과제</h2>
+            
+            <div class="practice-exercises">
+                <h3>이번 강의의 실습 과제</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">📝 과제 1: 기본 스크립트 작성</span>
+                            <span class="difficulty-badge difficulty-easy">초급</span>
+                        </div>
+                        <p>간단한 Templater 스크립트를 작성하세요:</p>
+                        <ul>
+                            <li>현재 날짜와 시간 삽입</li>
+                            <li>랜덤 인용구 생성</li>
+                            <li>파일 정보 표시</li>
+                            <li>간단한 계산기 기능</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">📊 과제 2: DataviewJS 대시보드</span>
+                            <span class="difficulty-badge difficulty-medium">중급</span>
+                        </div>
+                        <p>DataviewJS로 개인 대시보드를 만드세요:</p>
+                        <ul>
+                            <li>주간 활동 통계</li>
+                            <li>태그별 노트 분류</li>
+                            <li>미완료 작업 목록</li>
+                            <li>시각적 차트 추가</li>
+                        </ul>
+                    </div>
+
+                    <div class="exercise-item">
+                        <div class="exercise-header">
+                            <span class="exercise-title">🚀 과제 3: 자동화 워크플로우</span>
+                            <span class="difficulty-badge difficulty-hard">고급</span>
+                        </div>
+                        <p>복잡한 자동화 시스템을 구축하세요:</p>
+                        <ul>
+                            <li>일일 리포트 자동 생성</li>
+                            <li>외부 API 연동</li>
+                            <li>스마트 노트 분류 시스템</li>
+                            <li>커스텀 명령어 개발</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>FAQ</h2>
+            
+            <div class="faq-section">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Templater와 템플릿 플러그인의 차이점은?
+                    </div>
+                    <div class="faq-answer">
+                        템플릿 플러그인은 정적 템플릿만 지원하지만, Templater는 JavaScript 실행, 사용자 함수, 시스템 명령어 등 고급 기능을 제공합니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        DataviewJS에서 성능이 느려지는 이유는?
+                    </div>
+                    <div class="faq-answer">
+                        대량의 파일을 처리하거나 복잡한 계산을 수행할 때 느려질 수 있습니다. 필터링을 먼저 적용하고, 캐싱을 활용하며, 필요한 데이터만 가져오도록 최적화하세요.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        외부 API를 호출할 수 있나요?
+                    </div>
+                    <div class="faq-answer">
+                        네, fetch API를 사용하여 외부 API를 호출할 수 있습니다. 단, CORS 정책에 따라 일부 API는 직접 호출이 불가능할 수 있습니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        스크립트 에러를 디버깅하는 방법은?
+                    </div>
+                    <div class="faq-answer">
+                        개발자 도구(Ctrl+Shift+I)의 콘솔을 확인하고, console.log()를 활용하여 변수 값을 확인하세요. try-catch 블록으로 에러를 처리하는 것도 중요합니다.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        스크립트를 다른 사람과 공유할 수 있나요?
+                    </div>
+                    <div class="faq-answer">
+                        네, 스크립트 파일을 공유하거나 GitHub에 업로드할 수 있습니다. CustomJS 플러그인을 사용하면 재사용 가능한 함수 라이브러리를 만들 수 있습니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>추가 학습 자료</h2>
+            
+            <div class="resources-section">
+                <h3>JavaScript 스크립팅 관련 자료</h3>
+                <ul class="resource-list">
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📚 Templater 공식 문서
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🎥 DataviewJS 튜토리얼 시리즈
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            📝 JavaScript 스크립트 예제 모음
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            🛠️ QuickAdd 매크로 라이브러리
+                        </a>
+                    </li>
+                    <li class="resource-item">
+                        <a href="#" class="resource-link">
+                            💡 커뮤니티 스크립트 갤러리
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="next-lesson">
+            <h3>다음 강의 안내</h3>
+            <p>제24강: 지식 관리 시스템 구축 - 체계적인 개인 지식 관리 방법론</p>
+            <p>Obsidian을 활용한 효과적인 지식 관리 시스템 구축 방법을 배웁니다.</p>
+        </div>
+    </div>
+
+    <script>
+        // FAQ 토글 기능
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // 코드 복사 기능
+        function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('pre code');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '복사됨!';
+                button.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    button.textContent = '복사';
+                    button.style.background = 'var(--accent-color)';
+                }, 2000);
+            });
+        }
+
+        // 데모 실행 함수
+        function runDemo(type) {
+            const output = document.getElementById('demo-output');
+            const consoleOutput = document.getElementById('console-output');
+            consoleOutput.style.display = 'block';
+            
+            switch(type) {
+                case 'file-stats':
+                    output.textContent = `파일 통계 분석 중...
+                    
+총 파일 수: 1,234개
+마크다운 파일: 1,189개
+이미지 파일: 32개
+PDF 파일: 13개
+
+평균 파일 크기: 2.3KB
+최대 파일: Research Notes.md (127KB)
+최소 파일: index.md (0.1KB)
+
+최근 수정된 파일:
+- Daily/2024-01-15.md (2분 전)
+- Projects/Website Redesign.md (1시간 전)
+- Books/Atomic Habits.md (3시간 전)`;
+                    addConsoleLog('[INFO] 파일 통계 분석 완료');
+                    break;
+                    
+                case 'tag-cloud':
+                    output.innerHTML = `<div style="word-wrap: break-word; line-height: 2;">
+                        <span style="font-size: 2em; color: var(--text-accent);">#productivity</span>
+                        <span style="font-size: 1.5em; color: var(--text-muted);">#javascript</span>
+                        <span style="font-size: 1.8em; color: var(--text-accent);">#learning</span>
+                        <span style="font-size: 1.2em; color: var(--text-muted);">#books</span>
+                        <span style="font-size: 1.6em; color: var(--text-accent);">#projects</span>
+                        <span style="font-size: 1.3em; color: var(--text-muted);">#ideas</span>
+                        <span style="font-size: 1.9em; color: var(--text-accent);">#daily</span>
+                        <span style="font-size: 1.4em; color: var(--text-muted);">#meeting</span>
+                        <span style="font-size: 1.7em; color: var(--text-accent);">#research</span>
+                        <span style="font-size: 1.1em; color: var(--text-muted);">#obsidian</span>
+                    </div>`;
+                    addConsoleLog('[INFO] 태그 클라우드 생성 완료');
+                    break;
+                    
+                case 'link-analysis':
+                    output.textContent = `링크 분석 결과:
+                    
+가장 많이 연결된 노트:
+1. Index.md (87개 연결)
+2. Projects/Overview.md (45개 연결)
+3. Daily/Template.md (32개 연결)
+
+고립된 노트: 23개
+양방향 링크: 156개
+단방향 링크: 289개
+
+강하게 연결된 클러스터:
+- 프로젝트 관련 노트 (34개)
+- 일일 노트 (89개)
+- 독서 노트 (27개)`;
+                    addConsoleLog('[INFO] 링크 분석 완료');
+                    break;
+                    
+                case 'daily-summary':
+                    output.textContent = `오늘의 활동 요약 (2024-01-15):
+                    
+✍️ 작성한 노트: 5개
+- Daily/2024-01-15.md
+- Projects/API Integration.md
+- Ideas/New Feature.md
+- Meeting/Team Standup.md
+- Books/Deep Work - Notes.md
+
+✅ 완료한 작업: 8개
+📝 추가된 단어: 1,247개
+🏷️ 사용한 태그: #daily #project #meeting #idea
+⏱️ 활동 시간: 3시간 27분
+
+📊 주간 대비: +23% 생산성 향상`;
+                    addConsoleLog('[INFO] 일일 요약 생성 완료');
+                    break;
+            }
+        }
+
+        // 콘솔 로그 추가
+        function addConsoleLog(message) {
+            const consoleOutput = document.getElementById('console-output');
+            const newLine = document.createElement('div');
+            newLine.className = 'console-line';
+            newLine.innerHTML = `
+                <span class="console-prefix">></span>
+                <span class="console-log-text">${message}</span>
+            `;
+            consoleOutput.appendChild(newLine);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // 자동화 스크립트 생성
+        function generateAutomation() {
+            const trigger = document.getElementById('trigger-select').value;
+            const action = document.getElementById('action-select').value;
+            const scriptArea = document.getElementById('automation-script');
+            
+            let script = '';
+            
+            switch(trigger) {
+                case 'file-create':
+                    script = `// 파일 생성 시 실행되는 스크립트
+app.workspace.on('file-create', async (file) => {
+    if (file.extension === 'md') {
+        // ${action === 'add-content' ? '콘텐츠 추가' : action}
+        console.log('새 파일 생성:', file.path);
+        
+        // 여기에 자동화 로직 추가
+    }
+});`;
+                    break;
+                    
+                case 'daily':
+                    script = `// 매일 실행되는 스크립트
+const now = new Date();
+const hour = now.getHours();
+
+if (hour === 9) { // 오전 9시
+    // ${action === 'create-note' ? '일일 노트 생성' : action}
+    const dailyNote = \`Daily/\${moment().format('YYYY-MM-DD')}.md\`;
+    
+    // 여기에 자동화 로직 추가
+}`;
+                    break;
+            }
+            
+            scriptArea.value = script;
+        }
+
+        // 예제 로드
+        function loadExample(type) {
+            const output = document.getElementById('demo-output');
+            
+            switch(type) {
+                case 'weekly-review':
+                    output.textContent = `주간 리뷰 스크립트가 로드되었습니다.
+이 스크립트는 지난 7일간의 활동을 분석하여 자동으로 주간 리뷰를 생성합니다.`;
+                    break;
+                    
+                case 'tag-hierarchy':
+                    output.textContent = `태그 계층 구조화 스크립트가 로드되었습니다.
+중첩된 태그를 분석하여 트리 구조로 시각화합니다.`;
+                    break;
+            }
+        }
+
+        // 페이지 로드 애니메이션
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.section').forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

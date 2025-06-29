@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제27강: 개인 지식 관리(PKM) 전략 | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-brain"></i> 제27강: 개인 지식 관리(PKM) 전략</h1>
+                <p class="lesson-subtitle">제2의 뇌를 구축하는 체계적인 방법론</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 고급</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 60분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: PKM</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson26.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제27강: 개인 지식 관리(PKM) 전략</span>
+            <a href="lesson28.html" class="nav-link next">
+                다음 강의 <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>PKM의 핵심 원칙과 프로세스 이해하기</li>
+                    <li>Zettelkasten 방법론을 옵시디언에 구현하기</li>
+                    <li>PARA 방법론으로 정보 체계화하기</li>
+                    <li>효과적인 노트 작성 전략 수립하기</li>
+                    <li>개인 지식 네트워크 구축 및 활용하기</li>
+                </ul>
+            </section>
+
+            <section class="pkm-introduction">
+                <h2><i class="fas fa-lightbulb"></i> PKM이란 무엇인가?</h2>
+                
+                <div class="pkm-definition">
+                    <blockquote>
+                        <p>Personal Knowledge Management(PKM)는 개인이 정보를 수집, 처리, 저장, 검색, 활용하는 일련의 프로세스와 도구를 의미합니다. 이는 단순한 정보 저장을 넘어 지식의 창조와 혁신을 가능하게 하는 체계입니다.</p>
+                    </blockquote>
+                </div>
+
+                <div class="pkm-principles">
+                    <h3>PKM의 핵심 원칙</h3>
+                    <div class="principle-grid">
+                        <div class="principle-card">
+                            <i class="fas fa-link"></i>
+                            <h4>연결성</h4>
+                            <p>정보는 고립되어서는 가치가 없습니다. 연결을 통해 새로운 인사이트가 생성됩니다.</p>
+                        </div>
+                        <div class="principle-card">
+                            <i class="fas fa-sync-alt"></i>
+                            <h4>반복성</h4>
+                            <p>지식은 반복적인 검토와 개선을 통해 깊어지고 내재화됩니다.</p>
+                        </div>
+                        <div class="principle-card">
+                            <i class="fas fa-seedling"></i>
+                            <h4>진화성</h4>
+                            <p>지식 시스템은 고정되지 않고 지속적으로 성장하고 변화해야 합니다.</p>
+                        </div>
+                        <div class="principle-card">
+                            <i class="fas fa-user"></i>
+                            <h4>개인화</h4>
+                            <p>자신의 사고 방식과 작업 스타일에 맞는 시스템을 구축해야 합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pkm-process">
+                <h2><i class="fas fa-cogs"></i> PKM 프로세스</h2>
+                
+                <div class="process-flow">
+                    <div class="process-stage">
+                        <div class="stage-icon"><i class="fas fa-search"></i></div>
+                        <h3>1. Capture</h3>
+                        <p>정보 수집</p>
+                    </div>
+                    <div class="process-arrow">→</div>
+                    <div class="process-stage">
+                        <div class="stage-icon"><i class="fas fa-filter"></i></div>
+                        <h3>2. Organize</h3>
+                        <p>체계화</p>
+                    </div>
+                    <div class="process-arrow">→</div>
+                    <div class="process-stage">
+                        <div class="stage-icon"><i class="fas fa-lightbulb"></i></div>
+                        <h3>3. Distill</h3>
+                        <p>핵심 추출</p>
+                    </div>
+                    <div class="process-arrow">→</div>
+                    <div class="process-stage">
+                        <div class="stage-icon"><i class="fas fa-share"></i></div>
+                        <h3>4. Express</h3>
+                        <p>표현/공유</p>
+                    </div>
+                </div>
+
+                <div class="process-details">
+                    <h3>각 단계별 구현</h3>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Capture Template</span>
+                            <button class="copy-button">복사</button>
+                        </div>
+                        <pre><code># 빠른 캡처 템플릿
+
+## 📅 {{date:YYYY-MM-DD HH:mm}}
+## 🏷️ 유형: {{type}}
+## 🔗 출처: {{source}}
+
+### 💡 핵심 내용
+{{content}}
+
+### 🤔 내 생각
+{{thoughts}}
+
+### 🔍 액션 아이템
+- [ ] {{action}}
+
+### 🏷️ 태그
+#inbox #{{tag}}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="zettelkasten">
+                <h2><i class="fas fa-archive"></i> Zettelkasten 방법론</h2>
+                
+                <div class="zettelkasten-intro">
+                    <p>Zettelkasten(메모 상자)은 독일의 사회학자 니클라스 루만이 개발한 노트 작성 시스템으로, 원자적 노트와 연결을 통해 창발적 사고를 가능하게 합니다.</p>
+                </div>
+
+                <h3>Zettelkasten의 핵심 원칙</h3>
+                
+                <div class="zettel-principles">
+                    <div class="principle">
+                        <h4>1. 원자성 (Atomicity)</h4>
+                        <p>하나의 노트는 하나의 아이디어만 담아야 합니다.</p>
+                    </div>
+                    <div class="principle">
+                        <h4>2. 자율성 (Autonomy)</h4>
+                        <p>각 노트는 독립적으로 이해 가능해야 합니다.</p>
+                    </div>
+                    <div class="principle">
+                        <h4>3. 연결성 (Connectivity)</h4>
+                        <p>노트 간의 연결을 통해 지식 네트워크를 구축합니다.</p>
+                    </div>
+                </div>
+
+                <h3>Zettelkasten 구현</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Zettel Note Template</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># {{UID}} {{title}}
+
+## 🏷️ 메타데이터
+- **ID**: {{UID}}
+- **생성일**: {{date:YYYY-MM-DD HH:mm}}
+- **유형**: {{type}}
+- **상태**: {{status}}
+
+## 📝 내용
+{{content}}
+
+## 🔗 연결
+### 선행 노트
+- [[{{previous}}]]
+
+### 관련 노트
+- [[{{related1}}]]
+- [[{{related2}}]]
+
+### 후속 노트
+- [[{{next}}]]
+
+## 🏷️ 태그
+#zettel/{{category}} #{{tag1}} #{{tag2}}
+
+## 📚 참고문헌
+- {{reference}}</code></pre>
+                </div>
+
+                <h3>UID 생성 시스템</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">JavaScript</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>// Zettelkasten UID 생성기
+function generateZettelID() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
+    
+    // 기본 ID: YYYYMMDDHHMM
+    const baseID = `${year}${month}${day}${hour}${minute}`;
+    
+    // 충돌 방지를 위한 suffix
+    const suffix = Math.random().toString(36).substr(2, 2);
+    
+    return `${baseID}${suffix}`;
+}
+
+// 계층적 ID 생성
+function generateHierarchicalID(parentID, branch) {
+    if (!parentID) return '1';
+    
+    const parts = parentID.split('.');
+    const lastPart = parts[parts.length - 1];
+    
+    if (branch === 'continue') {
+        // 1.2 → 1.3
+        const num = parseInt(lastPart) + 1;
+        parts[parts.length - 1] = num.toString();
+    } else if (branch === 'branch') {
+        // 1.2 → 1.2.1
+        parts.push('1');
+    }
+    
+    return parts.join('.');
+}</code></pre>
+                </div>
+            </section>
+
+            <section class="para-method">
+                <h2><i class="fas fa-folder-open"></i> PARA 방법론</h2>
+                
+                <div class="para-overview">
+                    <p>PARA는 Projects, Areas, Resources, Archives의 약자로, Tiago Forte가 개발한 정보 조직 시스템입니다.</p>
+                </div>
+
+                <div class="para-structure">
+                    <div class="para-category">
+                        <h3><i class="fas fa-project-diagram"></i> Projects</h3>
+                        <p>명확한 완료 시점이 있는 활동</p>
+                        <ul>
+                            <li>논문 작성</li>
+                            <li>앱 개발</li>
+                            <li>강의 준비</li>
+                        </ul>
+                    </div>
+                    <div class="para-category">
+                        <h3><i class="fas fa-circle"></i> Areas</h3>
+                        <p>지속적으로 관리해야 하는 책임 영역</p>
+                        <ul>
+                            <li>건강 관리</li>
+                            <li>재정 관리</li>
+                            <li>가족 관계</li>
+                        </ul>
+                    </div>
+                    <div class="para-category">
+                        <h3><i class="fas fa-book"></i> Resources</h3>
+                        <p>미래에 유용할 수 있는 참고 자료</p>
+                        <ul>
+                            <li>기술 문서</li>
+                            <li>레시피</li>
+                            <li>인용구</li>
+                        </ul>
+                    </div>
+                    <div class="para-category">
+                        <h3><i class="fas fa-archive"></i> Archives</h3>
+                        <p>비활성화된 이전 항목들</p>
+                        <ul>
+                            <li>완료된 프로젝트</li>
+                            <li>중단된 활동</li>
+                            <li>오래된 자료</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>PARA 폴더 구조</h3>
+                
+                <div class="folder-structure">
+                    <pre>
+📁 PARA/
+├── 📁 1_Projects/
+│   ├── 📁 P01_논문작성/
+│   ├── 📁 P02_앱개발/
+│   └── 📁 P03_강의준비/
+├── 📁 2_Areas/
+│   ├── 📁 A01_건강/
+│   ├── 📁 A02_재정/
+│   └── 📁 A03_가족/
+├── 📁 3_Resources/
+│   ├── 📁 R01_기술문서/
+│   ├── 📁 R02_템플릿/
+│   └── 📁 R03_참고자료/
+└── 📁 4_Archives/
+    ├── 📁 2023/
+    └── 📁 2024/
+                    </pre>
+                </div>
+
+                <h3>PARA 자동화 스크립트</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Templater Script</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code><%*
+// PARA 분류 자동화
+const categories = {
+    "1": "Projects",
+    "2": "Areas",
+    "3": "Resources",
+    "4": "Archives"
+};
+
+const category = await tp.system.suggester(
+    Object.values(categories),
+    Object.keys(categories)
+);
+
+let folder = "";
+let prefix = "";
+
+switch(category) {
+    case "1":
+        folder = "1_Projects";
+        prefix = "P";
+        break;
+    case "2":
+        folder = "2_Areas";
+        prefix = "A";
+        break;
+    case "3":
+        folder = "3_Resources";
+        prefix = "R";
+        break;
+    case "4":
+        folder = "4_Archives";
+        prefix = "Archive";
+        break;
+}
+
+// 프로젝트인 경우 추가 정보 수집
+if (category === "1") {
+    const deadline = await tp.system.prompt("마감일 (YYYY-MM-DD):");
+    const priority = await tp.system.suggester(
+        ["🔴 높음", "🟡 중간", "🟢 낮음"],
+        ["high", "medium", "low"]
+    );
+    
+    // 프로젝트 메타데이터
+    tR += `---
+type: project
+status: active
+priority: ${priority}
+deadline: ${deadline}
+created: ${tp.date.now("YYYY-MM-DD")}
+---
+
+`;
+}
+
+// 파일 이동
+const title = tp.file.title;
+const newPath = `PARA/${folder}/${prefix}_${title}`;
+await tp.file.move(newPath);
+
+tR += `# ${title}\n\n`;
+tR += `## 📁 Category: ${categories[category]}\n\n`;
+%></code></pre>
+                </div>
+            </section>
+
+            <section class="note-taking-strategies">
+                <h2><i class="fas fa-pen"></i> 효과적인 노트 작성 전략</h2>
+                
+                <h3>Progressive Summarization</h3>
+                
+                <div class="progressive-summarization">
+                    <div class="ps-layer">
+                        <h4>Layer 1: 캡처</h4>
+                        <p>원본 텍스트를 그대로 저장</p>
+                    </div>
+                    <div class="ps-layer">
+                        <h4>Layer 2: 볼드</h4>
+                        <p><strong>중요한 부분을 볼드 처리</strong></p>
+                    </div>
+                    <div class="ps-layer">
+                        <h4>Layer 3: 하이라이트</h4>
+                        <p><mark>가장 중요한 부분을 하이라이트</mark></p>
+                    </div>
+                    <div class="ps-layer">
+                        <h4>Layer 4: 요약</h4>
+                        <p>자신의 언어로 핵심 요약</p>
+                    </div>
+                </div>
+
+                <h3>Evergreen Notes</h3>
+                
+                <div class="evergreen-principles">
+                    <h4>Evergreen Notes의 원칙</h4>
+                    <ul>
+                        <li><strong>원자적이어야 한다</strong>: 하나의 개념에 집중</li>
+                        <li><strong>개념 중심이어야 한다</strong>: 저자나 책이 아닌 아이디어 중심</li>
+                        <li><strong>밀도 있게 연결되어야 한다</strong>: 다른 노트와의 관계 명시</li>
+                        <li><strong>자신의 언어로 작성해야 한다</strong>: 단순 인용이 아닌 이해와 해석</li>
+                    </ul>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Evergreen Note Template</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># {{title}}
+
+## 핵심 개념
+{{concept}}
+
+## 상세 설명
+{{explanation}}
+
+## 예시
+{{examples}}
+
+## 반대 개념
+{{opposites}}
+
+## 관련 개념
+- [[관련개념1]] - 어떤 면에서 관련
+- [[관련개념2]] - 어떤 면에서 관련
+
+## 적용 분야
+{{applications}}
+
+## 개인적 통찰
+{{insights}}
+
+## 질문
+- {{question1}}
+- {{question2}}
+
+---
+태그: #evergreen #{{domain}} #{{subdomain}}
+생성일: {{date}}
+수정일: {{modified}}</code></pre>
+                </div>
+            </section>
+
+            <section class="pkm-workflows">
+                <h2><i class="fas fa-stream"></i> PKM 워크플로우</h2>
+                
+                <h3>일일 리뷰 워크플로우</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Daily Review Template</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># Daily Review - {{date:YYYY-MM-DD}}
+
+## 🌅 Morning Review (5 min)
+### Inbox 처리
+```dataview
+LIST
+FROM "Inbox"
+WHERE file.cday = date(today)
+```
+
+### 오늘의 우선순위
+1. {{priority1}}
+2. {{priority2}}
+3. {{priority3}}
+
+## 🌆 Evening Review (10 min)
+### 오늘 생성/수정된 노트
+```dataview
+TABLE 
+  file.mtime as "수정시간",
+  length(file.outlinks) as "연결"
+FROM ""
+WHERE file.mtime >= date(today)
+SORT file.mtime DESC
+```
+
+### 처리 필요 노트
+```dataview
+LIST
+FROM #review OR #process
+LIMIT 5
+```
+
+### 내일을 위한 준비
+- [ ] Inbox 비우기
+- [ ] 태그 정리
+- [ ] 연결 추가
+- [ ] 아카이브 이동</code></pre>
+                </div>
+
+                <h3>주간 리뷰 워크플로우</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">Weekly Review Process</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>## 🗓️ Weekly Review - Week {{date:WW}}
+
+### 📊 이번 주 통계
+```dataviewjs
+const startOfWeek = moment().startOf('week');
+const endOfWeek = moment().endOf('week');
+
+const created = dv.pages()
+    .where(p => p.file.ctime >= startOfWeek && p.file.ctime <= endOfWeek)
+    .length;
+
+const modified = dv.pages()
+    .where(p => p.file.mtime >= startOfWeek && p.file.mtime <= endOfWeek)
+    .length;
+
+const linked = dv.pages()
+    .where(p => p.file.outlinks.length > 5)
+    .length;
+
+dv.paragraph(`📝 생성된 노트: ${created}개`);
+dv.paragraph(`✏️ 수정된 노트: ${modified}개`);
+dv.paragraph(`🔗 잘 연결된 노트 (5+ 링크): ${linked}개`);
+```
+
+### 🌟 이번 주 하이라이트
+1. {{highlight1}}
+2. {{highlight2}}
+3. {{highlight3}}
+
+### 🔄 PARA 정리
+- [ ] Projects 검토 및 업데이트
+- [ ] Areas 상태 확인
+- [ ] Resources 정리
+- [ ] Archives로 이동할 항목 확인
+
+### 🎯 다음 주 포커스
+1. {{focus1}}
+2. {{focus2}}
+3. {{focus3}}</code></pre>
+                </div>
+            </section>
+
+            <section class="knowledge-graph">
+                <h2><i class="fas fa-network-wired"></i> 지식 네트워크 구축</h2>
+                
+                <h3>Map of Content (MOC)</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">MOC Template</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># MOC: {{topic}}
+
+## 🗺️ 개요
+{{overview}}
+
+## 📚 핵심 개념
+### 기초 개념
+- [[개념1]] - 기본 정의와 원리
+- [[개념2]] - 핵심 구성 요소
+- [[개념3]] - 기본 원칙
+
+### 심화 개념
+- [[개념4]] - 고급 이론
+- [[개념5]] - 응용 방법
+- [[개념6]] - 최신 동향
+
+## 🔗 관련 MOC
+- [[MOC_관련주제1]]
+- [[MOC_관련주제2]]
+
+## 📖 학습 경로
+```mermaid
+graph TD
+    A[기초 개념] --> B[핵심 이론]
+    B --> C[실습 예제]
+    C --> D[응용 프로젝트]
+    D --> E[심화 학습]
+```
+
+## 🏷️ 관련 태그
+- #{{topic}}
+- #{{subtopic1}}
+- #{{subtopic2}}
+
+## 📊 통계
+```dataview
+TABLE 
+  length(file.inlinks) as "참조",
+  length(file.outlinks) as "연결"
+FROM [[]]
+WHERE contains(file.path, "{{topic}}")
+SORT file.name ASC
+```</code></pre>
+                </div>
+
+                <h3>Trail Guide</h3>
+                
+                <div class="trail-guide">
+                    <p>Trail Guide는 특정 주제를 학습하기 위한 순차적 경로를 제공합니다.</p>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Trail Guide</span>
+                            <button class="copy-button">복사</button>
+                        </div>
+                        <pre><code># 🥾 Trail Guide: {{topic}} 마스터하기
+
+## 🎯 학습 목표
+{{learning_objectives}}
+
+## 📚 필수 전제 지식
+- [[전제지식1]]
+- [[전제지식2]]
+
+## 🗺️ 학습 경로
+
+### Stage 1: 기초 (1-2주)
+- [ ] [[기초1_개념이해]]
+- [ ] [[기초2_용어정리]]
+- [ ] [[기초3_첫실습]]
+
+### Stage 2: 핵심 (2-3주)
+- [ ] [[핵심1_주요이론]]
+- [ ] [[핵심2_실전예제]]
+- [ ] [[핵심3_문제해결]]
+
+### Stage 3: 심화 (3-4주)
+- [ ] [[심화1_고급기법]]
+- [ ] [[심화2_최적화]]
+- [ ] [[심화3_프로젝트]]
+
+### Stage 4: 전문가 (지속)
+- [ ] [[전문가1_연구동향]]
+- [ ] [[전문가2_기여하기]]
+- [ ] [[전문가3_가르치기]]
+
+## 📝 체크포인트
+- [ ] Stage 1 완료: 기초 테스트 통과
+- [ ] Stage 2 완료: 실전 프로젝트 1개
+- [ ] Stage 3 완료: 포트폴리오 완성
+- [ ] Stage 4 진입: 커뮤니티 기여
+
+## 🎓 추가 리소스
+- 📚 추천 도서: [[도서목록_{{topic}}]]
+- 🎥 강의: [[강의목록_{{topic}}]]
+- 👥 커뮤니티: [[커뮤니티_{{topic}}]]</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pkm-automation">
+                <h2><i class="fas fa-robot"></i> PKM 자동화</h2>
+                
+                <h3>스마트 노트 분류기</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">JavaScript</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>// 자동 노트 분류 시스템
+class SmartNoteCategorizer {
+    constructor() {
+        this.patterns = {
+            project: [
+                /deadline|마감|milestone|일정/i,
+                /프로젝트|project|개발|development/i
+            ],
+            area: [
+                /관리|management|유지|maintain/i,
+                /건강|health|재정|finance/i
+            ],
+            resource: [
+                /참고|reference|문서|document/i,
+                /가이드|guide|튜토리얼|tutorial/i
+            ],
+            zettel: [
+                /개념|concept|이론|theory/i,
+                /정의|definition|원리|principle/i
+            ]
+        };
+    }
+    
+    async categorizeNote(note) {
+        const content = note.content.toLowerCase();
+        const title = note.basename.toLowerCase();
+        const text = title + " " + content;
+        
+        let scores = {
+            project: 0,
+            area: 0,
+            resource: 0,
+            zettel: 0
+        };
+        
+        // 패턴 매칭으로 점수 계산
+        for (const [category, patterns] of Object.entries(this.patterns)) {
+            patterns.forEach(pattern => {
+                const matches = text.match(pattern);
+                if (matches) {
+                    scores[category] += matches.length;
+                }
+            });
+        }
+        
+        // 메타데이터 기반 가중치
+        if (note.frontmatter) {
+            if (note.frontmatter.deadline) scores.project += 5;
+            if (note.frontmatter.type === 'evergreen') scores.zettel += 5;
+            if (note.frontmatter.status === 'ongoing') scores.area += 3;
+        }
+        
+        // 최고 점수 카테고리 반환
+        return Object.entries(scores)
+            .sort(([,a], [,b]) => b - a)[0][0];
+    }
+    
+    async organizeVault(vault) {
+        const uncategorized = vault.getFiles()
+            .filter(f => f.parent.path === 'Inbox');
+        
+        for (const file of uncategorized) {
+            const category = await this.categorizeNote(file);
+            const targetFolder = this.getCategoryFolder(category);
+            
+            // 파일 이동
+            await vault.rename(
+                file,
+                `${targetFolder}/${file.name}`
+            );
+            
+            // 카테고리 태그 추가
+            await this.addCategoryTag(file, category);
+        }
+    }
+    
+    getCategoryFolder(category) {
+        const folderMap = {
+            project: '1_Projects',
+            area: '2_Areas',
+            resource: '3_Resources',
+            zettel: 'Zettelkasten'
+        };
+        return folderMap[category] || 'Inbox';
+    }
+}</code></pre>
+                </div>
+
+                <h3>지식 그래프 분석기</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">DataviewJS</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>```dataviewjs
+// 지식 네트워크 건강도 분석
+const pages = dv.pages();
+
+// 1. 고립된 노트 찾기
+const orphans = pages
+    .where(p => p.file.inlinks.length === 0 && 
+                p.file.outlinks.length === 0)
+    .sort(p => p.file.mtime, 'desc');
+
+// 2. 허브 노트 식별
+const hubs = pages
+    .where(p => p.file.inlinks.length > 10)
+    .sort(p => p.file.inlinks.length, 'desc')
+    .limit(10);
+
+// 3. 약한 연결 찾기
+const weakLinks = pages
+    .where(p => p.file.outlinks.length === 1 && 
+                p.file.inlinks.length <= 2)
+    .limit(20);
+
+// 리포트 생성
+dv.header(2, "🔍 지식 네트워크 분석");
+
+dv.header(3, "📊 전체 통계");
+dv.paragraph(`- 전체 노트: ${pages.length}개`);
+dv.paragraph(`- 고립된 노트: ${orphans.length}개`);
+dv.paragraph(`- 허브 노트: ${hubs.length}개`);
+
+dv.header(3, "🏝️ 고립된 노트 (연결 필요)");
+dv.table(["노트", "생성일", "액션"],
+    orphans.slice(0, 10).map(p => [
+        p.file.link,
+        p.file.ctime,
+        "[[" + p.file.name + "|연결하기]]"
+    ])
+);
+
+dv.header(3, "🌟 허브 노트 (주요 노드)");
+dv.table(["노트", "참조수", "유형"],
+    hubs.map(p => [
+        p.file.link,
+        p.file.inlinks.length,
+        p.file.tags[0] || "없음"
+    ])
+);
+
+dv.header(3, "💡 개선 제안");
+const suggestions = [];
+
+if (orphans.length > pages.length * 0.2) {
+    suggestions.push("- 고립된 노트가 20% 이상입니다. 연결 작업이 필요합니다.");
+}
+
+if (hubs.length < 5) {
+    suggestions.push("- 허브 노트가 부족합니다. MOC 생성을 고려하세요.");
+}
+
+const avgLinks = pages.map(p => p.file.outlinks.length)
+    .reduce((a, b) => a + b, 0) / pages.length;
+
+if (avgLinks < 3) {
+    suggestions.push("- 평균 연결 수가 낮습니다. 더 많은 연결을 만드세요.");
+}
+
+suggestions.forEach(s => dv.paragraph(s));
+```</code></pre>
+                </div>
+            </section>
+
+            <section class="pkm-metrics">
+                <h2><i class="fas fa-chart-line"></i> PKM 성과 측정</h2>
+                
+                <h3>지식 성장 지표</h3>
+                
+                <div class="metrics-dashboard">
+                    <div class="code-example">
+                        <div class="code-header">
+                            <span class="code-language">Knowledge Metrics</span>
+                            <button class="copy-button">복사</button>
+                        </div>
+                        <pre><code>```dataviewjs
+// PKM 대시보드
+const now = moment();
+const thirtyDaysAgo = now.subtract(30, 'days');
+
+// 노트 생성 추세
+const dailyNotes = {};
+for (let i = 0; i < 30; i++) {
+    const date = moment().subtract(i, 'days').format('YYYY-MM-DD');
+    dailyNotes[date] = 0;
+}
+
+dv.pages().forEach(p => {
+    const created = moment(p.file.ctime);
+    if (created.isAfter(thirtyDaysAgo)) {
+        const date = created.format('YYYY-MM-DD');
+        if (dailyNotes[date] !== undefined) {
+            dailyNotes[date]++;
+        }
+    }
+});
+
+// 차트 데이터 준비
+const chartData = {
+    type: 'line',
+    data: {
+        labels: Object.keys(dailyNotes).reverse(),
+        datasets: [{
+            label: '일일 노트 생성',
+            data: Object.values(dailyNotes).reverse(),
+            borderColor: '#7c3aed',
+            tension: 0.1
+        }]
+    }
+};
+
+// 품질 지표
+const qualityMetrics = dv.pages()
+    .map(p => ({
+        name: p.file.name,
+        links: p.file.outlinks.length,
+        backlinks: p.file.inlinks.length,
+        words: p.file.size,
+        tags: p.file.tags.length,
+        score: p.file.outlinks.length * 2 + 
+               p.file.inlinks.length * 3 + 
+               p.file.tags.length
+    }))
+    .sort(p => p.score, 'desc');
+
+dv.header(2, "📈 지식 성장 지표");
+
+// 성장률 계산
+const thisMonth = dv.pages()
+    .where(p => moment(p.file.ctime).month() === moment().month()).length;
+const lastMonth = dv.pages()
+    .where(p => moment(p.file.ctime).month() === moment().month() - 1).length;
+const growthRate = ((thisMonth - lastMonth) / lastMonth * 100).toFixed(1);
+
+dv.paragraph(`📊 이번 달 성장률: ${growthRate}%`);
+dv.paragraph(`📝 이번 달 생성: ${thisMonth}개`);
+dv.paragraph(`🔗 평균 연결: ${(qualityMetrics.map(m => m.links).reduce((a,b) => a+b, 0) / qualityMetrics.length).toFixed(1)}개`);
+
+dv.header(3, "🏆 높은 품질의 노트");
+dv.table(["노트", "연결", "역링크", "점수"],
+    qualityMetrics.slice(0, 10).map(m => [
+        `[[${m.name}]]`,
+        m.links,
+        m.backlinks,
+        m.score
+    ])
+);
+```</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <section class="practice-exercise">
+                <h2><i class="fas fa-dumbbell"></i> 실습 과제</h2>
+                
+                <div class="exercise-container">
+                    <h3>기본 실습</h3>
+                    <div class="checklist">
+                        <label><input type="checkbox"> PARA 폴더 구조 설정</label>
+                        <label><input type="checkbox"> Zettelkasten ID 시스템 구현</label>
+                        <label><input type="checkbox"> 첫 Evergreen Note 작성</label>
+                        <label><input type="checkbox"> MOC 1개 생성</label>
+                        <label><input type="checkbox"> Daily Review 템플릿 설정</label>
+                        <label><input type="checkbox"> 지식 네트워크 분석 실행</label>
+                    </div>
+
+                    <h3>심화 과제</h3>
+                    <div class="challenge-box">
+                        <h4><i class="fas fa-trophy"></i> 30일 PKM 챌린지</h4>
+                        <p>30일 동안 체계적인 PKM 시스템을 구축하고 운영하세요:</p>
+                        <ol>
+                            <li><strong>Week 1</strong>: 시스템 설정
+                                <ul>
+                                    <li>PARA 구조 구축</li>
+                                    <li>템플릿 생성</li>
+                                    <li>워크플로우 설계</li>
+                                </ul>
+                            </li>
+                            <li><strong>Week 2</strong>: 습관 형성
+                                <ul>
+                                    <li>일일 캡처 루틴</li>
+                                    <li>저녁 리뷰</li>
+                                    <li>주간 정리</li>
+                                </ul>
+                            </li>
+                            <li><strong>Week 3</strong>: 연결 강화
+                                <ul>
+                                    <li>기존 노트 연결</li>
+                                    <li>MOC 생성</li>
+                                    <li>Trail Guide 작성</li>
+                                </ul>
+                            </li>
+                            <li><strong>Week 4</strong>: 최적화
+                                <ul>
+                                    <li>자동화 스크립트 적용</li>
+                                    <li>성과 측정</li>
+                                    <li>시스템 개선</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="troubleshooting">
+                <h2><i class="fas fa-tools"></i> 문제 해결</h2>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> 어디서부터 시작해야 할지 모르겠어요</h3>
+                        <ul>
+                            <li>간단한 일일 노트부터 시작</li>
+                            <li>PARA 중 Projects 폴더만 먼저 사용</li>
+                            <li>하루 5분 리뷰 습관 만들기</li>
+                            <li>완벽하지 않아도 괜찮다는 마음가짐</li>
+                        </ul>
+                    </div>
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> 노트가 너무 많아져서 관리가 어려워요</h3>
+                        <ul>
+                            <li>정기적인 아카이브 작업</li>
+                            <li>태그 체계 재정비</li>
+                            <li>MOC로 구조화</li>
+                            <li>검색 기능 적극 활용</li>
+                        </ul>
+                    </div>
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> 연결을 어떻게 만들어야 할지 모르겠어요</h3>
+                        <ul>
+                            <li>"이것은 무엇과 비슷한가?" 질문하기</li>
+                            <li>"이것의 반대는 무엇인가?" 생각하기</li>
+                            <li>"이것을 어디에 적용할 수 있을까?" 고민하기</li>
+                            <li>일단 연결하고 나중에 정리하기</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="resources">
+                <h2><i class="fas fa-book"></i> 추가 학습 자료</h2>
+                
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <h3><i class="fas fa-book-open"></i> 추천 도서</h3>
+                        <ul>
+                            <li>How to Take Smart Notes - Sönke Ahrens</li>
+                            <li>Building a Second Brain - Tiago Forte</li>
+                            <li>The Zettelkasten Method - Sascha</li>
+                            <li>Digital Minimalism - Cal Newport</li>
+                        </ul>
+                    </div>
+                    <div class="resource-card">
+                        <h3><i class="fas fa-users"></i> 커뮤니티</h3>
+                        <ul>
+                            <li>r/ObsidianMD</li>
+                            <li>r/Zettelkasten</li>
+                            <li>PKM Discord Servers</li>
+                            <li>Obsidian Forum</li>
+                        </ul>
+                    </div>
+                    <div class="resource-card">
+                        <h3><i class="fas fa-tools"></i> 도구와 플러그인</h3>
+                        <ul>
+                            <li>Dataview - 데이터 쿼리</li>
+                            <li>Templater - 템플릿 자동화</li>
+                            <li>QuickAdd - 빠른 캡처</li>
+                            <li>Breadcrumbs - 계층 구조</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-book-reader"></i> 핵심 정리</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <i class="fas fa-brain"></i>
+                        <h3>제2의 뇌</h3>
+                        <p>외부 저장소로 인지 부하 감소</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-link"></i>
+                        <h3>연결의 힘</h3>
+                        <p>단순 저장이 아닌 네트워크 구축</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-seedling"></i>
+                        <h3>점진적 성장</h3>
+                        <p>완벽보다는 꾸준함이 중요</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="navigation-guide">
+                <h2><i class="fas fa-compass"></i> 다음 단계</h2>
+                <p>PKM 전략을 마스터했다면, 다음 강의에서는 AI를 활용한 지식 관리 자동화와 증강에 대해 배워보겠습니다.</p>
+                <div class="next-lesson-preview">
+                    <h3>다음 강의 미리보기: AI 통합과 자동화</h3>
+                    <ul>
+                        <li>AI 플러그인 생태계</li>
+                        <li>스마트 노트 생성과 요약</li>
+                        <li>자동화된 지식 추출</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer class="lesson-footer">
+            <div class="footer-content">
+                <p>옵시디언 마스터 클래스 | 제27강: 개인 지식 관리(PKM) 전략</p>
+                <div class="footer-links">
+                    <a href="../index.html"><i class="fas fa-home"></i> 홈</a>
+                    <a href="lesson26.html"><i class="fas fa-arrow-left"></i> 이전</a>
+                    <a href="lesson28.html"><i class="fas fa-arrow-right"></i> 다음</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>

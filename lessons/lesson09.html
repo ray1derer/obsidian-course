@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제9강: 그래프 뷰 기초 | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-project-diagram"></i> 제9강: 그래프 뷰 기초</h1>
+                <p class="lesson-subtitle">지식의 연결을 시각적으로 탐색하는 방법</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 중급</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 40분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: 시각화</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson08.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제9강: 그래프 뷰 기초</span>
+            <a href="lesson10.html" class="nav-link next">
+                다음 강의 <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>그래프 뷰의 개념과 중요성 이해하기</li>
+                    <li>그래프 뷰 기본 조작법 익히기</li>
+                    <li>필터와 그룹 기능 활용하기</li>
+                    <li>그래프 뷰를 통한 지식 구조 분석하기</li>
+                    <li>효과적인 노트 연결 전략 수립하기</li>
+                </ul>
+            </section>
+
+            <section class="concept">
+                <h2><i class="fas fa-lightbulb"></i> 그래프 뷰란?</h2>
+                
+                <div class="concept-explanation">
+                    <p>그래프 뷰는 노트 간의 연결 관계를 시각적으로 표현하는 옵시디언의 핵심 기능입니다. 각 노트는 노드(점)로, 링크는 엣지(선)로 표현되어 지식의 네트워크를 한눈에 볼 수 있습니다.</p>
+                </div>
+
+                <div class="graph-benefits">
+                    <h3>그래프 뷰의 장점</h3>
+                    <div class="benefit-grid">
+                        <div class="benefit-card">
+                            <i class="fas fa-eye"></i>
+                            <h4>시각적 이해</h4>
+                            <p>복잡한 연결 관계를 직관적으로 파악</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fas fa-search"></i>
+                            <h4>패턴 발견</h4>
+                            <p>숨겨진 연결고리와 클러스터 발견</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fas fa-lightbulb"></i>
+                            <h4>인사이트 도출</h4>
+                            <p>새로운 아이디어와 연결점 발견</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fas fa-route"></i>
+                            <h4>탐색 경로</h4>
+                            <p>관련 노트를 효율적으로 탐색</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="graph-interface">
+                <h2><i class="fas fa-desktop"></i> 그래프 뷰 인터페이스</h2>
+                
+                <div class="obsidian-mock-ui">
+                    <div class="mock-titlebar">
+                        <div class="window-controls">
+                            <span class="window-control close"></span>
+                            <span class="window-control minimize"></span>
+                            <span class="window-control maximize"></span>
+                        </div>
+                        <span>그래프 뷰</span>
+                    </div>
+                    <div class="mock-content graph-view">
+                        <div class="graph-canvas">
+                            <svg viewBox="0 0 600 400">
+                                <!-- 연결선들 -->
+                                <line x1="300" y1="200" x2="150" y2="100" stroke="#666" stroke-width="2"/>
+                                <line x1="300" y1="200" x2="450" y2="100" stroke="#666" stroke-width="2"/>
+                                <line x1="300" y1="200" x2="200" y2="300" stroke="#666" stroke-width="2"/>
+                                <line x1="300" y1="200" x2="400" y2="300" stroke="#666" stroke-width="2"/>
+                                <line x1="150" y1="100" x2="100" y2="50" stroke="#666" stroke-width="1"/>
+                                <line x1="450" y1="100" x2="500" y2="50" stroke="#666" stroke-width="1"/>
+                                
+                                <!-- 노드들 -->
+                                <circle cx="300" cy="200" r="20" fill="#7c3aed" />
+                                <text x="300" y="235" text-anchor="middle" fill="white">중심 노트</text>
+                                
+                                <circle cx="150" cy="100" r="15" fill="#a855f7" />
+                                <text x="150" y="125" text-anchor="middle" fill="white">관련 노트1</text>
+                                
+                                <circle cx="450" cy="100" r="15" fill="#a855f7" />
+                                <text x="450" y="125" text-anchor="middle" fill="white">관련 노트2</text>
+                                
+                                <circle cx="200" cy="300" r="12" fill="#c084fc" />
+                                <text x="200" y="320" text-anchor="middle" fill="white">하위 노트1</text>
+                                
+                                <circle cx="400" cy="300" r="12" fill="#c084fc" />
+                                <text x="400" y="320" text-anchor="middle" fill="white">하위 노트2</text>
+                                
+                                <circle cx="100" cy="50" r="10" fill="#e9d5ff" />
+                                <circle cx="500" cy="50" r="10" fill="#e9d5ff" />
+                            </svg>
+                        </div>
+                        <div class="graph-controls">
+                            <button class="graph-button"><i class="fas fa-filter"></i> 필터</button>
+                            <button class="graph-button"><i class="fas fa-palette"></i> 그룹</button>
+                            <button class="graph-button"><i class="fas fa-cog"></i> 설정</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="basic-operations">
+                <h2><i class="fas fa-mouse-pointer"></i> 기본 조작법</h2>
+                
+                <div class="operation-grid">
+                    <div class="operation-card">
+                        <h3><i class="fas fa-arrows-alt"></i> 탐색</h3>
+                        <ul>
+                            <li><strong>드래그</strong>: 그래프 이동</li>
+                            <li><strong>스크롤</strong>: 확대/축소</li>
+                            <li><strong>더블클릭</strong>: 노트 열기</li>
+                        </ul>
+                    </div>
+                    <div class="operation-card">
+                        <h3><i class="fas fa-hand-pointer"></i> 선택</h3>
+                        <ul>
+                            <li><strong>클릭</strong>: 노드 선택</li>
+                            <li><strong>Ctrl+클릭</strong>: 다중 선택</li>
+                            <li><strong>드래그 선택</strong>: 영역 선택</li>
+                        </ul>
+                    </div>
+                    <div class="operation-card">
+                        <h3><i class="fas fa-keyboard"></i> 단축키</h3>
+                        <ul>
+                            <li><strong>Ctrl+G</strong>: 그래프 뷰 토글</li>
+                            <li><strong>Ctrl+Shift+G</strong>: 로컬 그래프</li>
+                            <li><strong>F</strong>: 선택 노드에 포커스</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>마우스 제스처</h3>
+                
+                <div class="gesture-demo">
+                    <div class="gesture-item">
+                        <div class="gesture-icon">🖱️➡️</div>
+                        <p>마우스 드래그로 그래프 이동</p>
+                    </div>
+                    <div class="gesture-item">
+                        <div class="gesture-icon">🖱️⚡</div>
+                        <p>노드를 드래그하여 위치 조정</p>
+                    </div>
+                    <div class="gesture-item">
+                        <div class="gesture-icon">🖱️💫</div>
+                        <p>노드 호버로 연결 강조</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="graph-filters">
+                <h2><i class="fas fa-filter"></i> 필터 기능</h2>
+                
+                <div class="filter-panel">
+                    <h3>필터 옵션</h3>
+                    
+                    <div class="filter-category">
+                        <h4>파일 필터</h4>
+                        <div class="filter-options">
+                            <label><input type="checkbox" checked> 첨부파일 표시</label>
+                            <label><input type="checkbox" checked> 미연결 노트 표시</label>
+                            <label><input type="checkbox"> 태그 표시</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-category">
+                        <h4>경로 필터</h4>
+                        <div class="code-example">
+                            <input type="text" placeholder="path:Daily Notes" class="filter-input">
+                        </div>
+                        <p class="filter-hint">특정 폴더의 노트만 표시</p>
+                    </div>
+
+                    <div class="filter-category">
+                        <h4>태그 필터</h4>
+                        <div class="code-example">
+                            <input type="text" placeholder="tag:#프로젝트" class="filter-input">
+                        </div>
+                        <p class="filter-hint">특정 태그가 있는 노트만 표시</p>
+                    </div>
+
+                    <div class="filter-category">
+                        <h4>깊이 제한</h4>
+                        <div class="depth-slider">
+                            <input type="range" min="1" max="5" value="2">
+                            <span>연결 깊이: 2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>필터 조합 예제</h3>
+                
+                <div class="filter-examples">
+                    <div class="filter-example">
+                        <h4>프로젝트 관련 노트만</h4>
+                        <code>path:"프로젝트" OR tag:#프로젝트</code>
+                    </div>
+                    <div class="filter-example">
+                        <h4>최근 수정된 노트 중심</h4>
+                        <code>-path:"Archive" file:.md modified:7d</code>
+                    </div>
+                    <div class="filter-example">
+                        <h4>특정 주제 클러스터</h4>
+                        <code>tag:#개발 OR tag:#프로그래밍 -tag:#완료</code>
+                    </div>
+                </div>
+            </section>
+
+            <section class="graph-groups">
+                <h2><i class="fas fa-object-group"></i> 그룹 설정</h2>
+                
+                <div class="group-settings">
+                    <h3>색상 그룹 만들기</h3>
+                    
+                    <div class="group-creator">
+                        <div class="group-item">
+                            <div class="group-color" style="background: #ff6b6b;"></div>
+                            <div class="group-config">
+                                <label>그룹 이름: <input type="text" value="긴급"></label>
+                                <label>쿼리: <input type="text" value="tag:#긴급 OR tag:#중요"></label>
+                            </div>
+                        </div>
+                        <div class="group-item">
+                            <div class="group-color" style="background: #4ecdc4;"></div>
+                            <div class="group-config">
+                                <label>그룹 이름: <input type="text" value="완료"></label>
+                                <label>쿼리: <input type="text" value="tag:#완료"></label>
+                            </div>
+                        </div>
+                        <div class="group-item">
+                            <div class="group-color" style="background: #ffe66d;"></div>
+                            <div class="group-config">
+                                <label>그룹 이름: <input type="text" value="진행중"></label>
+                                <label>쿼리: <input type="text" value="tag:#진행중"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tip">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>팁:</strong> 그룹 색상을 통해 노트의 상태나 카테고리를 한눈에 파악할 수 있습니다.
+                    </div>
+                </div>
+            </section>
+
+            <section class="graph-types">
+                <h2><i class="fas fa-sitemap"></i> 그래프 뷰 종류</h2>
+                
+                <div class="graph-type-comparison">
+                    <div class="graph-type">
+                        <h3><i class="fas fa-globe"></i> 전역 그래프</h3>
+                        <p>전체 볼트의 모든 노트와 연결을 표시</p>
+                        <ul>
+                            <li>전체 지식 구조 파악</li>
+                            <li>주요 허브 노트 식별</li>
+                            <li>고립된 노트 발견</li>
+                        </ul>
+                        <div class="usage-tip">
+                            <strong>사용 시기:</strong> 전체적인 구조 분석, 정리가 필요한 영역 찾기
+                        </div>
+                    </div>
+                    <div class="graph-type">
+                        <h3><i class="fas fa-dot-circle"></i> 로컬 그래프</h3>
+                        <p>현재 노트를 중심으로 한 연결만 표시</p>
+                        <ul>
+                            <li>특정 주제 깊이 탐색</li>
+                            <li>직접 연결된 노트 확인</li>
+                            <li>컨텍스트 이해</li>
+                        </ul>
+                        <div class="usage-tip">
+                            <strong>사용 시기:</strong> 특정 노트의 맥락 파악, 관련 자료 탐색
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="graph-analysis">
+                <h2><i class="fas fa-chart-network"></i> 그래프 분석하기</h2>
+                
+                <h3>노드 패턴 이해하기</h3>
+                
+                <div class="pattern-grid">
+                    <div class="pattern-card">
+                        <h4><i class="fas fa-star"></i> 허브 노드</h4>
+                        <div class="pattern-visual">
+                            <div class="hub-node"></div>
+                        </div>
+                        <p>많은 연결을 가진 중심 노트</p>
+                        <ul>
+                            <li>주요 개념이나 인덱스</li>
+                            <li>자주 참조되는 정보</li>
+                            <li>MOC(Map of Content)</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-card">
+                        <h4><i class="fas fa-link"></i> 브릿지 노드</h4>
+                        <div class="pattern-visual">
+                            <div class="bridge-node"></div>
+                        </div>
+                        <p>서로 다른 클러스터를 연결</p>
+                        <ul>
+                            <li>학제간 개념</li>
+                            <li>통합적 아이디어</li>
+                            <li>연결 고리 역할</li>
+                        </ul>
+                    </div>
+                    <div class="pattern-card">
+                        <h4><i class="fas fa-circle"></i> 고립 노드</h4>
+                        <div class="pattern-visual">
+                            <div class="isolated-node"></div>
+                        </div>
+                        <p>연결이 없거나 적은 노트</p>
+                        <ul>
+                            <li>새로운 아이디어</li>
+                            <li>정리가 필요한 노트</li>
+                            <li>연결 기회 탐색</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>클러스터 분석</h3>
+                
+                <div class="cluster-analysis">
+                    <p>밀접하게 연결된 노트 그룹은 관련 주제나 프로젝트를 나타냅니다:</p>
+                    <ul>
+                        <li><strong>밀집 클러스터</strong>: 깊이 있게 탐구한 주제</li>
+                        <li><strong>느슨한 클러스터</strong>: 발전 가능성이 있는 영역</li>
+                        <li><strong>브릿지 연결</strong>: 창의적 연결 가능성</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="practical-use">
+                <h2><i class="fas fa-hands-helping"></i> 실전 활용법</h2>
+                
+                <div class="use-case-grid">
+                    <div class="use-case">
+                        <h3><i class="fas fa-search-plus"></i> 연구 주제 탐색</h3>
+                        <ol>
+                            <li>핵심 개념 노트에서 로컬 그래프 열기</li>
+                            <li>연결된 노트들을 순차적으로 탐색</li>
+                            <li>새로운 연결 가능성 발견</li>
+                            <li>빈 공간에 새 노트 추가</li>
+                        </ol>
+                    </div>
+                    <div class="use-case">
+                        <h3><i class="fas fa-broom"></i> 노트 정리</h3>
+                        <ol>
+                            <li>전역 그래프에서 고립 노드 찾기</li>
+                            <li>관련 있는 노트끼리 연결</li>
+                            <li>불필요한 노트 아카이브</li>
+                            <li>허브 노트 생성 고려</li>
+                        </ol>
+                    </div>
+                    <div class="use-case">
+                        <h3><i class="fas fa-lightbulb"></i> 아이디어 개발</h3>
+                        <ol>
+                            <li>브레인스토밍 노트 생성</li>
+                            <li>관련 개념들과 연결</li>
+                            <li>그래프에서 패턴 관찰</li>
+                            <li>새로운 연결점 발견</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section class="optimization-tips">
+                <h2><i class="fas fa-rocket"></i> 그래프 최적화</h2>
+                
+                <div class="optimization-grid">
+                    <div class="opt-tip">
+                        <h3><i class="fas fa-tachometer-alt"></i> 성능 개선</h3>
+                        <ul>
+                            <li>큰 볼트는 필터로 노드 수 제한</li>
+                            <li>애니메이션 설정 조정</li>
+                            <li>불필요한 첨부파일 제외</li>
+                            <li>깊이 제한 활용</li>
+                        </ul>
+                    </div>
+                    <div class="opt-tip">
+                        <h3><i class="fas fa-eye"></i> 가독성 향상</h3>
+                        <ul>
+                            <li>의미 있는 그룹 색상 설정</li>
+                            <li>노드 크기 조정</li>
+                            <li>레이블 표시 설정</li>
+                            <li>적절한 확대/축소 레벨</li>
+                        </ul>
+                    </div>
+                    <div class="opt-tip">
+                        <h3><i class="fas fa-link"></i> 연결 전략</h3>
+                        <ul>
+                            <li>의미 있는 연결만 생성</li>
+                            <li>양방향 링크 활용</li>
+                            <li>계층 구조 고려</li>
+                            <li>태그와 링크 병행</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="advanced-features">
+                <h2><i class="fas fa-cogs"></i> 고급 기능</h2>
+                
+                <h3>CSS로 그래프 커스터마이징</h3>
+                
+                <div class="code-example">
+                    <div class="code-header">
+                        <span class="code-language">CSS</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code>/* 그래프 노드 스타일 커스터마이징 */
+.graph-view.color-fill-tag {
+    color: #7c3aed;
+}
+
+.graph-view.color-fill-attachment {
+    color: #10b981;
+}
+
+.graph-view.color-arrow {
+    color: #6366f1;
+}
+
+.graph-view.color-circle {
+    color: #f59e0b;
+}
+
+/* 특정 태그 강조 */
+.graph-view.color-fill[data-tag="#중요"] {
+    color: #ef4444 !important;
+}</code></pre>
+                </div>
+
+                <h3>Force 설정</h3>
+                
+                <div class="force-settings">
+                    <div class="setting-item">
+                        <label>중심 Force: <input type="range" min="0" max="1" step="0.1" value="0.5"></label>
+                        <p>노드들이 중심으로 모이는 힘</p>
+                    </div>
+                    <div class="setting-item">
+                        <label>반발 Force: <input type="range" min="0" max="1" step="0.1" value="0.5"></label>
+                        <p>노드들이 서로 밀어내는 힘</p>
+                    </div>
+                    <div class="setting-item">
+                        <label>연결 Force: <input type="range" min="0" max="1" step="0.1" value="0.5"></label>
+                        <p>연결된 노드들이 당기는 힘</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="practice-exercise">
+                <h2><i class="fas fa-dumbbell"></i> 실습 과제</h2>
+                
+                <div class="exercise-container">
+                    <h3>기본 실습</h3>
+                    <div class="checklist">
+                        <label><input type="checkbox"> 전역 그래프 뷰 열어보기</label>
+                        <label><input type="checkbox"> 노드를 클릭하여 노트 열기</label>
+                        <label><input type="checkbox"> 필터로 특정 폴더만 표시하기</label>
+                        <label><input type="checkbox"> 태그별로 색상 그룹 만들기</label>
+                        <label><input type="checkbox"> 로컬 그래프로 특정 노트 탐색하기</label>
+                        <label><input type="checkbox"> 고립된 노트 찾아 연결하기</label>
+                        <label><input type="checkbox"> Force 설정 조정해보기</label>
+                    </div>
+
+                    <h3>심화 과제</h3>
+                    <div class="challenge-box">
+                        <h4><i class="fas fa-trophy"></i> 지식 네트워크 구축</h4>
+                        <p>다음 구조의 지식 네트워크를 만들어보세요:</p>
+                        <ol>
+                            <li>중심 주제 노트 1개 생성 (MOC)</li>
+                            <li>하위 주제 노트 5개 이상 생성</li>
+                            <li>각 하위 주제에 세부 노트 2-3개 연결</li>
+                            <li>교차 연결로 네트워크 강화</li>
+                            <li>태그로 분류하고 색상 그룹 설정</li>
+                        </ol>
+                        <p>완성 후 그래프 뷰에서 구조를 분석하고 개선점을 찾아보세요.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="troubleshooting">
+                <h2><i class="fas fa-tools"></i> 문제 해결</h2>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> 그래프가 너무 복잡해요</h3>
+                        <ul>
+                            <li>필터를 사용하여 표시할 노트 제한</li>
+                            <li>깊이 설정을 낮춰서 근처 노드만 표시</li>
+                            <li>특정 태그나 폴더만 표시하도록 설정</li>
+                        </ul>
+                    </div>
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> 노드가 겹쳐서 보여요</h3>
+                        <ul>
+                            <li>Force 설정에서 반발력 증가</li>
+                            <li>수동으로 노드 위치 조정</li>
+                            <li>확대하여 세부 영역 확인</li>
+                        </ul>
+                    </div>
+                    <div class="faq-item">
+                        <h3><i class="fas fa-question-circle"></i> 성능이 느려요</h3>
+                        <ul>
+                            <li>애니메이션 비활성화</li>
+                            <li>표시할 노드 수 제한</li>
+                            <li>하드웨어 가속 확인</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-book-reader"></i> 핵심 정리</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>시각적 탐색</h3>
+                        <p>복잡한 지식 구조를 직관적으로 이해</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-filter"></i>
+                        <h3>유연한 필터링</h3>
+                        <p>필요한 정보만 선택적으로 표시</p>
+                    </div>
+                    <div class="summary-item">
+                        <i class="fas fa-palette"></i>
+                        <h3>시각적 분류</h3>
+                        <p>색상과 그룹으로 정보 구조화</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="navigation-guide">
+                <h2><i class="fas fa-compass"></i> 다음 단계</h2>
+                <p>그래프 뷰의 기초를 마스터했다면, 다음 강의에서는 옵시디언의 강력함을 배가시키는 필수 커뮤니티 플러그인들을 알아보겠습니다.</p>
+                <div class="next-lesson-preview">
+                    <h3>다음 강의 미리보기: 필수 커뮤니티 플러그인</h3>
+                    <ul>
+                        <li>Dataview - 데이터베이스처럼 노트 관리</li>
+                        <li>Templater - 고급 템플릿 기능</li>
+                        <li>Calendar - 캘린더 뷰와 일일 노트 통합</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer class="lesson-footer">
+            <div class="footer-content">
+                <p>옵시디언 마스터 클래스 | 제9강: 그래프 뷰 기초</p>
+                <div class="footer-links">
+                    <a href="../index.html"><i class="fas fa-home"></i> 홈</a>
+                    <a href="lesson08.html"><i class="fas fa-arrow-left"></i> 이전</a>
+                    <a href="lesson10.html"><i class="fas fa-arrow-right"></i> 다음</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>
