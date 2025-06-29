@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 14: 템플레이터 고급 기능 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header intermediate">
+                <h3>중급 과정</h3>
+                <p>파워 유저 되기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson11.html">Lesson 11: 핵심 플러그인 마스터하기</a></li>
+                <li><a href="lesson12.html">Lesson 12: 일일 노트와 정기 노트</a></li>
+                <li><a href="lesson13.html">Lesson 13: 데이터뷰 플러그인 활용</a></li>
+                <li class="active"><a href="lesson14.html">Lesson 14: 템플레이터 고급 기능</a></li>
+                <li><a href="lesson15.html">Lesson 15: 캔버스로 시각적 사고</a></li>
+                <li><a href="lesson16.html">Lesson 16: 아웃라이너와 계층 구조</a></li>
+                <li><a href="lesson17.html">Lesson 17: 작업 관리 시스템 구축</a></li>
+                <li><a href="lesson18.html">Lesson 18: 북마크와 즐겨찾기 활용</a></li>
+                <li><a href="lesson19.html">Lesson 19: 모바일 앱 활용</a></li>
+                <li><a href="lesson20.html">Lesson 20: 플러그인 생태계 탐험</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header intermediate">
+                <h1>Lesson 14: 템플레이터 고급 기능</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 55분</span>
+                    <span><i class="fas fa-signal"></i> 중급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>Templater 플러그인의 고급 기능 마스터</li>
+                    <li>JavaScript를 활용한 동적 템플릿 생성</li>
+                    <li>외부 API 연동과 자동화</li>
+                    <li>복잡한 워크플로우 구현</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. Templater vs 기본 템플릿</h2>
+                
+                <div class="comparison-table">
+                    <h3>기능 비교</h3>
+                    <table>
+                        <tr>
+                            <th>기능</th>
+                            <th>기본 템플릿</th>
+                            <th>Templater</th>
+                        </tr>
+                        <tr>
+                            <td>날짜/시간 삽입</td>
+                            <td>✅ 기본적</td>
+                            <td>✅ 고급 포맷</td>
+                        </tr>
+                        <tr>
+                            <td>JavaScript 실행</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>파일 시스템 조작</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>외부 명령 실행</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>사용자 입력</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>조건부 로직</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="setup-guide">
+                    <h3>Templater 설정</h3>
+                    <ol>
+                        <li>커뮤니티 플러그인에서 Templater 설치</li>
+                        <li>템플릿 폴더 지정 (예: Templates/)</li>
+                        <li>트리거 설정 (자동 실행 옵션)</li>
+                        <li>사용자 함수 폴더 설정 (고급)</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 핵심 Templater 명령어</h2>
+                
+                <div class="command-reference">
+                    <h3>날짜와 시간</h3>
+                    <div class="command-grid">
+                        <div class="command-card">
+                            <h4><code>tp.date</code></h4>
+                            <div class="code-example">
+                                <pre><code class="language-javascript">// 오늘 날짜
+<% tp.date.now() %>
+
+// 특정 형식
+<% tp.date.now("YYYY-MM-DD") %>
+
+// 어제/내일
+<% tp.date.yesterday("YYYY-MM-DD") %>
+<% tp.date.tomorrow("YYYY-MM-DD") %>
+
+// 상대적 날짜
+<% tp.date.now("YYYY-MM-DD", 7) %> // 7일 후
+<% tp.date.now("YYYY-MM-DD", -30) %> // 30일 전
+
+// 요일 정보
+<% tp.date.now("dddd") %> // Monday
+<% tp.date.now("ddd") %> // Mon</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <h4><code>tp.file</code></h4>
+                            <div class="code-example">
+                                <pre><code class="language-javascript">// 파일 정보
+<% tp.file.title %> // 파일명
+<% tp.file.folder() %> // 폴더 경로
+<% tp.file.path(true) %> // 전체 경로
+
+// 파일 조작
+<% tp.file.rename("새이름") %>
+<% tp.file.move("/새폴더/") %>
+
+// 파일 생성
+<% tp.file.create_new("내용", "파일명", false, "/폴더/") %>
+
+// 다른 파일 포함
+<% tp.file.include("[[다른파일]]") %></code></pre>
+                            </div>
+                        </div>
+
+                        <div class="command-card">
+                            <h4><code>tp.system</code></h4>
+                            <div class="code-example">
+                                <pre><code class="language-javascript">// 사용자 입력
+<% tp.system.prompt("제목을 입력하세요:") %>
+<% tp.system.prompt("옵션 선택:", "기본값") %>
+
+// 선택 목록
+<% tp.system.suggester(["옵션1", "옵션2", "옵션3"], ["값1", "값2", "값3"]) %>
+
+// 클립보드
+<% tp.system.clipboard() %>
+
+// 모달 입력
+<%* const input = await tp.system.prompt("긴 텍스트:", "", true, true) %></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 동적 템플릿 생성</h2>
+                
+                <div class="dynamic-templates">
+                    <h3>조건부 템플릿</h3>
+                    
+                    <div class="template-example">
+                        <h4>회의록 템플릿 (회의 유형별)</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+const meetingType = await tp.system.suggester(
+    ["팀 회의", "1:1 미팅", "클라이언트 미팅", "브레인스토밍"],
+    ["team", "one-on-one", "client", "brainstorm"]
+);
+
+let attendees = "";
+let agenda = "";
+
+if (meetingType === "team") {
+    attendees = "전체 팀원";
+    agenda = `## 안건
+1. 주간 진행 상황
+2. 이슈 및 블로커
+3. 다음 주 계획`;
+} else if (meetingType === "one-on-one") {
+    attendees = await tp.system.prompt("참석자:");
+    agenda = `## 논의 사항
+- 성과 리뷰
+- 피드백
+- 목표 설정`;
+} else if (meetingType === "client") {
+    const clientName = await tp.system.prompt("클라이언트명:");
+    attendees = `${clientName} 팀`;
+    agenda = `## 안건
+1. 프로젝트 진행 상황
+2. 요구사항 검토
+3. 일정 협의`;
+}
+%>
+# 📋 회의록: <% tp.system.prompt("회의 제목") %>
+
+**일시:** <% tp.date.now("YYYY-MM-DD HH:mm") %>
+**참석자:** <%= attendees %>
+**회의 유형:** <%= meetingType %>
+
+<%= agenda %>
+
+## 📝 회의 내용
+
+
+## ✅ 액션 아이템
+- [ ] 
+
+## 📎 참고 자료
+- 
+
+---
+*작성자: <% tp.system.prompt("작성자", "나") %>*</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="template-example">
+                        <h4>프로젝트 템플릿 (규모별)</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+const projectSize = await tp.system.suggester(
+    ["소규모 (1-2주)", "중규모 (1-3개월)", "대규모 (3개월+)"],
+    ["small", "medium", "large"]
+);
+
+const projectName = await tp.system.prompt("프로젝트명:");
+const startDate = tp.date.now("YYYY-MM-DD");
+
+let template = `# 🚀 ${projectName}\n\n`;
+template += `**시작일:** ${startDate}\n`;
+template += `**규모:** ${projectSize}\n\n`;
+
+if (projectSize === "small") {
+    template += `## 목표\n- \n\n`;
+    template += `## 작업 목록\n- [ ] \n\n`;
+} else if (projectSize === "medium") {
+    template += `## 프로젝트 개요\n\n`;
+    template += `## 마일스톤\n### Phase 1\n- [ ] \n### Phase 2\n- [ ] \n\n`;
+    template += `## 팀 구성\n- \n\n`;
+    template += `## 리스크\n- \n`;
+} else {
+    template += `## 프로젝트 차터\n### 배경\n\n### 목표\n\n### 범위\n\n`;
+    template += `## 이해관계자\n- \n\n`;
+    template += `## 타임라인\n\`\`\`mermaid\ngantt\n    title ${projectName}\n    dateFormat YYYY-MM-DD\n    section 준비\n    계획 수립 :a1, ${startDate}, 14d\n\`\`\`\n`;
+}
+-%>
+<%= template %></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 외부 데이터 연동</h2>
+                
+                <div class="external-integration">
+                    <h3>API 활용 예제</h3>
+                    
+                    <div class="api-example">
+                        <h4>날씨 정보 가져오기</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+// OpenWeatherMap API 예제
+const apiKey = "YOUR_API_KEY";
+const city = "Seoul";
+const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+try {
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    const weather = {
+        temp: Math.round(data.main.temp),
+        desc: data.weather[0].description,
+        humidity: data.main.humidity,
+        wind: data.wind.speed
+    };
+    
+    tR += `☁️ **날씨:** ${weather.desc} | 🌡️ ${weather.temp}°C | 💧 ${weather.humidity}% | 💨 ${weather.wind}m/s`;
+} catch (error) {
+    tR += "날씨 정보를 가져올 수 없습니다.";
+}
+%></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="api-example">
+                        <h4>GitHub 이슈 가져오기</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+const repo = await tp.system.prompt("저장소 (owner/repo):");
+const token = "YOUR_GITHUB_TOKEN"; // 보안 주의!
+
+try {
+    const response = await fetch(`https://api.github.com/repos/${repo}/issues?state=open`, {
+        headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    });
+    
+    const issues = await response.json();
+    
+    tR += `## 📋 Open Issues (${issues.length})\n\n`;
+    
+    issues.slice(0, 5).forEach(issue => {
+        tR += `- [ ] [#${issue.number}](${issue.html_url}) - ${issue.title}\n`;
+        if (issue.labels.length > 0) {
+            tR += `  - 라벨: ${issue.labels.map(l => l.name).join(", ")}\n`;
+        }
+    });
+} catch (error) {
+    tR += "이슈를 가져올 수 없습니다.";
+}
+%></code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="system-commands">
+                    <h3>시스템 명령 실행</h3>
+                    <div class="code-example">
+                        <pre><code class="language-javascript"><%*
+// 시스템 명령 실행 (설정에서 활성화 필요)
+const result = await tp.system.command("echo Hello World");
+
+// Git 정보 가져오기
+const branch = await tp.system.command("git branch --show-current");
+const lastCommit = await tp.system.command("git log -1 --pretty=format:'%h - %s'");
+
+tR += `**Branch:** ${branch}\n`;
+tR += `**Last Commit:** ${lastCommit}\n`;
+
+// 파일 목록 가져오기
+const files = await tp.system.command("ls -la");
+%></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 사용자 정의 함수</h2>
+                
+                <div class="user-functions">
+                    <h3>재사용 가능한 함수 만들기</h3>
+                    
+                    <div class="function-example">
+                        <h4>유틸리티 함수 (utils.js)</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript">// Templates/Scripts/utils.js
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('ko-KR', {
+        style: 'currency',
+        currency: 'KRW'
+    }).format(amount);
+}
+
+function calculateReadingTime(text) {
+    const wordsPerMinute = 200;
+    const words = text.trim().split(/\s+/).length;
+    const minutes = Math.ceil(words / wordsPerMinute);
+    return `${minutes}분`;
+}
+
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function getWeekNumber(date) {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return weekNo;
+}
+
+module.exports = {
+    formatCurrency,
+    calculateReadingTime,
+    generateUUID,
+    getWeekNumber
+};</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="function-example">
+                        <h4>템플릿에서 사용하기</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+const utils = tp.user.utils();
+const uuid = utils.generateUUID();
+const weekNum = utils.getWeekNumber(new Date());
+
+const content = tp.file.content;
+const readingTime = utils.calculateReadingTime(content);
+
+const budget = await tp.system.prompt("예산:", "0");
+const formattedBudget = utils.formatCurrency(parseInt(budget));
+%>
+
+# 📄 문서 정보
+**ID:** <%= uuid %>
+**주차:** <%= weekNum %>주차
+**예상 읽기 시간:** <%= readingTime %>
+**예산:** <%= formattedBudget %></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 고급 워크플로우 예제</h2>
+                
+                <div class="workflow-examples">
+                    <div class="workflow-example">
+                        <h3>📚 독서 노트 자동화</h3>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+// 책 정보 입력
+const bookTitle = await tp.system.prompt("책 제목:");
+const author = await tp.system.prompt("저자:");
+const isbn = await tp.system.prompt("ISBN (선택):", "");
+
+let bookInfo = {};
+
+// ISBN으로 책 정보 가져오기
+if (isbn) {
+    try {
+        const response = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+        const data = await response.json();
+        const book = data[`ISBN:${isbn}`];
+        
+        if (book) {
+            bookInfo = {
+                title: book.title || bookTitle,
+                author: book.authors ? book.authors[0].name : author,
+                pages: book.number_of_pages || "Unknown",
+                published: book.publish_date || "Unknown",
+                cover: book.cover ? book.cover.medium : ""
+            };
+        }
+    } catch (error) {
+        console.error("책 정보를 가져올 수 없습니다.");
+    }
+}
+
+// 기본값 설정
+bookInfo.title = bookInfo.title || bookTitle;
+bookInfo.author = bookInfo.author || author;
+
+// 읽기 상태
+const status = await tp.system.suggester(
+    ["읽을 예정", "읽는 중", "완독"],
+    ["to-read", "reading", "finished"]
+);
+
+// 파일명 생성
+const fileName = `${bookInfo.title} - ${bookInfo.author}`.replace(/[^\w\s-가-힣]/gi, '');
+await tp.file.rename(fileName);
+%>
+---
+title: "<%= bookInfo.title %>"
+author: "<%= bookInfo.author %>"
+isbn: "<%= isbn %>"
+pages: <%= bookInfo.pages %>
+published: "<%= bookInfo.published %>"
+status: "<%= status %>"
+rating: 
+started: <% status !== "to-read" ? tp.date.now("YYYY-MM-DD") : "" %>
+finished: 
+tags: [book, <%= status %>]
+---
+
+# 📚 <%= bookInfo.title %>
+
+<% if (bookInfo.cover) { %>
+![Cover](<%= bookInfo.cover %>)
+<% } %>
+
+## 📖 책 정보
+- **저자:** <%= bookInfo.author %>
+- **출판:** <%= bookInfo.published %>
+- **페이지:** <%= bookInfo.pages %>
+- **ISBN:** <%= isbn %>
+
+## 🎯 읽는 이유
+
+
+## 📝 핵심 내용
+
+
+## 💭 인상 깊은 구절
+> 
+
+
+## 🤔 나의 생각
+
+
+## 🔑 핵심 개념
+
+
+## 🎬 실천 계획
+- [ ] 
+
+
+## 🔗 관련 자료
+- </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="workflow-example">
+                        <h3>🎯 프로젝트 리뷰 자동화</h3>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+// 프로젝트 선택
+const projectFiles = app.vault.getMarkdownFiles()
+    .filter(f => f.path.includes("Projects") && !f.path.includes("Archive"));
+
+const projectNames = projectFiles.map(f => f.basename);
+const projectPaths = projectFiles.map(f => f.path);
+
+const selectedPath = await tp.system.suggester(projectNames, projectPaths);
+
+if (!selectedPath) {
+    return;
+}
+
+// 프로젝트 메타데이터 읽기
+const projectFile = app.vault.getAbstractFileByPath(selectedPath);
+const projectContent = await app.vault.read(projectFile);
+const projectMeta = app.metadataCache.getFileCache(projectFile);
+
+// Dataview API 사용
+const dv = app.plugins.plugins.dataview.api;
+const projectPage = dv.page(selectedPath);
+
+// 관련 작업 수집
+const tasks = dv.pages(`"${projectFile.parent.path}"`)
+    .file.tasks
+    .where(t => t.text.includes(projectPage.file.name));
+
+const completedTasks = tasks.where(t => t.completed).length;
+const totalTasks = tasks.length;
+const completionRate = totalTasks > 0 ? Math.round(completedTasks / totalTasks * 100) : 0;
+
+// 리뷰 날짜 계산
+const lastReview = projectPage.lastReview || "Never";
+const daysSinceReview = lastReview !== "Never" 
+    ? Math.floor((new Date() - new Date(lastReview)) / (1000 * 60 * 60 * 24))
+    : "N/A";
+%>
+# 📊 프로젝트 리뷰: [[<%= projectNames[projectPaths.indexOf(selectedPath)] %>]]
+
+**리뷰 날짜:** <%= tp.date.now("YYYY-MM-DD") %>
+**마지막 리뷰:** <%= lastReview %> (<%= daysSinceReview %> 일 전)
+
+## 📈 프로젝트 현황
+- **상태:** <%= projectPage.status || "Unknown" %>
+- **우선순위:** <%= projectPage.priority || "Medium" %>
+- **시작일:** <%= projectPage.startDate || "Unknown" %>
+- **마감일:** <%= projectPage.dueDate || "Unknown" %>
+
+## ✅ 진행률
+- **완료 작업:** <%= completedTasks %> / <%= totalTasks %>
+- **완료율:** <%= completionRate %>%
+- **진행 바:** ${"█".repeat(Math.floor(completionRate/10))}${"░".repeat(10-Math.floor(completionRate/10))}
+
+## 🎯 이번 주 진행 사항
+- 
+
+## 🚧 블로커 및 이슈
+- 
+
+## 📋 다음 단계
+- [ ] 
+
+## 💭 리뷰 노트
+
+
+---
+*리뷰어: <%= tp.system.prompt("리뷰어 이름", "나") %>*</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>실습 프로젝트</h2>
+                
+                <div class="project-box">
+                    <h3>🤖 스마트 노트 생성 시스템 구축</h3>
+                    <p>Templater를 활용해 지능적인 노트 생성 워크플로우를 만들어보세요.</p>
+                    
+                    <div class="project-tasks">
+                        <h4>프로젝트 과제</h4>
+                        <ol>
+                            <li>
+                                <strong>컨텍스트 인식 템플릿</strong>
+                                <ul>
+                                    <li>시간대별 다른 인사말</li>
+                                    <li>요일별 다른 체크리스트</li>
+                                    <li>날씨 기반 활동 제안</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>자동 분류 시스템</strong>
+                                <ul>
+                                    <li>제목 기반 자동 폴더 이동</li>
+                                    <li>내용 기반 태그 추가</li>
+                                    <li>관련 노트 자동 링크</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>데이터 수집 폼</strong>
+                                <ul>
+                                    <li>구조화된 입력 폼</li>
+                                    <li>유효성 검사</li>
+                                    <li>데이터베이스 스타일 저장</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>보고서 생성기</strong>
+                                <ul>
+                                    <li>주간/월간 자동 요약</li>
+                                    <li>통계 및 차트 생성</li>
+                                    <li>PDF 내보내기 준비</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="starter-code">
+                        <h4>시작 코드</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+// 스마트 노트 생성기 시작 템플릿
+const noteType = await tp.system.suggester(
+    ["📝 일반 노트", "📋 작업", "💡 아이디어", "📚 학습", "🎯 프로젝트"],
+    ["general", "task", "idea", "learning", "project"]
+);
+
+// 여기에 각 타입별 로직 추가
+let template = "";
+
+switch(noteType) {
+    case "general":
+        // 일반 노트 템플릿
+        break;
+    case "task":
+        // 작업 템플릿
+        break;
+    // ... 더 추가
+}
+
+// 여기에 추가 기능 구현
+%></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>팁과 모범 사례</h2>
+                
+                <div class="best-practices">
+                    <div class="practice-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>보안</h4>
+                        <ul>
+                            <li>API 키는 별도 파일로 관리</li>
+                            <li>민감한 정보는 암호화</li>
+                            <li>권한 최소화 원칙</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="practice-card">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h4>성능</h4>
+                        <ul>
+                            <li>무거운 작업은 비동기 처리</li>
+                            <li>캐싱 활용</li>
+                            <li>불필요한 API 호출 최소화</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="practice-card">
+                        <i class="fas fa-code"></i>
+                        <h4>코드 품질</h4>
+                        <ul>
+                            <li>에러 처리 철저히</li>
+                            <li>재사용 가능한 함수 작성</li>
+                            <li>명확한 변수명 사용</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>무한한 가능성</h4>
+                            <p>JavaScript의 힘으로 Obsidian을 완전히 자동화된 지식 관리 시스템으로 변환</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>점진적 복잡도</h4>
+                            <p>간단한 날짜 삽입부터 시작해 복잡한 API 연동까지 단계적 학습</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>워크플로우 최적화</h4>
+                            <p>반복 작업을 자동화하여 실제 사고와 창작에 집중</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson13.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson15.html" class="next-button">
+                    다음 강의 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 16: 아웃라이너와 계층 구조 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header intermediate">
+                <h3>중급 과정</h3>
+                <p>파워 유저 되기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson11.html">Lesson 11: 핵심 플러그인 마스터하기</a></li>
+                <li><a href="lesson12.html">Lesson 12: 일일 노트와 정기 노트</a></li>
+                <li><a href="lesson13.html">Lesson 13: 데이터뷰 플러그인 활용</a></li>
+                <li><a href="lesson14.html">Lesson 14: 템플레이터 고급 기능</a></li>
+                <li><a href="lesson15.html">Lesson 15: 캔버스로 시각적 사고</a></li>
+                <li class="active"><a href="lesson16.html">Lesson 16: 아웃라이너와 계층 구조</a></li>
+                <li><a href="lesson17.html">Lesson 17: 작업 관리 시스템 구축</a></li>
+                <li><a href="lesson18.html">Lesson 18: 북마크와 즐겨찾기 활용</a></li>
+                <li><a href="lesson19.html">Lesson 19: 모바일 앱 활용</a></li>
+                <li><a href="lesson20.html">Lesson 20: 플러그인 생태계 탐험</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header intermediate">
+                <h1>Lesson 16: 아웃라이너와 계층 구조</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 50분</span>
+                    <span><i class="fas fa-signal"></i> 중급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>아웃라이너 기능의 깊이 있는 활용</li>
+                    <li>효과적인 계층 구조 설계</li>
+                    <li>Outliner 플러그인 마스터하기</li>
+                    <li>구조화된 사고와 글쓰기 기법</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. 아웃라이너의 개념</h2>
+                
+                <div class="outliner-intro">
+                    <h3>구조화된 사고의 도구</h3>
+                    <p>아웃라이너는 정보를 계층적으로 구성하여 복잡한 아이디어를 체계적으로 정리하는 강력한 도구입니다.</p>
+                    
+                    <div class="outliner-benefits">
+                        <div class="benefit-card">
+                            <i class="fas fa-sitemap"></i>
+                            <h4>계층적 구조</h4>
+                            <p>주제와 하위 주제의 명확한 관계 표현</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fas fa-compress-alt"></i>
+                            <h4>접기/펼치기</h4>
+                            <p>필요한 정보만 선택적으로 표시</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fas fa-arrows-alt"></i>
+                            <h4>유연한 재구성</h4>
+                            <p>드래그로 쉽게 구조 변경</p>
+                        </div>
+                        <div class="benefit-card">
+                            <i class="fas fa-eye"></i>
+                            <h4>줌 기능</h4>
+                            <p>특정 섹션에 집중하여 작업</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="basic-syntax">
+                    <h3>기본 문법과 조작</h3>
+                    <div class="syntax-demo">
+                        <div class="code-example">
+                            <pre><code class="language-markdown">- 최상위 항목
+  - 하위 항목 1
+    - 세부 항목 1.1
+    - 세부 항목 1.2
+      - 더 깊은 수준
+  - 하위 항목 2
+    - 세부 항목 2.1
+- 다른 최상위 항목
+
+또는 번호 목록:
+1. 첫 번째 주제
+   1. 하위 주제 A
+   2. 하위 주제 B
+      1. 세부 내용
+      2. 추가 세부 내용</code></pre>
+                        </div>
+                        
+                        <div class="keyboard-shortcuts">
+                            <h4>필수 단축키</h4>
+                            <table>
+                                <tr>
+                                    <th>동작</th>
+                                    <th>단축키</th>
+                                </tr>
+                                <tr>
+                                    <td>들여쓰기 증가</td>
+                                    <td><kbd>Tab</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td>들여쓰기 감소</td>
+                                    <td><kbd>Shift + Tab</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td>접기/펼치기</td>
+                                    <td><kbd>Ctrl/Cmd + .</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td>모두 접기</td>
+                                    <td><kbd>Ctrl/Cmd + Shift + .</kbd></td>
+                                </tr>
+                                <tr>
+                                    <td>줌 인</td>
+                                    <td><kbd>Ctrl/Cmd + Click</kbd></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. Outliner 플러그인 활용</h2>
+                
+                <div class="plugin-features">
+                    <h3>강화된 아웃라이너 기능</h3>
+                    
+                    <div class="feature-showcase">
+                        <div class="feature-demo">
+                            <h4>🔄 향상된 이동 기능</h4>
+                            <ul>
+                                <li><strong>항목 위/아래 이동:</strong> Ctrl/Cmd + Shift + ↑/↓</li>
+                                <li><strong>전체 브랜치 이동:</strong> 하위 항목 포함 이동</li>
+                                <li><strong>드래그 앤 드롭:</strong> 마우스로 구조 재배치</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-demo">
+                            <h4>📊 목록 스타일</h4>
+                            <div class="code-example">
+                                <pre><code class="language-css">/* CSS 스니펫으로 커스터마이징 */
+.outliner-plugin-vertical-lines {
+    border-left: 1px solid var(--background-modifier-border);
+}
+
+/* 번호 목록 스타일 */
+ol {
+    counter-reset: item;
+}
+ol > li {
+    counter-increment: item;
+}
+ol > li::before {
+    content: counters(item, ".") ". ";
+    color: var(--text-accent);
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="feature-demo">
+                            <h4>🎯 Zoom 기능</h4>
+                            <p>특정 브랜치에 집중하여 작업할 수 있는 강력한 기능</p>
+                            <div class="zoom-example">
+                                <div class="zoom-state">
+                                    <h5>전체 보기</h5>
+                                    <pre>- 프로젝트
+  - 기획
+  - 개발 ← Zoom here
+    - 프론트엔드
+    - 백엔드
+  - 테스트</pre>
+                                </div>
+                                <div class="zoom-state">
+                                    <h5>Zoom 후</h5>
+                                    <pre>- 개발
+  - 프론트엔드
+    - React 설정
+    - 컴포넌트 개발
+  - 백엔드
+    - API 설계
+    - 데이터베이스</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 효과적인 계층 구조 설계</h2>
+                
+                <div class="structure-principles">
+                    <h3>구조화 원칙</h3>
+                    
+                    <div class="principle-cards">
+                        <div class="principle">
+                            <h4>🎯 MECE 원칙</h4>
+                            <p>Mutually Exclusive, Collectively Exhaustive</p>
+                            <ul>
+                                <li>상호 배타적: 중복 없음</li>
+                                <li>전체 포괄적: 누락 없음</li>
+                            </ul>
+                            <div class="code-example">
+                                <pre><code class="language-markdown">- 마케팅 전략
+  - 온라인 마케팅
+    - 소셜 미디어
+    - 검색 엔진
+    - 이메일
+  - 오프라인 마케팅
+    - 인쇄물
+    - 이벤트
+    - 방송</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="principle">
+                            <h4>📏 깊이 관리</h4>
+                            <p>적절한 계층 깊이 유지 (보통 3-5단계)</p>
+                            <div class="depth-guide">
+                                <div class="good-example">
+                                    <h5>✅ 적절한 깊이</h5>
+                                    <pre>- 주제
+  - 대분류
+    - 중분류
+      - 세부사항</pre>
+                                </div>
+                                <div class="bad-example">
+                                    <h5>❌ 과도한 깊이</h5>
+                                    <pre>- 주제
+  - 분류1
+    - 분류2
+      - 분류3
+        - 분류4
+          - 분류5
+            - 내용</pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="principle">
+                            <h4>🔢 일관된 분류</h4>
+                            <p>동일 레벨에서 일관된 분류 기준 적용</p>
+                            <div class="code-example">
+                                <pre><code class="language-markdown">- 프로젝트 문서
+  - 기능별 분류
+    - 인증 시스템
+    - 결제 시스템
+    - 알림 시스템
+  - 단계별 분류
+    - 기획 문서
+    - 개발 문서
+    - 운영 문서</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 실전 활용 템플릿</h2>
+                
+                <div class="template-collection">
+                    <div class="template-item">
+                        <h3>📝 글쓰기 아웃라인</h3>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 글 제목: [주제]
+
+## 1. 서론
+   - 주목 끌기 (Hook)
+     - 통계/인용문/질문
+   - 배경 설명
+   - 논제 제시 (Thesis)
+   - 글의 구조 안내
+
+## 2. 본론
+   ### 2.1 첫 번째 논점
+       - 주장
+       - 근거 1
+         - 예시/데이터
+       - 근거 2
+         - 예시/데이터
+       - 소결론
+   
+   ### 2.2 두 번째 논점
+       - 주장
+       - 근거
+       - 반박 고려
+       - 재반박
+   
+   ### 2.3 세 번째 논점
+       - 주장
+       - 사례 연구
+       - 시사점
+
+## 3. 결론
+   - 요약
+   - 논제 재확인
+   - 행동 촉구 (CTA)
+   - 마무리 (여운)</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="template-item">
+                        <h3>🎯 프로젝트 계획</h3>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 프로젝트: [이름]
+
+## 1. 프로젝트 개요
+   - 목적과 목표
+     - 비즈니스 목표
+     - 기술적 목표
+   - 범위
+     - 포함 사항
+     - 제외 사항
+   - 이해관계자
+     - 내부 팀
+     - 외부 고객
+
+## 2. 요구사항
+   ### 2.1 기능 요구사항
+       - 사용자 관리
+         - [ ] 회원가입
+         - [ ] 로그인/로그아웃
+         - [ ] 프로필 관리
+       - 핵심 기능
+         - [ ] 기능 A
+         - [ ] 기능 B
+   
+   ### 2.2 비기능 요구사항
+       - 성능
+       - 보안
+       - 사용성
+
+## 3. 일정
+   - Phase 1: 기획 (2주)
+     - [ ] 요구사항 분석
+     - [ ] 설계 문서
+   - Phase 2: 개발 (8주)
+     - [ ] Sprint 1-4
+   - Phase 3: 테스트 (2주)
+
+## 4. 리스크 관리
+   - 기술적 리스크
+   - 일정 리스크
+   - 예산 리스크</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="template-item">
+                        <h3>📚 학습 노트</h3>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 주제: [학습 주제]
+
+## 1. 개요
+   - 학습 목표
+   - 선수 지식
+   - 참고 자료
+
+## 2. 핵심 개념
+   ### 2.1 개념 A
+       - 정의
+       - 특징
+         - 특징 1
+         - 특징 2
+       - 예시
+       - 관련 개념 → [[링크]]
+   
+   ### 2.2 개념 B
+       - 정의
+       - 원리
+         - 작동 방식
+         - 구성 요소
+       - 활용 사례
+
+## 3. 실습
+   - 예제 1
+     - 문제
+     - 해결 과정
+     - 결과
+   - 예제 2
+
+## 4. 요약
+   - 핵심 포인트
+   - 추가 학습 필요 사항
+   - 다음 단계</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 고급 기법</h2>
+                
+                <div class="advanced-techniques">
+                    <h3>동적 아웃라인</h3>
+                    
+                    <div class="technique-examples">
+                        <div class="technique">
+                            <h4>🔗 블록 참조 활용</h4>
+                            <div class="code-example">
+                                <pre><code class="language-markdown">## 마스터 아웃라인
+- 프로젝트 구조 ^project-structure
+  - 프론트엔드
+    - ![[Frontend Plan#구조]]
+  - 백엔드
+    - ![[Backend Plan#구조]]
+  - 데이터베이스
+    - ![[DB Schema#설계]]
+
+## 다른 문서에서 참조
+프로젝트 구조는 [[Master Outline#^project-structure]]를 참조</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="technique">
+                            <h4>📊 Dataview 통합</h4>
+                            <div class="code-example">
+                                <pre><code class="language-dataview">## 작업 현황 아웃라인
+```dataview
+LIST 
+FROM "Projects"
+WHERE status != "completed"
+GROUP BY project
+```
+
+### 세부 작업
+- 프로젝트 A
+  ```dataview
+  TASK
+  FROM "Projects/Project-A"
+  WHERE !completed
+  ```
+- 프로젝트 B
+  ```dataview
+  TASK
+  FROM "Projects/Project-B"
+  WHERE !completed
+  ```</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="technique">
+                            <h4>🎨 시각적 강화</h4>
+                            <div class="code-example">
+                                <pre><code class="language-css">/* 커스텀 CSS로 아웃라인 스타일링 */
+/* 중요도별 색상 */
+li:has(.tag-important) {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+li:has(.tag-inprogress) {
+    background: rgba(52, 152, 219, 0.1);
+    border-left: 3px solid #3498db;
+}
+
+li:has(.tag-completed) {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+/* 깊이별 들여쓰기 */
+.markdown-preview-view ul ul {
+    border-left: 2px solid #ecf0f1;
+    margin-left: 1em;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="workflow-integration">
+                    <h3>워크플로우 통합</h3>
+                    
+                    <div class="workflow-examples">
+                        <div class="workflow">
+                            <h4>📅 GTD 시스템</h4>
+                            <pre>- 📥 Inbox
+  - [ ] 새로운 아이디어 #처리필요
+  - [ ] 이메일 확인 사항
+- 🎯 Next Actions
+  - 컨텍스트별
+    - @집
+      - [ ] 보고서 작성
+    - @사무실
+      - [ ] 회의 준비
+    - @외출
+      - [ ] 은행 업무
+- 📅 캘린더
+  - [[2024-01-15|오늘]]
+  - [[2024-01-16|내일]]
+- 🔄 프로젝트
+  - [[프로젝트 A]]
+  - [[프로젝트 B]]</pre>
+                        </div>
+
+                        <div class="workflow">
+                            <h4>🧠 Zettelkasten 구조</h4>
+                            <pre>- 영구 노트
+  - 1. 철학
+    - 1a. 인식론
+      - 1a1. 경험주의
+      - 1a2. 합리주의
+    - 1b. 윤리학
+  - 2. 과학
+    - 2a. 물리학
+    - 2b. 생물학
+- 문헌 노트
+  - 저자별
+  - 주제별
+- 일일 노트
+  - 아이디어 캡처
+  - 임시 메모</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 실습 프로젝트</h2>
+                
+                <div class="project-box">
+                    <h3>🏗️ 지식 체계 구축하기</h3>
+                    <p>아웃라이너를 활용해 자신만의 체계적인 지식 관리 시스템을 만들어보세요.</p>
+                    
+                    <div class="project-phases">
+                        <div class="phase">
+                            <h4>Phase 1: 분야 설정</h4>
+                            <ol>
+                                <li>관심 분야 3-5개 선정</li>
+                                <li>각 분야의 주요 주제 도출</li>
+                                <li>최상위 구조 설계</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="phase">
+                            <h4>Phase 2: 계층 구조화</h4>
+                            <ol>
+                                <li>MECE 원칙 적용</li>
+                                <li>3-4단계 깊이로 구성</li>
+                                <li>교차 참조 링크 추가</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="phase">
+                            <h4>Phase 3: 콘텐츠 채우기</h4>
+                            <ol>
+                                <li>각 노드에 핵심 정보 추가</li>
+                                <li>관련 노트 링크</li>
+                                <li>참고 자료 연결</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="phase">
+                            <h4>Phase 4: 동적 요소 추가</h4>
+                            <ol>
+                                <li>Dataview 쿼리 통합</li>
+                                <li>작업 추적 시스템</li>
+                                <li>진행 상황 시각화</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="evaluation-criteria">
+                        <h4>평가 기준</h4>
+                        <ul>
+                            <li>구조의 논리성과 일관성</li>
+                            <li>정보의 접근성과 탐색 용이성</li>
+                            <li>확장 가능성과 유지보수성</li>
+                            <li>시각적 명확성</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>생산성 팁</h2>
+                
+                <div class="productivity-tips">
+                    <div class="tip-category">
+                        <h3>⚡ 빠른 작업</h3>
+                        <ul>
+                            <li>템플릿으로 구조 재사용</li>
+                            <li>단축키 완벽 숙지</li>
+                            <li>자주 쓰는 구조는 스니펫으로</li>
+                            <li>배치 작업으로 효율성 향상</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-category">
+                        <h3>🎯 집중력 향상</h3>
+                        <ul>
+                            <li>Zoom으로 현재 작업에만 집중</li>
+                            <li>불필요한 섹션은 접어두기</li>
+                            <li>색상 코딩으로 우선순위 표시</li>
+                            <li>방해 요소 최소화</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-category">
+                        <h3>📈 지속적 개선</h3>
+                        <ul>
+                            <li>정기적인 구조 리뷰</li>
+                            <li>사용 패턴 분석</li>
+                            <li>피드백 반영</li>
+                            <li>최적화 지속</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>구조화된 사고</h4>
+                            <p>복잡한 정보를 체계적으로 정리하여 명확한 이해와 전달</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>유연한 관리</h4>
+                            <p>쉽게 재구성하고 확장할 수 있는 동적인 정보 구조</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>효율적 워크플로우</h4>
+                            <p>아웃라이너를 중심으로 한 통합된 작업 환경 구축</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson15.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson17.html" class="next-button">
+                    다음 강의 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

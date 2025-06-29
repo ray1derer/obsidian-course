@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 10: 기본 설정 최적화 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>초급 과정</h3>
+                <p>기본기 마스터하기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson01.html">Lesson 1: Obsidian 소개와 설치</a></li>
+                <li><a href="lesson02.html">Lesson 2: 첫 번째 노트 만들기</a></li>
+                <li><a href="lesson03.html">Lesson 3: 마크다운 기초</a></li>
+                <li><a href="lesson04.html">Lesson 4: 링크와 백링크</a></li>
+                <li><a href="lesson05.html">Lesson 5: 태그와 폴더 구조</a></li>
+                <li><a href="lesson06.html">Lesson 6: 고급 포매팅과 스타일링</a></li>
+                <li><a href="lesson07.html">Lesson 7: 템플릿 활용하기</a></li>
+                <li><a href="lesson08.html">Lesson 8: 검색과 필터링</a></li>
+                <li><a href="lesson09.html">Lesson 9: 그래프 뷰 활용</a></li>
+                <li class="active"><a href="lesson10.html">Lesson 10: 기본 설정 최적화</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header">
+                <h1>Lesson 10: 기본 설정 최적화</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 50분</span>
+                    <span><i class="fas fa-signal"></i> 초급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>개인 워크플로우에 맞는 설정 최적화</li>
+                    <li>핵심 설정 항목 이해와 구성</li>
+                    <li>단축키 커스터마이징</li>
+                    <li>성능 최적화와 백업 전략</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. 에디터 설정</h2>
+                
+                <div class="settings-category">
+                    <h3>편집 환경 최적화</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-header">
+                            <h4>기본 편집 옵션</h4>
+                            <span class="setting-path">설정 → 에디터</span>
+                        </div>
+                        <div class="setting-options">
+                            <label class="option">
+                                <input type="checkbox" checked>
+                                <span>라이브 프리뷰 사용</span>
+                                <p class="option-desc">편집하면서 실시간으로 렌더링 확인</p>
+                            </label>
+                            <label class="option">
+                                <input type="checkbox" checked>
+                                <span>자동 저장</span>
+                                <p class="option-desc">입력 중단 2초 후 자동 저장</p>
+                            </label>
+                            <label class="option">
+                                <input type="checkbox">
+                                <span>Vim 키 바인딩</span>
+                                <p class="option-desc">Vim 편집 모드 활성화</p>
+                            </label>
+                            <label class="option">
+                                <input type="checkbox" checked>
+                                <span>스마트 들여쓰기</span>
+                                <p class="option-desc">문맥에 맞는 자동 들여쓰기</p>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-header">
+                            <h4>표시 옵션</h4>
+                            <span class="setting-path">설정 → 에디터 → 표시</span>
+                        </div>
+                        <div class="setting-options">
+                            <label class="option">
+                                <input type="checkbox" checked>
+                                <span>줄 번호 표시</span>
+                            </label>
+                            <label class="option">
+                                <input type="checkbox" checked>
+                                <span>줄 바꿈</span>
+                            </label>
+                            <label class="option">
+                                <input type="checkbox">
+                                <span>들여쓰기 가이드</span>
+                            </label>
+                            <label class="option">
+                                <input type="range" min="12" max="24" value="16">
+                                <span>글꼴 크기: 16px</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>추천 설정:</strong> 라이브 프리뷰와 자동 저장을 활성화하면 작업 흐름이 훨씬 부드러워집니다.</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 파일 및 링크 설정</h2>
+                
+                <div class="settings-category">
+                    <h3>파일 관리 최적화</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-header">
+                            <h4>새 파일 위치</h4>
+                            <span class="setting-path">설정 → 파일 및 링크</span>
+                        </div>
+                        <div class="setting-config">
+                            <select class="setting-select">
+                                <option>볼트 루트</option>
+                                <option selected>현재 파일과 같은 폴더</option>
+                                <option>지정된 폴더</option>
+                            </select>
+                            <p class="config-desc">새 노트가 생성될 기본 위치</p>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-header">
+                            <h4>링크 형식</h4>
+                        </div>
+                        <div class="setting-options">
+                            <label class="option">
+                                <input type="radio" name="link-format" checked>
+                                <span>최단 경로 가능</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="link-format">
+                                <span>절대 경로</span>
+                            </label>
+                            <label class="option">
+                                <input type="radio" name="link-format">
+                                <span>상대 경로</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-header">
+                            <h4>첨부 파일 폴더</h4>
+                        </div>
+                        <div class="attachment-config">
+                            <input type="text" value="Attachments" placeholder="첨부 파일 폴더 경로">
+                            <p class="config-desc">이미지와 파일이 저장될 폴더</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="best-practice">
+                    <h4>📁 폴더 구조 모범 사례</h4>
+                    <div class="code-example">
+                        <pre><code>📁 My Vault
+  📁 Daily Notes      # 일일 노트
+  📁 Projects         # 프로젝트별 문서
+  📁 Resources        # 참고 자료
+  📁 Templates        # 템플릿
+  📁 Attachments      # 이미지/파일
+  📁 Archive          # 보관 문서</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 단축키 커스터마이징</h2>
+                
+                <div class="hotkeys-section">
+                    <h3>생산성을 위한 단축키 설정</h3>
+                    <p class="section-desc">설정 → 단축키에서 모든 명령의 단축키를 사용자 정의할 수 있습니다.</p>
+                    
+                    <div class="hotkey-categories">
+                        <div class="hotkey-category">
+                            <h4>추천 단축키 설정</h4>
+                            <table class="hotkey-table">
+                                <tr>
+                                    <th>기능</th>
+                                    <th>추천 단축키</th>
+                                    <th>설명</th>
+                                </tr>
+                                <tr>
+                                    <td>일일 노트 생성</td>
+                                    <td><kbd>Ctrl+Shift+D</kbd></td>
+                                    <td>오늘의 일일 노트 생성/열기</td>
+                                </tr>
+                                <tr>
+                                    <td>템플릿 삽입</td>
+                                    <td><kbd>Ctrl+T</kbd></td>
+                                    <td>템플릿 선택 및 삽입</td>
+                                </tr>
+                                <tr>
+                                    <td>빠른 전환</td>
+                                    <td><kbd>Ctrl+O</kbd></td>
+                                    <td>파일 빠른 검색 및 열기</td>
+                                </tr>
+                                <tr>
+                                    <td>명령 팔레트</td>
+                                    <td><kbd>Ctrl+P</kbd></td>
+                                    <td>모든 명령 검색 및 실행</td>
+                                </tr>
+                                <tr>
+                                    <td>사이드바 토글</td>
+                                    <td><kbd>Ctrl+B</kbd></td>
+                                    <td>좌측 사이드바 표시/숨김</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="hotkey-category">
+                            <h4>충돌 방지 팁</h4>
+                            <ul class="conflict-tips">
+                                <li>시스템 단축키와 중복 확인</li>
+                                <li>일관된 패턴 사용 (예: Ctrl+Shift+문자)</li>
+                                <li>자주 사용하는 기능 우선 배치</li>
+                                <li>외우기 쉬운 연상 단축키 사용</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 외관 및 테마 설정</h2>
+                
+                <div class="appearance-settings">
+                    <h3>작업 환경 꾸미기</h3>
+                    
+                    <div class="theme-selector">
+                        <h4>테마 선택</h4>
+                        <div class="theme-grid">
+                            <div class="theme-card light">
+                                <div class="theme-preview"></div>
+                                <span>기본 (라이트)</span>
+                            </div>
+                            <div class="theme-card dark">
+                                <div class="theme-preview"></div>
+                                <span>기본 (다크)</span>
+                            </div>
+                            <div class="theme-card custom">
+                                <div class="theme-preview"></div>
+                                <span>커뮤니티 테마</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="css-snippets">
+                        <h4>CSS 스니펫 활용</h4>
+                        <p>자신만의 스타일을 추가해 Obsidian을 커스터마이징하세요.</p>
+                        
+                        <div class="snippet-example">
+                            <h5>유용한 CSS 스니펫 예제</h5>
+                            <div class="code-example">
+                                <pre><code class="language-css">/* 포커스 모드 */
+.workspace-leaf:not(.is-active) {
+    opacity: 0.7;
+}
+
+/* 더 넓은 에디터 */
+.markdown-source-view,
+.markdown-preview-view {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* 체크박스 스타일 */
+input[type="checkbox"] {
+    border-radius: 50%;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 동기화와 백업 설정</h2>
+                
+                <div class="sync-settings">
+                    <h3>데이터 안전성 확보</h3>
+                    
+                    <div class="sync-options">
+                        <div class="sync-option">
+                            <i class="fas fa-cloud"></i>
+                            <h4>Obsidian Sync</h4>
+                            <p>공식 동기화 서비스 (유료)</p>
+                            <ul>
+                                <li>엔드투엔드 암호화</li>
+                                <li>버전 기록</li>
+                                <li>모든 기기 동기화</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="sync-option">
+                            <i class="fas fa-folder"></i>
+                            <h4>클라우드 스토리지</h4>
+                            <p>타사 클라우드 서비스 활용</p>
+                            <ul>
+                                <li>Dropbox, Google Drive, OneDrive</li>
+                                <li>무료 옵션 가능</li>
+                                <li>수동 설정 필요</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="sync-option">
+                            <i class="fas fa-code-branch"></i>
+                            <h4>Git 버전 관리</h4>
+                            <p>개발자 친화적 옵션</p>
+                            <ul>
+                                <li>완전한 버전 관리</li>
+                                <li>협업 가능</li>
+                                <li>기술적 지식 필요</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="backup-strategy">
+                        <h4>백업 전략</h4>
+                        <div class="strategy-steps">
+                            <div class="strategy-step">
+                                <span class="step-number">1</span>
+                                <div>
+                                    <strong>자동 백업 설정</strong>
+                                    <p>클라우드 서비스 또는 로컬 백업 도구 활용</p>
+                                </div>
+                            </div>
+                            <div class="strategy-step">
+                                <span class="step-number">2</span>
+                                <div>
+                                    <strong>정기적 수동 백업</strong>
+                                    <p>중요한 변경사항 후 수동 백업</p>
+                                </div>
+                            </div>
+                            <div class="strategy-step">
+                                <span class="step-number">3</span>
+                                <div>
+                                    <strong>다중 백업 위치</strong>
+                                    <p>로컬 + 클라우드 이중 백업</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 성능 최적화</h2>
+                
+                <div class="performance-tips">
+                    <h3>대용량 볼트 최적화</h3>
+                    
+                    <div class="optimization-grid">
+                        <div class="opt-card">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <h4>시작 성능</h4>
+                            <ul>
+                                <li>불필요한 플러그인 비활성화</li>
+                                <li>시작 시 열릴 파일 수 제한</li>
+                                <li>큰 파일 분할</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="opt-card">
+                            <i class="fas fa-search"></i>
+                            <h4>검색 성능</h4>
+                            <ul>
+                                <li>검색 제외 폴더 설정</li>
+                                <li>큰 바이너리 파일 제외</li>
+                                <li>인덱싱 최적화</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="opt-card">
+                            <i class="fas fa-project-diagram"></i>
+                            <h4>그래프 뷰 성능</h4>
+                            <ul>
+                                <li>표시 노드 수 제한</li>
+                                <li>애니메이션 비활성화</li>
+                                <li>필터 적극 활용</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="opt-card">
+                            <i class="fas fa-memory"></i>
+                            <h4>메모리 관리</h4>
+                            <ul>
+                                <li>주기적 재시작</li>
+                                <li>캐시 정리</li>
+                                <li>메모리 사용량 모니터링</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>7. 워크플로우별 설정 예시</h2>
+                
+                <div class="workflow-examples">
+                    <div class="workflow-example">
+                        <h4>📚 학습용 설정</h4>
+                        <ul>
+                            <li>일일 노트 자동 생성</li>
+                            <li>스페이스드 리피티션 플러그인</li>
+                            <li>마인드맵 뷰 활성화</li>
+                            <li>플래시카드 템플릿</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="workflow-example">
+                        <h4>💼 업무용 설정</h4>
+                        <ul>
+                            <li>프로젝트 관리 플러그인</li>
+                            <li>칸반 보드 뷰</li>
+                            <li>회의록 템플릿</li>
+                            <li>작업 추적 시스템</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="workflow-example">
+                        <h4>✍️ 글쓰기용 설정</h4>
+                        <ul>
+                            <li>집중 모드 (디스트랙션 프리)</li>
+                            <li>글자 수 표시</li>
+                            <li>아웃라인 플러그인</li>
+                            <li>버전 관리 시스템</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>실전 프로젝트: 나만의 최적 환경 구축</h2>
+                
+                <div class="project-box">
+                    <h3>⚙️ 완벽한 Obsidian 환경 만들기</h3>
+                    <p>지금까지 배운 내용을 종합해 자신만의 최적화된 환경을 구축해봅시다.</p>
+                    
+                    <div class="project-checklist">
+                        <h4>체크리스트</h4>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check1">
+                            <label for="check1">에디터 설정 최적화 (글꼴, 테마, 표시 옵션)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check2">
+                            <label for="check2">폴더 구조 정리 및 파일 명명 규칙 설정</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check3">
+                            <label for="check3">자주 사용하는 기능의 단축키 설정</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check4">
+                            <label for="check4">CSS 스니펫으로 UI 커스터마이징</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check5">
+                            <label for="check5">백업 시스템 구축</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check6">
+                            <label for="check6">성능 최적화 설정 적용</label>
+                        </div>
+                    </div>
+                    
+                    <div class="final-tips">
+                        <h4>🎯 마지막 팁</h4>
+                        <ul>
+                            <li>설정은 점진적으로 조정하세요</li>
+                            <li>다른 사용자의 설정을 참고하되, 자신에게 맞게 수정하세요</li>
+                            <li>정기적으로 설정을 리뷰하고 개선하세요</li>
+                            <li>설정 파일을 백업해두세요</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>초급 과정 완료!</h2>
+                <div class="completion-message">
+                    <i class="fas fa-trophy"></i>
+                    <h3>축하합니다!</h3>
+                    <p>Obsidian 초급 과정을 모두 완료하셨습니다. 이제 기본적인 기능을 마스터하셨으니, 중급 과정에서 더 강력한 기능들을 배워보세요!</p>
+                    
+                    <div class="next-steps">
+                        <h4>다음 단계</h4>
+                        <ul>
+                            <li>배운 내용을 실제로 활용해보기</li>
+                            <li>자신만의 노트 시스템 구축하기</li>
+                            <li>중급 과정으로 진행하기</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson09.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson11.html" class="next-button">
+                    중급 과정 시작 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

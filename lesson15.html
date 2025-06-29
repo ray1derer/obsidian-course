@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 15: 캔버스로 시각적 사고 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header intermediate">
+                <h3>중급 과정</h3>
+                <p>파워 유저 되기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson11.html">Lesson 11: 핵심 플러그인 마스터하기</a></li>
+                <li><a href="lesson12.html">Lesson 12: 일일 노트와 정기 노트</a></li>
+                <li><a href="lesson13.html">Lesson 13: 데이터뷰 플러그인 활용</a></li>
+                <li><a href="lesson14.html">Lesson 14: 템플레이터 고급 기능</a></li>
+                <li class="active"><a href="lesson15.html">Lesson 15: 캔버스로 시각적 사고</a></li>
+                <li><a href="lesson16.html">Lesson 16: 아웃라이너와 계층 구조</a></li>
+                <li><a href="lesson17.html">Lesson 17: 작업 관리 시스템 구축</a></li>
+                <li><a href="lesson18.html">Lesson 18: 북마크와 즐겨찾기 활용</a></li>
+                <li><a href="lesson19.html">Lesson 19: 모바일 앱 활용</a></li>
+                <li><a href="lesson20.html">Lesson 20: 플러그인 생태계 탐험</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header intermediate">
+                <h1>Lesson 15: 캔버스로 시각적 사고</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 50분</span>
+                    <span><i class="fas fa-signal"></i> 중급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>Obsidian 캔버스의 핵심 기능 마스터</li>
+                    <li>시각적 사고와 마인드맵핑 기법</li>
+                    <li>캔버스를 활용한 프로젝트 계획</li>
+                    <li>노트와 캔버스의 효과적인 통합</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. 캔버스 소개</h2>
+                
+                <div class="canvas-intro">
+                    <h3>무한한 디지털 화이트보드</h3>
+                    <p>Obsidian 캔버스는 아이디어를 시각적으로 연결하고 구성할 수 있는 무한한 공간입니다.</p>
+                    
+                    <div class="canvas-features">
+                        <div class="feature-card">
+                            <i class="fas fa-infinity"></i>
+                            <h4>무한한 공간</h4>
+                            <p>제한 없는 캔버스에서 자유롭게 사고</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-sticky-note"></i>
+                            <h4>다양한 카드 타입</h4>
+                            <p>텍스트, 노트, 이미지, 웹 페이지</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-project-diagram"></i>
+                            <h4>유연한 연결</h4>
+                            <p>화살표로 관계와 흐름 표현</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-palette"></i>
+                            <h4>시각적 구성</h4>
+                            <p>색상, 그룹, 정렬로 체계화</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="canvas-basics">
+                    <h3>기본 조작법</h3>
+                    <div class="controls-table">
+                        <table>
+                            <tr>
+                                <th>동작</th>
+                                <th>방법</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>캔버스 이동</td>
+                                <td>마우스 드래그 / 스페이스 + 드래그</td>
+                                <td>캔버스 공간 탐색</td>
+                            </tr>
+                            <tr>
+                                <td>확대/축소</td>
+                                <td>Ctrl/Cmd + 마우스휠</td>
+                                <td>뷰 크기 조절</td>
+                            </tr>
+                            <tr>
+                                <td>카드 추가</td>
+                                <td>더블클릭 / 드래그&드롭</td>
+                                <td>새 요소 생성</td>
+                            </tr>
+                            <tr>
+                                <td>연결선 그리기</td>
+                                <td>카드 가장자리에서 드래그</td>
+                                <td>관계 생성</td>
+                            </tr>
+                            <tr>
+                                <td>다중 선택</td>
+                                <td>Shift + 클릭 / 드래그 선택</td>
+                                <td>여러 요소 선택</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 캔버스 카드 타입</h2>
+                
+                <div class="card-types">
+                    <div class="card-type-demo">
+                        <h3>📝 텍스트 카드</h3>
+                        <div class="card-example text-card">
+                            <div class="card-preview">
+                                <p>간단한 아이디어나 메모를 위한 기본 카드</p>
+                                <ul>
+                                    <li>빠른 입력</li>
+                                    <li>마크다운 지원</li>
+                                    <li>즉석 편집</li>
+                                </ul>
+                            </div>
+                            <div class="card-usage">
+                                <h4>활용 예시</h4>
+                                <ul>
+                                    <li>브레인스토밍 아이디어</li>
+                                    <li>임시 메모</li>
+                                    <li>라벨이나 설명</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-type-demo">
+                        <h3>📄 노트 카드</h3>
+                        <div class="card-example note-card">
+                            <div class="card-preview">
+                                <div class="embedded-note">
+                                    <h4>[[기존 노트]]</h4>
+                                    <p>볼트의 노트를 캔버스에 직접 임베드</p>
+                                </div>
+                            </div>
+                            <div class="card-usage">
+                                <h4>특징</h4>
+                                <ul>
+                                    <li>실시간 동기화</li>
+                                    <li>직접 편집 가능</li>
+                                    <li>백링크 유지</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-type-demo">
+                        <h3>🖼️ 미디어 카드</h3>
+                        <div class="card-example media-card">
+                            <div class="card-preview">
+                                <img src="https://via.placeholder.com/300x200/e8f4f8/2c3e50?text=Image+Card" alt="이미지 카드">
+                            </div>
+                            <div class="card-usage">
+                                <h4>지원 형식</h4>
+                                <ul>
+                                    <li>이미지 (PNG, JPG, GIF)</li>
+                                    <li>비디오</li>
+                                    <li>PDF</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-type-demo">
+                        <h3>🌐 웹 카드</h3>
+                        <div class="card-example web-card">
+                            <div class="card-preview">
+                                <div class="web-embed">
+                                    <div class="url-bar">https://example.com</div>
+                                    <div class="web-content">웹 페이지 임베드</div>
+                                </div>
+                            </div>
+                            <div class="card-usage">
+                                <h4>활용법</h4>
+                                <ul>
+                                    <li>참고 자료 링크</li>
+                                    <li>YouTube 동영상</li>
+                                    <li>외부 문서</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 시각적 구성 기법</h2>
+                
+                <div class="visual-techniques">
+                    <h3>색상과 스타일링</h3>
+                    
+                    <div class="styling-guide">
+                        <div class="color-palette">
+                            <h4>색상 코딩 시스템</h4>
+                            <div class="color-examples">
+                                <div class="color-item">
+                                    <div class="color-box" style="background: #ff6b6b;"></div>
+                                    <span>긴급/중요</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-box" style="background: #4ecdc4;"></div>
+                                    <span>진행중</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-box" style="background: #45b7d1;"></div>
+                                    <span>아이디어</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-box" style="background: #96ceb4;"></div>
+                                    <span>완료</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-box" style="background: #ffeaa7;"></div>
+                                    <span>참고</span>
+                                </div>
+                                <div class="color-item">
+                                    <div class="color-box" style="background: #dfe6e9;"></div>
+                                    <span>보류</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grouping-techniques">
+                            <h4>그룹화 방법</h4>
+                            <div class="group-examples">
+                                <div class="group-method">
+                                    <h5>📦 영역별 그룹</h5>
+                                    <p>관련 카드들을 색상 배경으로 묶기</p>
+                                </div>
+                                <div class="group-method">
+                                    <h5>🔲 프레임 사용</h5>
+                                    <p>시각적 경계로 섹션 구분</p>
+                                </div>
+                                <div class="group-method">
+                                    <h5>↔️ 정렬과 간격</h5>
+                                    <p>일관된 배치로 질서 부여</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>연결선 활용</h3>
+                    <div class="connection-types">
+                        <div class="connection-example">
+                            <h4>→ 순차적 흐름</h4>
+                            <p>프로세스나 타임라인 표현</p>
+                        </div>
+                        <div class="connection-example">
+                            <h4>⟷ 상호 관계</h4>
+                            <p>양방향 영향이나 연관성</p>
+                        </div>
+                        <div class="connection-example">
+                            <h4>⤵️ 계층 구조</h4>
+                            <p>상하 관계나 분류 체계</p>
+                        </div>
+                        <div class="connection-example">
+                            <h4>⚡ 인과 관계</h4>
+                            <p>원인과 결과의 연결</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 실전 활용 사례</h2>
+                
+                <div class="use-cases-gallery">
+                    <div class="use-case-item">
+                        <h3>🧠 마인드맵</h3>
+                        <div class="canvas-example">
+                            <img src="https://via.placeholder.com/700x400/f8f9fa/495057?text=Mind+Map+Example" alt="마인드맵 예시">
+                            <div class="example-structure">
+                                <h4>구조</h4>
+                                <ul>
+                                    <li>중심 주제</li>
+                                    <li>주요 가지</li>
+                                    <li>세부 아이디어</li>
+                                    <li>연관 개념 연결</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="use-case-item">
+                        <h3>📊 프로젝트 계획</h3>
+                        <div class="canvas-template">
+                            <div class="code-example">
+                                <pre><code class="language-markdown"># 프로젝트 캔버스 구조
+
+## 1. 프로젝트 개요 (중앙)
+- 프로젝트명
+- 목표
+- 기간
+
+## 2. 이해관계자 (좌측)
+- 팀원 카드
+- 역할과 책임
+- 연락처
+
+## 3. 타임라인 (상단)
+- 마일스톤 카드
+- 주요 일정
+- 데드라인
+
+## 4. 작업 분해 (우측)
+- 주요 작업
+- 하위 작업
+- 의존성 화살표
+
+## 5. 리소스 (하단)
+- 예산
+- 도구
+- 참고 자료</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="use-case-item">
+                        <h3>📚 학습 맵</h3>
+                        <div class="learning-map">
+                            <h4>지식 연결망 구축</h4>
+                            <ol>
+                                <li>핵심 개념 카드 배치</li>
+                                <li>관련 노트 연결</li>
+                                <li>참고 자료 링크</li>
+                                <li>학습 경로 표시</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="use-case-item">
+                        <h3>💡 아이디어 보드</h3>
+                        <div class="idea-board">
+                            <h4>창의적 사고 도구</h4>
+                            <div class="board-sections">
+                                <div class="section">
+                                    <h5>🌱 씨앗</h5>
+                                    <p>초기 아이디어</p>
+                                </div>
+                                <div class="section">
+                                    <h5>🌿 발전</h5>
+                                    <p>구체화 단계</p>
+                                </div>
+                                <div class="section">
+                                    <h5>🌳 성숙</h5>
+                                    <p>실행 가능한 계획</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 캔버스와 노트 통합</h2>
+                
+                <div class="integration-strategies">
+                    <h3>효과적인 통합 방법</h3>
+                    
+                    <div class="strategy-examples">
+                        <div class="strategy">
+                            <h4>📌 인덱스 캔버스</h4>
+                            <div class="code-example">
+                                <pre><code class="language-markdown"># MOC (Map of Contents) 캔버스
+
+1. 주제별 허브 노트를 중앙에 배치
+2. 관련 하위 노트들을 주변에 연결
+3. 색상으로 카테고리 구분
+4. 중요도에 따라 크기 조절
+
+예시:
+- 중앙: [[프로젝트 홈]]
+- 주변: [[요구사항]], [[설계]], [[개발]], [[테스트]]
+- 참고: 외부 링크, 이미지, 문서</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="strategy">
+                            <h4>🔄 워크플로우 캔버스</h4>
+                            <p>프로세스와 절차를 시각화하여 팀 협업 강화</p>
+                            <ul>
+                                <li>각 단계를 노트 카드로</li>
+                                <li>템플릿 노트 연결</li>
+                                <li>체크리스트 포함</li>
+                                <li>책임자 표시</li>
+                            </ul>
+                        </div>
+
+                        <div class="strategy">
+                            <h4>📖 스토리텔링</h4>
+                            <p>내러티브 구조를 캔버스로 표현</p>
+                            <ul>
+                                <li>챕터별 노트 배치</li>
+                                <li>캐릭터 관계도</li>
+                                <li>타임라인 시각화</li>
+                                <li>플롯 구조</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="advanced-tips">
+                    <h3>고급 활용 팁</h3>
+                    
+                    <div class="tip-grid">
+                        <div class="tip-item">
+                            <i class="fas fa-layer-group"></i>
+                            <h4>레이어 사고</h4>
+                            <p>추상화 수준별로 캔버스를 구성하여 복잡한 주제 단순화</p>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fas fa-sync"></i>
+                            <h4>동적 업데이트</h4>
+                            <p>노트 카드는 원본과 동기화되어 항상 최신 정보 반영</p>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fas fa-compress-arrows-alt"></i>
+                            <h4>줌 레벨 활용</h4>
+                            <p>전체 구조와 세부 내용을 오가며 다층적 사고</p>
+                        </div>
+                        <div class="tip-item">
+                            <i class="fas fa-code-branch"></i>
+                            <h4>버전 관리</h4>
+                            <p>중요한 캔버스는 정기적으로 복사본 생성</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 실습 프로젝트</h2>
+                
+                <div class="project-box">
+                    <h3>🎨 지식 정원 캔버스 만들기</h3>
+                    <p>개인 지식 관리 시스템을 시각적으로 표현하는 마스터 캔버스를 만들어보세요.</p>
+                    
+                    <div class="project-requirements">
+                        <h4>프로젝트 단계</h4>
+                        
+                        <div class="phase-cards">
+                            <div class="phase">
+                                <h5>Phase 1: 구조 설계</h5>
+                                <ul>
+                                    <li>주요 관심 분야 식별</li>
+                                    <li>각 분야별 색상 지정</li>
+                                    <li>중심 허브 생성</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="phase">
+                                <h5>Phase 2: 콘텐츠 배치</h5>
+                                <ul>
+                                    <li>핵심 노트 카드 추가</li>
+                                    <li>관계 화살표 연결</li>
+                                    <li>참고 자료 링크</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="phase">
+                                <h5>Phase 3: 시각화 개선</h5>
+                                <ul>
+                                    <li>그룹별 배경 추가</li>
+                                    <li>아이콘과 이미지 활용</li>
+                                    <li>레이아웃 최적화</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="phase">
+                                <h5>Phase 4: 상호작용 추가</h5>
+                                <ul>
+                                    <li>대시보드 노트 연결</li>
+                                    <li>작업 추적 영역</li>
+                                    <li>학습 경로 표시</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="canvas-templates">
+                        <h4>시작 템플릿</h4>
+                        <div class="template-grid">
+                            <div class="template-card">
+                                <h5>📚 학습 캔버스</h5>
+                                <p>과목별 학습 진도와 자료 관리</p>
+                            </div>
+                            <div class="template-card">
+                                <h5>💼 프로젝트 캔버스</h5>
+                                <p>프로젝트 전체 구조 시각화</p>
+                            </div>
+                            <div class="template-card">
+                                <h5>🎯 목표 캔버스</h5>
+                                <p>장단기 목표와 진행 상황</p>
+                            </div>
+                            <div class="template-card">
+                                <h5>🔍 연구 캔버스</h5>
+                                <p>주제 탐구와 자료 수집</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>캔버스 최적화 팁</h2>
+                
+                <div class="optimization-guide">
+                    <div class="opt-category">
+                        <h3>🚀 성능 최적화</h3>
+                        <ul>
+                            <li>큰 이미지는 외부 링크로 대체</li>
+                            <li>과도한 노트 임베딩 자제</li>
+                            <li>정기적인 캔버스 정리</li>
+                            <li>필요시 캔버스 분할</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="opt-category">
+                        <h3>🎨 디자인 원칙</h3>
+                        <ul>
+                            <li>일관된 색상 체계</li>
+                            <li>적절한 여백 활용</li>
+                            <li>시각적 계층 구조</li>
+                            <li>명확한 흐름 방향</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="opt-category">
+                        <h3>🔧 유지보수</h3>
+                        <ul>
+                            <li>정기적인 링크 확인</li>
+                            <li>오래된 정보 업데이트</li>
+                            <li>백업 캔버스 생성</li>
+                            <li>변경 이력 문서화</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>시각적 사고의 힘</h4>
+                            <p>복잡한 개념과 관계를 직관적으로 이해하고 표현</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>유연한 구조</h4>
+                            <p>선형적 사고를 벗어나 다차원적 연결과 탐색</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>통합된 워크플로우</h4>
+                            <p>노트와 캔버스를 결합한 강력한 지식 관리 시스템</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson14.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson16.html" class="next-button">
+                    다음 강의 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

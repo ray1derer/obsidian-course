@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제1강: 옵시디언 첫걸음 - 왜 옵시디언인가? | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <h1>제1강: 옵시디언 첫걸음 - 당신의 두 번째 뇌를 만나다</h1>
+            <div class="lesson-meta">
+                <span class="category">초급 과정</span>
+                <span class="date">2025-06-29</span>
+                <span class="reading-time">독서 시간: 25분</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="../index.html" class="nav-index">
+                <i class="fas fa-home"></i> 목차로 돌아가기
+            </a>
+            <a href="lesson02.html" class="nav-next">
+                다음 강의: 볼트(Vault)의 이해 <i class="fas fa-arrow-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2>🎯 이번 강의에서 배울 내용</h2>
+                <ul>
+                    <li>옵시디언이 다른 노트 앱과 어떻게 다른지 본질적으로 이해하기</li>
+                    <li>로컬 파일 시스템 기반의 장점과 데이터 소유권의 중요성 파악하기</li>
+                    <li>윈도우, 맥, 리눅스 환경별 최적화된 설치 과정 완벽 마스터</li>
+                    <li>첫 실행 시 놓치기 쉬운 핵심 설정들을 체계적으로 구성하기</li>
+                    <li>앞으로의 학습 여정을 위한 확실한 기초 다지기</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>📖 들어가며: 당신의 지식은 안전한가요?</h2>
+                <p>
+                    2023년, 구글이 갑작스럽게 Google Keep의 일부 기능을 중단했을 때, 수많은 사용자들이 자신의 노트를 잃을 뻔했습니다. 
+                    2022년에는 Notion이 몇 시간 동안 다운되면서 전 세계 수백만 사용자들이 자신의 업무 문서에 접근할 수 없었죠. 
+                    이런 일들이 반복되면서 우리는 깨달았습니다. <strong>우리의 지식과 생각은 정말로 '우리의 것'일까요?</strong>
+                </p>
+                
+                <div class="important">
+                    <p>
+                        <strong>핵심 질문:</strong> 만약 내일 당신이 사용하는 노트 서비스가 사라진다면, 
+                        당신의 모든 노트, 아이디어, 연구 자료를 온전히 되찾을 수 있습니까?
+                    </p>
+                </div>
+
+                <p>
+                    옵시디언은 이 근본적인 문제에 대한 해답입니다. 단순한 노트 앱이 아닌, 
+                    <strong>당신의 지식에 대한 완전한 소유권과 통제권을 보장하는 도구</strong>입니다.
+                </p>
+            </section>
+
+            <section>
+                <h2>🧠 옵시디언의 철학: 당신의 뇌를 확장하는 도구</h2>
+                
+                <h3>1. 로컬 우선(Local-First) 원칙</h3>
+                <p>
+                    옵시디언의 가장 혁명적인 특징은 모든 데이터가 <strong>당신의 컴퓨터에 평범한 마크다운 파일로 저장</strong>된다는 것입니다.
+                </p>
+                
+                <div class="obsidian-mock-ui">
+                    <div class="mock-titlebar">
+                        <div class="window-controls">
+                            <span class="window-control close"></span>
+                            <span class="window-control minimize"></span>
+                            <span class="window-control maximize"></span>
+                        </div>
+                        <span>Obsidian - My Knowledge Vault</span>
+                    </div>
+                    <div class="mock-content">
+                        <div style="display: flex; height: 400px;">
+                            <div style="width: 200px; background-color: #262626; padding: 20px; border-right: 1px solid #3d3d3d;">
+                                <h4 style="color: #a78bfa; margin-bottom: 15px;">📁 파일 탐색기</h4>
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 5px 0;">📂 Daily Notes</li>
+                                    <li style="padding: 5px 0;">📂 Projects</li>
+                                    <li style="padding: 5px 0;">📂 Areas</li>
+                                    <li style="padding: 5px 0;">📂 Resources</li>
+                                    <li style="padding: 5px 0;">📂 Archive</li>
+                                </ul>
+                            </div>
+                            <div style="flex: 1; padding: 30px;">
+                                <h3 style="color: #e0e0e0; margin-bottom: 20px;">Welcome.md</h3>
+                                <p style="color: #b0b0b0; line-height: 1.8;">
+                                    # 내 지식 금고에 오신 것을 환영합니다<br><br>
+                                    이곳은 당신의 모든 생각, 아이디어, 지식이 <br>
+                                    안전하게 보관되고 자유롭게 연결되는 공간입니다.<br><br>
+                                    [[시작하기]] | [[기본 설정]] | [[첫 번째 노트]]
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <p>
+                        <strong>실제 파일 시스템:</strong> 옵시디언에서 만든 모든 노트는 `.md` 확장자를 가진 일반 텍스트 파일입니다. 
+                        메모장, VS Code, 또는 어떤 텍스트 에디터로도 열 수 있죠. 이는 100년 후에도 당신의 노트를 읽을 수 있다는 의미입니다.
+                    </p>
+                </div>
+
+                <h3>2. 연결된 사고(Connected Thinking)</h3>
+                <p>
+                    우리의 뇌는 선형적으로 작동하지 않습니다. 하나의 생각은 다른 생각으로 이어지고, 
+                    그 연결고리들이 모여 통찰을 만들어냅니다. 옵시디언은 이런 사고 과정을 그대로 디지털화합니다.
+                </p>
+
+                <div class="ascii-diagram">
+<pre>
+        [아이디어 A]
+       /     |     \
+      /      |      \
+[개념 1]  [개념 2]  [개념 3]
+    |   \    |    /    |
+    |    \   |   /     |
+[노트 X]  [통찰]   [노트 Y]
+             |
+        [새로운 발견]
+</pre>
+                </div>
+
+                <h3>3. 미래 보장(Future-Proof)</h3>
+                <ul>
+                    <li><strong>표준 포맷:</strong> 마크다운은 수십 년 동안 사용되어 온 검증된 포맷</li>
+                    <li><strong>이동성:</strong> 언제든 다른 도구로 전환 가능</li>
+                    <li><strong>백업:</strong> Git, Dropbox, iCloud 등 어떤 방식으로도 백업 가능</li>
+                    <li><strong>오프라인:</strong> 인터넷 없이도 모든 기능 사용 가능</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>⚡ 옵시디언 vs 다른 노트 앱: 정직한 비교</h2>
+                
+                <div class="comparison-table" style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                        <thead>
+                            <tr style="background-color: #2d2d2d;">
+                                <th style="padding: 15px; text-align: left; border: 1px solid #3d3d3d;">특징</th>
+                                <th style="padding: 15px; text-align: center; border: 1px solid #3d3d3d;">옵시디언</th>
+                                <th style="padding: 15px; text-align: center; border: 1px solid #3d3d3d;">Notion</th>
+                                <th style="padding: 15px; text-align: center; border: 1px solid #3d3d3d;">Roam Research</th>
+                                <th style="padding: 15px; text-align: center; border: 1px solid #3d3d3d;">OneNote</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d;">데이터 소유권</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 100% 로컬</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #f87171;">❌ 클라우드 종속</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #f87171;">❌ 클라우드 종속</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #fb923c;">⚠️ 제한적</td>
+                            </tr>
+                            <tr style="background-color: #262626;">
+                                <td style="padding: 12px; border: 1px solid #3d3d3d;">오프라인 사용</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 완벽 지원</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #fb923c;">⚠️ 제한적</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #f87171;">❌ 불가능</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 가능</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d;">양방향 링크</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 네이티브</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #fb923c;">⚠️ 기본적</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 핵심 기능</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #f87171;">❌ 없음</td>
+                            </tr>
+                            <tr style="background-color: #262626;">
+                                <td style="padding: 12px; border: 1px solid #3d3d3d;">속도</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 매우 빠름</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #fb923c;">⚠️ 보통</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #fb923c;">⚠️ 느림</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 빠름</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d;">확장성</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 1000+ 플러그인</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #fb923c;">⚠️ 제한적</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #fb923c;">⚠️ 제한적</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #f87171;">❌ 거의 없음</td>
+                            </tr>
+                            <tr style="background-color: #262626;">
+                                <td style="padding: 12px; border: 1px solid #3d3d3d;">가격</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 무료</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #fb923c;">⚠️ 프리미엄</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #f87171;">❌ 비싸다</td>
+                                <td style="padding: 12px; border: 1px solid #3d3d3d; text-align: center; color: #4ade80;">✅ 무료</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="note">
+                    <p>
+                        <strong>중요:</strong> 이 비교는 각 도구가 나쁘다는 것이 아닙니다. 
+                        각자의 장점이 있죠. 하지만 <strong>지식의 영구적 보존과 자유로운 연결</strong>이 목표라면, 
+                        옵시디언이 최선의 선택입니다.
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <h2>💾 옵시디언 설치하기: 플랫폼별 완벽 가이드</h2>
+                
+                <div class="warning">
+                    <p>
+                        <strong>설치 전 체크리스트:</strong>
+                        <br>✓ 운영체제 확인 (Windows 10+, macOS 10.13+, Linux)
+                        <br>✓ 최소 200MB의 여유 공간
+                        <br>✓ 관리자 권한 (기업 환경의 경우)
+                    </p>
+                </div>
+
+                <h3>🪟 Windows 설치 가이드</h3>
+                
+                <div class="step-by-step">
+                    <h4>Step 1: 다운로드</h4>
+                    <ol>
+                        <li>공식 웹사이트 방문: <code>https://obsidian.md/download</code></li>
+                        <li>Windows 버전 다운로드 버튼 클릭</li>
+                        <li>파일명: <code>Obsidian-1.x.x.exe</code> (버전은 달라질 수 있음)</li>
+                    </ol>
+
+                    <div class="screenshot-placeholder">
+                        <div class="placeholder-content">
+                            <i class="fas fa-download"></i>
+                            <p>Windows 다운로드 페이지</p>
+                            <small>큰 보라색 "Download for Windows" 버튼이 보입니다</small>
+                        </div>
+                    </div>
+
+                    <h4>Step 2: 설치 과정</h4>
+                    <ol>
+                        <li>다운로드한 <code>.exe</code> 파일 실행</li>
+                        <li>Windows Defender 경고창이 뜨면 "추가 정보" → "실행" 클릭</li>
+                        <li>설치 경로 선택 (기본값 권장: <code>C:\Users\[사용자명]\AppData\Local\Obsidian</code>)</li>
+                        <li>바탕화면 바로가기 생성 옵션 체크</li>
+                        <li>설치 완료 후 자동 실행</li>
+                    </ol>
+
+                    <div class="tip">
+                        <p>
+                            <strong>Pro Tip:</strong> 포터블 버전을 원한다면 <code>.zip</code> 파일을 다운로드하여 
+                            USB나 클라우드 드라이브에서 실행할 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+
+                <h3>🍎 macOS 설치 가이드</h3>
+                
+                <div class="step-by-step">
+                    <h4>Step 1: 다운로드 및 설치</h4>
+                    <ol>
+                        <li>공식 웹사이트에서 macOS 버전 다운로드</li>
+                        <li><code>Obsidian-1.x.x-universal.dmg</code> 파일 실행</li>
+                        <li>Obsidian 아이콘을 Applications 폴더로 드래그</li>
+                        <li>첫 실행 시 "개발자를 확인할 수 없습니다" 경고 해결:
+                            <ul>
+                                <li>시스템 환경설정 → 보안 및 개인정보 보호</li>
+                                <li>"확인 없이 열기" 클릭</li>
+                                <li>또는 Finder에서 우클릭 → 열기</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <div class="code-header">
+                        <span class="code-language">Terminal</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># Homebrew를 사용한 설치 (선택사항)
+brew install --cask obsidian
+
+# 설치 확인
+ls /Applications | grep Obsidian</code></pre>
+                </div>
+
+                <h3>🐧 Linux 설치 가이드</h3>
+                
+                <div class="step-by-step">
+                    <h4>AppImage 방식 (권장)</h4>
+                    <div class="code-header">
+                        <span class="code-language">Bash</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># 다운로드 디렉토리로 이동
+cd ~/Downloads
+
+# AppImage 다운로드 (버전은 최신으로 변경)
+wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.x.x/Obsidian-1.x.x.AppImage
+
+# 실행 권한 부여
+chmod +x Obsidian-1.x.x.AppImage
+
+# 애플리케이션 디렉토리로 이동
+mv Obsidian-1.x.x.AppImage ~/Applications/
+
+# 실행
+~/Applications/Obsidian-1.x.x.AppImage</code></pre>
+
+                    <h4>Snap 패키지 방식</h4>
+                    <div class="code-header">
+                        <span class="code-language">Bash</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># Snap으로 설치
+sudo snap install obsidian --classic
+
+# 실행
+obsidian</code></pre>
+
+                    <h4>Flatpak 방식</h4>
+                    <div class="code-header">
+                        <span class="code-language">Bash</span>
+                        <button class="copy-button">복사</button>
+                    </div>
+                    <pre><code># Flatpak 저장소 추가
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# Obsidian 설치
+flatpak install flathub md.obsidian.Obsidian
+
+# 실행
+flatpak run md.obsidian.Obsidian</code></pre>
+                </div>
+
+                <div class="important">
+                    <p>
+                        <strong>설치 후 확인사항:</strong>
+                        <br>• 프로그램이 정상적으로 실행되는지
+                        <br>• 파일 시스템 접근 권한이 있는지
+                        <br>• 한글 입력이 제대로 되는지 (Linux의 경우 ibus/fcitx 설정 필요)
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <h2>🚀 첫 실행: 중요한 첫 단계들</h2>
+                
+                <h3>1. 언어 설정</h3>
+                <p>
+                    옵시디언을 처음 실행하면 영어로 표시됩니다. 한국어로 변경하는 방법:
+                </p>
+                
+                <div class="obsidian-mock-ui">
+                    <div class="mock-titlebar">
+                        <div class="window-controls">
+                            <span class="window-control close"></span>
+                            <span class="window-control minimize"></span>
+                            <span class="window-control maximize"></span>
+                        </div>
+                        <span>Obsidian - Settings</span>
+                    </div>
+                    <div class="mock-content">
+                        <div style="display: flex; height: 300px;">
+                            <div style="width: 200px; background-color: #262626; padding: 20px;">
+                                <ul style="list-style: none; padding: 0;">
+                                    <li style="padding: 8px; background-color: #7c3aed; border-radius: 4px; margin-bottom: 5px;">General</li>
+                                    <li style="padding: 8px;">Editor</li>
+                                    <li style="padding: 8px;">Files & Links</li>
+                                    <li style="padding: 8px;">Appearance</li>
+                                    <li style="padding: 8px;">Hotkeys</li>
+                                </ul>
+                            </div>
+                            <div style="flex: 1; padding: 30px;">
+                                <h3 style="color: #e0e0e0; margin-bottom: 20px;">General Settings</h3>
+                                <div style="margin-bottom: 20px;">
+                                    <label style="color: #b0b0b0;">Language</label>
+                                    <select style="width: 100%; padding: 8px; margin-top: 5px; background-color: #1e1e1e; color: #e0e0e0; border: 1px solid #3d3d3d; border-radius: 4px;">
+                                        <option>English</option>
+                                        <option selected>한국어</option>
+                                        <option>日本語</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ol>
+                    <li>좌측 하단의 설정(Settings) 아이콘 클릭 또는 <kbd>Ctrl/Cmd + ,</kbd></li>
+                    <li>General 탭에서 Language 드롭다운 메뉴 클릭</li>
+                    <li>"한국어" 선택</li>
+                    <li>자동으로 인터페이스가 한국어로 변경됨</li>
+                </ol>
+
+                <h3>2. 첫 번째 보관함(Vault) 만들기</h3>
+                
+                <div class="important">
+                    <p>
+                        <strong>보관함(Vault)이란?</strong> 옵시디언에서 보관함은 당신의 모든 노트가 저장되는 
+                        폴더입니다. 하나의 프로젝트, 하나의 주제, 또는 당신의 전체 지식을 담는 공간이죠.
+                    </p>
+                </div>
+
+                <h4>보관함 생성 과정:</h4>
+                <ol>
+                    <li>
+                        <strong>새 보관함 만들기</strong> 클릭
+                        <ul>
+                            <li>의미 있는 이름 선택 (예: "나의 지식 정원", "SecondBrain", "PKM")</li>
+                            <li>한글 이름도 완벽히 지원됩니다</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>저장 위치 선택</strong>
+                        <ul>
+                            <li><strong>권장:</strong> 문서 폴더 내 전용 디렉토리</li>
+                            <li><strong>클라우드 동기화:</strong> Dropbox, Google Drive, iCloud Drive 폴더도 가능</li>
+                            <li><strong>피해야 할 위치:</strong> 시스템 폴더, 프로그램 파일 폴더</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>생성 완료</strong>
+                        <ul>
+                            <li>빈 보관함이 열리며 환영 메시지가 표시됩니다</li>
+                            <li>좌측에 파일 탐색기 패널이 나타납니다</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <div class="tip">
+                    <p>
+                        <strong>폴더 구조 추천:</strong>
+                        <br><code>문서/Obsidian/나의지식정원/</code>
+                        <br>또는
+                        <br><code>Dropbox/Obsidian/SecondBrain/</code>
+                    </p>
+                </div>
+
+                <h3>3. 핵심 초기 설정</h3>
+                
+                <h4>필수 설정 체크리스트:</h4>
+                <ul class="checklist">
+                    <li><input type="checkbox"> <strong>안전한 모드 해제:</strong> 커뮤니티 플러그인 사용을 위해 필요</li>
+                    <li><input type="checkbox"> <strong>파일 복구 활성화:</strong> 설정 → 파일 및 링크 → 삭제된 파일 → 휴지통으로 이동</li>
+                    <li><input type="checkbox"> <strong>자동 저장:</strong> 에디터 → 자동 저장 간격 → 2분 (기본값)</li>
+                    <li><input type="checkbox"> <strong>맞춤법 검사:</strong> 에디터 → 맞춤법 검사 → 활성화</li>
+                    <li><input type="checkbox"> <strong>읽기 쉬운 줄 길이:</strong> 에디터 → 읽기 쉬운 줄 길이 → 활성화</li>
+                </ul>
+
+                <h4>테마 선택하기:</h4>
+                <p>
+                    옵시디언은 밝은 테마와 어두운 테마를 제공합니다. 장시간 사용을 고려하면 어두운 테마를 권장합니다.
+                </p>
+                
+                <ol>
+                    <li>설정 → 모양 → 기본 테마</li>
+                    <li>어둡게 또는 밝게 선택</li>
+                    <li>커뮤니티 테마 둘러보기 (나중에 다룰 예정)</li>
+                </ol>
+            </section>
+
+            <section>
+                <h2>🎯 첫 번째 노트 작성하기</h2>
+                
+                <p>
+                    이제 모든 준비가 끝났습니다. 첫 번째 노트를 만들어봅시다!
+                </p>
+
+                <div class="obsidian-mock-ui">
+                    <div class="mock-titlebar">
+                        <div class="window-controls">
+                            <span class="window-control close"></span>
+                            <span class="window-control minimize"></span>
+                            <span class="window-control maximize"></span>
+                        </div>
+                        <span>Obsidian - 나의 첫 번째 노트.md</span>
+                    </div>
+                    <div class="mock-content">
+                        <div style="padding: 30px;">
+                            <div style="margin-bottom: 20px;">
+                                <code style="color: #7c3aed; font-size: 1.2rem;"># 나의 첫 번째 노트</code>
+                            </div>
+                            <div style="color: #b0b0b0; line-height: 2;">
+                                <p>오늘부터 나의 두 번째 뇌가 시작됩니다.</p>
+                                <p>&nbsp;</p>
+                                <p>## 오늘 배운 것</p>
+                                <p>- 옵시디언은 내 컴퓨터에 모든 것을 저장한다</p>
+                                <p>- 마크다운 형식으로 작성하면 영원히 읽을 수 있다</p>
+                                <p>- [[링크]]를 통해 생각을 연결할 수 있다</p>
+                                <p>&nbsp;</p>
+                                <p>## 다음에 해볼 것</p>
+                                <p>- [ ] 폴더 구조 만들기</p>
+                                <p>- [ ] 일일 노트 설정하기</p>
+                                <p>- [ ] 첫 번째 MOC(Map of Content) 만들기</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>노트 생성 방법:</h3>
+                <ol>
+                    <li><kbd>Ctrl/Cmd + N</kbd> 또는 좌측 패널의 "새 노트" 버튼 클릭</li>
+                    <li>제목 입력 (자동으로 파일명이 됩니다)</li>
+                    <li>내용 작성 시작</li>
+                    <li>저장은 자동으로 이루어집니다!</li>
+                </ol>
+
+                <div class="practice">
+                    <h3>✏️ 실습: 당신의 첫 노트</h3>
+                    <p>다음 내용을 포함한 첫 번째 노트를 작성해보세요:</p>
+                    <ul>
+                        <li>오늘 날짜와 당신의 목표</li>
+                        <li>옵시디언을 시작한 이유</li>
+                        <li>앞으로 정리하고 싶은 주제 3가지</li>
+                        <li>이 강의에서 가장 인상 깊었던 점</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>⚠️ 흔한 실수와 해결책</h2>
+                
+                <div class="warning">
+                    <h3>1. 보관함을 클라우드 루트에 만들기</h3>
+                    <p>
+                        <strong>문제:</strong> Google Drive나 Dropbox 최상위 폴더에 직접 보관함 생성
+                        <br><strong>해결:</strong> 전용 하위 폴더를 만들어 사용 (예: <code>Dropbox/Obsidian/MyVault</code>)
+                    </p>
+                </div>
+
+                <div class="warning">
+                    <h3>2. 파일명에 특수문자 사용</h3>
+                    <p>
+                        <strong>문제:</strong> <code>/ \ : * ? " < > |</code> 등의 문자는 파일명에 사용 불가
+                        <br><strong>해결:</strong> 대시(-), 언더스코어(_), 또는 공백 사용
+                    </p>
+                </div>
+
+                <div class="warning">
+                    <h3>3. 백업 없이 시작하기</h3>
+                    <p>
+                        <strong>문제:</strong> 실수로 파일을 삭제하거나 덮어쓸 수 있음
+                        <br><strong>해결:</strong> Git, 클라우드 동기화, 또는 수동 백업 설정
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <h2>🎓 핵심 요약</h2>
+                
+                <div class="summary-box" style="background-color: #2d2d2d; padding: 30px; border-radius: 12px; border-left: 4px solid #7c3aed;">
+                    <h3 style="margin-top: 0; color: #a78bfa;">이번 강의에서 배운 것:</h3>
+                    <ul>
+                        <li>✅ 옵시디언은 당신의 데이터를 당신이 완전히 소유하는 유일한 노트 앱</li>
+                        <li>✅ 모든 노트는 평범한 마크다운 파일로 저장되어 영구적으로 접근 가능</li>
+                        <li>✅ Windows, macOS, Linux 모두에서 동일하게 작동</li>
+                        <li>✅ 보관함(Vault)은 당신의 지식이 저장되는 폴더</li>
+                        <li>✅ 첫 설정에서 안전한 모드 해제와 기본 설정이 중요</li>
+                    </ul>
+                    
+                    <h3 style="color: #a78bfa; margin-top: 25px;">다음 강의 예고:</h3>
+                    <p>
+                        <strong>제2강: 볼트(Vault)의 이해</strong>에서는 효과적인 폴더 구조 설계, 
+                        다중 보관함 관리, 그리고 당신만의 지식 체계를 구축하는 방법을 깊이 있게 다룹니다.
+                    </p>
+                </div>
+            </section>
+
+            <section class="practice">
+                <h2>📝 과제</h2>
+                <p>다음 강의 전까지 완료해주세요:</p>
+                <ol>
+                    <li>옵시디언 설치 및 한국어 설정 완료</li>
+                    <li>의미 있는 이름의 보관함 생성</li>
+                    <li>최소 3개의 노트 작성하기:
+                        <ul>
+                            <li>"나의 목표" 노트</li>
+                            <li>"오늘 배운 것" 노트</li>
+                            <li>"궁금한 점" 노트</li>
+                        </ul>
+                    </li>
+                    <li>각 노트를 <code>[[이중 대괄호]]</code>로 연결해보기</li>
+                </ol>
+
+                <div class="tip">
+                    <p>
+                        <strong>💡 보너스 과제:</strong> 설정에서 "그래프 뷰"를 열어보세요. 
+                        아직은 단순하지만, 앞으로 당신의 지식이 어떻게 연결될지 미리 볼 수 있습니다!
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <nav class="lesson-nav">
+            <a href="../index.html" class="nav-index">
+                <i class="fas fa-home"></i> 목차로 돌아가기
+            </a>
+            <a href="lesson02.html" class="nav-next">
+                다음 강의: 볼트(Vault)의 이해 <i class="fas fa-arrow-right"></i>
+            </a>
+        </nav>
+
+        <footer class="lesson-footer" style="text-align: center; padding: 40px 0; color: #808080;">
+            <p>🧠 옵시디언 마스터 클래스 | 제1강: 옵시디언 첫걸음</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">피드백이나 질문이 있다면 GitHub Issues에 남겨주세요.</p>
+        </footer>
+    </div>
+
+    <script>
+        // 코드 복사 기능
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const codeBlock = button.closest('.code-header').nextElementSibling.querySelector('code');
+                navigator.clipboard.writeText(codeBlock.textContent);
+                button.textContent = '복사됨!';
+                setTimeout(() => {
+                    button.textContent = '복사';
+                }, 2000);
+            });
+        });
+
+        // 체크리스트 상호작용
+        document.querySelectorAll('.checklist input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const allChecked = document.querySelectorAll('.checklist input[type="checkbox"]:checked').length;
+                const total = document.querySelectorAll('.checklist input[type="checkbox"]').length;
+                if (allChecked === total) {
+                    alert('🎉 모든 설정을 완료했습니다! 다음 단계로 진행하세요.');
+                }
+            });
+        });
+
+        // 페이지 진행률 표시
+        let progressBar = document.createElement('div');
+        progressBar.className = 'progress-indicator';
+        progressBar.innerHTML = '<div class="progress-bar"></div>';
+        document.body.appendChild(progressBar);
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.progress-bar').style.width = scrolled + '%';
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

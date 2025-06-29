@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 20: 플러그인 생태계 탐험 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header intermediate">
+                <h3>중급 과정</h3>
+                <p>파워 유저 되기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson11.html">Lesson 11: 핵심 플러그인 마스터하기</a></li>
+                <li><a href="lesson12.html">Lesson 12: 일일 노트와 정기 노트</a></li>
+                <li><a href="lesson13.html">Lesson 13: 데이터뷰 플러그인 활용</a></li>
+                <li><a href="lesson14.html">Lesson 14: 템플레이터 고급 기능</a></li>
+                <li><a href="lesson15.html">Lesson 15: 캔버스로 시각적 사고</a></li>
+                <li><a href="lesson16.html">Lesson 16: 아웃라이너와 계층 구조</a></li>
+                <li><a href="lesson17.html">Lesson 17: 작업 관리 시스템 구축</a></li>
+                <li><a href="lesson18.html">Lesson 18: 북마크와 즐겨찾기 활용</a></li>
+                <li><a href="lesson19.html">Lesson 19: 모바일 앱 활용</a></li>
+                <li class="active"><a href="lesson20.html">Lesson 20: 플러그인 생태계 탐험</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header intermediate">
+                <h1>Lesson 20: 플러그인 생태계 탐험</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 60분</span>
+                    <span><i class="fas fa-signal"></i> 중급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>Obsidian 플러그인 생태계의 전체 구조 이해</li>
+                    <li>카테고리별 필수 플러그인 탐색</li>
+                    <li>플러그인 선택과 관리 전략</li>
+                    <li>커뮤니티 참여와 기여 방법</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. 플러그인 생태계 개요</h2>
+                
+                <div class="ecosystem-overview">
+                    <h3>Obsidian 플러그인의 세계</h3>
+                    <p>1000개 이상의 커뮤니티 플러그인이 Obsidian의 기능을 무한히 확장합니다.</p>
+                    
+                    <div class="ecosystem-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-puzzle-piece"></i>
+                            <h4>1000+</h4>
+                            <p>커뮤니티 플러그인</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <h4>500+</h4>
+                            <p>활발한 개발자</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-download"></i>
+                            <h4>10M+</h4>
+                            <p>총 다운로드</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-code-branch"></i>
+                            <h4>매일</h4>
+                            <p>새로운 업데이트</p>
+                        </div>
+                    </div>
+
+                    <div class="plugin-categories">
+                        <h3>주요 카테고리</h3>
+                        <div class="category-grid">
+                            <div class="category">
+                                <i class="fas fa-edit"></i>
+                                <h4>편집 도구</h4>
+                                <p>글쓰기와 편집 향상</p>
+                            </div>
+                            <div class="category">
+                                <i class="fas fa-tasks"></i>
+                                <h4>작업 관리</h4>
+                                <p>GTD와 프로젝트 관리</p>
+                            </div>
+                            <div class="category">
+                                <i class="fas fa-chart-bar"></i>
+                                <h4>시각화</h4>
+                                <p>그래프와 차트</p>
+                            </div>
+                            <div class="category">
+                                <i class="fas fa-sync"></i>
+                                <h4>통합</h4>
+                                <p>외부 서비스 연동</p>
+                            </div>
+                            <div class="category">
+                                <i class="fas fa-palette"></i>
+                                <h4>UI/UX</h4>
+                                <p>인터페이스 개선</p>
+                            </div>
+                            <div class="category">
+                                <i class="fas fa-robot"></i>
+                                <h4>자동화</h4>
+                                <p>워크플로우 자동화</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 카테고리별 필수 플러그인</h2>
+                
+                <div class="essential-plugins">
+                    <h3>📝 편집 향상 플러그인</h3>
+                    
+                    <div class="plugin-showcase">
+                        <div class="plugin-card">
+                            <h4>Editor Syntax Highlight</h4>
+                            <div class="plugin-info">
+                                <p>코드 블록에 구문 강조 표시</p>
+                                <div class="plugin-features">
+                                    <span class="feature">구문 강조</span>
+                                    <span class="feature">다중 언어</span>
+                                    <span class="feature">테마 지원</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="plugin-card">
+                            <h4>Advanced Tables</h4>
+                            <div class="plugin-info">
+                                <p>표 편집을 쉽고 빠르게</p>
+                                <div class="plugin-features">
+                                    <span class="feature">자동 정렬</span>
+                                    <span class="feature">탭 이동</span>
+                                    <span class="feature">Excel 가져오기</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="plugin-card">
+                            <h4>Natural Language Dates</h4>
+                            <div class="plugin-info">
+                                <p>자연어로 날짜 입력</p>
+                                <div class="code-example">
+                                    <pre><code>@today → 2024-01-15
+@tomorrow → 2024-01-16
+@next Monday → 2024-01-22
+@in 3 days → 2024-01-18</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>📊 데이터 시각화</h3>
+                    
+                    <div class="plugin-showcase">
+                        <div class="plugin-card">
+                            <h4>Obsidian Charts</h4>
+                            <div class="plugin-info">
+                                <p>Chart.js 기반 차트 생성</p>
+                                <div class="code-example">
+                                    <pre><code class="language-chart">```chart
+type: bar
+labels: [월, 화, 수, 목, 금]
+series:
+  - title: 작업 완료
+    data: [5, 8, 12, 7, 10]
+  - title: 새 작업
+    data: [3, 5, 8, 4, 6]
+```</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="plugin-card">
+                            <h4>Excalidraw</h4>
+                            <div class="plugin-info">
+                                <p>손그림 스타일 다이어그램</p>
+                                <div class="plugin-features">
+                                    <span class="feature">드로잉</span>
+                                    <span class="feature">다이어그램</span>
+                                    <span class="feature">협업</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="plugin-card">
+                            <h4>Mind Map</h4>
+                            <div class="plugin-info">
+                                <p>마크다운을 마인드맵으로</p>
+                                <div class="plugin-features">
+                                    <span class="feature">자동 변환</span>
+                                    <span class="feature">대화형</span>
+                                    <span class="feature">내보내기</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>🤖 자동화와 통합</h3>
+                    
+                    <div class="plugin-showcase">
+                        <div class="plugin-card">
+                            <h4>QuickAdd</h4>
+                            <div class="plugin-info">
+                                <p>강력한 매크로와 템플릿</p>
+                                <ul>
+                                    <li>복잡한 워크플로우 자동화</li>
+                                    <li>사용자 입력 처리</li>
+                                    <li>JavaScript 매크로</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="plugin-card">
+                            <h4>Obsidian Git</h4>
+                            <div class="plugin-info">
+                                <p>Git으로 버전 관리</p>
+                                <div class="plugin-features">
+                                    <span class="feature">자동 백업</span>
+                                    <span class="feature">버전 기록</span>
+                                    <span class="feature">협업</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="plugin-card">
+                            <h4>Readwise Official</h4>
+                            <div class="plugin-info">
+                                <p>Readwise 하이라이트 동기화</p>
+                                <div class="plugin-features">
+                                    <span class="feature">자동 동기화</span>
+                                    <span class="feature">태그 매핑</span>
+                                    <span class="feature">템플릿</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 숨은 보석 플러그인</h2>
+                
+                <div class="hidden-gems">
+                    <h3>덜 알려졌지만 강력한 플러그인들</h3>
+                    
+                    <div class="gem-plugins">
+                        <div class="gem-plugin">
+                            <h4>🎨 Style Settings</h4>
+                            <p>테마를 세밀하게 커스터마이징</p>
+                            <ul>
+                                <li>색상 스키마 조정</li>
+                                <li>폰트 설정</li>
+                                <li>레이아웃 커스터마이징</li>
+                                <li>테마별 설정 저장</li>
+                            </ul>
+                        </div>
+
+                        <div class="gem-plugin">
+                            <h4>🔍 Another Quick Switcher</h4>
+                            <p>향상된 파일 검색과 전환</p>
+                            <ul>
+                                <li>헤딩으로 이동</li>
+                                <li>백링크 검색</li>
+                                <li>정규식 지원</li>
+                                <li>최근 파일 우선</li>
+                            </ul>
+                        </div>
+
+                        <div class="gem-plugin">
+                            <h4>📐 Longform</h4>
+                            <p>장편 글쓰기 프로젝트 관리</p>
+                            <ul>
+                                <li>챕터 구성</li>
+                                <li>씬 관리</li>
+                                <li>컴파일 기능</li>
+                                <li>메타데이터 추적</li>
+                            </ul>
+                        </div>
+
+                        <div class="gem-plugin">
+                            <h4>🎯 Focus Mode</h4>
+                            <p>집중력 향상을 위한 인터페이스</p>
+                            <ul>
+                                <li>방해 요소 제거</li>
+                                <li>타자기 스크롤</li>
+                                <li>라인 하이라이트</li>
+                                <li>Zen 모드</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 플러그인 관리 전략</h2>
+                
+                <div class="management-strategy">
+                    <h3>효과적인 플러그인 관리</h3>
+                    
+                    <div class="strategy-principles">
+                        <div class="principle">
+                            <h4>🎯 목적 중심 선택</h4>
+                            <p>실제 필요에 기반한 플러그인 선택</p>
+                            <ul>
+                                <li>문제 정의 먼저</li>
+                                <li>기존 기능 확인</li>
+                                <li>대안 비교</li>
+                                <li>테스트 후 채택</li>
+                            </ul>
+                        </div>
+
+                        <div class="principle">
+                            <h4>⚡ 성능 고려</h4>
+                            <p>시스템 성능 유지</p>
+                            <ul>
+                                <li>플러그인 수 제한 (20-30개)</li>
+                                <li>무거운 플러그인 주의</li>
+                                <li>정기적 정리</li>
+                                <li>성능 모니터링</li>
+                            </ul>
+                        </div>
+
+                        <div class="principle">
+                            <h4>🔄 정기적 검토</h4>
+                            <p>플러그인 포트폴리오 최적화</p>
+                            <ul>
+                                <li>월간 사용률 체크</li>
+                                <li>업데이트 확인</li>
+                                <li>중복 기능 제거</li>
+                                <li>새로운 대안 탐색</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="plugin-audit">
+                        <h3>플러그인 감사 체크리스트</h3>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 플러그인 감사 - {{date:YYYY-MM}}
+
+## 현재 활성 플러그인
+| 플러그인 | 용도 | 사용 빈도 | 유지 여부 |
+|---------|------|-----------|-----------|
+| Dataview | 동적 쿼리 | 매일 | ✅ |
+| Templater | 템플릿 | 매일 | ✅ |
+| ... | ... | ... | ... |
+
+## 성능 영향
+- 시작 시간: _초
+- 메모리 사용: _MB
+- 문제 플러그인: 
+
+## 새로 시도할 플러그인
+- [ ] 
+- [ ] 
+
+## 제거할 플러그인
+- [ ] 
+
+## 업데이트 필요
+- [ ] </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 플러그인 개발 입문</h2>
+                
+                <div class="plugin-development">
+                    <h3>나만의 플러그인 만들기</h3>
+                    
+                    <div class="dev-basics">
+                        <h4>개발 환경 설정</h4>
+                        <ol>
+                            <li>Node.js 설치</li>
+                            <li>TypeScript 설정</li>
+                            <li>Obsidian API 문서 참조</li>
+                            <li>샘플 플러그인 복제</li>
+                        </ol>
+
+                        <h4>기본 플러그인 구조</h4>
+                        <div class="code-example">
+                            <pre><code class="language-typescript">import { Plugin } from 'obsidian';
+
+export default class MyPlugin extends Plugin {
+    async onload() {
+        console.log('플러그인 로드됨');
+        
+        // 명령 추가
+        this.addCommand({
+            id: 'my-command',
+            name: '내 명령 실행',
+            callback: () => {
+                console.log('명령 실행됨!');
+            }
+        });
+        
+        // 리본 아이콘 추가
+        this.addRibbonIcon('dice', '내 플러그인', () => {
+            console.log('아이콘 클릭됨!');
+        });
+    }
+    
+    onunload() {
+        console.log('플러그인 언로드됨');
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="plugin-ideas">
+                        <h4>플러그인 아이디어</h4>
+                        <ul>
+                            <li>개인 워크플로우 자동화</li>
+                            <li>외부 API 통합</li>
+                            <li>커스텀 UI 컴포넌트</li>
+                            <li>특수 포맷 파서</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 커뮤니티 참여</h2>
+                
+                <div class="community-engagement">
+                    <h3>Obsidian 커뮤니티 활동</h3>
+                    
+                    <div class="community-channels">
+                        <div class="channel">
+                            <h4>💬 Discord</h4>
+                            <p>가장 활발한 커뮤니티</p>
+                            <ul>
+                                <li>실시간 도움</li>
+                                <li>플러그인 발표</li>
+                                <li>워크플로우 공유</li>
+                                <li>개발자 채널</li>
+                            </ul>
+                        </div>
+
+                        <div class="channel">
+                            <h4>📝 Forum</h4>
+                            <p>깊이 있는 토론</p>
+                            <ul>
+                                <li>기능 요청</li>
+                                <li>버그 리포트</li>
+                                <li>튜토리얼</li>
+                                <li>쇼케이스</li>
+                            </ul>
+                        </div>
+
+                        <div class="channel">
+                            <h4>🐙 GitHub</h4>
+                            <p>오픈소스 기여</p>
+                            <ul>
+                                <li>이슈 제기</li>
+                                <li>PR 제출</li>
+                                <li>플러그인 개발</li>
+                                <li>문서 개선</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="contribution-guide">
+                        <h3>기여 방법</h3>
+                        <ol>
+                            <li><strong>버그 리포트:</strong> 재현 가능한 단계와 함께 상세히 보고</li>
+                            <li><strong>기능 제안:</strong> 사용 사례와 함께 구체적으로 제안</li>
+                            <li><strong>번역:</strong> 플러그인과 문서 현지화</li>
+                            <li><strong>코드 기여:</strong> 플러그인 개발이나 개선</li>
+                            <li><strong>지식 공유:</strong> 튜토리얼, 가이드, 워크플로우 작성</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>실습 프로젝트</h2>
+                
+                <div class="project-box">
+                    <h3>🔧 나만의 플러그인 스택 구축</h3>
+                    <p>개인 워크플로우에 최적화된 플러그인 조합을 만들어보세요.</p>
+                    
+                    <div class="project-phases">
+                        <h4>프로젝트 단계</h4>
+                        
+                        <div class="phase">
+                            <h5>Phase 1: 현재 상태 분석</h5>
+                            <ul>
+                                <li>현재 워크플로우 문서화</li>
+                                <li>병목 지점 파악</li>
+                                <li>개선 가능 영역 식별</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="phase">
+                            <h5>Phase 2: 플러그인 조사</h5>
+                            <ul>
+                                <li>카테고리별 후보 목록 작성</li>
+                                <li>리뷰와 평가 확인</li>
+                                <li>호환성 체크</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="phase">
+                            <h5>Phase 3: 테스트와 선택</h5>
+                            <ul>
+                                <li>테스트 볼트에서 시험</li>
+                                <li>성능 영향 측정</li>
+                                <li>최종 선택</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="phase">
+                            <h5>Phase 4: 통합과 최적화</h5>
+                            <ul>
+                                <li>플러그인 간 시너지 창출</li>
+                                <li>설정 최적화</li>
+                                <li>문서화</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="deliverable">
+                        <h4>최종 산출물</h4>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 🔌 My Plugin Stack
+
+## Core Workflow (5-7 plugins)
+1. **Dataview** - 동적 데이터 표시
+   - 용도: 대시보드, 작업 추적
+   - 설정: [설정 파일 링크]
+   
+2. **Templater** - 고급 템플릿
+   - 용도: 자동화, 템플릿
+   - 커스텀 함수: [함수 목록]
+
+## Enhancement (5-10 plugins)
+...
+
+## Experimental (2-3 plugins)
+...
+
+## Performance Metrics
+- Load time: _ms
+- Memory usage: _MB
+- Conflicts: None
+
+## Maintenance Schedule
+- Weekly: 플러그인 업데이트 확인
+- Monthly: 사용률 검토
+- Quarterly: 전체 감사</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>중급 과정 완료!</h2>
+                <div class="completion-message intermediate">
+                    <i class="fas fa-medal"></i>
+                    <h3>축하합니다!</h3>
+                    <p>Obsidian 중급 과정을 모두 완료하셨습니다. 이제 고급 기능을 자유롭게 활용할 수 있는 파워 유저가 되셨습니다!</p>
+                    
+                    <div class="next-steps">
+                        <h4>다음 단계</h4>
+                        <ul>
+                            <li>고급 과정으로 진행하여 전문가 수준 도달</li>
+                            <li>자신만의 워크플로우 확립과 공유</li>
+                            <li>커뮤니티 참여와 기여</li>
+                            <li>플러그인 개발 도전</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>무한한 확장성</h4>
+                            <p>플러그인으로 Obsidian을 자신만의 완벽한 도구로 변환</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>균형잡힌 선택</h4>
+                            <p>필요와 성능 사이의 최적점을 찾아 지속 가능한 시스템 구축</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>커뮤니티의 힘</h4>
+                            <p>활발한 생태계에서 학습하고 기여하며 함께 성장</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson19.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson21.html" class="next-button">
+                    고급 과정 시작 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 18: 북마크와 즐겨찾기 활용 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header intermediate">
+                <h3>중급 과정</h3>
+                <p>파워 유저 되기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson11.html">Lesson 11: 핵심 플러그인 마스터하기</a></li>
+                <li><a href="lesson12.html">Lesson 12: 일일 노트와 정기 노트</a></li>
+                <li><a href="lesson13.html">Lesson 13: 데이터뷰 플러그인 활용</a></li>
+                <li><a href="lesson14.html">Lesson 14: 템플레이터 고급 기능</a></li>
+                <li><a href="lesson15.html">Lesson 15: 캔버스로 시각적 사고</a></li>
+                <li><a href="lesson16.html">Lesson 16: 아웃라이너와 계층 구조</a></li>
+                <li><a href="lesson17.html">Lesson 17: 작업 관리 시스템 구축</a></li>
+                <li class="active"><a href="lesson18.html">Lesson 18: 북마크와 즐겨찾기 활용</a></li>
+                <li><a href="lesson19.html">Lesson 19: 모바일 앱 활용</a></li>
+                <li><a href="lesson20.html">Lesson 20: 플러그인 생태계 탐험</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header intermediate">
+                <h1>Lesson 18: 북마크와 즐겨찾기 활용</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 45분</span>
+                    <span><i class="fas fa-signal"></i> 중급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>북마크 기능의 고급 활용법</li>
+                    <li>효율적인 즐겨찾기 시스템 구축</li>
+                    <li>빠른 접근을 위한 워크플로우 최적화</li>
+                    <li>북마크와 다른 기능의 통합 활용</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. 북마크 기능 이해하기</h2>
+                
+                <div class="bookmark-basics">
+                    <h3>북마크의 진화</h3>
+                    <p>Obsidian의 북마크 기능은 기존의 Starred 플러그인을 대체하며 더 강력한 기능을 제공합니다.</p>
+                    
+                    <div class="bookmark-types">
+                        <h4>북마크 가능한 항목</h4>
+                        <div class="type-grid">
+                            <div class="type-card">
+                                <i class="fas fa-file-alt"></i>
+                                <h5>파일</h5>
+                                <p>자주 사용하는 노트</p>
+                            </div>
+                            <div class="type-card">
+                                <i class="fas fa-folder"></i>
+                                <h5>폴더</h5>
+                                <p>중요한 프로젝트 폴더</p>
+                            </div>
+                            <div class="type-card">
+                                <i class="fas fa-search"></i>
+                                <h5>검색 쿼리</h5>
+                                <p>자주 사용하는 검색</p>
+                            </div>
+                            <div class="type-card">
+                                <i class="fas fa-project-diagram"></i>
+                                <h5>그래프 뷰</h5>
+                                <p>특정 필터의 그래프</p>
+                            </div>
+                            <div class="type-card">
+                                <i class="fas fa-heading"></i>
+                                <h5>헤딩</h5>
+                                <p>특정 섹션 바로가기</p>
+                            </div>
+                            <div class="type-card">
+                                <i class="fas fa-cube"></i>
+                                <h5>블록</h5>
+                                <p>중요한 단락이나 목록</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bookmark-interface">
+                        <h3>북마크 인터페이스</h3>
+                        <div class="interface-demo">
+                            <div class="sidebar-mockup">
+                                <div class="bookmark-panel">
+                                    <div class="panel-header">
+                                        <i class="fas fa-bookmark"></i> Bookmarks
+                                    </div>
+                                    <div class="bookmark-list">
+                                        <div class="bookmark-group">
+                                            <h4>📁 Work</h4>
+                                            <ul>
+                                                <li>📄 Project Dashboard</li>
+                                                <li>🔍 Active Tasks</li>
+                                                <li>📊 Weekly Report</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bookmark-group">
+                                            <h4>📚 Learning</h4>
+                                            <ul>
+                                                <li>📄 Study Notes</li>
+                                                <li>📁 Resources</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 북마크 생성과 관리</h2>
+                
+                <div class="bookmark-management">
+                    <h3>북마크 추가 방법</h3>
+                    
+                    <div class="methods-grid">
+                        <div class="method">
+                            <h4>방법 1: 컨텍스트 메뉴</h4>
+                            <ol>
+                                <li>파일/폴더 우클릭</li>
+                                <li>"Bookmark" 선택</li>
+                                <li>그룹 선택 (선택사항)</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="method">
+                            <h4>방법 2: 명령 팔레트</h4>
+                            <ol>
+                                <li>Ctrl/Cmd + P</li>
+                                <li>"Bookmark" 검색</li>
+                                <li>원하는 항목 북마크</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="method">
+                            <h4>방법 3: 단축키</h4>
+                            <p>커스텀 단축키 설정</p>
+                            <code>Ctrl/Cmd + Shift + B</code>
+                        </div>
+                    </div>
+
+                    <h3>고급 북마크 기능</h3>
+                    
+                    <div class="advanced-features">
+                        <div class="feature-example">
+                            <h4>검색 쿼리 북마크</h4>
+                            <div class="code-example">
+                                <pre><code class="language-plaintext">// 자주 사용하는 검색 쿼리
+tag:#important -tag:#completed
+path:Projects file:2024
+"meeting notes" file:.md</code></pre>
+                            </div>
+                            <p>복잡한 검색 쿼리를 저장하여 빠르게 재사용</p>
+                        </div>
+
+                        <div class="feature-example">
+                            <h4>그래프 뷰 북마크</h4>
+                            <p>특정 필터가 적용된 그래프 뷰 상태를 저장</p>
+                            <ul>
+                                <li>특정 태그만 표시</li>
+                                <li>날짜 범위 필터</li>
+                                <li>색상 그룹 설정</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-example">
+                            <h4>블록 참조 북마크</h4>
+                            <div class="code-example">
+                                <pre><code class="language-markdown">## 중요한 정의 ^important-def
+
+이것은 자주 참조하는 중요한 정의입니다...
+
+## 다른 곳에서 참조
+[[파일명#^important-def|중요 정의 바로가기]]</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 북마크 그룹과 조직화</h2>
+                
+                <div class="bookmark-organization">
+                    <h3>효과적인 그룹 구조</h3>
+                    
+                    <div class="group-strategies">
+                        <div class="strategy">
+                            <h4>🎯 목적별 그룹화</h4>
+                            <div class="group-structure">
+                                <pre>📚 북마크
+├── 🏢 Work
+│   ├── 📊 Dashboards
+│   ├── 📋 Active Projects
+│   └── 📅 Meetings
+├── 📖 Learning
+│   ├── 📚 Courses
+│   ├── 📝 Notes
+│   └── 🔗 Resources
+├── 🏠 Personal
+│   ├── 📓 Journal
+│   ├── 🎯 Goals
+│   └── 💡 Ideas
+└── 🔧 System
+    ├── 📄 Templates
+    ├── ⚙️ Settings
+    └── 📋 Checklists</pre>
+                            </div>
+                        </div>
+
+                        <div class="strategy">
+                            <h4>⏱️ 시간 기반 그룹화</h4>
+                            <ul>
+                                <li>Today (오늘 작업)</li>
+                                <li>This Week (이번 주)</li>
+                                <li>This Month (이번 달)</li>
+                                <li>Someday (언젠가)</li>
+                            </ul>
+                        </div>
+
+                        <div class="strategy">
+                            <h4>🎨 프로젝트별 그룹화</h4>
+                            <ul>
+                                <li>각 주요 프로젝트별 그룹</li>
+                                <li>관련 문서 모음</li>
+                                <li>참고 자료 링크</li>
+                                <li>작업 대시보드</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="naming-conventions">
+                        <h3>명명 규칙과 아이콘</h3>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 북마크 이름 규칙 예시
+
+## 이모지 + 카테고리
+🏠 Home Dashboard
+📊 Sales Report 2024
+🔍 Find Unlinked Notes
+📅 Weekly Planning
+
+## 우선순위 표시
+🔴 [긴급] 프로젝트 마감
+🟡 [중요] 월간 리뷰
+🟢 [일반] 참고 문서
+
+## 상태 표시
+✅ Completed Projects
+🔄 In Progress
+⏸️ On Hold
+🗄️ Archive</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 워크플로우 통합</h2>
+                
+                <div class="workflow-integration">
+                    <h3>북마크를 활용한 효율적인 워크플로우</h3>
+                    
+                    <div class="workflow-examples">
+                        <div class="workflow-example">
+                            <h4>📅 일일 루틴</h4>
+                            <div class="routine-structure">
+                                <ol>
+                                    <li><strong>Morning Start</strong>
+                                        <ul>
+                                            <li>📄 Daily Note (북마크)</li>
+                                            <li>📊 Task Dashboard (북마크)</li>
+                                            <li>📧 Inbox Review (북마크)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Work Sessions</strong>
+                                        <ul>
+                                            <li>🎯 Current Project (북마크 그룹)</li>
+                                            <li>📚 Reference Docs (북마크)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>End of Day</strong>
+                                        <ul>
+                                            <li>✅ Review Checklist (북마크)</li>
+                                            <li>📝 Tomorrow Planning (북마크)</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="workflow-example">
+                            <h4>🔍 연구 워크플로우</h4>
+                            <div class="code-example">
+                                <pre><code class="language-markdown"># Research Hub (북마크됨)
+
+## 🔍 Quick Searches (북마크 그룹)
+- [[Unprocessed Sources]] - 검색 쿼리 북마크
+- [[Recent Papers]] - 검색 쿼리 북마크
+- [[Key Concepts]] - 검색 쿼리 북마크
+
+## 📚 Active Research (북마크 그룹)
+- [[Current Topic Overview]]
+- [[Literature Review]]
+- [[Research Questions]]
+- [[Methodology Notes]]
+
+## 🗂️ Archives (북마크 그룹)
+- [[Completed Research]]
+- [[Reference Library]]</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Quick Switcher 최적화</h3>
+                    <div class="switcher-tips">
+                        <p>북마크와 Quick Switcher를 함께 사용하여 더 빠른 탐색</p>
+                        <ul>
+                            <li>북마크에 고유한 접두사 사용</li>
+                            <li>자주 사용하는 파일을 북마크</li>
+                            <li>별칭(alias) 활용</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 고급 활용 기법</h2>
+                
+                <div class="advanced-techniques">
+                    <h3>동적 북마크 시스템</h3>
+                    
+                    <div class="technique-cards">
+                        <div class="technique-card">
+                            <h4>📊 Dataview 통합</h4>
+                            <div class="code-example">
+                                <pre><code class="language-markdown"># 📌 Dynamic Bookmarks Dashboard
+
+## 최근 수정된 북마크 파일
+```dataview
+TABLE file.mtime as "Modified"
+FROM ""
+WHERE contains(file.bookmarks, this.file.name)
+SORT file.mtime DESC
+LIMIT 10
+```
+
+## 자주 사용하는 북마크 (수동 추적)
+```dataview
+TABLE access-count as "Access Count", last-accessed as "Last Used"
+FROM #bookmark
+WHERE access-count > 10
+SORT access-count DESC
+```</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="technique-card">
+                            <h4>🔄 컨텍스트 전환</h4>
+                            <p>작업 모드별 북마크 세트 준비</p>
+                            <ul>
+                                <li><strong>Writing Mode:</strong> 글쓰기 관련 북마크</li>
+                                <li><strong>Research Mode:</strong> 연구 도구 북마크</li>
+                                <li><strong>Planning Mode:</strong> 계획 도구 북마크</li>
+                                <li><strong>Review Mode:</strong> 리뷰 체크리스트</li>
+                            </ul>
+                        </div>
+
+                        <div class="technique-card">
+                            <h4>🎯 Smart Collections</h4>
+                            <div class="code-example">
+                                <pre><code class="language-markdown"># Smart Bookmark Collections
+
+## 이번 주 작업 (자동 업데이트)
+- 🔍 `file:{{date:YYYY-[W]ww}}` (검색 북마크)
+- 🔍 `tag:#week-{{date:ww}}` (검색 북마크)
+
+## 현재 프로젝트 (수동 업데이트)
+- [[Project Alpha]] - 메인 문서
+- 🔍 `path:"Project Alpha"` - 모든 관련 파일
+- [[Project Alpha Canvas]] - 비주얼 보드
+
+## 학습 자료 (카테고리별)
+- 🔍 `tag:#toread -tag:#done` - 읽을 자료
+- 🔍 `tag:#course file:2024` - 올해 코스</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="automation-section">
+                    <h3>북마크 자동화</h3>
+                    
+                    <div class="automation-example">
+                        <h4>Templater로 북마크 관리</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript"><%*
+// 프로젝트 시작시 자동 북마크 생성
+const projectName = await tp.system.prompt("Project Name:");
+const projectPath = `Projects/${projectName}`;
+
+// 프로젝트 구조 생성
+await tp.file.create_new("", `${projectName} Dashboard`, false, projectPath);
+await tp.file.create_new("", `${projectName} Tasks`, false, projectPath);
+await tp.file.create_new("", `${projectName} Notes`, false, projectPath);
+
+// 북마크 그룹 생성 알림
+new Notice(`Remember to bookmark the ${projectName} folder!`);
+
+// 프로젝트 대시보드 템플릿
+-%>
+# 🚀 <%= projectName %> Dashboard
+
+## Quick Links (Bookmark These!)
+- [[<%= projectName %> Tasks]]
+- [[<%= projectName %> Notes]]
+- [[<%= projectName %> Resources]]
+
+## Search Queries to Bookmark
+- 🔍 `path:"<%= projectPath %>" tag:active`
+- 🔍 `path:"<%= projectPath %>" tag:important`
+- 🔍 `"<%= projectName %>" -path:"<%= projectPath %>"` (외부 참조)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 모범 사례와 팁</h2>
+                
+                <div class="best-practices">
+                    <h3>북마크 관리 원칙</h3>
+                    
+                    <div class="principles-grid">
+                        <div class="principle">
+                            <i class="fas fa-broom"></i>
+                            <h4>정기적인 정리</h4>
+                            <ul>
+                                <li>주간 북마크 리뷰</li>
+                                <li>사용하지 않는 항목 제거</li>
+                                <li>그룹 재구성</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="principle">
+                            <i class="fas fa-tag"></i>
+                            <h4>일관된 명명</h4>
+                            <ul>
+                                <li>명확한 이름 사용</li>
+                                <li>이모지로 시각적 구분</li>
+                                <li>컨텍스트 포함</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="principle">
+                            <i class="fas fa-layer-group"></i>
+                            <h4>계층적 구성</h4>
+                            <ul>
+                                <li>최대 3단계 깊이</li>
+                                <li>논리적 그룹화</li>
+                                <li>자주 사용하는 것 상단</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="principle">
+                            <i class="fas fa-sync"></i>
+                            <h4>동적 업데이트</h4>
+                            <ul>
+                                <li>프로젝트 진행에 따른 조정</li>
+                                <li>새로운 워크플로우 반영</li>
+                                <li>피드백 기반 개선</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tips-collection">
+                        <h3>생산성 향상 팁</h3>
+                        
+                        <div class="tip-list">
+                            <div class="pro-tip">
+                                <h4>💡 단축키 설정</h4>
+                                <p>자주 사용하는 북마크에 개별 단축키 할당</p>
+                            </div>
+                            
+                            <div class="pro-tip">
+                                <h4>💡 시작 페이지</h4>
+                                <p>가장 중요한 대시보드를 북마크하고 시작 페이지로 설정</p>
+                            </div>
+                            
+                            <div class="pro-tip">
+                                <h4>💡 검색 조합</h4>
+                                <p>복잡한 검색 쿼리를 북마크로 저장하여 재사용</p>
+                            </div>
+                            
+                            <div class="pro-tip">
+                                <h4>💡 임시 북마크</h4>
+                                <p>"Temp" 그룹을 만들어 단기 작업용 북마크 관리</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>실습 프로젝트</h2>
+                
+                <div class="project-box">
+                    <h3>🎯 개인화된 북마크 시스템 구축</h3>
+                    <p>자신의 워크플로우에 최적화된 북마크 시스템을 설계하고 구현해보세요.</p>
+                    
+                    <div class="project-requirements">
+                        <h4>프로젝트 단계</h4>
+                        
+                        <ol>
+                            <li><strong>현재 워크플로우 분석</strong>
+                                <ul>
+                                    <li>자주 접근하는 파일/폴더 목록 작성</li>
+                                    <li>반복적인 검색 패턴 파악</li>
+                                    <li>작업 컨텍스트 분류</li>
+                                </ul>
+                            </li>
+                            
+                            <li><strong>북마크 구조 설계</strong>
+                                <ul>
+                                    <li>그룹 계층 구조 결정</li>
+                                    <li>명명 규칙 확립</li>
+                                    <li>우선순위 정렬</li>
+                                </ul>
+                            </li>
+                            
+                            <li><strong>구현 및 테스트</strong>
+                                <ul>
+                                    <li>북마크 생성 및 조직화</li>
+                                    <li>1주일 사용 테스트</li>
+                                    <li>사용 패턴 추적</li>
+                                </ul>
+                            </li>
+                            
+                            <li><strong>최적화</strong>
+                                <ul>
+                                    <li>사용 빈도 기반 재배치</li>
+                                    <li>불필요한 북마크 제거</li>
+                                    <li>새로운 요구사항 반영</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="deliverables">
+                        <h4>최종 결과물</h4>
+                        <ul>
+                            <li>개인화된 북마크 구조</li>
+                            <li>북마크 관리 가이드라인 문서</li>
+                            <li>자주 사용하는 검색 쿼리 모음</li>
+                            <li>워크플로우별 북마크 세트</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>빠른 접근성</h4>
+                            <p>자주 사용하는 모든 리소스에 즉시 접근할 수 있는 개인화된 시스템</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>유연한 조직화</h4>
+                            <p>워크플로우에 맞춰 동적으로 조정 가능한 북마크 구조</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>생산성 향상</h4>
+                            <p>검색 시간 단축과 컨텍스트 전환 비용 최소화</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson17.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson19.html" class="next-button">
+                    다음 강의 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

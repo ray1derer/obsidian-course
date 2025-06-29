@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 9: 그래프 뷰 활용 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>초급 과정</h3>
+                <p>기본기 마스터하기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson01.html">Lesson 1: Obsidian 소개와 설치</a></li>
+                <li><a href="lesson02.html">Lesson 2: 첫 번째 노트 만들기</a></li>
+                <li><a href="lesson03.html">Lesson 3: 마크다운 기초</a></li>
+                <li><a href="lesson04.html">Lesson 4: 링크와 백링크</a></li>
+                <li><a href="lesson05.html">Lesson 5: 태그와 폴더 구조</a></li>
+                <li><a href="lesson06.html">Lesson 6: 고급 포매팅과 스타일링</a></li>
+                <li><a href="lesson07.html">Lesson 7: 템플릿 활용하기</a></li>
+                <li><a href="lesson08.html">Lesson 8: 검색과 필터링</a></li>
+                <li class="active"><a href="lesson09.html">Lesson 9: 그래프 뷰 활용</a></li>
+                <li><a href="lesson10.html">Lesson 10: 기본 설정 최적화</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header">
+                <h1>Lesson 9: 그래프 뷰 활용</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 40분</span>
+                    <span><i class="fas fa-signal"></i> 초급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>그래프 뷰의 개념과 활용법 이해</li>
+                    <li>노트 간 연결 관계 시각화</li>
+                    <li>그래프 필터와 그룹 설정</li>
+                    <li>지식 네트워크 구축 전략</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. 그래프 뷰란?</h2>
+                
+                <div class="concept-box">
+                    <h3>지식의 시각화</h3>
+                    <p>그래프 뷰는 노트들 간의 연결 관계를 시각적으로 보여주는 Obsidian의 핵심 기능입니다.</p>
+                    
+                    <div class="graph-demo">
+                        <img src="https://via.placeholder.com/700x400/1e1e1e/e8f4f8?text=Graph+View+Demo" alt="그래프 뷰 데모">
+                        <div class="graph-legend">
+                            <div class="legend-item">
+                                <span class="node-dot active"></span> 현재 노트
+                            </div>
+                            <div class="legend-item">
+                                <span class="node-dot"></span> 연결된 노트
+                            </div>
+                            <div class="legend-item">
+                                <span class="node-dot orphan"></span> 고립된 노트
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>활용 아이디어:</strong> 
+                    <br>• 지식 구조 파악
+                    <br>• 연결이 부족한 노트 발견
+                    <br>• 중요한 허브 노트 식별
+                    <br>• 주제별 클러스터 확인</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 그래프 뷰 기본 조작</h2>
+                
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <i class="fas fa-mouse"></i>
+                        <h4>마우스 조작</h4>
+                        <ul>
+                            <li><strong>드래그:</strong> 그래프 이동</li>
+                            <li><strong>스크롤:</strong> 확대/축소</li>
+                            <li><strong>클릭:</strong> 노트 선택</li>
+                            <li><strong>더블클릭:</strong> 노트 열기</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="control-item">
+                        <i class="fas fa-keyboard"></i>
+                        <h4>키보드 단축키</h4>
+                        <ul>
+                            <li><strong>Ctrl/Cmd + G:</strong> 그래프 뷰 열기</li>
+                            <li><strong>Ctrl/Cmd + 클릭:</strong> 다중 선택</li>
+                            <li><strong>R:</strong> 그래프 리셋</li>
+                            <li><strong>L:</strong> 로컬 그래프 전환</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>그래프 뷰 타입</h3>
+                <div class="view-types">
+                    <div class="view-type">
+                        <h4>전체 그래프</h4>
+                        <p>볼트 내 모든 노트의 연결 관계</p>
+                        <div class="view-features">
+                            <span class="feature-tag">전체 구조 파악</span>
+                            <span class="feature-tag">대규모 패턴 발견</span>
+                        </div>
+                    </div>
+                    
+                    <div class="view-type">
+                        <h4>로컬 그래프</h4>
+                        <p>선택한 노트 주변의 연결 관계</p>
+                        <div class="view-features">
+                            <span class="feature-tag">세부 관계 분석</span>
+                            <span class="feature-tag">집중적 탐색</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 필터와 디스플레이 옵션</h2>
+                
+                <div class="filter-panel">
+                    <h3>필터 옵션</h3>
+                    
+                    <div class="filter-section">
+                        <h4>검색 필터</h4>
+                        <div class="code-example">
+                            <pre><code>tag:#프로젝트
+path:Archive
+file:2024
+-tag:#임시</code></pre>
+                        </div>
+                        <p>검색 문법을 사용해 표시할 노트 필터링</p>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h4>디스플레이 옵션</h4>
+                        <div class="option-list">
+                            <label class="option-item">
+                                <input type="checkbox" checked>
+                                <span>태그 표시</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" checked>
+                                <span>첨부파일 표시</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox">
+                                <span>고립된 노트 표시</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="checkbox" checked>
+                                <span>화살표 표시</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h4>깊이 설정</h4>
+                        <div class="depth-slider">
+                            <input type="range" min="1" max="5" value="2">
+                            <span>연결 깊이: 2</span>
+                        </div>
+                        <p>현재 노트로부터 몇 단계까지 표시할지 설정</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 그룹과 색상 설정</h2>
+                
+                <div class="group-settings">
+                    <h3>노드 그룹화</h3>
+                    <p>규칙에 따라 노트를 그룹화하고 색상을 지정할 수 있습니다.</p>
+                    
+                    <div class="group-examples">
+                        <div class="group-example">
+                            <div class="color-circle" style="background: #e74c3c;"></div>
+                            <div class="group-info">
+                                <h4>중요 문서</h4>
+                                <code>tag:#중요 OR tag:#핵심</code>
+                            </div>
+                        </div>
+                        
+                        <div class="group-example">
+                            <div class="color-circle" style="background: #3498db;"></div>
+                            <div class="group-info">
+                                <h4>프로젝트</h4>
+                                <code>path:Projects</code>
+                            </div>
+                        </div>
+                        
+                        <div class="group-example">
+                            <div class="color-circle" style="background: #2ecc71;"></div>
+                            <div class="group-info">
+                                <h4>완료된 작업</h4>
+                                <code>tag:#완료</code>
+                            </div>
+                        </div>
+                        
+                        <div class="group-example">
+                            <div class="color-circle" style="background: #f39c12;"></div>
+                            <div class="group-info">
+                                <h4>참고 자료</h4>
+                                <code>tag:#참고 OR tag:#리소스</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-palette"></i>
+                    <p><strong>색상 활용 팁:</strong> 워크플로우나 중요도에 따라 색상을 지정하면 그래프를 한눈에 파악하기 쉬워집니다.</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 효과적인 지식 네트워크 구축</h2>
+                
+                <div class="network-strategies">
+                    <div class="strategy">
+                        <i class="fas fa-hub"></i>
+                        <h4>허브 노트 만들기</h4>
+                        <p>주요 주제별로 중심이 되는 인덱스 노트를 만들어 관련 노트들을 연결합니다.</p>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 프로젝트 A 허브
+
+## 개요
+[[프로젝트 A 개요]]
+
+## 문서
+- [[요구사항 분석]]
+- [[시스템 설계]]
+- [[개발 일정]]
+
+## 회의록
+- [[2024-01-15 킥오프 미팅]]
+- [[2024-01-22 진행상황 리뷰]]
+
+## 참고 자료
+- [[관련 기술 문서]]
+- [[경쟁사 분석]]</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="strategy">
+                        <i class="fas fa-link"></i>
+                        <h4>양방향 링크 활용</h4>
+                        <p>단순 참조가 아닌 의미 있는 연결을 만들어 지식의 그물망을 형성합니다.</p>
+                        <ul>
+                            <li>개념 간 관계 명시</li>
+                            <li>원인과 결과 연결</li>
+                            <li>유사 주제 그룹화</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="strategy">
+                        <i class="fas fa-layer-group"></i>
+                        <h4>계층적 구조화</h4>
+                        <p>큰 주제에서 세부 주제로 연결되는 계층 구조를 만듭니다.</p>
+                        <div class="hierarchy-demo">
+                            <div class="level">분야 → 주제 → 세부주제 → 구체적 내용</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 그래프 분석과 인사이트</h2>
+                
+                <div class="analysis-tips">
+                    <h3>그래프에서 찾을 수 있는 패턴</h3>
+                    
+                    <div class="pattern-cards">
+                        <div class="pattern-card">
+                            <h4>🕸️ 클러스터</h4>
+                            <p>밀접하게 연결된 노트 그룹은 관련 주제를 나타냅니다.</p>
+                        </div>
+                        
+                        <div class="pattern-card">
+                            <h4>🌟 허브</h4>
+                            <p>많은 연결을 가진 노트는 중요한 개념이나 인덱스입니다.</p>
+                        </div>
+                        
+                        <div class="pattern-card">
+                            <h4>🔗 브리지</h4>
+                            <p>서로 다른 클러스터를 연결하는 노트는 학제간 아이디어를 나타냅니다.</p>
+                        </div>
+                        
+                        <div class="pattern-card">
+                            <h4>🏝️ 고립된 노트</h4>
+                            <p>연결이 없는 노트는 통합이 필요하거나 삭제 대상일 수 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-box">
+                    <h4>연습: 그래프 분석하기</h4>
+                    <ol>
+                        <li>전체 그래프 뷰를 열고 가장 큰 클러스터 찾기</li>
+                        <li>연결이 가장 많은 상위 5개 노트 식별</li>
+                        <li>고립된 노트를 찾아 연결 가능성 검토</li>
+                        <li>색상 그룹을 설정해 주제별 분포 확인</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>실전 프로젝트: 지식 정원 가꾸기</h2>
+                
+                <div class="project-box">
+                    <h3>🌱 나만의 지식 정원 만들기</h3>
+                    <p>그래프 뷰를 활용해 체계적인 지식 네트워크를 구축해봅시다.</p>
+                    
+                    <div class="project-steps">
+                        <h4>Step 1: 핵심 허브 노트 생성</h4>
+                        <ul>
+                            <li>관심 분야별 메인 노트 5개 생성</li>
+                            <li>각 허브에 하위 주제 링크 추가</li>
+                        </ul>
+                        
+                        <h4>Step 2: 연결망 구축</h4>
+                        <ul>
+                            <li>관련 노트 간 양방향 링크 생성</li>
+                            <li>교차 주제 연결점 찾기</li>
+                        </ul>
+                        
+                        <h4>Step 3: 시각적 최적화</h4>
+                        <ul>
+                            <li>주제별 색상 그룹 설정</li>
+                            <li>중요도에 따른 필터 생성</li>
+                        </ul>
+                        
+                        <h4>Step 4: 정기적 관리</h4>
+                        <ul>
+                            <li>주간 그래프 리뷰</li>
+                            <li>고립된 노트 통합</li>
+                            <li>새로운 연결 발견</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>고급 활용 팁</h2>
+                
+                <div class="advanced-tips">
+                    <div class="tip-item">
+                        <i class="fas fa-magic"></i>
+                        <h4>CSS로 그래프 커스터마이징</h4>
+                        <div class="code-example">
+                            <pre><code class="language-css">/* 그래프 노드 크기 조정 */
+.graph-view.color-fill-tag {
+    color: #ff6b6b;
+}
+
+.graph-view.color-fill-attachment {
+    color: #4ecdc4;
+}
+
+/* 중요 노트 강조 */
+.graph-view.color-fill-unresolved {
+    color: #ffe66d;
+    opacity: 0.8;
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="tip-item">
+                        <i class="fas fa-chart-line"></i>
+                        <h4>그래프 성능 최적화</h4>
+                        <ul>
+                            <li>큰 볼트: 필터로 노드 수 제한</li>
+                            <li>애니메이션 비활성화로 성능 향상</li>
+                            <li>로컬 그래프로 부분 탐색</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>시각적 이해</h4>
+                            <p>복잡한 지식 구조를 직관적으로 파악</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>연결의 발견</h4>
+                            <p>숨겨진 관계와 패턴을 시각적으로 발견</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>지식 관리</h4>
+                            <p>체계적인 지식 네트워크 구축과 유지</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson08.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson10.html" class="next-button">
+                    다음 강의 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

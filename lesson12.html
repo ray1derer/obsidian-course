@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 12: 일일 노트와 정기 노트 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header intermediate">
+                <h3>중급 과정</h3>
+                <p>파워 유저 되기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson11.html">Lesson 11: 핵심 플러그인 마스터하기</a></li>
+                <li class="active"><a href="lesson12.html">Lesson 12: 일일 노트와 정기 노트</a></li>
+                <li><a href="lesson13.html">Lesson 13: 데이터뷰 플러그인 활용</a></li>
+                <li><a href="lesson14.html">Lesson 14: 템플레이터 고급 기능</a></li>
+                <li><a href="lesson15.html">Lesson 15: 캔버스로 시각적 사고</a></li>
+                <li><a href="lesson16.html">Lesson 16: 아웃라이너와 계층 구조</a></li>
+                <li><a href="lesson17.html">Lesson 17: 작업 관리 시스템 구축</a></li>
+                <li><a href="lesson18.html">Lesson 18: 북마크와 즐겨찾기 활용</a></li>
+                <li><a href="lesson19.html">Lesson 19: 모바일 앱 활용</a></li>
+                <li><a href="lesson20.html">Lesson 20: 플러그인 생태계 탐험</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header intermediate">
+                <h1>Lesson 12: 일일 노트와 정기 노트</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 50분</span>
+                    <span><i class="fas fa-signal"></i> 중급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>일일 노트 시스템 구축과 활용</li>
+                    <li>주간/월간 정기 노트 설정</li>
+                    <li>자동화된 노트 생성 워크플로우</li>
+                    <li>시간 기반 지식 관리 시스템</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. 일일 노트의 철학</h2>
+                
+                <div class="philosophy-box">
+                    <h3>왜 일일 노트인가?</h3>
+                    <div class="philosophy-grid">
+                        <div class="philosophy-item">
+                            <i class="fas fa-brain"></i>
+                            <h4>두뇌 확장</h4>
+                            <p>매일의 생각과 아이디어를 외부 저장소에 보관</p>
+                        </div>
+                        <div class="philosophy-item">
+                            <i class="fas fa-link"></i>
+                            <h4>연결성</h4>
+                            <p>시간의 흐름 속에서 아이디어의 발전 추적</p>
+                        </div>
+                        <div class="philosophy-item">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>성장 기록</h4>
+                            <p>개인의 발전과 학습 과정을 문서화</p>
+                        </div>
+                        <div class="philosophy-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <h4>인사이트 발견</h4>
+                            <p>패턴과 트렌드를 통한 자기 이해</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quote-box">
+                    <blockquote>
+                        "일일 노트는 단순한 일기가 아니라, 시간을 통해 진화하는 개인 지식 관리 시스템의 중추입니다."
+                    </blockquote>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 일일 노트 설정하기</h2>
+                
+                <div class="setup-guide">
+                    <h3>기본 설정</h3>
+                    
+                    <div class="step-by-step">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>플러그인 활성화</h4>
+                                <p>설정 → 코어 플러그인 → Daily notes 활성화</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>폴더 구조 설정</h4>
+                                <div class="code-example">
+                                    <pre><code>📁 Daily Notes
+  📁 2024
+    📁 01-January
+      📄 2024-01-15.md
+      📄 2024-01-16.md
+    📁 02-February
+      📄 2024-02-01.md</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>날짜 형식 설정</h4>
+                                <div class="date-format-examples">
+                                    <table>
+                                        <tr>
+                                            <th>형식</th>
+                                            <th>결과</th>
+                                            <th>용도</th>
+                                        </tr>
+                                        <tr>
+                                            <td><code>YYYY-MM-DD</code></td>
+                                            <td>2024-01-15</td>
+                                            <td>정렬 용이</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>YYYY/MM/DD</code></td>
+                                            <td>2024/01/15</td>
+                                            <td>폴더 구조</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>YYYYMMDD</code></td>
+                                            <td>20240115</td>
+                                            <td>컴팩트</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="template-showcase">
+                    <h3>강력한 일일 노트 템플릿</h3>
+                    <div class="code-example">
+                        <pre><code class="language-markdown">---
+created: {{date}} {{time}}
+tags: [daily-note, {{date:YYYY-MM}}]
+weather: 
+mood: 
+energy: /10
+---
+
+# 📅 {{date:dddd, MMMM Do YYYY}}
+
+## 🌅 Morning Routine
+- [ ] 명상 10분
+- [ ] 운동 30분
+- [ ] 아침 일기
+
+### 오늘의 의도
+> 
+
+## 📋 Today's Schedule
+### 🕐 Morning (9-12)
+- 
+
+### 🕑 Afternoon (1-5)
+- 
+
+### 🕕 Evening (6-9)
+- 
+
+## 🎯 Top 3 Priorities
+1. [ ] 
+2. [ ] 
+3. [ ] 
+
+## 💭 Thoughts & Ideas
+### 💡 Insights
+- 
+
+### 🤔 Questions
+- 
+
+### 📚 Learning
+- 
+
+## 📝 Meeting Notes
+### Meeting: [제목]
+- **Time**: 
+- **Attendees**: 
+- **Key Points**: 
+- **Action Items**: 
+
+## 🔗 Created Today
+```dataview
+LIST
+WHERE file.cday = date("{{date}}")
+AND file.name != "{{date}}"
+```
+
+## 📊 Daily Review
+### What went well?
+- 
+
+### What could be improved?
+- 
+
+### Gratitude
+1. 
+2. 
+3. 
+
+## 🌙 Evening Reflection
+- **Today's Win**: 
+- **Tomorrow's Focus**: 
+- **Energy Level**: /10
+- **Mood**: 
+
+---
+### 📎 Quick Links
+- [[{{date:YYYY-MM-DD}} - Yesterday|← Yesterday]] | [[{{date:YYYY-MM-DD}} - Tomorrow|Tomorrow →]]
+- [[{{date:YYYY-[W]ww}}|This Week]] | [[{{date:YYYY-MM}}|This Month]]</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 주간 노트 시스템</h2>
+                
+                <div class="periodic-notes">
+                    <h3>주간 리뷰와 계획</h3>
+                    
+                    <div class="weekly-template">
+                        <h4>주간 노트 템플릿</h4>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 🗓️ Week {{date:ww}} - {{date:YYYY}}
+**Period**: {{date:YYYY-MM-DD}} to {{date:YYYY-MM-DD}}
+
+## 📊 Week Overview
+### 🎯 Weekly Goals
+- [ ] 
+- [ ] 
+- [ ] 
+
+### 📈 Key Metrics
+| Metric | Target | Actual |
+|--------|--------|---------|
+| 운동 | 5회 | |
+| 독서 | 50페이지 | |
+| 프로젝트 진행률 | 25% | |
+
+## 📅 Daily Summary
+### Monday [[{{date:YYYY-MM-DD}}]]
+- 
+
+### Tuesday [[{{date:YYYY-MM-DD}}]]
+- 
+
+### Wednesday [[{{date:YYYY-MM-DD}}]]
+- 
+
+### Thursday [[{{date:YYYY-MM-DD}}]]
+- 
+
+### Friday [[{{date:YYYY-MM-DD}}]]
+- 
+
+### Weekend
+- 
+
+## 🔍 Weekly Review
+### Achievements
+- 
+
+### Challenges
+- 
+
+### Lessons Learned
+- 
+
+## 📊 Time Analysis
+```dataview
+TABLE 
+  energy as "Energy",
+  mood as "Mood",
+  length(file.tasks.completed) as "Tasks Done"
+FROM "Daily Notes"
+WHERE file.day >= date("{{date:YYYY-MM-DD}}") 
+  AND file.day <= date("{{date:YYYY-MM-DD}}")
+SORT file.day ASC
+```
+
+## 🎯 Next Week Planning
+### Top Priorities
+1. 
+2. 
+3. 
+
+### Schedule Blocks
+- **Deep Work**: 
+- **Meetings**: 
+- **Learning**: </code></pre>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <i class="fas fa-lightbulb"></i>
+                        <p><strong>Pro Tip:</strong> Periodic Notes 플러그인을 사용하면 주간, 월간, 분기별 노트를 자동으로 생성할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 월간 노트와 분기 리뷰</h2>
+                
+                <div class="monthly-system">
+                    <h3>장기적 관점의 리뷰</h3>
+                    
+                    <div class="monthly-template">
+                        <h4>월간 노트 구조</h4>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 📆 {{date:MMMM YYYY}}
+
+## 🎯 Monthly Theme
+> 
+
+## 📊 Month at a Glance
+### Goals Progress
+```dataview
+TABLE 
+  goal as "Goal",
+  status as "Status",
+  progress as "Progress"
+FROM #monthly-goal
+WHERE file.name = "{{date:YYYY-MM}}"
+```
+
+### Habit Tracking
+| Habit | Week 1 | Week 2 | Week 3 | Week 4 |
+|-------|--------|--------|---------|---------|
+| 운동 | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ |
+| 명상 | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ |
+| 독서 | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ | ⬜⬜⬜⬜⬜ |
+
+## 📚 Learning & Growth
+### Books Read
+- 
+
+### Courses Completed
+- 
+
+### Skills Developed
+- 
+
+## 💰 Financial Review
+- **Income**: 
+- **Expenses**: 
+- **Savings**: 
+- **Investments**: 
+
+## 🔗 Important Events
+- 
+
+## 📸 Photo Memories
+![[{{date:YYYY-MM}}-highlights.png]]
+
+## 🎯 Next Month Planning
+### Focus Areas
+1. 
+2. 
+3. </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 자동화와 워크플로우</h2>
+                
+                <div class="automation-section">
+                    <h3>스마트한 노트 생성</h3>
+                    
+                    <div class="automation-examples">
+                        <div class="automation-card">
+                            <h4>🤖 Templater 활용</h4>
+                            <p>동적 템플릿으로 더 강력한 자동화</p>
+                            <div class="code-example">
+                                <pre><code class="language-javascript"><%*
+// 날씨 정보 가져오기
+const weather = await tp.web.request("weather-api-url");
+
+// 이전 노트 링크
+const yesterday = moment(tp.file.title, "YYYY-MM-DD")
+  .subtract(1, 'days')
+  .format("YYYY-MM-DD");
+
+// 관련 프로젝트 찾기
+const projects = app.vault.getMarkdownFiles()
+  .filter(f => f.path.includes("Projects"))
+  .map(f => `[[${f.basename}]]`);
+%>
+
+# Daily Note for <%tp.date.now("dddd, MMMM Do")%>
+
+Weather: <%weather.description%> <%weather.temp%>°C
+
+## Yesterday's Review
+![[<%yesterday%>#review]]
+
+## Active Projects
+<%projects.join("\n")%></code></pre>
+                            </div>
+                        </div>
+
+                        <div class="automation-card">
+                            <h4>📊 자동 통계</h4>
+                            <p>Dataview로 동적 대시보드 생성</p>
+                            <div class="code-example">
+                                <pre><code class="language-dataview">```dataviewjs
+// 이번 주 완료한 작업
+const thisWeek = dv.pages('"Daily Notes"')
+  .where(p => p.file.day >= dv.date("this week"))
+  .file.tasks.where(t => t.completed);
+
+// 생산성 차트
+const productivity = dv.pages('"Daily Notes"')
+  .where(p => p.file.day >= dv.date("this month"))
+  .map(p => ({
+    date: p.file.name,
+    tasks: p.file.tasks.length,
+    completed: p.file.tasks.where(t => t.completed).length
+  }));
+
+dv.table(["Date", "Total Tasks", "Completed", "Rate"],
+  productivity.map(p => [
+    p.date,
+    p.tasks,
+    p.completed,
+    `${Math.round(p.completed/p.tasks*100)}%`
+  ])
+);
+```</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="workflow-tips">
+                    <h3>효과적인 일일 노트 워크플로우</h3>
+                    
+                    <div class="workflow-timeline">
+                        <div class="timeline-item morning">
+                            <div class="time">🌅 아침 (5분)</div>
+                            <div class="activity">
+                                <h4>Daily Note 생성 및 계획</h4>
+                                <ul>
+                                    <li>오늘의 우선순위 설정</li>
+                                    <li>일정 확인</li>
+                                    <li>의도 설정</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item day">
+                            <div class="time">☀️ 낮 (수시)</div>
+                            <div class="activity">
+                                <h4>실시간 기록</h4>
+                                <ul>
+                                    <li>미팅 노트</li>
+                                    <li>아이디어 캡처</li>
+                                    <li>작업 진행 상황</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item evening">
+                            <div class="time">🌙 저녁 (10분)</div>
+                            <div class="activity">
+                                <h4>일일 리뷰</h4>
+                                <ul>
+                                    <li>완료 사항 체크</li>
+                                    <li>성찰 작성</li>
+                                    <li>내일 준비</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 고급 활용 팁</h2>
+                
+                <div class="advanced-tips">
+                    <div class="tip-category">
+                        <h3>🔗 연결성 강화</h3>
+                        <ul>
+                            <li>일일 노트에서 프로젝트 노트로 링크</li>
+                            <li>중요한 인사이트는 별도 노트로 추출</li>
+                            <li>태그로 주제별 스레드 생성</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-category">
+                        <h3>📈 분석과 인사이트</h3>
+                        <ul>
+                            <li>월말에 패턴 분석</li>
+                            <li>분기별 목표 달성률 추적</li>
+                            <li>연간 성장 그래프 생성</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-category">
+                        <h3>🎨 시각화</h3>
+                        <ul>
+                            <li>Calendar 플러그인으로 한눈에 보기</li>
+                            <li>Heatmap으로 활동 패턴 시각화</li>
+                            <li>Timeline으로 중요 이벤트 추적</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>실습 프로젝트</h2>
+                
+                <div class="project-box">
+                    <h3>📅 30일 일일 노트 챌린지</h3>
+                    <p>한 달 동안 일일 노트를 작성하며 자신만의 시스템을 구축해보세요.</p>
+                    
+                    <div class="challenge-phases">
+                        <div class="phase">
+                            <h4>Week 1: 기초 확립</h4>
+                            <ul>
+                                <li>매일 노트 생성 습관화</li>
+                                <li>기본 템플릿 사용</li>
+                                <li>5분 이내 작성 목표</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="phase">
+                            <h4>Week 2: 커스터마이징</h4>
+                            <ul>
+                                <li>템플릿 개인화</li>
+                                <li>자동화 요소 추가</li>
+                                <li>링크 활용 증가</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="phase">
+                            <h4>Week 3: 통합</h4>
+                            <ul>
+                                <li>프로젝트 노트와 연결</li>
+                                <li>주간 리뷰 도입</li>
+                                <li>데이터 분석 시작</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="phase">
+                            <h4>Week 4: 최적화</h4>
+                            <ul>
+                                <li>워크플로우 개선</li>
+                                <li>월간 리뷰 작성</li>
+                                <li>시스템 문서화</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-tracking">
+                        <h4>추적할 메트릭</h4>
+                        <ul>
+                            <li>작성 일수 / 30일</li>
+                            <li>평균 작성 시간</li>
+                            <li>생성된 링크 수</li>
+                            <li>완료한 작업 수</li>
+                            <li>캡처한 아이디어 수</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>일관성이 핵심</h4>
+                            <p>완벽한 노트보다 꾸준한 기록이 더 가치있음</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>점진적 발전</h4>
+                            <p>시작은 단순하게, 필요에 따라 복잡도 증가</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>개인화가 중요</h4>
+                            <p>자신의 라이프스타일에 맞는 시스템 구축</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson11.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson13.html" class="next-button">
+                    다음 강의 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

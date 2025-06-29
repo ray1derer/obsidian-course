@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 13: 데이터뷰 플러그인 활용 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header intermediate">
+                <h3>중급 과정</h3>
+                <p>파워 유저 되기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson11.html">Lesson 11: 핵심 플러그인 마스터하기</a></li>
+                <li><a href="lesson12.html">Lesson 12: 일일 노트와 정기 노트</a></li>
+                <li class="active"><a href="lesson13.html">Lesson 13: 데이터뷰 플러그인 활용</a></li>
+                <li><a href="lesson14.html">Lesson 14: 템플레이터 고급 기능</a></li>
+                <li><a href="lesson15.html">Lesson 15: 캔버스로 시각적 사고</a></li>
+                <li><a href="lesson16.html">Lesson 16: 아웃라이너와 계층 구조</a></li>
+                <li><a href="lesson17.html">Lesson 17: 작업 관리 시스템 구축</a></li>
+                <li><a href="lesson18.html">Lesson 18: 북마크와 즐겨찾기 활용</a></li>
+                <li><a href="lesson19.html">Lesson 19: 모바일 앱 활용</a></li>
+                <li><a href="lesson20.html">Lesson 20: 플러그인 생태계 탐험</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header intermediate">
+                <h1>Lesson 13: 데이터뷰 플러그인 활용</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 60분</span>
+                    <span><i class="fas fa-signal"></i> 중급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>Dataview 쿼리 언어 마스터하기</li>
+                    <li>동적 테이블, 리스트, 작업 목록 생성</li>
+                    <li>메타데이터 활용한 고급 쿼리</li>
+                    <li>DataviewJS로 복잡한 로직 구현</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. Dataview란?</h2>
+                
+                <div class="concept-introduction">
+                    <h3>노트를 데이터베이스로</h3>
+                    <p>Dataview는 Obsidian 볼트를 쿼리 가능한 데이터베이스로 변환하는 강력한 플러그인입니다.</p>
+                    
+                    <div class="feature-showcase">
+                        <div class="feature-card">
+                            <i class="fas fa-database"></i>
+                            <h4>SQL 스타일 쿼리</h4>
+                            <p>친숙한 쿼리 문법으로 노트 검색</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-sync"></i>
+                            <h4>실시간 업데이트</h4>
+                            <p>노트 변경시 자동으로 결과 갱신</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-code"></i>
+                            <h4>JavaScript API</h4>
+                            <p>복잡한 로직을 위한 프로그래밍</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-chart-bar"></i>
+                            <h4>다양한 출력 형식</h4>
+                            <p>테이블, 리스트, 작업 목록, 캘린더</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="installation-guide">
+                    <h3>설치 및 활성화</h3>
+                    <ol>
+                        <li>설정 → 커뮤니티 플러그인 → 브라우저</li>
+                        <li>"Dataview" 검색 후 설치</li>
+                        <li>플러그인 활성화</li>
+                        <li>Dataview 설정에서 JavaScript 쿼리 활성화 (선택)</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 기본 쿼리 문법</h2>
+                
+                <div class="syntax-guide">
+                    <h3>Dataview Query Language (DQL)</h3>
+                    
+                    <div class="query-types">
+                        <div class="query-type">
+                            <h4>LIST - 리스트 형식</h4>
+                            <div class="code-example">
+                                <pre><code class="language-dataview">```dataview
+LIST
+FROM "Projects"
+WHERE status = "active"
+SORT file.mtime DESC
+```</code></pre>
+                            </div>
+                            <div class="output-preview">
+                                <p><strong>출력 예시:</strong></p>
+                                <ul>
+                                    <li>[[프로젝트 A]]</li>
+                                    <li>[[프로젝트 B]]</li>
+                                    <li>[[프로젝트 C]]</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="query-type">
+                            <h4>TABLE - 테이블 형식</h4>
+                            <div class="code-example">
+                                <pre><code class="language-dataview">```dataview
+TABLE 
+  status as "상태",
+  due as "마감일",
+  priority as "우선순위"
+FROM "Tasks"
+WHERE !completed
+SORT priority DESC, due ASC
+```</code></pre>
+                            </div>
+                            <div class="output-preview">
+                                <p><strong>출력 예시:</strong></p>
+                                <table>
+                                    <tr>
+                                        <th>파일</th>
+                                        <th>상태</th>
+                                        <th>마감일</th>
+                                        <th>우선순위</th>
+                                    </tr>
+                                    <tr>
+                                        <td>[[작업1]]</td>
+                                        <td>진행중</td>
+                                        <td>2024-01-20</td>
+                                        <td>높음</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="query-type">
+                            <h4>TASK - 작업 목록</h4>
+                            <div class="code-example">
+                                <pre><code class="language-dataview">```dataview
+TASK
+FROM "Daily Notes"
+WHERE !completed
+GROUP BY file.link
+```</code></pre>
+                            </div>
+                            <div class="output-preview">
+                                <p><strong>출력 예시:</strong></p>
+                                <div class="task-output">
+                                    <strong>[[2024-01-15]]</strong>
+                                    <ul>
+                                        <li>[ ] 회의 준비</li>
+                                        <li>[ ] 보고서 작성</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="syntax-reference">
+                    <h3>주요 쿼리 절</h3>
+                    <table>
+                        <tr>
+                            <th>절</th>
+                            <th>설명</th>
+                            <th>예시</th>
+                        </tr>
+                        <tr>
+                            <td><code>FROM</code></td>
+                            <td>검색 범위 지정</td>
+                            <td><code>FROM "폴더명" or #태그</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>WHERE</code></td>
+                            <td>조건 필터링</td>
+                            <td><code>WHERE status = "active"</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>SORT</code></td>
+                            <td>정렬</td>
+                            <td><code>SORT file.mtime DESC</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>GROUP BY</code></td>
+                            <td>그룹화</td>
+                            <td><code>GROUP BY category</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>LIMIT</code></td>
+                            <td>결과 수 제한</td>
+                            <td><code>LIMIT 10</code></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 메타데이터 활용</h2>
+                
+                <div class="metadata-guide">
+                    <h3>YAML Front Matter</h3>
+                    <div class="code-example">
+                        <pre><code class="language-yaml">---
+title: 프로젝트 계획
+status: active
+priority: high
+due: 2024-02-01
+tags: [project, important]
+team:
+  - Alice
+  - Bob
+  - Charlie
+budget: 50000
+progress: 75
+---</code></pre>
+                    </div>
+
+                    <h3>인라인 필드</h3>
+                    <div class="code-example">
+                        <pre><code class="language-markdown">프로젝트:: [[새 웹사이트]]
+상태:: 진행중
+마감일:: 2024-02-15
+담당자:: [[김철수]]
+예산:: 1000만원</code></pre>
+                    </div>
+
+                    <div class="metadata-queries">
+                        <h3>메타데이터 쿼리 예제</h3>
+                        
+                        <div class="example-query">
+                            <h4>프로젝트 대시보드</h4>
+                            <div class="code-example">
+                                <pre><code class="language-dataview">```dataview
+TABLE 
+  status as "상태",
+  progress + "%" as "진행률",
+  team as "팀원",
+  budget as "예산"
+FROM #project
+WHERE status != "completed"
+SORT priority DESC, due ASC
+```</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="example-query">
+                            <h4>마감일 추적</h4>
+                            <div class="code-example">
+                                <pre><code class="language-dataview">```dataview
+TABLE WITHOUT ID
+  file.link as "작업",
+  due as "마감일",
+  (date(due) - date(today)) as "남은 일수"
+FROM ""
+WHERE due
+WHERE date(due) >= date(today)
+SORT due ASC
+```</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 고급 쿼리 기법</h2>
+                
+                <div class="advanced-queries">
+                    <h3>복잡한 조건과 계산</h3>
+                    
+                    <div class="advanced-example">
+                        <h4>작업 부하 분석</h4>
+                        <div class="code-example">
+                            <pre><code class="language-dataview">```dataview
+TABLE 
+  length(filter(file.tasks, (t) => !t.completed)) as "미완료",
+  length(filter(file.tasks, (t) => t.completed)) as "완료",
+  round(length(filter(file.tasks, (t) => t.completed)) / length(file.tasks) * 100) + "%" as "완료율"
+FROM "Projects"
+WHERE file.tasks
+SORT length(filter(file.tasks, (t) => !t.completed)) DESC
+```</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="advanced-example">
+                        <h4>주간 활동 히트맵</h4>
+                        <div class="code-example">
+                            <pre><code class="language-dataview">```dataview
+TABLE WITHOUT ID
+  dateformat(file.day, "ddd") as "요일",
+  length(file.outlinks) as "링크",
+  length(file.tasks) as "작업",
+  file.size as "크기"
+FROM "Daily Notes"
+WHERE file.day >= date(today) - dur(7 days)
+SORT file.day ASC
+```</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="advanced-example">
+                        <h4>태그 기반 지식 맵</h4>
+                        <div class="code-example">
+                            <pre><code class="language-dataview">```dataview
+TABLE 
+  file.tags as "태그",
+  length(file.inlinks) as "참조수",
+  file.mtime as "수정일"
+FROM ""
+WHERE contains(file.tags, "#knowledge")
+FLATTEN file.tags as tag
+WHERE contains(tag, "#")
+GROUP BY tag
+```</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. DataviewJS 활용</h2>
+                
+                <div class="dataviewjs-section">
+                    <h3>JavaScript로 더 강력하게</h3>
+                    <p>DataviewJS를 사용하면 JavaScript의 모든 기능을 활용할 수 있습니다.</p>
+                    
+                    <div class="js-example">
+                        <h4>작업 통계 차트</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript">```dataviewjs
+const pages = dv.pages('"Daily Notes"')
+    .where(p => p.file.day >= dv.date("2024-01-01"))
+    .sort(p => p.file.day);
+
+const taskStats = pages.map(p => ({
+    date: p.file.name,
+    total: p.file.tasks.length,
+    completed: p.file.tasks.filter(t => t.completed).length,
+    rate: p.file.tasks.length > 0 
+        ? Math.round(p.file.tasks.filter(t => t.completed).length / p.file.tasks.length * 100)
+        : 0
+}));
+
+dv.table(
+    ["날짜", "전체", "완료", "완료율", "진행바"],
+    taskStats.map(s => [
+        s.date,
+        s.total,
+        s.completed,
+        s.rate + "%",
+        "▓".repeat(Math.floor(s.rate/10)) + "░".repeat(10-Math.floor(s.rate/10))
+    ])
+);
+```</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="js-example">
+                        <h4>프로젝트 칸반 보드</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript">```dataviewjs
+const projects = dv.pages('#project').array();
+
+const statuses = ['계획', '진행중', '검토', '완료'];
+const kanban = {};
+
+statuses.forEach(status => {
+    kanban[status] = projects.filter(p => p.status === status);
+});
+
+dv.header(2, "프로젝트 칸반");
+
+const container = dv.container;
+const board = container.createEl('div', {cls: 'kanban-board'});
+
+for (const status of statuses) {
+    const column = board.createEl('div', {cls: 'kanban-column'});
+    column.createEl('h3', {text: status});
+    
+    const items = kanban[status];
+    items.forEach(item => {
+        const card = column.createEl('div', {cls: 'kanban-card'});
+        card.createEl('a', {
+            text: item.file.name,
+            href: item.file.path
+        });
+        if (item.due) {
+            card.createEl('div', {
+                text: `마감: ${item.due}`,
+                cls: 'due-date'
+            });
+        }
+    });
+}
+```</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="js-example">
+                        <h4>읽기 목록 추적</h4>
+                        <div class="code-example">
+                            <pre><code class="language-javascript">```dataviewjs
+const books = dv.pages('#book')
+    .sort(b => b.rating, 'desc');
+
+const reading = books.where(b => b.status === "reading");
+const toRead = books.where(b => b.status === "to-read");
+const finished = books.where(b => b.status === "finished");
+
+dv.header(3, `📚 독서 현황`);
+dv.paragraph(`읽는 중: ${reading.length} | 읽을 예정: ${toRead.length} | 완독: ${finished.length}`);
+
+if (reading.length > 0) {
+    dv.header(4, "현재 읽는 중");
+    for (const book of reading) {
+        dv.paragraph(`- **${book.file.link}** by ${book.author} (${book.progress || 0}%)`);
+    }
+}
+
+dv.header(4, "최근 완독");
+dv.table(
+    ["제목", "저자", "평점", "완독일"],
+    finished
+        .limit(5)
+        .map(b => [
+            b.file.link,
+            b.author,
+            "⭐".repeat(b.rating || 0),
+            b.finished
+        ])
+);
+```</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 실용적인 활용 사례</h2>
+                
+                <div class="use-cases">
+                    <div class="use-case-card">
+                        <h3>📊 개인 대시보드</h3>
+                        <div class="code-example">
+                            <pre><code class="language-markdown"># 📊 Personal Dashboard
+
+## 오늘의 작업
+```dataview
+TASK
+FROM "Daily Notes"
+WHERE file.day = date(today)
+WHERE !completed
+```
+
+## 이번 주 진행률
+```dataviewjs
+const thisWeek = dv.pages('"Daily Notes"')
+    .where(p => p.file.day >= dv.date("this week monday"));
+
+const stats = {
+    tasks: thisWeek.file.tasks.length,
+    completed: thisWeek.file.tasks.where(t => t.completed).length,
+    notes: thisWeek.length,
+    words: thisWeek.file.size.values.reduce((a,b) => a+b, 0)
+};
+
+dv.paragraph(`📝 노트: ${stats.notes} | ✅ 완료: ${stats.completed}/${stats.tasks} | 📄 단어: ${stats.words}`);
+```
+
+## 중요 프로젝트
+```dataview
+TABLE 
+  status as "상태",
+  progress as "진행률",
+  due as "마감일"
+FROM #project and #important
+WHERE status != "completed"
+```</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h3>📚 학습 추적기</h3>
+                        <div class="code-example">
+                            <pre><code class="language-dataview">```dataview
+TABLE 
+  subject as "과목",
+  hours as "학습시간",
+  topics as "주제",
+  round(hours/7, 2) as "일평균"
+FROM #study
+WHERE date >= date(today) - dur(7 days)
+GROUP BY week
+```</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h3>💰 재정 관리</h3>
+                        <div class="code-example">
+                            <pre><code class="language-dataview">```dataviewjs
+const expenses = dv.pages('#expense')
+    .where(p => p.date >= dv.date("this month"));
+
+const categories = {};
+for (const expense of expenses) {
+    if (!categories[expense.category]) {
+        categories[expense.category] = 0;
+    }
+    categories[expense.category] += expense.amount;
+}
+
+const total = Object.values(categories).reduce((a,b) => a+b, 0);
+
+dv.header(3, `이번 달 지출: ${total.toLocaleString()}원`);
+dv.table(
+    ["카테고리", "금액", "비율"],
+    Object.entries(categories)
+        .sort((a,b) => b[1] - a[1])
+        .map(([cat, amount]) => [
+            cat,
+            amount.toLocaleString() + "원",
+            Math.round(amount/total*100) + "%"
+        ])
+);
+```</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>실습 프로젝트</h2>
+                
+                <div class="project-box">
+                    <h3>🎯 지식 관리 대시보드 만들기</h3>
+                    <p>Dataview를 활용해 개인 지식 관리 시스템을 구축해보세요.</p>
+                    
+                    <div class="project-requirements">
+                        <h4>프로젝트 요구사항</h4>
+                        <ol>
+                            <li>
+                                <strong>메인 대시보드 생성</strong>
+                                <ul>
+                                    <li>최근 수정된 노트 10개</li>
+                                    <li>미완료 작업 목록</li>
+                                    <li>이번 주 생성된 노트 수</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>프로젝트 트래커</strong>
+                                <ul>
+                                    <li>진행 중인 프로젝트 상태</li>
+                                    <li>마감일별 정렬</li>
+                                    <li>진행률 시각화</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>학습 로그</strong>
+                                <ul>
+                                    <li>주제별 학습 시간</li>
+                                    <li>월간 학습 통계</li>
+                                    <li>참고 자료 링크</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>아이디어 뱅크</strong>
+                                <ul>
+                                    <li>태그별 아이디어 분류</li>
+                                    <li>우선순위 표시</li>
+                                    <li>관련 노트 연결</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="bonus-challenges">
+                        <h4>🏆 보너스 도전</h4>
+                        <ul>
+                            <li>DataviewJS로 인터랙티브 요소 추가</li>
+                            <li>CSS로 대시보드 스타일링</li>
+                            <li>모바일 친화적 레이아웃</li>
+                            <li>자동 업데이트되는 통계 그래프</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>최적화 팁</h2>
+                
+                <div class="optimization-tips">
+                    <div class="tip-card">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h4>성능 최적화</h4>
+                        <ul>
+                            <li>큰 폴더는 구체적인 경로 지정</li>
+                            <li>LIMIT으로 결과 수 제한</li>
+                            <li>복잡한 계산은 캐싱 고려</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <i class="fas fa-bug"></i>
+                        <h4>디버깅</h4>
+                        <ul>
+                            <li>콘솔에서 쿼리 테스트</li>
+                            <li>단계별로 쿼리 구축</li>
+                            <li>dv.paragraph()로 중간 결과 확인</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-card">
+                        <i class="fas fa-book"></i>
+                        <h4>학습 리소스</h4>
+                        <ul>
+                            <li>공식 문서 참조</li>
+                            <li>커뮤니티 예제 활용</li>
+                            <li>포럼에서 질문하기</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>동적 콘텐츠의 힘</h4>
+                            <p>정적 노트를 동적 대시보드로 변환하여 실시간 인사이트 제공</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>메타데이터 중심 사고</h4>
+                            <p>구조화된 데이터로 더 강력한 쿼리와 분석 가능</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>점진적 복잡도</h4>
+                            <p>간단한 LIST부터 시작해 점차 복잡한 DataviewJS로 발전</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson12.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson14.html" class="next-button">
+                    다음 강의 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

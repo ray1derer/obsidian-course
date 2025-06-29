@@ -35,3 +35,8 @@ logs/
 screenshots/temp/
 *.bak
 course_metadata_backup.json
+
+# Sensitive files
+memory/API_KEYS.md
+.env
+config.json

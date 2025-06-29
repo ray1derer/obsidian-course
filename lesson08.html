@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 8: 검색과 필터링 | Obsidian 마스터 클래스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-brain"></i>
+                <span>Obsidian 마스터 클래스</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#courses">강좌 목록</a>
+                <a href="index.html#about">소개</a>
+                <a href="index.html#contact">문의</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="lesson-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>초급 과정</h3>
+                <p>기본기 마스터하기</p>
+            </div>
+            <ul class="lesson-list">
+                <li><a href="lesson01.html">Lesson 1: Obsidian 소개와 설치</a></li>
+                <li><a href="lesson02.html">Lesson 2: 첫 번째 노트 만들기</a></li>
+                <li><a href="lesson03.html">Lesson 3: 마크다운 기초</a></li>
+                <li><a href="lesson04.html">Lesson 4: 링크와 백링크</a></li>
+                <li><a href="lesson05.html">Lesson 5: 태그와 폴더 구조</a></li>
+                <li><a href="lesson06.html">Lesson 6: 고급 포매팅과 스타일링</a></li>
+                <li><a href="lesson07.html">Lesson 7: 템플릿 활용하기</a></li>
+                <li class="active"><a href="lesson08.html">Lesson 8: 검색과 필터링</a></li>
+                <li><a href="lesson09.html">Lesson 9: 그래프 뷰 활용</a></li>
+                <li><a href="lesson10.html">Lesson 10: 기본 설정 최적화</a></li>
+            </ul>
+        </aside>
+
+        <main class="lesson-content">
+            <div class="lesson-header">
+                <h1>Lesson 8: 검색과 필터링</h1>
+                <p class="lesson-meta">
+                    <span><i class="fas fa-clock"></i> 45분</span>
+                    <span><i class="fas fa-signal"></i> 초급</span>
+                </p>
+            </div>
+
+            <div class="lesson-section">
+                <h2>학습 목표</h2>
+                <ul class="objectives">
+                    <li>강력한 검색 기능 마스터하기</li>
+                    <li>검색 연산자와 필터 활용법</li>
+                    <li>검색 쿼리 저장과 활용</li>
+                    <li>효율적인 정보 찾기 전략</li>
+                </ul>
+            </div>
+
+            <div class="lesson-section">
+                <h2>1. 기본 검색 기능</h2>
+                
+                <div class="feature-showcase">
+                    <h3>빠른 검색 (Ctrl/Cmd + Shift + F)</h3>
+                    <div class="search-demo">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="검색어 입력..." disabled>
+                        </div>
+                        <div class="search-options">
+                            <label><input type="checkbox" checked> 대소문자 구분</label>
+                            <label><input type="checkbox"> 전체 단어만</label>
+                            <label><input type="checkbox"> 정규식 사용</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <i class="fas fa-keyboard"></i>
+                    <p><strong>단축키:</strong> 
+                    <br>• 전체 검색: Ctrl/Cmd + Shift + F
+                    <br>• 현재 파일 검색: Ctrl/Cmd + F
+                    <br>• 파일 이름 검색: Ctrl/Cmd + O</p>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>2. 검색 연산자</h2>
+                
+                <div class="operator-grid">
+                    <div class="operator-card">
+                        <h4><code>file:</code></h4>
+                        <p>파일 이름으로 검색</p>
+                        <div class="code-example">
+                            <pre><code>file:회의록
+file:"2024-01"</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="operator-card">
+                        <h4><code>path:</code></h4>
+                        <p>경로 포함 검색</p>
+                        <div class="code-example">
+                            <pre><code>path:프로젝트
+path:"개인/일기"</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="operator-card">
+                        <h4><code>tag:</code></h4>
+                        <p>태그로 검색</p>
+                        <div class="code-example">
+                            <pre><code>tag:중요
+tag:#프로젝트</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="operator-card">
+                        <h4><code>line:</code></h4>
+                        <p>같은 줄에 있는 단어</p>
+                        <div class="code-example">
+                            <pre><code>line:(회의 참석)
+line:(목표 달성)</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="operator-card">
+                        <h4><code>section:</code></h4>
+                        <p>같은 섹션 내 검색</p>
+                        <div class="code-example">
+                            <pre><code>section:(프로젝트 완료)
+section:(버그 수정)</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="operator-card">
+                        <h4><code>block:</code></h4>
+                        <p>같은 블록 내 검색</p>
+                        <div class="code-example">
+                            <pre><code>block:(코드 리뷰)
+block:(TODO 완료)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>3. 고급 검색 쿼리</h2>
+                
+                <h3>복합 검색 예제</h3>
+                <div class="search-examples">
+                    <div class="example-item">
+                        <h4>프로젝트 관련 미완료 작업 찾기</h4>
+                        <div class="code-example">
+                            <pre><code>tag:프로젝트 "[ ]" -tag:완료</code></pre>
+                        </div>
+                        <p class="example-desc">프로젝트 태그가 있고, 체크되지 않은 할 일이 있으며, 완료 태그가 없는 노트</p>
+                    </div>
+                    
+                    <div class="example-item">
+                        <h4>특정 기간의 회의록</h4>
+                        <div class="code-example">
+                            <pre><code>file:회의록 file:2024-01</code></pre>
+                        </div>
+                        <p class="example-desc">2024년 1월의 회의록 파일들</p>
+                    </div>
+                    
+                    <div class="example-item">
+                        <h4>코드 블록 포함 문서</h4>
+                        <div class="code-example">
+                            <pre><code>/```[\s\S]*?```/ tag:개발</code></pre>
+                        </div>
+                        <p class="example-desc">개발 태그가 있고 코드 블록을 포함한 문서 (정규식 사용)</p>
+                    </div>
+                </div>
+
+                <h3>검색 연산자 조합</h3>
+                <table class="operator-table">
+                    <tr>
+                        <th>연산자</th>
+                        <th>설명</th>
+                        <th>예시</th>
+                    </tr>
+                    <tr>
+                        <td><code>AND</code></td>
+                        <td>두 조건 모두 만족 (공백)</td>
+                        <td><code>프로젝트 완료</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>OR</code></td>
+                        <td>하나 이상 만족</td>
+                        <td><code>프로젝트 OR 작업</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>-</code></td>
+                        <td>제외</td>
+                        <td><code>회의 -취소</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>"..."</code></td>
+                        <td>정확한 구문</td>
+                        <td><code>"프로젝트 관리"</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>(...)</code></td>
+                        <td>그룹화</td>
+                        <td><code>(프로젝트 OR 작업) 완료</code></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="lesson-section">
+                <h2>4. 검색 결과 활용</h2>
+                
+                <div class="feature-showcase">
+                    <h3>검색 결과 패널</h3>
+                    <img src="https://via.placeholder.com/700x400/e8f4f8/2c3e50?text=Search+Results+Panel" alt="검색 결과 패널">
+                    
+                    <div class="panel-features">
+                        <div class="feature-item">
+                            <i class="fas fa-copy"></i>
+                            <h4>결과 복사</h4>
+                            <p>검색 결과를 링크 목록으로 복사</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-sort"></i>
+                            <h4>정렬 옵션</h4>
+                            <p>수정 시간, 생성 시간, 알파벳 순</p>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-compress"></i>
+                            <h4>결과 축소/확장</h4>
+                            <p>파일별로 결과 접기/펼치기</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>5. 검색 쿼리 저장</h2>
+                
+                <div class="step-by-step">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>쿼리 입력</h4>
+                            <p>자주 사용하는 검색 쿼리 작성</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>임베드 생성</h4>
+                            <p>검색 쿼리를 노트에 임베드</p>
+                            <div class="code-example">
+                                <pre><code class="language-markdown">```query
+tag:중요 -tag:완료
+```</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>대시보드 활용</h4>
+                            <p>여러 검색 쿼리를 모아 대시보드 생성</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>검색 대시보드 예제</h3>
+                <div class="code-example">
+                    <pre><code class="language-markdown"># 📊 작업 대시보드
+
+## 🔴 긴급 작업
+```query
+tag:긴급 "[ ]" -tag:완료
+```
+
+## 🟡 이번 주 마감
+```query
+tag:마감 file:2024-W03 "[ ]"
+```
+
+## 🟢 완료된 작업
+```query
+tag:완료 file:{{date:YYYY-MM}}
+```
+
+## 📝 최근 수정된 노트
+```query
+file:. sort:modified-desc limit:10
+```</code></pre>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>6. 효율적인 검색 전략</h2>
+                
+                <div class="strategy-cards">
+                    <div class="strategy-card">
+                        <i class="fas fa-tag"></i>
+                        <h4>태그 체계 활용</h4>
+                        <p>일관된 태그 시스템으로 빠른 필터링</p>
+                        <ul>
+                            <li>#상태/진행중</li>
+                            <li>#우선순위/높음</li>
+                            <li>#프로젝트/A</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="strategy-card">
+                        <i class="fas fa-folder-tree"></i>
+                        <h4>폴더 구조 최적화</h4>
+                        <p>논리적 폴더 구조로 path: 검색 활용</p>
+                        <ul>
+                            <li>프로젝트별 폴더</li>
+                            <li>날짜별 아카이브</li>
+                            <li>유형별 분류</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="strategy-card">
+                        <i class="fas fa-heading"></i>
+                        <h4>일관된 제목 규칙</h4>
+                        <p>검색하기 쉬운 파일명 규칙</p>
+                        <ul>
+                            <li>날짜 접두사</li>
+                            <li>카테고리 표시</li>
+                            <li>상태 표시</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>실습 프로젝트</h2>
+                
+                <div class="project-box">
+                    <h3>🔍 스마트 검색 시스템 구축</h3>
+                    <p>자신의 워크플로우에 맞는 검색 시스템을 만들어보세요.</p>
+                    
+                    <div class="project-tasks">
+                        <h4>과제 1: 검색 대시보드 만들기</h4>
+                        <ol>
+                            <li>자주 사용하는 검색 쿼리 5개 정의</li>
+                            <li>검색 대시보드 노트 생성</li>
+                            <li>쿼리 블록으로 동적 결과 표시</li>
+                        </ol>
+                        
+                        <h4>과제 2: 고급 검색 활용</h4>
+                        <ol>
+                            <li>정규식을 사용한 패턴 검색</li>
+                            <li>복합 연산자로 정밀 검색</li>
+                            <li>검색 결과를 새 노트로 정리</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="challenge-box">
+                        <h4>🏆 도전 과제</h4>
+                        <p>다음 검색 쿼리를 작성해보세요:</p>
+                        <ul>
+                            <li>최근 7일 내 수정된 미완료 작업</li>
+                            <li>코드 블록이 있는 튜토리얼 노트</li>
+                            <li>특정 사람과 관련된 모든 회의록</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>검색 팁 모음</h2>
+                
+                <div class="tips-collection">
+                    <div class="search-tip">
+                        <i class="fas fa-asterisk"></i>
+                        <h4>와일드카드 사용</h4>
+                        <p><code>프로*</code>로 "프로젝트", "프로그램" 등 검색</p>
+                    </div>
+                    
+                    <div class="search-tip">
+                        <i class="fas fa-calendar"></i>
+                        <h4>날짜 범위 검색</h4>
+                        <p><code>file:2024-01 file:2024-02</code>로 기간 지정</p>
+                    </div>
+                    
+                    <div class="search-tip">
+                        <i class="fas fa-link"></i>
+                        <h4>링크된 노트 찾기</h4>
+                        <p><code>[[노트이름]]</code>으로 해당 노트를 링크한 문서 검색</p>
+                    </div>
+                    
+                    <div class="search-tip">
+                        <i class="fas fa-image"></i>
+                        <h4>미디어 파일 찾기</h4>
+                        <p><code>file:.png OR file:.jpg</code>로 이미지 파일 검색</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h2>핵심 정리</h2>
+                <div class="key-points">
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>강력한 검색 연산자</h4>
+                            <p>file:, path:, tag: 등으로 정밀한 검색</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>검색 쿼리 저장</h4>
+                            <p>자주 사용하는 검색을 저장해 효율성 극대화</p>
+                        </div>
+                    </div>
+                    <div class="point">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>체계적인 정보 구조</h4>
+                            <p>검색하기 쉬운 태그와 폴더 구조 설계</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="lesson07.html" class="prev-button">
+                    <i class="fas fa-arrow-left"></i> 이전 강의
+                </a>
+                <a href="lesson09.html" class="next-button">
+                    다음 강의 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>
