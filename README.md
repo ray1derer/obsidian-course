@@ -17,11 +17,11 @@
 ## 🚀 시작하기
 
 ### 온라인으로 보기
-[GitHub Pages에서 강좌 보기](https://your-username.github.io/obsidian-course/)
+[GitHub Pages에서 강좌 보기](https://ray1derer.github.io/obsidian-course/)
 
 ### 로컬에서 실행
 ```bash
-git clone https://github.com/your-username/obsidian-course.git
+git clone https://github.com/ray1derer/obsidian-course.git
 cd obsidian-course
 # 브라우저에서 index.html 열기
 ```
@@ -96,6 +96,116 @@ obsidian-course/
 - Obsidian 개발팀과 커뮤니티
 - 모든 기여자와 학습자 여러분
 
+## 💻 개발 가이드
+
+### 프로젝트 설정 및 GitHub 배포
+
+#### 1. 프로젝트 초기 설정
+```bash
+# 프로젝트 디렉토리 생성
+mkdir obsidian_course
+cd obsidian_course
+
+# Git 저장소 초기화
+git init
+git branch -m main
+
+# 필요한 디렉토리 생성
+mkdir -p lessons screenshots assets templates
+```
+
+#### 2. GitHub 저장소 생성 및 연결
+```bash
+# Git 사용자 정보 설정
+git config user.email "your-email@example.com"
+git config user.name "Your Name"
+
+# 원격 저장소 추가
+git remote add origin https://github.com/ray1derer/obsidian-course.git
+
+# 첫 커밋 및 푸시
+git add -A
+git commit -m "Initial commit"
+git push -u origin main
+```
+
+#### 3. GitHub Pages 활성화 (GitHub CLI 사용)
+```bash
+# GitHub CLI 설치 (Termux)
+pkg install gh
+
+# GitHub 인증
+echo "YOUR_GITHUB_TOKEN" | gh auth login --with-token
+
+# Pages 활성화
+gh api --method POST repos/ray1derer/obsidian-course/pages \
+  -f source[branch]=main -f source[path]=/
+```
+
+#### 4. 자동 강좌 생성 시스템 사용
+```bash
+# 강좌 생성 스크립트 실행
+python3 course_generator.py
+
+# 특정 카테고리 강좌 생성
+# (course_generator.py 수정 후)
+python3 course_generator.py --category basics --lessons 1-10
+```
+
+### 📝 프로젝트 구조 상세 설명
+
+- **index.html**: 사이드바가 있는 메인 페이지
+- **course_generator.py**: 카테고리별 자동 조사 및 HTML 생성
+- **lessons/**: 각 강좌별 HTML 파일 저장
+- **screenshots/**: 강좌에 사용될 스크린샷 저장
+- **assets/**: CSS, JavaScript 등 정적 파일
+- **templates/**: HTML 템플릿 파일
+
+### 🔧 주요 기능
+
+1. **자동화된 강좌 생성**
+   - 카테고리 입력 시 자동으로 내용 조사
+   - 템플릿 기반 HTML 생성
+   - 메타데이터 관리
+
+2. **스크린샷 시스템** (계획 중)
+   - 자동 스크린샷 캡처
+   - 어노테이션 추가
+   - 최적화 및 압축
+
+3. **인터랙티브 요소**
+   - 진행률 추적
+   - 이미지 확대/축소
+   - 코드 복사 기능
+
+### 🚀 향후 개발 계획
+
+- [ ] 스크린샷 자동 캡처 시스템 구현
+- [ ] 실제 강좌 내용 작성 (35개 강좌)
+- [ ] 검색 기능 강화
+- [ ] 다국어 지원
+- [ ] 실습 환경 통합
+- [ ] AI 기반 Q&A 시스템
+
+### 🤝 기여 방법
+
+1. **강좌 내용 추가**
+   - `lessons/` 디렉토리에 새 강좌 HTML 추가
+   - 스크린샷은 `screenshots/` 디렉토리에 저장
+
+2. **기능 개선**
+   - `course_generator.py` 개선
+   - CSS/JS 개선
+
+3. **버그 수정**
+   - 이슈 생성 후 PR 제출
+
+### 📌 주의사항
+
+- GitHub Token은 절대 커밋하지 마세요
+- 개인정보가 포함된 스크린샷 주의
+- 한국어 인코딩 UTF-8 유지
+
 ## 📞 연락처
 
 프로젝트 관련 문의사항이 있으시면 이슈를 생성해주세요.
@@ -103,3 +213,5 @@ obsidian-course/
 ---
 
 **🧠 함께 두 번째 뇌를 만들어봐요!**
+
+> 이 프로젝트는 Claude Code와 함께 개발되었습니다.
