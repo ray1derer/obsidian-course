@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>옵시디언 마스터 클래스 - 제2의 뇌 만들기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 사이드바 스타일 */
+        .sidebar {
+            width: 300px;
+            background-color: #2d2d2d;
+            padding: 20px;
+            overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            border-right: 1px solid #3d3d3d;
+        }
+
+        .sidebar h2 {
+            color: #7c3aed;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section h3 {
+            color: #a78bfa;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            padding: 10px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lesson-list {
+            list-style: none;
+        }
+
+        .lesson-item {
+            margin-bottom: 5px;
+        }
+
+        .lesson-link {
+            display: block;
+            padding: 10px 15px;
+            color: #e0e0e0;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-link:hover {
+            background-color: #3d3d3d;
+            color: #a78bfa;
+            transform: translateX(5px);
+        }
+
+        .lesson-link.active {
+            background-color: #7c3aed;
+            color: white;
+        }
+
+        .lesson-number {
+            display: inline-block;
+            width: 30px;
+            font-weight: bold;
+            color: #7c3aed;
+        }
+
+        .lesson-link:hover .lesson-number,
+        .lesson-link.active .lesson-number {
+            color: inherit;
+        }
+
+        /* 메인 콘텐츠 영역 */
+        .main-content {
+            margin-left: 300px;
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            border-radius: 20px;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .feature-card {
+            background-color: #2d2d2d;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #3d3d3d;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+            border-color: #7c3aed;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #7c3aed;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            color: #a78bfa;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .feature-card p {
+            color: #b0b0b0;
+            line-height: 1.8;
+        }
+
+        .stats {
+            background-color: #2d2d2d;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: #7c3aed;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #b0b0b0;
+            font-size: 1.1rem;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 40px;
+            background-color: #2d2d2d;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: #7c3aed;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .cta-button:hover {
+            background-color: #6b21a8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .progress-bar {
+            background-color: #1e1e1e;
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #7c3aed, #a78bfa);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            background-color: #1e1e1e;
+            border: 1px solid #3d3d3d;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7c3aed;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .container {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 사이드바 -->
+        <aside class="sidebar">
+            <h2><i class="fas fa-brain"></i> 옵시디언 마스터 클래스</h2>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="강좌 검색...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <!-- 초급 과정 -->
+            <div class="sidebar-section">
+                <h3><i class="fas fa-seedling"></i> 초급 과정 (1-10강)</h3>
+                <ul class="lesson-list">
+                    <li class="lesson-item">
+                        <a href="lessons/lesson01.html" class="lesson-link">
+                            <span class="lesson-number">01</span> 옵시디언 첫걸음
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson02.html" class="lesson-link">
+                            <span class="lesson-number">02</span> 볼트(Vault)의 이해
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson03.html" class="lesson-link">
+                            <span class="lesson-number">03</span> 기본 노트 작성
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson04.html" class="lesson-link">
+                            <span class="lesson-number">04</span> 내부 링크의 마법
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson05.html" class="lesson-link">
+                            <span class="lesson-number">05</span> 태그와 속성
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson06.html" class="lesson-link">
+                            <span class="lesson-number">06</span> 일일 노트와 템플릿
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson07.html" class="lesson-link">
+                            <span class="lesson-number">07</span> 파일 임베드와 트랜스클루전
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson08.html" class="lesson-link">
+                            <span class="lesson-number">08</span> 검색과 필터링
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson09.html" class="lesson-link">
+                            <span class="lesson-number">09</span> 그래프 뷰 기초
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson10.html" class="lesson-link">
+                            <span class="lesson-number">10</span> 필수 커뮤니티 플러그인
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 중급 과정 -->
+            <div class="sidebar-section">
+                <h3><i class="fas fa-rocket"></i> 중급 과정 (11-20강)</h3>
+                <ul class="lesson-list">
+                    <li class="lesson-item">
+                        <a href="lessons/lesson11.html" class="lesson-link">
+                            <span class="lesson-number">11</span> Dataview 플러그인 마스터
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson12.html" class="lesson-link">
+                            <span class="lesson-number">12</span> Templater 고급 템플릿
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson13.html" class="lesson-link">
+                            <span class="lesson-number">13</span> Tasks로 할 일 관리
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson14.html" class="lesson-link">
+                            <span class="lesson-number">14</span> 캔버스로 시각적 사고
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson15.html" class="lesson-link">
+                            <span class="lesson-number">15</span> Excalidraw로 그리기
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson16.html" class="lesson-link">
+                            <span class="lesson-number">16</span> PKM 시스템 구축
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson17.html" class="lesson-link">
+                            <span class="lesson-number">17</span> Zettelkasten 구현
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson18.html" class="lesson-link">
+                            <span class="lesson-number">18</span> 두 번째 뇌 만들기
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson19.html" class="lesson-link">
+                            <span class="lesson-number">19</span> 고급 검색과 쿼리
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson20.html" class="lesson-link">
+                            <span class="lesson-number">20</span> 워크플로우 자동화
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 고급 과정 -->
+            <div class="sidebar-section">
+                <h3><i class="fas fa-gem"></i> 고급 과정 (21-30강)</h3>
+                <ul class="lesson-list">
+                    <li class="lesson-item">
+                        <a href="lessons/lesson21.html" class="lesson-link">
+                            <span class="lesson-number">21</span> Git으로 버전 관리
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson22.html" class="lesson-link">
+                            <span class="lesson-number">22</span> 모바일 동기화
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson23.html" class="lesson-link">
+                            <span class="lesson-number">23</span> Obsidian Publish
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson24.html" class="lesson-link">
+                            <span class="lesson-number">24</span> API와 플러그인 개발
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson25.html" class="lesson-link">
+                            <span class="lesson-number">25</span> CSS 커스터마이징
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson26.html" class="lesson-link">
+                            <span class="lesson-number">26</span> 고급 Dataview
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson27.html" class="lesson-link">
+                            <span class="lesson-number">27</span> 연구와 논문 작성
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson28.html" class="lesson-link">
+                            <span class="lesson-number">28</span> 팀 협업
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson29.html" class="lesson-link">
+                            <span class="lesson-number">29</span> 성능 최적화
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson30.html" class="lesson-link">
+                            <span class="lesson-number">30</span> 통합 워크플로우
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 보너스 과정 -->
+            <div class="sidebar-section">
+                <h3><i class="fas fa-gift"></i> 보너스 과정 (31-35강)</h3>
+                <ul class="lesson-list">
+                    <li class="lesson-item">
+                        <a href="lessons/lesson31.html" class="lesson-link">
+                            <span class="lesson-number">31</span> AI와 옵시디언
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson32.html" class="lesson-link">
+                            <span class="lesson-number">32</span> 특수 용도별 설정
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson33.html" class="lesson-link">
+                            <span class="lesson-number">33</span> 커뮤니티와 리소스
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson34.html" class="lesson-link">
+                            <span class="lesson-number">34</span> 마이그레이션 가이드
+                        </a>
+                    </li>
+                    <li class="lesson-item">
+                        <a href="lessons/lesson35.html" class="lesson-link">
+                            <span class="lesson-number">35</span> 미래를 위한 옵시디언
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 5%;"></div>
+            </div>
+            <p style="text-align: center; margin-top: 10px; color: #7c3aed;">진행률: 5%</p>
+        </aside>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="main-content">
+            <div class="hero">
+                <h1>🧠 옵시디언 마스터 클래스</h1>
+                <p>당신의 두 번째 뇌를 만들어보세요</p>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3>연결된 사고</h3>
+                    <p>백링크와 그래프 뷰로 지식을 연결하고 새로운 통찰을 발견하세요</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>완전한 소유권</h3>
+                    <p>모든 데이터를 로컬에 저장하여 영원히 당신의 것으로 보관하세요</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>무한한 확장성</h3>
+                    <p>1000개 이상의 플러그인으로 나만의 완벽한 시스템을 구축하세요</p>
+                </div>
+            </div>
+
+            <div class="stats">
+                <h2>📊 강좌 통계</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">35</div>
+                        <div class="stat-label">총 강좌 수</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">실습 예제</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">플러그인 소개</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">∞</div>
+                        <div class="stat-label">가능성</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h2>🚀 지금 시작하세요!</h2>
+                <p style="margin-bottom: 20px;">초보자부터 전문가까지, 단계별로 옵시디언을 마스터하세요</p>
+                <a href="lessons/lesson01.html" class="cta-button">
+                    <i class="fas fa-play-circle"></i> 첫 강좌 시작하기
+                </a>
+                <a href="#" class="cta-button" style="background-color: #6b21a8;">
+                    <i class="fas fa-download"></i> 전체 자료 다운로드
+                </a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 검색 기능
+        const searchInput = document.querySelector('.search-input');
+        const lessonLinks = document.querySelectorAll('.lesson-link');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            lessonLinks.forEach(link => {
+                const text = link.textContent.toLowerCase();
+                const parent = link.parentElement;
+                
+                if (text.includes(searchTerm)) {
+                    parent.style.display = 'block';
+                } else {
+                    parent.style.display = 'none';
+                }
+            });
+        });
+
+        // 현재 페이지 활성화
+        const currentPath = window.location.pathname;
+        lessonLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+
+        // 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
