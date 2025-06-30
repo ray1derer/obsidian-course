@@ -1,0 +1,66 @@
+{
+  "lessons": {
+    "lesson01": {
+      "title": "옵시디언 첫걸음",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.836902",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson01.html"
+    },
+    "lesson02": {
+      "title": "볼트(Vault)의 이해",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.837797",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson02.html"
+    },
+    "lesson03": {
+      "title": "기본 노트 작성",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.838565",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson03.html"
+    },
+    "lesson04": {
+      "title": "내부 링크의 마법",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.839291",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson04.html"
+    },
+    "lesson05": {
+      "title": "태그와 속성",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.840026",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson05.html"
+    },
+    "lesson06": {
+      "title": "일일 노트와 템플릿",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.840653",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson06.html"
+    },
+    "lesson07": {
+      "title": "파일 임베드와 트랜스클루전",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.841287",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson07.html"
+    },
+    "lesson08": {
+      "title": "검색과 필터링",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.841873",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson08.html"
+    },
+    "lesson09": {
+      "title": "그래프 뷰 기초",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.842405",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson09.html"
+    },
+    "lesson10": {
+      "title": "필수 커뮤니티 플러그인",
+      "category": "basics",
+      "created": "2025-06-30T19:02:49.843060",
+      "file": "/data/data/com.termux/files/home/obsidian_course/lessons/lesson10.html"
+    }
+  },
+  "categories": {},
+  "last_updated": "2025-06-30T19:02:49.843139"
+}

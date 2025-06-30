@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제32강: AI 콘텐츠 생성 능력 | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-brain"></i> 제32강: AI 콘텐츠 생성 능력</h1>
+                <p class="lesson-subtitle">텍스트에서 블로그까지, AI로 만드는 모든 콘텐츠</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 고급</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 75분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: AI 활용</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson31.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제32강: AI 콘텐츠 생성 능력</span>
+            <a href="lesson33.html" class="nav-link next">
+                다음 강의 <i class="fas fa-chevron-right"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>AI를 활용한 다양한 콘텐츠 생성 기법 마스터하기</li>
+                    <li>블로그 포스트부터 기술 문서까지 작성하기</li>
+                    <li>코드 생성과 리팩토링 자동화하기</li>
+                    <li>마케팅 콘텐츠와 소셜 미디어 포스트 생성하기</li>
+                    <li>AI 프롬프트 엔지니어링 최적화 기법 익히기</li>
+                    <li>콘텐츠 품질 검증과 개선 워크플로우 구축하기</li>
+                </ul>
+            </section>
+
+            <section class="ai-content-types">
+                <h2><i class="fas fa-layer-group"></i> AI로 생성 가능한 콘텐츠 유형</h2>
+                
+                <div class="content-types-grid">
+                    <div class="content-type-card">
+                        <div class="card-icon">
+                            <i class="fas fa-blog"></i>
+                        </div>
+                        <h3>블로그 & 아티클</h3>
+                        <ul>
+                            <li>SEO 최적화된 블로그 포스트</li>
+                            <li>기술 튜토리얼과 가이드</li>
+                            <li>뉴스 기사와 리뷰</li>
+                            <li>개인 경험담과 케이스 스터디</li>
+                        </ul>
+                        <div class="code-example">
+                            <h4>프롬프트 예시</h4>
+                            <pre><code class="language-text">주제: React 18의 새로운 기능
+형식: 기술 블로그 포스트
+길이: 2000-2500 단어
+톤: 전문적이면서 이해하기 쉬운
+포함 내용:
+- 도입부 (React 18의 중요성)
+- 주요 새 기능 5가지 상세 설명
+- 각 기능별 코드 예제
+- 마이그레이션 가이드
+- 결론과 향후 전망</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="content-type-card">
+                        <div class="card-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>코드 & 프로그램</h3>
+                        <ul>
+                            <li>완전한 애플리케이션 코드</li>
+                            <li>API 엔드포인트 구현</li>
+                            <li>데이터베이스 스키마 설계</li>
+                            <li>테스트 코드와 문서화</li>
+                        </ul>
+                        <div class="code-example">
+                            <h4>생성 예시</h4>
+                            <pre><code class="language-python"># AI가 생성한 Todo 앱 백엔드
+from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todos.db'
+db = SQLAlchemy(app)
+
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text)
+    completed = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'completed': self.completed,
+            'created_at': self.created_at.isoformat()
+        }</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="content-type-card">
+                        <div class="card-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>문서 & 보고서</h3>
+                        <ul>
+                            <li>기술 사양서와 RFC</li>
+                            <li>사용자 매뉴얼과 가이드</li>
+                            <li>비즈니스 제안서</li>
+                            <li>프로젝트 계획서</li>
+                        </ul>
+                        <div class="document-template">
+                            <h4>문서 구조 템플릿</h4>
+                            <pre><code class="language-markdown"># 프로젝트 제안서: AI 기반 고객 서비스 시스템
+
+## 1. 개요
+### 1.1 배경
+### 1.2 목적
+### 1.3 범위
+
+## 2. 현재 상황 분석
+### 2.1 문제점
+### 2.2 기회
+### 2.3 제약사항
+
+## 3. 제안 솔루션
+### 3.1 시스템 아키텍처
+### 3.2 주요 기능
+### 3.3 기술 스택
+
+## 4. 구현 계획
+### 4.1 일정
+### 4.2 리소스
+### 4.3 예산
+
+## 5. 기대 효과
+### 5.1 ROI 분석
+### 5.2 위험 관리</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="content-type-card">
+                        <div class="card-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h3>마케팅 콘텐츠</h3>
+                        <ul>
+                            <li>소셜 미디어 포스트</li>
+                            <li>이메일 캠페인</li>
+                            <li>광고 카피</li>
+                            <li>랜딩 페이지 콘텐츠</li>
+                        </ul>
+                        <div class="marketing-examples">
+                            <h4>소셜 미디어 포스트 예시</h4>
+                            <div class="social-post">
+                                <p><strong>LinkedIn:</strong></p>
+                                <p>🚀 새로운 AI 도구로 생산성을 10배 높이세요!</p>
+                                <p>최신 LLM 기술을 활용한 우리의 솔루션은:</p>
+                                <p>✅ 코드 작성 시간 80% 단축<br>
+                                ✅ 버그 발견율 95% 향상<br>
+                                ✅ 문서화 자동화로 팀 협업 강화</p>
+                                <p>#AI #개발자도구 #생산성향상</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="prompt-engineering">
+                <h2><i class="fas fa-cogs"></i> 고급 프롬프트 엔지니어링</h2>
+                
+                <div class="prompt-techniques">
+                    <h3>1. 구조화된 프롬프트 작성법</h3>
+                    <div class="technique-box">
+                        <h4>CLEAR 프레임워크</h4>
+                        <ul>
+                            <li><strong>C</strong>ontext: 배경 정보 제공</li>
+                            <li><strong>L</strong>ength: 원하는 길이 명시</li>
+                            <li><strong>E</strong>xample: 예시 제공</li>
+                            <li><strong>A</strong>udience: 대상 독자 정의</li>
+                            <li><strong>R</strong>equirements: 특별 요구사항</li>
+                        </ul>
+                        
+                        <div class="code-example">
+                            <pre><code class="language-text">Context: 스타트업을 위한 MVP 개발 가이드
+Length: 3000단어, 5개 섹션
+Example: Airbnb, Uber의 초기 MVP 사례 포함
+Audience: 기술 배경이 없는 창업자
+Requirements: 
+- 실행 가능한 체크리스트 포함
+- 예산별 추천 기술 스택
+- 일반적인 실수와 해결책</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>2. Chain of Thought (CoT) 프롬프팅</h3>
+                    <div class="technique-box">
+                        <p>복잡한 문제를 단계별로 분해하여 AI가 논리적으로 사고하도록 유도</p>
+                        <div class="code-example">
+                            <pre><code class="language-text">문제: 대규모 전자상거래 사이트의 성능 최적화 방안
+
+단계별로 생각해보세요:
+1. 먼저 현재 성능 병목 지점을 파악하세요
+2. 각 병목 지점의 원인을 분석하세요
+3. 우선순위를 정하세요 (영향도 vs 구현 난이도)
+4. 각 문제에 대한 해결책을 제시하세요
+5. 구현 로드맵을 작성하세요
+6. 성능 측정 지표를 정의하세요</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>3. Few-Shot Learning</h3>
+                    <div class="technique-box">
+                        <p>원하는 출력 형식의 예시를 제공하여 AI가 패턴을 학습하도록 함</p>
+                        <div class="code-example">
+                            <pre><code class="language-text">다음 형식으로 제품 설명을 작성해주세요:
+
+예시 1:
+제품: 무선 이어폰
+특징: 노이즈 캔슬링, 30시간 배터리
+설명: "일상의 소음을 차단하고 당신만의 음악 세계로. 30시간 연속 재생으로 충전 걱정 없이 하루 종일 즐기세요."
+
+예시 2:
+제품: 스마트 워치
+특징: 건강 추적, 방수
+설명: "당신의 건강을 24시간 지켜주는 스마트 파트너. 수영장에서도 걱정 없는 완벽한 방수 기능."
+
+이제 다음 제품의 설명을 작성해주세요:
+제품: AI 스피커
+특징: 음성 인식, 스마트홈 연동</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-generation-workflow">
+                <h2><i class="fas fa-project-diagram"></i> 콘텐츠 생성 워크플로우</h2>
+                
+                <div class="workflow-stages">
+                    <div class="stage">
+                        <div class="stage-number">1</div>
+                        <h3>기획 단계</h3>
+                        <ul>
+                            <li>목표 정의와 타겟 오디언스 분석</li>
+                            <li>콘텐츠 형식과 톤 결정</li>
+                            <li>핵심 메시지와 CTA 설정</li>
+                        </ul>
+                        <div class="stage-tips">
+                            <h4>💡 프로 팁</h4>
+                            <p>AI에게 "브레인스토밍 파트너" 역할을 맡겨 아이디어를 확장하세요.</p>
+                            <pre><code class="language-text">"다음 주제에 대해 10가지 독특한 관점을 제시해주세요: [주제]
+각 관점마다 핵심 논점 3가지씩 포함해주세요."</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="stage">
+                        <div class="stage-number">2</div>
+                        <h3>초안 생성</h3>
+                        <ul>
+                            <li>구조화된 프롬프트로 초안 작성</li>
+                            <li>섹션별 상세 내용 생성</li>
+                            <li>필요한 예시와 데이터 추가</li>
+                        </ul>
+                        <div class="stage-tips">
+                            <h4>💡 프로 팁</h4>
+                            <p>긴 콘텐츠는 섹션별로 나누어 생성하고 나중에 통합하세요.</p>
+                        </div>
+                    </div>
+
+                    <div class="stage">
+                        <div class="stage-number">3</div>
+                        <h3>검토 및 개선</h3>
+                        <ul>
+                            <li>팩트 체크와 정확성 검증</li>
+                            <li>톤과 스타일 일관성 확인</li>
+                            <li>SEO 최적화 요소 추가</li>
+                        </ul>
+                        <div class="stage-tips">
+                            <h4>💡 프로 팁</h4>
+                            <p>AI를 "에디터"로 활용하여 개선점을 찾아내세요.</p>
+                            <pre><code class="language-text">"다음 콘텐츠를 검토하고 개선점을 제안해주세요:
+- 문법과 맞춤법 오류
+- 논리적 일관성
+- 독자 참여도 향상 방안
+- SEO 최적화 제안"</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="stage">
+                        <div class="stage-number">4</div>
+                        <h3>최종 마무리</h3>
+                        <ul>
+                            <li>시각적 요소 추가 (이미지, 차트)</li>
+                            <li>메타데이터와 태그 설정</li>
+                            <li>배포 채널별 최적화</li>
+                        </ul>
+                        <div class="stage-tips">
+                            <h4>💡 프로 팁</h4>
+                            <p>AI로 소셜 미디어용 요약본과 홍보 문구도 함께 생성하세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="advanced-techniques">
+                <h2><i class="fas fa-rocket"></i> 고급 콘텐츠 생성 기법</h2>
+                
+                <div class="technique-cards">
+                    <div class="technique-card">
+                        <h3>1. 멀티모달 콘텐츠 생성</h3>
+                        <p>텍스트와 이미지를 결합한 풍부한 콘텐츠 제작</p>
+                        <div class="example-box">
+                            <h4>인포그래픽 생성 프로세스</h4>
+                            <ol>
+                                <li>AI로 데이터와 핵심 포인트 정리</li>
+                                <li>시각화 아이디어 브레인스토밍</li>
+                                <li>이미지 생성 AI로 그래픽 요소 제작</li>
+                                <li>최종 디자인 도구에서 조합</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="technique-card">
+                        <h3>2. 개인화된 콘텐츠 대량 생성</h3>
+                        <p>템플릿과 변수를 활용한 맞춤형 콘텐츠 자동화</p>
+                        <div class="code-example">
+                            <pre><code class="language-python"># 개인화된 이메일 생성 예시
+template = """
+안녕하세요 {name}님,
+
+{company}에서 {role}로 일하고 계신다니 정말 멋지네요!
+
+우리의 {product}는 특히 {industry} 분야의 
+{challenge}를 해결하는 데 탁월합니다.
+
+{personalized_benefit}
+
+관심 있으시다면 {cta}
+"""
+
+# AI가 각 고객별로 personalized_benefit 생성
+for customer in customers:
+    personalized_content = ai.generate(
+        f"고객 프로필: {customer.profile}\n"
+        f"제품: {product}\n"
+        f"고객의 주요 과제와 연결된 혜택을 작성하세요"
+    )</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="technique-card">
+                        <h3>3. 반복적 개선 (Iterative Refinement)</h3>
+                        <p>AI와의 대화를 통해 콘텐츠를 점진적으로 개선</p>
+                        <div class="refinement-process">
+                            <div class="iteration">
+                                <h4>1차 반복</h4>
+                                <p>"기본 구조와 주요 내용 생성"</p>
+                            </div>
+                            <div class="iteration">
+                                <h4>2차 반복</h4>
+                                <p>"구체적인 예시와 데이터 추가"</p>
+                            </div>
+                            <div class="iteration">
+                                <h4>3차 반복</h4>
+                                <p>"톤 조정과 독자 참여 요소 강화"</p>
+                            </div>
+                            <div class="iteration">
+                                <h4>4차 반복</h4>
+                                <p>"SEO 최적화와 CTA 추가"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="technique-card">
+                        <h3>4. 콘텐츠 A/B 테스팅</h3>
+                        <p>AI로 여러 버전을 생성하고 성과 비교</p>
+                        <div class="ab-testing">
+                            <h4>테스트 가능한 요소들</h4>
+                            <ul>
+                                <li>헤드라인 변형 (감정적 vs 논리적)</li>
+                                <li>콘텐츠 길이 (간결 vs 상세)</li>
+                                <li>톤과 스타일 (공식적 vs 친근한)</li>
+                                <li>CTA 문구와 위치</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="quality-assurance">
+                <h2><i class="fas fa-check-circle"></i> 콘텐츠 품질 보증</h2>
+                
+                <div class="qa-checklist">
+                    <h3>AI 생성 콘텐츠 검증 체크리스트</h3>
+                    
+                    <div class="checklist-category">
+                        <h4>정확성 검증</h4>
+                        <ul class="checklist">
+                            <li>
+                                <input type="checkbox" id="fact-check">
+                                <label for="fact-check">팩트와 수치의 정확성 확인</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="source-verify">
+                                <label for="source-verify">인용된 출처의 신뢰성 검증</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="tech-accuracy">
+                                <label for="tech-accuracy">기술적 내용의 정확성 확인</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="checklist-category">
+                        <h4>품질 기준</h4>
+                        <ul class="checklist">
+                            <li>
+                                <input type="checkbox" id="originality">
+                                <label for="originality">독창성과 부가가치 확인</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="coherence">
+                                <label for="coherence">논리적 일관성과 흐름</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="engagement">
+                                <label for="engagement">독자 참여도와 가독성</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="checklist-category">
+                        <h4>최적화</h4>
+                        <ul class="checklist">
+                            <li>
+                                <input type="checkbox" id="seo">
+                                <label for="seo">SEO 키워드와 메타데이터</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="mobile">
+                                <label for="mobile">모바일 친화적 포맷</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="accessibility">
+                                <label for="accessibility">접근성 기준 충족</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="quality-metrics">
+                    <h3>콘텐츠 성과 측정 지표</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <i class="fas fa-eye"></i>
+                            <h4>조회수</h4>
+                            <p>페이지뷰, 순방문자</p>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-clock"></i>
+                            <h4>체류 시간</h4>
+                            <p>평균 읽기 시간</p>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-share"></i>
+                            <h4>공유율</h4>
+                            <p>소셜 미디어 공유</p>
+                        </div>
+                        <div class="metric-card">
+                            <i class="fas fa-bullseye"></i>
+                            <h4>전환율</h4>
+                            <p>CTA 클릭, 목표 달성</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="real-world-examples">
+                <h2><i class="fas fa-briefcase"></i> 실전 활용 사례</h2>
+                
+                <div class="case-studies">
+                    <div class="case-study">
+                        <h3>사례 1: 기술 블로그 운영</h3>
+                        <div class="case-content">
+                            <h4>상황</h4>
+                            <p>주 3회 기술 블로그 포스팅이 필요한 스타트업</p>
+                            
+                            <h4>솔루션</h4>
+                            <ul>
+                                <li>AI로 주제 아이디어 생성 (월 50개)</li>
+                                <li>초안 작성 시간 80% 단축</li>
+                                <li>일관된 품질과 톤 유지</li>
+                            </ul>
+                            
+                            <h4>결과</h4>
+                            <p>월간 트래픽 300% 증가, 리드 생성 250% 향상</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <h3>사례 2: 이커머스 상품 설명</h3>
+                        <div class="case-content">
+                            <h4>상황</h4>
+                            <p>5,000개 상품의 설명 작성 필요</p>
+                            
+                            <h4>솔루션</h4>
+                            <ul>
+                                <li>제품 스펙 기반 자동 설명 생성</li>
+                                <li>SEO 최적화된 제목과 태그</li>
+                                <li>A/B 테스트로 최적 버전 선택</li>
+                            </ul>
+                            
+                            <h4>결과</h4>
+                            <p>작성 시간 95% 단축, 전환율 40% 향상</p>
+                        </div>
+                    </div>
+
+                    <div class="case-study">
+                        <h3>사례 3: 교육 콘텐츠 제작</h3>
+                        <div class="case-content">
+                            <h4>상황</h4>
+                            <p>온라인 코스를 위한 대량의 학습 자료 필요</p>
+                            
+                            <h4>솔루션</h4>
+                            <ul>
+                                <li>커리큘럼 기반 체계적 콘텐츠 생성</li>
+                                <li>퀴즈와 연습 문제 자동 생성</li>
+                                <li>학습자 수준별 맞춤 설명</li>
+                            </ul>
+                            
+                            <h4>결과</h4>
+                            <p>코스 제작 기간 70% 단축, 학습자 만족도 90%</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="best-practices">
+                <h2><i class="fas fa-star"></i> 모범 사례와 주의사항</h2>
+                
+                <div class="practices-grid">
+                    <div class="practice-card do">
+                        <h3><i class="fas fa-check"></i> 해야 할 것</h3>
+                        <ul>
+                            <li>명확하고 구체적인 프롬프트 작성</li>
+                            <li>생성된 콘텐츠의 팩트 체크</li>
+                            <li>인간의 검토와 편집 과정 포함</li>
+                            <li>타겟 오디언스에 맞는 톤 조정</li>
+                            <li>지속적인 품질 모니터링</li>
+                            <li>윤리적 사용 가이드라인 준수</li>
+                        </ul>
+                    </div>
+
+                    <div class="practice-card dont">
+                        <h3><i class="fas fa-times"></i> 하지 말아야 할 것</h3>
+                        <ul>
+                            <li>AI 생성 콘텐츠를 검증 없이 게시</li>
+                            <li>저작권이 있는 콘텐츠 무단 사용</li>
+                            <li>AI 사용 사실을 숨기기</li>
+                            <li>개인정보나 민감한 정보 포함</li>
+                            <li>편향되거나 차별적인 콘텐츠 생성</li>
+                            <li>과도한 자동화로 인한 품질 저하</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="ethical-guidelines">
+                    <h3>윤리적 AI 콘텐츠 생성 가이드</h3>
+                    <div class="guideline-box">
+                        <h4>1. 투명성</h4>
+                        <p>AI를 활용했음을 명시하고, 필요시 편집 과정을 설명</p>
+                        
+                        <h4>2. 정확성</h4>
+                        <p>생성된 정보의 정확성을 항상 검증하고 출처를 명시</p>
+                        
+                        <h4>3. 독창성</h4>
+                        <p>단순 복제가 아닌 새로운 가치를 더하는 콘텐츠 생성</p>
+                        
+                        <h4>4. 책임감</h4>
+                        <p>생성된 콘텐츠에 대한 최종 책임은 인간에게 있음을 인식</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="practice-exercise">
+                <h2><i class="fas fa-laptop-code"></i> 실습: AI 콘텐츠 생성 프로젝트</h2>
+                
+                <div class="exercise-container">
+                    <h3>프로젝트: 1주일 블로그 콘텐츠 캘린더 제작</h3>
+                    
+                    <div class="exercise-steps">
+                        <div class="step">
+                            <h4>Step 1: 주제 브레인스토밍</h4>
+                            <p>AI를 활용해 타겟 오디언스에 맞는 7개의 블로그 주제를 생성하세요.</p>
+                            <div class="hint">
+                                <p><strong>힌트:</strong> 업계 트렌드, 고객 문제점, 계절적 이슈를 고려하세요.</p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <h4>Step 2: 콘텐츠 개요 작성</h4>
+                            <p>각 주제별로 상세한 개요와 핵심 포인트를 작성하세요.</p>
+                        </div>
+
+                        <div class="step">
+                            <h4>Step 3: 초안 생성</h4>
+                            <p>하나의 주제를 선택해 2000단어 분량의 초안을 생성하세요.</p>
+                        </div>
+
+                        <div class="step">
+                            <h4>Step 4: 최적화</h4>
+                            <p>SEO 키워드를 추가하고 가독성을 개선하세요.</p>
+                        </div>
+
+                        <div class="step">
+                            <h4>Step 5: 멀티채널 배포</h4>
+                            <p>소셜 미디어용 요약본과 이메일 뉴스레터를 생성하세요.</p>
+                        </div>
+                    </div>
+
+                    <div class="exercise-deliverables">
+                        <h4>최종 산출물</h4>
+                        <ul>
+                            <li>7개 블로그 포스트 주제와 개요</li>
+                            <li>1개 완성된 블로그 포스트</li>
+                            <li>5개 소셜 미디어 포스트</li>
+                            <li>1개 이메일 뉴스레터</li>
+                            <li>콘텐츠 성과 측정 계획</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tools-resources">
+                <h2><i class="fas fa-toolbox"></i> 추천 도구와 리소스</h2>
+                
+                <div class="tools-grid">
+                    <div class="tool-category">
+                        <h3>AI 콘텐츠 생성 도구</h3>
+                        <ul class="tool-list">
+                            <li>
+                                <strong>ChatGPT/Claude:</strong> 범용 텍스트 생성
+                            </li>
+                            <li>
+                                <strong>Jasper AI:</strong> 마케팅 콘텐츠 특화
+                            </li>
+                            <li>
+                                <strong>Copy.ai:</strong> 짧은 카피 생성
+                            </li>
+                            <li>
+                                <strong>Writesonic:</strong> SEO 최적화 콘텐츠
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-category">
+                        <h3>콘텐츠 관리 플랫폼</h3>
+                        <ul class="tool-list">
+                            <li>
+                                <strong>Notion:</strong> 콘텐츠 계획과 협업
+                            </li>
+                            <li>
+                                <strong>Airtable:</strong> 콘텐츠 캘린더 관리
+                            </li>
+                            <li>
+                                <strong>Contentful:</strong> 헤드리스 CMS
+                            </li>
+                            <li>
+                                <strong>Buffer:</strong> 소셜 미디어 스케줄링
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tool-category">
+                        <h3>분석 및 최적화</h3>
+                        <ul class="tool-list">
+                            <li>
+                                <strong>Google Analytics:</strong> 트래픽 분석
+                            </li>
+                            <li>
+                                <strong>Hotjar:</strong> 사용자 행동 분석
+                            </li>
+                            <li>
+                                <strong>Grammarly:</strong> 문법 검사
+                            </li>
+                            <li>
+                                <strong>Hemingway:</strong> 가독성 개선
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-clipboard-check"></i> 핵심 요약</h2>
+                
+                <div class="key-takeaways">
+                    <h3>이번 강의의 핵심 내용</h3>
+                    <ul>
+                        <li>AI는 다양한 형태의 콘텐츠를 빠르고 효율적으로 생성할 수 있습니다</li>
+                        <li>구조화된 프롬프트와 고급 기법으로 품질을 크게 향상시킬 수 있습니다</li>
+                        <li>반복적 개선과 인간의 검토는 고품질 콘텐츠를 위해 필수적입니다</li>
+                        <li>윤리적 사용과 투명성은 AI 콘텐츠 생성의 기본 원칙입니다</li>
+                        <li>적절한 도구와 워크플로우로 콘텐츠 생산성을 극대화할 수 있습니다</li>
+                    </ul>
+                </div>
+
+                <div class="next-steps">
+                    <h3>다음 단계</h3>
+                    <p>이제 AI 콘텐츠 생성의 기초를 마스터했으니, 다음 강의에서는 Cursor의 혁신적인 기능들을 살펴보며 개발자를 위한 AI 도구의 최전선을 탐험해보겠습니다.</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="lesson-footer">
+            <div class="footer-content">
+                <p>&copy; 2025 옵시디언 마스터 클래스. 모든 권리 보유.</p>
+                <p>이 콘텐츠는 AI의 도움을 받아 제작되었습니다.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>

@@ -3,647 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>제6강: 일일 노트와 템플릿 | 옵시디언 마스터 클래스</title>
+    <title>일일 노트와 템플릿 - 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/lesson-style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="lesson-container">
         <header class="lesson-header">
-            <div class="lesson-title">
-                <h1><i class="fas fa-calendar-day"></i> 제6강: 일일 노트와 템플릿</h1>
-                <p class="lesson-subtitle">매일의 기록을 체계적으로 관리하는 방법</p>
-            </div>
+            <h1>제6강: 일일 노트와 템플릿</h1>
             <div class="lesson-meta">
-                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 기초</span>
-                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 35분</span>
-                <span class="category"><i class="fas fa-folder"></i> 카테고리: 일일 관리</span>
+                <span class="category">basics</span>
+                <span class="date">2025-06-30</span>
             </div>
         </header>
-
+        
         <nav class="lesson-nav">
-            <a href="lesson05.html" class="nav-link prev">
-                <i class="fas fa-chevron-left"></i> 이전 강의
-            </a>
-            <span class="nav-title">제6강: 일일 노트와 템플릿</span>
-            <a href="lesson07.html" class="nav-link next">
-                다음 강의 <i class="fas fa-chevron-right"></i>
-            </a>
+            <a href="lesson05.html" class="nav-prev">
+<i class="fas fa-arrow-left"></i> 이전 강의</a>
+<a href="../index.html" class="nav-index">
+<i class="fas fa-list"></i> 목차</a>
+<a href="lesson07.html" class="nav-next">
+다음 강의 <i class="fas fa-arrow-right"></i></a>
         </nav>
-
+        
         <main class="lesson-content">
             <section class="learning-objectives">
-                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
-                <ul>
-                    <li>일일 노트 시스템의 개념과 장점 이해하기</li>
-                    <li>일일 노트 플러그인 설정 및 사용법 마스터하기</li>
-                    <li>효과적인 템플릿 작성 및 활용법 익히기</li>
-                    <li>템플릿 변수와 동적 콘텐츠 활용하기</li>
-                    <li>일일 노트 워크플로우 최적화하기</li>
-                </ul>
-            </section>
-
-            <section class="concept">
-                <h2><i class="fas fa-lightbulb"></i> 일일 노트란?</h2>
-                <div class="concept-grid">
-                    <div class="concept-card">
-                        <h3><i class="fas fa-book"></i> 정의</h3>
-                        <p>일일 노트(Daily Notes)는 매일의 생각, 할 일, 메모를 기록하는 개인 저널 시스템입니다. 옵시디언에서는 자동으로 날짜별 노트를 생성하고 관리할 수 있습니다.</p>
-                    </div>
-                    <div class="concept-card">
-                        <h3><i class="fas fa-star"></i> 장점</h3>
-                        <ul>
-                            <li>일관된 기록 습관 형성</li>
-                            <li>시간에 따른 생각의 변화 추적</li>
-                            <li>아이디어와 인사이트 포착</li>
-                            <li>할 일 관리와 회고 용이</li>
-                        </ul>
-                    </div>
-                    <div class="concept-card">
-                        <h3><i class="fas fa-cog"></i> 활용 예시</h3>
-                        <ul>
-                            <li>업무 일지 작성</li>
-                            <li>개인 일기 및 감정 기록</li>
-                            <li>학습 로그 관리</li>
-                            <li>프로젝트 진행 상황 추적</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section class="practice">
-                <h2><i class="fas fa-laptop-code"></i> 일일 노트 플러그인 설정</h2>
-                
-                <div class="tip">
-                    <i class="fas fa-lightbulb"></i>
-                    <strong>팁:</strong> 일일 노트 플러그인은 옵시디언에 기본으로 포함되어 있습니다. 설정에서 활성화만 하면 바로 사용할 수 있습니다.
-                </div>
-
-                <div class="obsidian-mock-ui">
-                    <div class="mock-titlebar">
-                        <div class="window-controls">
-                            <span class="window-control close"></span>
-                            <span class="window-control minimize"></span>
-                            <span class="window-control maximize"></span>
-                        </div>
-                        <span>설정 - 일일 노트</span>
-                    </div>
-                    <div class="mock-content">
-                        <div class="settings-container">
-                            <h3>일일 노트 설정</h3>
-                            <div class="setting-item">
-                                <div class="setting-label">
-                                    <strong>새 파일 위치</strong>
-                                    <p class="setting-desc">일일 노트가 저장될 폴더</p>
-                                </div>
-                                <input type="text" value="Daily Notes/" class="setting-input">
-                            </div>
-                            <div class="setting-item">
-                                <div class="setting-label">
-                                    <strong>날짜 형식</strong>
-                                    <p class="setting-desc">파일명에 사용할 날짜 형식</p>
-                                </div>
-                                <input type="text" value="YYYY-MM-DD" class="setting-input">
-                            </div>
-                            <div class="setting-item">
-                                <div class="setting-label">
-                                    <strong>템플릿 파일 위치</strong>
-                                    <p class="setting-desc">새 일일 노트에 사용할 템플릿</p>
-                                </div>
-                                <input type="text" value="Templates/일일 노트 템플릿.md" class="setting-input">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h3><i class="fas fa-calendar-plus"></i> 일일 노트 생성하기</h3>
-                
-                <div class="step-by-step">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h4>명령 팔레트 열기</h4>
-                            <p><kbd>Ctrl/Cmd + P</kbd>를 눌러 명령 팔레트를 엽니다.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h4>일일 노트 명령 실행</h4>
-                            <p>"일일 노트: 오늘의 일일 노트 열기"를 검색하여 실행합니다.</p>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4>단축키 설정 (선택)</h4>
-                            <p>자주 사용한다면 단축키를 설정하세요. 예: <kbd>Alt + D</kbd></p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="template-section">
-                <h2><i class="fas fa-file-alt"></i> 템플릿 작성하기</h2>
-                
-                <h3>기본 일일 노트 템플릿</h3>
-                
-                <div class="code-example">
-                    <div class="code-header">
-                        <span class="code-language">Markdown</span>
-                        <button class="copy-button">복사</button>
-                    </div>
-                    <pre><code># {{date:YYYY년 MM월 DD일}} {{date:dddd}}
-
-## 📅 오늘의 할 일
-- [ ] 
-- [ ] 
-- [ ] 
-
-## 💡 오늘의 생각
-- 
-
-## 📚 학습 내용
-- 
-
-## 🎯 내일의 계획
-- 
-
-## 🙏 감사한 일
-1. 
-2. 
-3. 
-
----
-태그: #일일노트/{{date:YYYY}}/{{date:MM}}
-</code></pre>
-                </div>
-
-                <h3>고급 템플릿 예제</h3>
-                
-                <div class="code-example">
-                    <div class="code-header">
-                        <span class="code-language">Markdown</span>
-                        <button class="copy-button">복사</button>
-                    </div>
-                    <pre><code># {{date:YYYY-MM-DD}} {{date:dddd}}
-
-## 🌅 아침 루틴
-- [ ] 06:00 - 기상
-- [ ] 06:30 - 운동/명상
-- [ ] 07:00 - 아침 식사
-- [ ] 07:30 - 일일 계획 수립
-
-## 📊 주요 지표
-- 수면 시간: ___시간
-- 물 섭취량: ___L
-- 운동 시간: ___분
-- 집중 시간: ___시간
-
-## 🎯 오늘의 최우선 과제 (MIT)
-1. 
-2. 
-3. 
-
-## 📝 업무 로그
-### 오전 (09:00 - 12:00)
-- 
-
-### 오후 (13:00 - 18:00)
-- 
-
-### 저녁 (19:00 - )
-- 
-
-## 💭 회고 및 반성
-### 잘한 점
-- 
-
-### 개선할 점
-- 
-
-### 내일을 위한 메모
-- 
-
-## 🔗 관련 노트
-- [[프로젝트명]]
-- [[회의록/{{date:YYYY-MM-DD}}]]
-- [[주간 리뷰/{{date:YYYY-[W]WW}}]]
-
----
-생성 시간: {{time:HH:mm}}
-마지막 수정: {{date:YYYY-MM-DD}} {{time:HH:mm}}
-</code></pre>
-                </div>
-
-                <div class="interactive-example" data-example-type="template">
-                    <h3>템플릿 변수 테스트</h3>
-                    <p>아래에서 다양한 템플릿 변수를 테스트해보세요:</p>
-                    <div class="template-tester">
-                        <select class="template-variable-select">
-                            <option value="{{date:YYYY-MM-DD}}">날짜 (YYYY-MM-DD)</option>
-                            <option value="{{date:YYYY년 MM월 DD일}}">날짜 (한국식)</option>
-                            <option value="{{date:dddd}}">요일</option>
-                            <option value="{{time:HH:mm}}">현재 시간</option>
-                            <option value="{{date:YYYY-[W]WW}}">주차</option>
-                            <option value="{{title}}">노트 제목</option>
-                        </select>
-                        <button class="preview-button">미리보기</button>
-                        <div class="template-preview">
-                            <em>여기에 결과가 표시됩니다</em>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="template-types">
-                <h2><i class="fas fa-layer-group"></i> 다양한 템플릿 유형</h2>
-                
-                <div class="template-gallery">
-                    <div class="template-card">
-                        <h3><i class="fas fa-briefcase"></i> 업무 일지 템플릿</h3>
-                        <div class="code-example">
-                            <div class="code-header">
-                                <span class="code-language">Markdown</span>
-                                <button class="copy-button">복사</button>
-                            </div>
-                            <pre><code># 업무 일지 - {{date:YYYY-MM-DD}}
-
-## 📋 오늘의 업무
-### 완료된 작업
-- [x] 
-
-### 진행 중인 작업
-- [ ] (진행률: __%)
-
-### 대기 중인 작업
-- [ ] (대기 사유: )
-
-## 🤝 미팅 및 커뮤니케이션
-- 
-
-## 💡 아이디어 및 개선사항
-- 
-
-## 🚧 이슈 및 블로커
-- 
-
-## 📎 참고 자료
-- </code></pre>
-                        </div>
-                    </div>
-
-                    <div class="template-card">
-                        <h3><i class="fas fa-graduation-cap"></i> 학습 일지 템플릿</h3>
-                        <div class="code-example">
-                            <div class="code-header">
-                                <span class="code-language">Markdown</span>
-                                <button class="copy-button">복사</button>
-                            </div>
-                            <pre><code># 학습 일지 - {{date:YYYY-MM-DD}}
-
-## 📚 오늘의 학습 목표
-- [ ] 
-
-## 🎓 학습 내용
-### 과목/주제: 
-- **핵심 개념**: 
-- **세부 내용**: 
-- **실습/예제**: 
-
-## ❓ 질문 및 의문점
-- 
-
-## 🔍 추가 학습 필요사항
-- 
-
-## 📊 학습 시간
-- 총 학습 시간: __시간 __분
-- 집중도: ⭐⭐⭐⭐⭐
-
-## 🎯 내일의 학습 계획
-- </code></pre>
-                        </div>
-                    </div>
-
-                    <div class="template-card">
-                        <h3><i class="fas fa-heart"></i> 개인 일기 템플릿</h3>
-                        <div class="code-example">
-                            <div class="code-header">
-                                <span class="code-language">Markdown</span>
-                                <button class="copy-button">복사</button>
-                            </div>
-                            <pre><code># {{date:YYYY년 MM월 DD일}} {{date:dddd}}
-
-## 🌤️ 오늘의 기분
-😊 😐 😔 😡 😰
-
-## ✍️ 오늘의 이야기
-<!-- 오늘 있었던 일을 자유롭게 적어보세요 -->
-
-## 💝 감사한 마음
-1. 
-2. 
-3. 
-
-## 🌱 성장의 순간
-- 
-
-## 📸 오늘의 한 장면
-![[사진 첨부]]
-
-## 🎵 오늘의 노래
-- 
-
----
-날씨: ☀️ ☁️ 🌧️ ❄️
-기분 점수: __/10</code></pre>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="advanced-templates">
-                <h2><i class="fas fa-rocket"></i> 고급 템플릿 기법</h2>
-                
-                <h3>조건부 템플릿</h3>
-                
-                <div class="code-example">
-                    <div class="code-header">
-                        <span class="code-language">Markdown</span>
-                        <button class="copy-button">복사</button>
-                    </div>
-                    <pre><code># {{date:YYYY-MM-DD}} - {{date:dddd}}
-
-<%* 
-// JavaScript를 사용한 동적 템플릿
-const dayOfWeek = moment().day();
-const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-
-if (isWeekend) { %>
-## 🏖️ 주말 계획
-- [ ] 휴식 및 재충전
-- [ ] 취미 활동
-- [ ] 가족/친구와 시간 보내기
-<% } else { %>
-## 💼 업무 계획
-- [ ] 오전 회의 참석
-- [ ] 프로젝트 진행
-- [ ] 보고서 작성
-<% } %>
-
-## 📝 메모
-- 
-
-<%* 
-// 현재 시간에 따른 인사말
-const hour = moment().hour();
-let greeting;
-if (hour < 12) greeting = "좋은 아침입니다! ☀️";
-else if (hour < 18) greeting = "좋은 오후입니다! 🌤️";
-else greeting = "좋은 저녁입니다! 🌙";
-%>
-<%= greeting %></code></pre>
-                </div>
-
-                <h3>연결된 템플릿 시스템</h3>
-                
-                <div class="workflow-diagram">
-                    <div class="workflow-step">
-                        <i class="fas fa-calendar-day"></i>
-                        <h4>일일 노트</h4>
-                        <p>매일의 기록</p>
-                    </div>
-                    <div class="workflow-arrow">→</div>
-                    <div class="workflow-step">
-                        <i class="fas fa-calendar-week"></i>
-                        <h4>주간 리뷰</h4>
-                        <p>일주일 정리</p>
-                    </div>
-                    <div class="workflow-arrow">→</div>
-                    <div class="workflow-step">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h4>월간 리뷰</h4>
-                        <p>한 달 회고</p>
-                    </div>
-                </div>
-
-                <div class="code-example">
-                    <div class="code-header">
-                        <span class="code-language">Markdown</span>
-                        <button class="copy-button">복사</button>
-                    </div>
-                    <pre><code># 주간 리뷰 - {{date:YYYY-[W]WW}}
-
-## 📅 이번 주 일일 노트
-- [[{{date-7d:YYYY-MM-DD}}|월요일]]
-- [[{{date-6d:YYYY-MM-DD}}|화요일]]
-- [[{{date-5d:YYYY-MM-DD}}|수요일]]
-- [[{{date-4d:YYYY-MM-DD}}|목요일]]
-- [[{{date-3d:YYYY-MM-DD}}|금요일]]
-- [[{{date-2d:YYYY-MM-DD}}|토요일]]
-- [[{{date-1d:YYYY-MM-DD}}|일요일]]
-
-## 🎯 주간 목표 달성률
-- [ ] 목표 1: 
-- [ ] 목표 2: 
-- [ ] 목표 3: 
-
-## 💡 주요 성과
-1. 
-2. 
-3. 
-
-## 📈 개선 사항
-- 
-
-## 🎯 다음 주 계획
-- </code></pre>
-                </div>
-            </section>
-
-            <section class="workflow-optimization">
-                <h2><i class="fas fa-cogs"></i> 워크플로우 최적화</h2>
-                
-                <h3>자동화 설정</h3>
-                
-                <div class="automation-grid">
-                    <div class="automation-card">
-                        <h4><i class="fas fa-clock"></i> 시작 시 자동 생성</h4>
-                        <p>옵시디언을 시작할 때 자동으로 오늘의 일일 노트를 생성하도록 설정할 수 있습니다.</p>
-                        <div class="setting-demo">
-                            <label>
-                                <input type="checkbox" checked> 시작 시 일일 노트 열기
-                            </label>
-                        </div>
-                    </div>
-                    <div class="automation-card">
-                        <h4><i class="fas fa-link"></i> 자동 링크</h4>
-                        <p>일일 노트 간 자동 링크를 생성하여 네비게이션을 쉽게 만듭니다.</p>
-                        <div class="code-snippet">
-                            <code>[[{{date-1d:YYYY-MM-DD}}|← 어제]] | [[{{date+1d:YYYY-MM-DD}}|내일 →]]</code>
-                        </div>
-                    </div>
-                    <div class="automation-card">
-                        <h4><i class="fas fa-folder-tree"></i> 폴더 구조</h4>
-                        <p>연도/월별로 자동 정리되는 폴더 구조를 설정합니다.</p>
-                        <div class="folder-structure">
-                            <div>📁 Daily Notes/</div>
-                            <div>&nbsp;&nbsp;📁 2024/</div>
-                            <div>&nbsp;&nbsp;&nbsp;&nbsp;📁 01/</div>
-                            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 2024-01-01.md</div>
-                        </div>
-                    </div>
-                </div>
-
-                <h3>검색 및 필터링</h3>
-                
-                <div class="search-examples">
-                    <h4>유용한 검색 쿼리</h4>
-                    <ul class="query-list">
-                        <li>
-                            <code>path:"Daily Notes" tag:#중요</code>
-                            <span class="query-desc">일일 노트 중 중요 태그가 있는 노트</span>
-                        </li>
-                        <li>
-                            <code>file:2024-01 task:""</code>
-                            <span class="query-desc">2024년 1월의 미완료 작업</span>
-                        </li>
-                        <li>
-                            <code>"회의" file:{{date:YYYY-MM}}</code>
-                            <span class="query-desc">이번 달 회의 관련 내용</span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
-
-            <section class="best-practices">
-                <h2><i class="fas fa-star"></i> 일일 노트 모범 사례</h2>
-                
-                <div class="best-practice-grid">
-                    <div class="practice-card">
-                        <h3><i class="fas fa-check-circle"></i> DO</h3>
-                        <ul>
-                            <li>매일 일관된 시간에 작성하기</li>
-                            <li>간단하고 실행 가능한 목표 설정</li>
-                            <li>감정과 생각도 함께 기록</li>
-                            <li>주기적으로 과거 노트 검토</li>
-                            <li>태그와 링크 적극 활용</li>
-                        </ul>
-                    </div>
-                    <div class="practice-card">
-                        <h3><i class="fas fa-times-circle"></i> DON'T</h3>
-                        <ul>
-                            <li>너무 복잡한 템플릿 사용</li>
-                            <li>완벽하게 채우려는 압박감</li>
-                            <li>일일 노트를 할 일 목록으로만 사용</li>
-                            <li>과거 노트를 수정하지 않기</li>
-                            <li>백업 없이 중요 정보만 기록</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="tip">
-                    <i class="fas fa-lightbulb"></i>
-                    <strong>프로 팁:</strong> 일일 노트는 완벽할 필요가 없습니다. 중요한 것은 꾸준히 기록하는 습관입니다. 처음에는 간단한 템플릿으로 시작하고, 필요에 따라 점진적으로 발전시켜 나가세요.
-                </div>
-            </section>
-
-            <section class="practice-exercise">
-                <h2><i class="fas fa-dumbbell"></i> 실습 과제</h2>
-                
-                <div class="exercise-container">
-                    <h3>오늘의 실습</h3>
-                    <div class="checklist">
-                        <label><input type="checkbox"> 일일 노트 플러그인 활성화하기</label>
-                        <label><input type="checkbox"> Daily Notes 폴더 생성하기</label>
-                        <label><input type="checkbox"> 기본 일일 노트 템플릿 작성하기</label>
-                        <label><input type="checkbox"> 오늘의 일일 노트 생성하고 작성하기</label>
-                        <label><input type="checkbox"> 단축키 설정하기</label>
-                        <label><input type="checkbox"> 3가지 이상의 태그 사용해보기</label>
-                        <label><input type="checkbox"> 다른 노트와 링크 연결하기</label>
-                    </div>
-                    
-                    <h3>도전 과제</h3>
-                    <div class="challenge-box">
-                        <h4><i class="fas fa-trophy"></i> 일주일 챌린지</h4>
-                        <p>7일 연속으로 일일 노트를 작성하고, 주말에 주간 리뷰를 작성해보세요. 템플릿을 점진적으로 개선하면서 자신만의 스타일을 찾아가세요.</p>
-                        <ul>
-                            <li>Day 1-3: 기본 템플릿 사용</li>
-                            <li>Day 4-5: 템플릿 커스터마이징</li>
-                            <li>Day 6-7: 자동화 기능 추가</li>
-                            <li>주말: 주간 리뷰 작성</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <section class="troubleshooting">
-                <h2><i class="fas fa-tools"></i> 문제 해결</h2>
-                
-                <div class="faq-container">
-                    <div class="faq-item">
-                        <h3><i class="fas fa-question-circle"></i> 템플릿이 적용되지 않아요</h3>
-                        <p>템플릿 파일 경로가 정확한지 확인하세요. 템플릿 파일은 .md 확장자를 포함한 전체 경로를 입력해야 합니다.</p>
-                    </div>
-                    <div class="faq-item">
-                        <h3><i class="fas fa-question-circle"></i> 날짜 형식을 변경하고 싶어요</h3>
-                        <p>설정에서 날짜 형식을 Moment.js 형식으로 지정할 수 있습니다. 예: YYYY년 MM월 DD일</p>
-                    </div>
-                    <div class="faq-item">
-                        <h3><i class="fas fa-question-circle"></i> 과거 날짜의 노트를 생성하려면?</h3>
-                        <p>캘린더 플러그인을 사용하거나, 명령 팔레트에서 "일일 노트: 특정 날짜의 일일 노트 열기"를 사용하세요.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="summary">
-                <h2><i class="fas fa-book-reader"></i> 핵심 정리</h2>
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <i class="fas fa-calendar-check"></i>
-                        <h3>일일 노트의 가치</h3>
-                        <p>매일의 기록은 장기적으로 큰 자산이 됩니다</p>
-                    </div>
-                    <div class="summary-item">
-                        <i class="fas fa-file-code"></i>
-                        <h3>템플릿의 힘</h3>
-                        <p>일관성 있는 구조로 효율적인 기록이 가능합니다</p>
-                    </div>
-                    <div class="summary-item">
-                        <i class="fas fa-sync-alt"></i>
-                        <h3>지속 가능한 시스템</h3>
-                        <p>간단하게 시작하고 점진적으로 발전시키세요</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="navigation-guide">
-                <h2><i class="fas fa-compass"></i> 다음 단계</h2>
-                <p>일일 노트와 템플릿을 마스터했다면, 다음 강의에서는 파일을 임베드하고 트랜스클루전하는 방법을 배워보겠습니다. 이를 통해 노트 간의 연결을 더욱 강화할 수 있습니다.</p>
-                <div class="next-lesson-preview">
-                    <h3>다음 강의 미리보기: 파일 임베드와 트랜스클루전</h3>
-                    <ul>
-                        <li>임베드의 개념과 활용법</li>
-                        <li>트랜스클루전으로 정보 재사용하기</li>
-                        <li>블록 참조 마스터하기</li>
-                    </ul>
-                </div>
-            </section>
+<h2>🎯 학습 목표</h2>
+<ul>
+<li>옵시디언의 기본 기능 이해</li>
+<li>마크다운 문법 익히기</li>
+<li>노트 작성과 관리</li>
+</ul>
+</section>
+<section class="key-concepts">
+<h2>💡 주요 개념</h2>
+<div class="concepts-grid">
+<div class="concept-card">기본 개념 이해</div>
+<div class="concept-card">인터페이스 익히기</div>
+<div class="concept-card">첫 번째 노트 작성</div>
+</div>
+</section>
+<section class="content-section">
+<h2>소개</h2>
+<div class="section-content"></div>
+</section>
+<section class="content-section">
+<h2>기본 개념</h2>
+<div class="section-content"></div>
+</section>
+<section class="content-section">
+<h2>실습</h2>
+<div class="section-content"></div>
+</section>
+<section class="content-section">
+<h2>요약</h2>
+<div class="section-content"></div>
+</section>
         </main>
-
+        
         <footer class="lesson-footer">
-            <div class="footer-content">
-                <p>옵시디언 마스터 클래스 | 제6강: 일일 노트와 템플릿</p>
-                <div class="footer-links">
-                    <a href="../index.html"><i class="fas fa-home"></i> 홈</a>
-                    <a href="lesson05.html"><i class="fas fa-arrow-left"></i> 이전</a>
-                    <a href="lesson07.html"><i class="fas fa-arrow-right"></i> 다음</a>
-                </div>
-            </div>
+            <p>&copy; 2025 옵시디언 마스터 클래스</p>
         </footer>
     </div>
-
+    
     <script src="../assets/lesson-script.js"></script>
 </body>
 </html>

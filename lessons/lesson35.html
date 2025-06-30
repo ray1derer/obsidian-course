@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제35강: Cursor 마스터되기 | 옵시디언 마스터 클래스</title>
+    <link rel="stylesheet" href="../assets/lesson-style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="lesson-container">
+        <header class="lesson-header">
+            <div class="lesson-title">
+                <h1><i class="fas fa-trophy"></i> 제35강: Cursor 마스터되기</h1>
+                <p class="lesson-subtitle">AI 시대 최고의 개발자가 되는 완벽한 로드맵</p>
+            </div>
+            <div class="lesson-meta">
+                <span class="difficulty"><i class="fas fa-signal"></i> 난이도: 마스터</span>
+                <span class="duration"><i class="fas fa-clock"></i> 예상 시간: 90분</span>
+                <span class="category"><i class="fas fa-folder"></i> 카테고리: 종합 마스터리</span>
+            </div>
+        </header>
+
+        <nav class="lesson-nav">
+            <a href="lesson34.html" class="nav-link prev">
+                <i class="fas fa-chevron-left"></i> 이전 강의
+            </a>
+            <span class="nav-title">제35강: Cursor 마스터되기</span>
+            <a href="../index.html" class="nav-link next">
+                목차로 돌아가기 <i class="fas fa-home"></i>
+            </a>
+        </nav>
+
+        <main class="lesson-content">
+            <section class="learning-objectives">
+                <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+                <ul>
+                    <li>Cursor 전문가가 되기 위한 완벽한 로드맵 구축하기</li>
+                    <li>고급 워크플로우와 자동화 시스템 마스터하기</li>
+                    <li>팀 전체의 생산성을 끌어올리는 방법 익히기</li>
+                    <li>AI와 인간의 시너지를 극대화하는 전략 수립하기</li>
+                    <li>미래 기술 트렌드에 대비하는 방법 이해하기</li>
+                    <li>Cursor 마스터로서의 커리어 패스 설계하기</li>
+                </ul>
+            </section>
+
+            <section class="mastery-roadmap">
+                <h2><i class="fas fa-road"></i> Cursor 마스터리 로드맵</h2>
+                
+                <div class="roadmap-timeline">
+                    <div class="milestone beginner">
+                        <div class="milestone-header">
+                            <h3>🌱 초급 (1-2주)</h3>
+                            <p>기초 다지기</p>
+                        </div>
+                        <div class="milestone-content">
+                            <h4>핵심 스킬</h4>
+                            <ul>
+                                <li>기본 Tab 자동완성 사용</li>
+                                <li>간단한 Chat 대화</li>
+                                <li>단일 파일 편집</li>
+                                <li>기본 단축키 숙달</li>
+                            </ul>
+                            <h4>목표 달성 지표</h4>
+                            <ul>
+                                <li>일일 50% 이상 AI 도움 사용</li>
+                                <li>코딩 속도 20% 향상</li>
+                                <li>기본 기능 자연스럽게 사용</li>
+                            </ul>
+                            <div class="practice-project">
+                                <h5>실습 프로젝트</h5>
+                                <p>간단한 Todo 앱 만들기 (AI 도움 50% 활용)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="milestone intermediate">
+                        <div class="milestone-header">
+                            <h3>🌿 중급 (3-8주)</h3>
+                            <p>실력 향상</p>
+                        </div>
+                        <div class="milestone-content">
+                            <h4>핵심 스킬</h4>
+                            <ul>
+                                <li>컨텍스트 관리 최적화</li>
+                                <li>Composer로 멀티파일 작업</li>
+                                <li>고급 프롬프트 작성</li>
+                                <li>AI 모델별 특성 이해</li>
+                            </ul>
+                            <h4>목표 달성 지표</h4>
+                            <ul>
+                                <li>복잡한 기능 30분 내 구현</li>
+                                <li>코드 품질 50% 향상</li>
+                                <li>버그 발생률 70% 감소</li>
+                            </ul>
+                            <div class="practice-project">
+                                <h5>실습 프로젝트</h5>
+                                <p>풀스택 블로그 플랫폼 (인증, 댓글, 관리자 기능 포함)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="milestone advanced">
+                        <div class="milestone-header">
+                            <h3>🌳 고급 (2-3개월)</h3>
+                            <p>전문가 도약</p>
+                        </div>
+                        <div class="milestone-content">
+                            <h4>핵심 스킬</h4>
+                            <ul>
+                                <li>대규모 리팩토링 자동화</li>
+                                <li>AI 기반 아키텍처 설계</li>
+                                <li>커스텀 워크플로우 구축</li>
+                                <li>팀 협업 프로세스 최적화</li>
+                            </ul>
+                            <h4>목표 달성 지표</h4>
+                            <ul>
+                                <li>프로젝트 완성 시간 80% 단축</li>
+                                <li>코드 리뷰 시간 90% 감소</li>
+                                <li>팀 전체 생산성 3배 향상</li>
+                            </ul>
+                            <div class="practice-project">
+                                <h5>실습 프로젝트</h5>
+                                <p>마이크로서비스 기반 이커머스 플랫폼</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="milestone master">
+                        <div class="milestone-header">
+                            <h3>🌟 마스터 (6개월+)</h3>
+                            <p>혁신 창조</p>
+                        </div>
+                        <div class="milestone-content">
+                            <h4>핵심 스킬</h4>
+                            <ul>
+                                <li>AI와 완벽한 협업</li>
+                                <li>새로운 패러다임 창조</li>
+                                <li>커뮤니티 리더십</li>
+                                <li>차세대 개발자 멘토링</li>
+                            </ul>
+                            <h4>목표 달성 지표</h4>
+                            <ul>
+                                <li>불가능해 보이던 프로젝트 실현</li>
+                                <li>오픈소스 기여도 상위 1%</li>
+                                <li>업계 인정 전문가</li>
+                            </ul>
+                            <div class="practice-project">
+                                <h5>실습 프로젝트</h5>
+                                <p>AI 기반 개발 도구 또는 프레임워크 창조</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="advanced-workflows">
+                <h2><i class="fas fa-cogs"></i> 고급 워크플로우 패턴</h2>
+                
+                <div class="workflow-patterns">
+                    <div class="pattern-card">
+                        <h3>1. TDD with AI (AI 기반 테스트 주도 개발)</h3>
+                        <div class="workflow-steps">
+                            <div class="step">
+                                <div class="step-icon">📝</div>
+                                <h4>테스트 먼저 작성</h4>
+                                <pre><code class="language-text">프롬프트: "사용자 인증 시스템의 모든 엣지 케이스를 
+포함한 완벽한 테스트 스위트를 작성해줘"</code></pre>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">🤖</div>
+                                <h4>AI가 구현 생성</h4>
+                                <pre><code class="language-text">프롬프트: "이 테스트를 모두 통과하는 
+최소한의 코드를 작성해줘"</code></pre>
+                            </div>
+                            <div class="step">
+                                <div class="step-icon">♻️</div>
+                                <h4>리팩토링</h4>
+                                <pre><code class="language-text">프롬프트: "성능과 가독성을 최적화하되,
+모든 테스트는 계속 통과해야 해"</code></pre>
+                            </div>
+                        </div>
+                        <div class="pattern-benefits">
+                            <h4>장점</h4>
+                            <ul>
+                                <li>100% 테스트 커버리지 보장</li>
+                                <li>버그 사전 방지</li>
+                                <li>문서화 자동 완성</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3>2. Architecture-First Development</h3>
+                        <div class="architecture-flow">
+                            <div class="arch-step">
+                                <h4>1. 고수준 설계</h4>
+                                <p>"마이크로서비스 아키텍처로 소셜 미디어 플랫폼 설계"</p>
+                            </div>
+                            <div class="arch-step">
+                                <h4>2. 서비스별 상세 설계</h4>
+                                <p>각 마이크로서비스의 API, 데이터 모델, 비즈니스 로직</p>
+                            </div>
+                            <div class="arch-step">
+                                <h4>3. 동시 구현</h4>
+                                <p>Composer로 모든 서비스 동시 생성</p>
+                            </div>
+                            <div class="arch-step">
+                                <h4>4. 통합 테스트</h4>
+                                <p>서비스 간 통신과 전체 시스템 검증</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3>3. Continuous Refactoring Pipeline</h3>
+                        <div class="refactoring-cycle">
+                            <div class="cycle-item">
+                                <i class="fas fa-code"></i>
+                                <h4>코드 작성</h4>
+                                <p>기능 구현에 집중</p>
+                            </div>
+                            <div class="cycle-item">
+                                <i class="fas fa-search"></i>
+                                <h4>AI 분석</h4>
+                                <p>코드 스멜, 성능 이슈 탐지</p>
+                            </div>
+                            <div class="cycle-item">
+                                <i class="fas fa-magic"></i>
+                                <h4>자동 개선</h4>
+                                <p>최적화와 리팩토링</p>
+                            </div>
+                            <div class="cycle-item">
+                                <i class="fas fa-check"></i>
+                                <h4>검증</h4>
+                                <p>테스트 통과 확인</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pattern-card">
+                        <h3>4. Documentation-Driven Development</h3>
+                        <div class="doc-workflow">
+                            <ol>
+                                <li><strong>API 문서 먼저:</strong> OpenAPI 스펙 작성</li>
+                                <li><strong>구현 자동 생성:</strong> 문서 기반 코드 생성</li>
+                                <li><strong>테스트 자동 생성:</strong> API 스펙에서 테스트 도출</li>
+                                <li><strong>클라이언트 SDK:</strong> 다양한 언어로 자동 생성</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="team-productivity">
+                <h2><i class="fas fa-users"></i> 팀 생산성 극대화 전략</h2>
+                
+                <div class="team-strategies">
+                    <div class="strategy-box">
+                        <h3>1. AI 페어 프로그래밍 문화</h3>
+                        <div class="pair-programming">
+                            <h4>구현 방법</h4>
+                            <ul>
+                                <li><strong>Morning AI Review:</strong> 매일 아침 AI와 함께 코드 리뷰</li>
+                                <li><strong>Shared Prompts:</strong> 팀 공용 프롬프트 라이브러리</li>
+                                <li><strong>AI Mentor:</strong> 주니어 개발자를 위한 AI 멘토링</li>
+                            </ul>
+                            
+                            <div class="team-rules">
+                                <h4>팀 규칙 예시</h4>
+                                <pre><code class="language-json">// .cursor/team-rules.json
+{
+  "code_style": "airbnb",
+  "naming_convention": "camelCase",
+  "comment_language": "korean",
+  "test_coverage_minimum": 80,
+  "pr_requirements": {
+    "must_have_tests": true,
+    "must_have_docs": true,
+    "ai_review_required": true
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="strategy-box">
+                        <h3>2. 지식 공유 시스템</h3>
+                        <div class="knowledge-sharing">
+                            <div class="sharing-method">
+                                <h4>프롬프트 라이브러리</h4>
+                                <p>팀원들이 발견한 효과적인 프롬프트 공유</p>
+                                <div class="prompt-example">
+                                    <pre><code class="language-markdown"># 팀 프롬프트 라이브러리
+
+## 버그 수정
+"이 에러를 수정하되, 다음을 고려해줘:
+1. 기존 테스트가 깨지면 안 됨
+2. 성능 저하 없어야 함
+3. 우리 팀 코딩 컨벤션 준수"
+
+## 리팩토링
+"이 코드를 리팩토링하되:
+1. SOLID 원칙 적용
+2. 함수는 20줄 이내
+3. 복잡도 10 이하"</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="sharing-method">
+                                <h4>AI 세션 녹화</h4>
+                                <p>복잡한 문제 해결 과정을 녹화하여 팀 학습 자료로 활용</p>
+                            </div>
+
+                            <div class="sharing-method">
+                                <h4>주간 AI 활용 리뷰</h4>
+                                <p>매주 가장 효과적었던 AI 활용 사례 공유</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="strategy-box">
+                        <h3>3. 자동화된 품질 관리</h3>
+                        <div class="quality-automation">
+                            <h4>CI/CD 파이프라인에 AI 통합</h4>
+                            <pre><code class="language-yaml"># .github/workflows/ai-review.yml
+name: AI Code Review
+on: [pull_request]
+
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: AI Code Review
+        run: |
+          cursor-cli review \
+            --check-style \
+            --check-performance \
+            --check-security \
+            --suggest-improvements</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="ai-human-synergy">
+                <h2><i class="fas fa-handshake"></i> AI와 인간의 완벽한 시너지</h2>
+                
+                <div class="synergy-principles">
+                    <div class="principle">
+                        <h3>1. AI는 도구, 인간은 창조자</h3>
+                        <div class="principle-content">
+                            <p>AI가 아무리 발전해도 창의성과 비전은 인간의 영역입니다.</p>
+                            <div class="balance-chart">
+                                <h4>역할 분담</h4>
+                                <div class="role-division">
+                                    <div class="human-role">
+                                        <h5>인간의 역할</h5>
+                                        <ul>
+                                            <li>비즈니스 요구사항 이해</li>
+                                            <li>아키텍처 결정</li>
+                                            <li>창의적 문제 해결</li>
+                                            <li>윤리적 판단</li>
+                                            <li>사용자 경험 설계</li>
+                                        </ul>
+                                    </div>
+                                    <div class="ai-role">
+                                        <h5>AI의 역할</h5>
+                                        <ul>
+                                            <li>반복적 코드 생성</li>
+                                            <li>버그 탐지와 수정</li>
+                                            <li>문서화</li>
+                                            <li>테스트 작성</li>
+                                            <li>최적화 제안</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="principle">
+                        <h3>2. 지속적 학습과 적응</h3>
+                        <div class="learning-cycle">
+                            <div class="cycle-stage">
+                                <i class="fas fa-book"></i>
+                                <h4>학습</h4>
+                                <p>새로운 AI 기능과 기법 습득</p>
+                            </div>
+                            <div class="cycle-stage">
+                                <i class="fas fa-flask"></i>
+                                <h4>실험</h4>
+                                <p>다양한 접근법 시도</p>
+                            </div>
+                            <div class="cycle-stage">
+                                <i class="fas fa-chart-line"></i>
+                                <h4>측정</h4>
+                                <p>생산성과 품질 지표 추적</p>
+                            </div>
+                            <div class="cycle-stage">
+                                <i class="fas fa-sync"></i>
+                                <h4>개선</h4>
+                                <p>워크플로우 최적화</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="principle">
+                        <h3>3. 비판적 사고 유지</h3>
+                        <div class="critical-thinking">
+                            <h4>AI 출력물 검증 체크리스트</h4>
+                            <ul class="verification-list">
+                                <li>
+                                    <input type="checkbox" id="logic-check">
+                                    <label for="logic-check">논리적 일관성 확인</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="security-check">
+                                    <label for="security-check">보안 취약점 검토</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="performance-check">
+                                    <label for="performance-check">성능 영향 평가</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="maintainability-check">
+                                    <label for="maintainability-check">유지보수성 검토</label>
+                                </li>
+                                <li>
+                                    <input type="checkbox" id="business-check">
+                                    <label for="business-check">비즈니스 요구사항 충족</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="future-readiness">
+                <h2><i class="fas fa-rocket"></i> 미래 기술 트렌드 대비</h2>
+                
+                <div class="future-trends">
+                    <div class="trend-card">
+                        <div class="trend-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <h3>음성 기반 코딩</h3>
+                        <p>손을 사용하지 않고 음성으로 코드를 작성하는 시대</p>
+                        <div class="preparation">
+                            <h4>준비 방법</h4>
+                            <ul>
+                                <li>명확한 의사소통 능력 향상</li>
+                                <li>코드 구조를 말로 설명하는 연습</li>
+                                <li>음성 명령 프로토타입 실험</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="trend-card">
+                        <div class="trend-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>AGI 통합 개발</h3>
+                        <p>인공 일반 지능과 함께 일하는 미래</p>
+                        <div class="preparation">
+                            <h4>준비 방법</h4>
+                            <ul>
+                                <li>높은 수준의 추상화 능력</li>
+                                <li>시스템 설계 역량 강화</li>
+                                <li>인간만의 창의성 개발</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="trend-card">
+                        <div class="trend-icon">
+                            <i class="fas fa-vr-cardboard"></i>
+                        </div>
+                        <h3>VR/AR 개발 환경</h3>
+                        <p>3차원 공간에서 코드를 조작하는 새로운 패러다임</p>
+                        <div class="preparation">
+                            <h4>준비 방법</h4>
+                            <ul>
+                                <li>공간적 사고력 향상</li>
+                                <li>VR/AR 기술 기초 학습</li>
+                                <li>새로운 인터페이스 실험</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="trend-card">
+                        <div class="trend-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3>자율 코드 생성</h3>
+                        <p>요구사항만으로 전체 시스템을 생성하는 AI</p>
+                        <div class="preparation">
+                            <h4>준비 방법</h4>
+                            <ul>
+                                <li>비즈니스 분석 능력 강화</li>
+                                <li>시스템 검증 역량 개발</li>
+                                <li>AI 시스템 관리 학습</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="career-path">
+                <h2><i class="fas fa-compass"></i> Cursor 마스터의 커리어 패스</h2>
+                
+                <div class="career-options">
+                    <div class="career-card">
+                        <h3>1. AI 엔지니어링 리드</h3>
+                        <div class="career-details">
+                            <h4>역할</h4>
+                            <ul>
+                                <li>팀의 AI 도구 도입과 최적화 주도</li>
+                                <li>AI 기반 개발 프로세스 설계</li>
+                                <li>개발자 교육과 멘토링</li>
+                            </ul>
+                            <h4>필요 역량</h4>
+                            <ul>
+                                <li>Cursor 고급 기능 완벽 숙달</li>
+                                <li>다양한 AI 모델 이해</li>
+                                <li>팀 리더십</li>
+                            </ul>
+                            <h4>예상 연봉</h4>
+                            <p>$150,000 - $300,000+</p>
+                        </div>
+                    </div>
+
+                    <div class="career-card">
+                        <h3>2. AI 개발 컨설턴트</h3>
+                        <div class="career-details">
+                            <h4>역할</h4>
+                            <ul>
+                                <li>기업의 AI 전환 컨설팅</li>
+                                <li>개발 팀 생산성 향상 지원</li>
+                                <li>맞춤형 AI 워크플로우 설계</li>
+                            </ul>
+                            <h4>필요 역량</h4>
+                            <ul>
+                                <li>다양한 산업 도메인 지식</li>
+                                <li>뛰어난 커뮤니케이션 능력</li>
+                                <li>문제 해결 능력</li>
+                            </ul>
+                            <h4>예상 시급</h4>
+                            <p>$200 - $500/시간</p>
+                        </div>
+                    </div>
+
+                    <div class="career-card">
+                        <h3>3. AI 도구 개발자</h3>
+                        <div class="career-details">
+                            <h4>역할</h4>
+                            <ul>
+                                <li>차세대 AI 개발 도구 창조</li>
+                                <li>Cursor 플러그인 개발</li>
+                                <li>오픈소스 프로젝트 주도</li>
+                            </ul>
+                            <h4>필요 역량</h4>
+                            <ul>
+                                <li>딥러닝과 NLP 이해</li>
+                                <li>도구 개발 경험</li>
+                                <li>사용자 경험 설계</li>
+                            </ul>
+                            <h4>기회</h4>
+                            <p>스타트업 창업, 대기업 스카우트</p>
+                        </div>
+                    </div>
+
+                    <div class="career-card">
+                        <h3>4. AI 교육 전문가</h3>
+                        <div class="career-details">
+                            <h4>역할</h4>
+                            <ul>
+                                <li>AI 시대 개발자 교육</li>
+                                <li>교육 콘텐츠 제작</li>
+                                <li>워크샵과 세미나 진행</li>
+                            </ul>
+                            <h4>필요 역량</h4>
+                            <ul>
+                                <li>탁월한 교육 능력</li>
+                                <li>콘텐츠 제작 능력</li>
+                                <li>지속적 학습 열정</li>
+                            </ul>
+                            <h4>수익원</h4>
+                            <p>온라인 코스, 기업 교육, 출판</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="daily-routine">
+                <h2><i class="fas fa-calendar-day"></i> Cursor 마스터의 하루</h2>
+                
+                <div class="routine-timeline">
+                    <div class="time-block morning">
+                        <h3>🌅 오전 (9:00 - 12:00)</h3>
+                        <div class="activities">
+                            <div class="activity">
+                                <span class="time">9:00</span>
+                                <h4>AI 모닝 리뷰</h4>
+                                <p>밤새 발생한 이슈와 PR을 AI와 함께 검토</p>
+                            </div>
+                            <div class="activity">
+                                <span class="time">9:30</span>
+                                <h4>딥 워크 세션</h4>
+                                <p>복잡한 기능 구현, Composer로 대규모 작업</p>
+                            </div>
+                            <div class="activity">
+                                <span class="time">11:00</span>
+                                <h4>코드 리팩토링</h4>
+                                <p>AI와 함께 코드 품질 개선</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="time-block afternoon">
+                        <h3>☀️ 오후 (13:00 - 17:00)</h3>
+                        <div class="activities">
+                            <div class="activity">
+                                <span class="time">13:00</span>
+                                <h4>팀 협업</h4>
+                                <p>PR 리뷰, 페어 프로그래밍, 지식 공유</p>
+                            </div>
+                            <div class="activity">
+                                <span class="time">14:30</span>
+                                <h4>실험과 학습</h4>
+                                <p>새로운 AI 기능 테스트, 프롬프트 최적화</p>
+                            </div>
+                            <div class="activity">
+                                <span class="time">16:00</span>
+                                <h4>문서화와 테스트</h4>
+                                <p>AI로 문서 자동 생성, 테스트 커버리지 향상</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="time-block evening">
+                        <h3>🌙 저녁 (17:00 - 18:00)</h3>
+                        <div class="activities">
+                            <div class="activity">
+                                <span class="time">17:00</span>
+                                <h4>일일 회고</h4>
+                                <p>AI 활용 통계 리뷰, 개선점 발견</p>
+                            </div>
+                            <div class="activity">
+                                <span class="time">17:30</span>
+                                <h4>내일 계획</h4>
+                                <p>AI와 함께 다음 날 작업 우선순위 설정</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="productivity-stats">
+                    <h3>일일 생산성 통계</h3>
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <div class="stat-number">8,000+</div>
+                            <div class="stat-label">코드 라인 작성</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">기능 구현</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">테스트 커버리지</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">프로덕션 버그</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="community-contribution">
+                <h2><i class="fas fa-heart"></i> 커뮤니티 기여와 성장</h2>
+                
+                <div class="contribution-ways">
+                    <div class="contribution-card">
+                        <h3>1. 오픈소스 기여</h3>
+                        <ul>
+                            <li>Cursor 플러그인 개발</li>
+                            <li>프롬프트 라이브러리 공유</li>
+                            <li>베스트 프랙티스 문서화</li>
+                        </ul>
+                    </div>
+
+                    <div class="contribution-card">
+                        <h3>2. 지식 공유</h3>
+                        <ul>
+                            <li>블로그 포스트 작성</li>
+                            <li>유튜브 튜토리얼 제작</li>
+                            <li>컨퍼런스 발표</li>
+                        </ul>
+                    </div>
+
+                    <div class="contribution-card">
+                        <h3>3. 멘토링</h3>
+                        <ul>
+                            <li>주니어 개발자 지도</li>
+                            <li>스터디 그룹 운영</li>
+                            <li>온라인 Q&A 참여</li>
+                        </ul>
+                    </div>
+
+                    <div class="contribution-card">
+                        <h3>4. 혁신 주도</h3>
+                        <ul>
+                            <li>새로운 워크플로우 개발</li>
+                            <li>도구 통합 방법 연구</li>
+                            <li>미래 비전 제시</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="final-challenge">
+                <h2><i class="fas fa-flag-checkered"></i> 최종 도전 과제</h2>
+                
+                <div class="challenge-box">
+                    <h3>🏆 Cursor 마스터 인증 프로젝트</h3>
+                    
+                    <div class="challenge-requirements">
+                        <h4>요구사항</h4>
+                        <p>다음 조건을 모두 충족하는 프로젝트를 72시간 내에 완성하세요:</p>
+                        
+                        <ul class="requirements-list">
+                            <li>최소 10개의 마이크로서비스로 구성</li>
+                            <li>프론트엔드, 백엔드, 모바일 앱 포함</li>
+                            <li>실시간 기능 필수 (채팅, 알림 등)</li>
+                            <li>머신러닝 기능 1개 이상 포함</li>
+                            <li>95% 이상 테스트 커버리지</li>
+                            <li>완벽한 문서화 (API, 사용자 가이드)</li>
+                            <li>CI/CD 파이프라인 구축</li>
+                            <li>프로덕션 배포 가능한 상태</li>
+                        </ul>
+                    </div>
+
+                    <div class="challenge-rules">
+                        <h4>규칙</h4>
+                        <ul>
+                            <li>Cursor만 사용 (다른 IDE 사용 금지)</li>
+                            <li>모든 코드는 AI와 협업으로 작성</li>
+                            <li>프로세스를 영상으로 기록</li>
+                            <li>일일 진행 상황 공유</li>
+                        </ul>
+                    </div>
+
+                    <div class="challenge-rewards">
+                        <h4>완료 시 획득</h4>
+                        <ul>
+                            <li>Cursor 마스터 인증</li>
+                            <li>커뮤니티 인정</li>
+                            <li>취업/프리랜서 기회</li>
+                            <li>컨퍼런스 발표 기회</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="closing-thoughts">
+                <h2><i class="fas fa-graduation-cap"></i> 마무리하며</h2>
+                
+                <div class="final-message">
+                    <p class="quote">"미래는 AI를 두려워하는 개발자가 아닌, AI와 함께 춤추는 개발자의 것입니다."</p>
+                    
+                    <div class="journey-summary">
+                        <h3>당신의 여정</h3>
+                        <p>이제 당신은 Cursor의 모든 기능을 이해하고, AI와 함께 일하는 방법을 배웠습니다. 
+                        하지만 이것은 끝이 아닌 시작입니다. AI 기술은 매일 발전하고 있으며, 
+                        새로운 가능성이 계속 열리고 있습니다.</p>
+                    </div>
+
+                    <div class="next-actions">
+                        <h3>다음 단계</h3>
+                        <ol>
+                            <li>오늘 바로 Cursor Pro를 시작하세요</li>
+                            <li>작은 프로젝트부터 AI 협업을 실천하세요</li>
+                            <li>매일 새로운 프롬프트 기법을 실험하세요</li>
+                            <li>커뮤니티에 참여하고 경험을 공유하세요</li>
+                            <li>미래를 만드는 개발자가 되세요</li>
+                        </ol>
+                    </div>
+
+                    <div class="inspiration">
+                        <h3>영감을 주는 말</h3>
+                        <p>10년 후, 당신은 하지 않은 일들로 인해 후회할 것입니다. 
+                        지금 AI의 파도를 타고, 불가능해 보이는 것들을 현실로 만드세요. 
+                        Cursor는 단순한 도구가 아닌, 당신의 잠재력을 해방시키는 열쇠입니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="course-completion">
+                <h2><i class="fas fa-certificate"></i> 과정 수료</h2>
+                
+                <div class="completion-certificate">
+                    <div class="certificate-content">
+                        <h3>🎊 축하합니다! 🎊</h3>
+                        <p>옵시디언 마스터 클래스의 모든 과정을 완료하셨습니다!</p>
+                        
+                        <div class="achievements">
+                            <h4>획득한 스킬</h4>
+                            <ul>
+                                <li>✅ 옵시디언 전문가 수준 활용</li>
+                                <li>✅ AI 도구 마스터리</li>
+                                <li>✅ Cursor 고급 기능 완벽 이해</li>
+                                <li>✅ 미래 기술 준비 완료</li>
+                            </ul>
+                        </div>
+
+                        <div class="certificate-footer">
+                            <p class="date">수료일: 2025년</p>
+                            <p class="signature">옵시디언 마스터 클래스</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="share-achievement">
+                    <h3>성취를 공유하세요</h3>
+                    <div class="share-buttons">
+                        <button class="share-btn linkedin">
+                            <i class="fab fa-linkedin"></i> LinkedIn에 공유
+                        </button>
+                        <button class="share-btn twitter">
+                            <i class="fab fa-twitter"></i> Twitter에 공유
+                        </button>
+                        <button class="share-btn github">
+                            <i class="fab fa-github"></i> GitHub 프로필에 추가
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="summary">
+                <h2><i class="fas fa-star"></i> 핵심 요약</h2>
+                
+                <div class="key-takeaways">
+                    <h3>Cursor 마스터가 되기 위한 핵심</h3>
+                    <ul>
+                        <li>단계별 학습 로드맵을 따라 체계적으로 성장하세요</li>
+                        <li>AI는 도구일 뿐, 창의성과 비전은 여전히 인간의 영역입니다</li>
+                        <li>팀 전체의 생산성을 높이는 리더가 되세요</li>
+                        <li>지속적으로 학습하고 커뮤니티에 기여하세요</li>
+                        <li>미래 기술 트렌드에 대비하여 경쟁력을 유지하세요</li>
+                        <li>AI와 함께 불가능을 가능으로 만드는 개발자가 되세요</li>
+                    </ul>
+                </div>
+
+                <div class="final-words">
+                    <h3>마지막 한마디</h3>
+                    <p>기술은 계속 발전하지만, 배우고 적응하는 능력은 영원합니다. 
+                    Cursor와 AI는 당신의 능력을 증폭시키는 도구입니다. 
+                    이제 이 도구들을 마스터했으니, 세상을 바꿀 무언가를 만들어보세요. 
+                    당신의 코드가 미래를 만듭니다. <strong>Happy Coding with AI! 🚀</strong></p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="lesson-footer">
+            <div class="footer-content">
+                <p>&copy; 2025 옵시디언 마스터 클래스. 모든 권리 보유.</p>
+                <p>이 과정은 Cursor와 AI의 도움으로 제작되었습니다.</p>
+                <p class="final-note">🌟 당신도 이제 Cursor 마스터입니다! 🌟</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../assets/lesson-script.js"></script>
+</body>
+</html>

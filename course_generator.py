@@ -553,6 +553,32 @@ function setupCodeCopy() {
 }'''
 
 
+# 개별 레슨 생성 함수
+async def generate_single_lesson(lesson_number: int, topic: str, category: str = "advanced"):
+    generator = ObsidianCourseGenerator()
+    
+    # 주제 조사
+    lesson_data = await generator.research_topic(category, topic)
+    
+    # HTML 생성
+    html_content = generator.generate_lesson_html(lesson_data, lesson_number)
+    
+    # 파일 저장
+    file_path = generator.lessons_dir / f"lesson{lesson_number:02d}.html"
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    
+    # 메타데이터 업데이트
+    generator.metadata["lessons"][f"lesson{lesson_number:02d}"] = {
+        "title": topic,
+        "category": category,
+        "created": datetime.now().isoformat(),
+        "file": str(file_path)
+    }
+    
+    generator.save_metadata()
+    generator.logger.info(f"생성 완료: 제{lesson_number}강 - {topic}")
+
 # 메인 실행 함수
 async def main():
     generator = ObsidianCourseGenerator()
@@ -578,4 +604,22 @@ async def main():
     await generator.generate_course("basics", basic_topics, start_number=1)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import sys
+    if len(sys.argv) > 1:
+        # 레슨 번호가 제공된 경우 개별 레슨 생성
+        lesson_num = int(sys.argv[1])
+        
+        # 레슨별 주제 정의
+        lesson_topics = {
+            32: "AI 콘텐츠 생성 능력",
+            33: "Cursor의 혁신적 기능들",
+            34: "Cursor Pro와 무료 버전 비교",
+            35: "Cursor 마스터되기"
+        }
+        
+        if lesson_num in lesson_topics:
+            asyncio.run(generate_single_lesson(lesson_num, lesson_topics[lesson_num]))
+        else:
+            print(f"레슨 {lesson_num}에 대한 주제가 정의되지 않았습니다.")
+    else:
+        asyncio.run(main())
